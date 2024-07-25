@@ -1,0 +1,277 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Student") }}
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav2.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-gray-900">
+         Students
+        </h1>
+        <div class="flex items-center flex-wrap gap-1.5 font-medium">
+         <span class="text-md text-gray-600">
+          All Students:
+         </span>
+         <span class="text-md text-ray-800 font-semibold me-2">
+          {{ student_count }}
+         </span>
+         <span class="text-md text-gray-600">
+          Active
+         </span>
+         <span class="text-md text-gray-800 font-semibold">
+          {{ student_count }}
+         </span>
+        </div>
+       </div>
+       <div class="flex items-center gap-2.5">
+        <a class="btn btn-sm btn-primary" href="/app/student/new-student-">
+         Add Student
+        </a>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="card card-grid min-w-full">
+        <div class="card-header flex-wrap gap-2">
+         <h3 class="card-title font-medium text-sm">
+          <!-- Showing 10 of {{ student_count }} Students -->
+         </h3>
+         <div class="flex flex-wrap gap-2 lg:gap-5">
+          <div class="flex">
+           <label class="input input-sm">
+            <i class="ki-filled ki-magnifier">
+            </i>
+            <input placeholder="Search users" type="text" value="">
+            </input>
+           </label>
+          </div>
+          <div class="flex flex-wrap gap-2.5">
+           <select class="select select-sm w-28">
+            <option value="1">
+             Active
+            </option>
+            <option value="2">
+             Disabled
+            </option>
+            <option value="2">
+             Pending
+            </option>
+           </select>
+           <select class="select select-sm w-28">
+            <option value="1">
+             Latest
+            </option>
+            <option value="2">
+             Older
+            </option>
+            <option value="3">
+             Oldest
+            </option>
+           </select>
+           <button class="btn btn-sm btn-outline btn-primary">
+            <i class="ki-filled ki-setting-4">
+            </i>
+            Filters
+           </button>
+          </div>
+         </div>
+        </div>
+        <div class="card-body">
+         <div data-datatable="true" data-datatable-page-size="10">
+          <div class="scrollable-x-auto">
+           <table class="table table-auto table-border" data-datatable-table="true">
+            <thead>
+             <tr>
+              <th class="w-[60px] text-center">
+               <input class="checkbox checkbox-sm" data-datatable-check="true" type="checkbox"/>
+              </th>
+              <th class="min-w-[300px]">
+               <span class="sort asc">
+                <span class="sort-label">
+                 Student
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[150px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Student ID
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[150px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Status
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[150px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Joining Date
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="w-[100px] text-center">
+               <span class="sort">
+                <span class="sort-label">
+                 Invoices
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="w-[60px]">
+              </th>
+             </tr>
+            </thead>
+            <tbody>
+            {% for student in students %}
+             <tr>
+              <td class="text-center">
+               <input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/>
+              </td>
+              <td>
+               <div class="flex items-center gap-2.5">
+                <img alt="" class="rounded-full size-7 shrink-0" src="{% if student.image  %}{{student.image}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/>
+                <div class="flex flex-col">
+                 <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/students/profile/{{ student.name }}">
+                  {{ student.student_name }}
+                 <span class="text-2sm font-medium text-gray-600 hover:text-primary-active">
+                  {{ student.student_email_id }}
+                 </span>
+                 </a>
+                </div>
+               </div>
+              </td>
+              <td>
+               {{ student.name }}
+              </td>
+              <td>
+               <div class="flex items-center gap-1.5">
+                  {% if student.enabled == 1 %}
+                 <span class="badge badge-pill badge-outline badge-success gap-1 items-center">
+                  <span class="badge badge-dot size-1.5 badge-success">
+                  </span>
+                    Active
+                 </span>
+                  {% else %}
+                 <span class="badge badge-pill badge-outline badge-danger gap-1 items-center">
+                  <span class="badge badge-dot size-1.5 badge-danger">
+                  </span>
+                    Disabled
+                 </span>
+                  {% endif %}
+               </div>
+              </td>
+              <td>
+               {{ student.joining_date }}
+              </td>
+              <td>
+               <div class="flex justify-center">
+                <a class="btn btn-link" href="/students/billing/{{ student.name }}">
+                 View
+                </a>
+               </div>
+              </td>
+              <td>
+               <div class="menu" data-menu="true">
+                <div class="menu-item" data-menu-item-offset="0, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
+                 <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
+                  <i class="ki-filled ki-dots-vertical">
+                  </i>
+                 </button>
+                 <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
+                  <div class="menu-item">
+                   <a class="menu-link" href="/students/profile/{{ student.name }}">
+                    <span class="menu-icon">
+                     <i class="ki-filled ki-search-list">
+                     </i>
+                    </span>
+                    <span class="menu-title">
+                     View
+                    </span>
+                   </a>
+                  </div>
+                  <div class="menu-separator">
+                  </div>
+                  <div class="menu-item">
+                   <a class="menu-link" href="/app/student/{{ student.name }}">
+                    <span class="menu-icon">
+                     <i class="ki-filled ki-pencil">
+                     </i>
+                    </span>
+                    <span class="menu-title">
+                     Edit
+                    </span>
+                   </a>
+                  </div>
+<!--                   <div class="menu-separator">
+                  </div>
+                  <div class="menu-item">
+                   <a class="menu-link" href="#">
+                    <span class="menu-icon">
+                     <i class="ki-filled ki-trash">
+                     </i>
+                    </span>
+                    <span class="menu-title">
+                     Remove
+                    </span>
+                   </a>
+                  </div> -->
+                 </div>
+                </div>
+               </div>
+              </td>
+             </tr>
+               {% endfor %}
+            </tbody>
+           </table>
+          </div>
+          <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
+           <div class="flex items-center gap-2 order-2 md:order-1">
+            Show
+            <select class="select select-sm w-16" data-datatable-size="true" name="perpage">
+            </select>
+            per page
+           </div>
+           <div class="flex items-center gap-4 order-1 md:order-2">
+            <span data-datatable-info="true">
+            </span>
+            <div class="pagination" data-datatable-pagination="true">
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+    </main>
+{% endblock %}

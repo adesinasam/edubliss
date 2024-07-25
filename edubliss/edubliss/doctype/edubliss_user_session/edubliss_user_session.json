@@ -1,0 +1,106 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-07-25 08:12:18.412953",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_ldpq",
+  "user",
+  "user_full_name",
+  "username",
+  "column_break_fqgv",
+  "school",
+  "academic_year",
+  "academic_term"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_ldpq",
+   "fieldtype": "Section Break"
+  },
+  {
+   "bold": 1,
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "User",
+   "options": "User",
+   "read_only": 1,
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fetch_from": "user.full_name",
+   "fieldname": "user_full_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "User Full Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "user.username",
+   "fieldname": "username",
+   "fieldtype": "Data",
+   "label": "Username",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_fqgv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "school",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "School",
+   "options": "Company"
+  },
+  {
+   "fieldname": "academic_year",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "label": "Academic Year",
+   "options": "Academic Year"
+  },
+  {
+   "fieldname": "academic_term",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "label": "Academic Term",
+   "options": "Academic Term"
+  }
+ ],
+ "in_create": 1,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-07-25 08:48:15.937858",
+ "modified_by": "Administrator",
+ "module": "Edubliss",
+ "name": "Edubliss User Session",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

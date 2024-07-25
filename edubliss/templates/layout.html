@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html class="h-full" data-theme="true" data-theme-mode="light" lang="en">
+ <head><base href="/">
+    <meta charset="utf-8" />
+
+    {% block meta_block %}
+        {% include "templates/includes/meta_block.html" %}
+    {% endblock %}
+
+    <title>{% block title %}{{ title | striptags }}{% endblock %}</title>
+
+    {% block favicon %}
+    <link rel="shortcut icon" href="{{ (favicon or "/assets/frappe/images/frappe-favicon.svg") | abs_url }}" type="image/x-icon">
+    <link href="{{ (favicon or "/assets/frappe/images/frappe-favicon.svg") | abs_url }}" rel="apple-touch-icon" sizes="180x180"/>
+    <link href="{{ (favicon or "/assets/frappe/images/frappe-favicon.svg") | abs_url }}" rel="icon" sizes="32x32" type="image/x-icon"/>
+    <link href="{{ (favicon or "/assets/frappe/images/frappe-favicon.svg") | abs_url }}" rel="icon" sizes="16x16" type="image/x-icon"/>
+    {% endblock %}
+
+    <link rel="canonical" href="{{ canonical }}">
+
+    <link rel="stylesheet" href="/assets/edubliss/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="assets/edubliss/dist/vendors/apexcharts/apexcharts.css" rel="stylesheet"/>
+    <link href="assets/edubliss/dist/vendors/keenicons/styles.bundle.css" rel="stylesheet"/>
+    <link href="assets/edubliss/dist/css/styles.css" rel="stylesheet"/>
+  <!-- FRAPPE RESOURCES HEAD -->
+    <link type="text/css" rel="stylesheet" href="/assets/css/desk.min.css?ver=1617776598.0">
+    <link type="text/css" rel="stylesheet" href="/assets/css/erpnext.css?ver=1617776598.0">
+
+  <script>
+    window.frappe = {};
+    frappe.ready_events = [];
+    frappe.ready = function(fn) {
+      frappe.ready_events.push(fn);
+    }
+    window.dev_server = {{ dev_server }};
+    window.socketio_port = {{ (frappe.socketio_port or 'null') }};
+  </script>
+  <!-- FRAPPE RESOURCES HEAD -->
+
+    {% block custom_link %}
+    {% endblock %}
+
+ </head>
+
+     {% block body_link %}
+ <body class="flex h-full demo1 sidebar-fixed header-fixed bg-[#fefefe] dark:bg-coal-500">
+     {% endblock %}
+ <!--begin::Theme mode setup on page load-->
+  <script>
+   const defaultThemeMode = 'light'; // light|dark|system
+        let themeMode;
+
+        if ( document.documentElement ) {
+            if ( localStorage.getItem('theme')) {
+                    themeMode = localStorage.getItem('theme');
+            } else if ( document.documentElement.hasAttribute('data-theme-mode')) {
+                themeMode = document.documentElement.getAttribute('data-theme-mode');
+            } else {
+                themeMode = defaultThemeMode;
+            }
+
+            if (themeMode === 'system') {
+                themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            document.documentElement.classList.add(themeMode);
+        }
+  </script>
+  <!--end::Theme mode setup on page load-->
+  <!--begin::Page layout-->
+  <div class="flex grow">
+
+    {% block sidebar_link %}
+    {% include "templates/includes/edu_sidebar.html" %}
+    {% endblock %}
+
+   <div class="wrapper flex grow flex-col">
+    {% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav2.html" %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+    {% include "templates/includes/edu_footer.html" %}
+
+   </div>
+  </div>
+    {% block modal_link %}
+    {% include "templates/includes/modal_default.html" %}
+    {% endblock %}
+
+  <!--end::Page layout-->
+  <!--begin::Welcome Modal and scripts-->
+    {% block welcome_link %}
+  <div class="modal-footer justify-end">
+   <div class="flex gap-4">
+    <button class="btn btn-light" data-modal-dismiss="true">
+     Cancel
+    </button>
+    <button class="btn btn-primary">
+     Submit
+    </button>
+   </div>
+  </div>
+     <div class="modal" data-modal="true" id="modal_welcome_message">
+      <div class="modal-content modal-center max-w-[600px] top-[10%] w-full" >
+       <div class="modal-header">
+        <h3 class="modal-title">
+        </h3>
+        <button class="btn btn-xs btn-icon btn-light" data-modal-dismiss="true">
+         <i class="ki-outline ki-cross">
+         </i>
+        </button>
+       </div>
+       <div class="modal-body scrollable-y py-0 my-5 pl-6 pr-3 mr-3 h-[300px] max-h-[95%]">
+        <div class="mb-3 flex flex-col items-center">
+          {%- if brand_html -%}
+          <span class="default-logo min-h-[22px] max-w-[22px]">
+          {{ brand_html }}
+          </span>
+          {%- elif banner_image -%}
+          <img src='{{ banner_image }}' class="default-logo min-h-[22px] max-w-[22px]">
+          {%- endif -%}
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 text-center mb-3">
+         Welcome Onboard
+        </h3>
+        <div class="text-2sm font-medium text-center text-gray-600 mb-7">
+         We're thrilled to have you on board and excited for
+         <br/>
+         the journey ahead together.
+        </div>
+        <form id="selectForm" onsubmit="return submitForm()">
+          <div class="grid p-5 border-t border-t-gray-200">
+            <span class="text-2sm font-semibold text-gray-900 hover:text-primary-active">
+                School
+            </span>
+            {% set companys = frappe.call('edubliss.api.get_company') %}
+            <select id="company" class="select select-sm bg-dark-light">
+            {% for company in companys %}
+              <option value="{{ company.name }}">{{ company.company_name }}</option>
+            {% endfor %}
+            </select>
+            <br>
+            <span class="text-2sm font-semibold text-gray-900 hover:text-primary-active">
+              Academic Year
+            </span>
+            {% set acadyears = frappe.call('edubliss.api.get_academic_year') %}
+            <select id="academic_year" class="select select-sm bg-primary-light">
+            {% for acadyear in acadyears %}
+              <option value="{{ acadyear.name }}">{{ acadyear.academic_year_name }}</option>
+            {% endfor %}
+            </select>
+            <br>
+            <span class="text-2sm font-semibold text-gray-900 hover:text-primary-active">
+              Academic Term
+            </span>
+            {% set acadterms = frappe.call('edubliss.api.get_academic_term') %}
+            <select id="academic_term" class="select select-sm bg-info-light">
+            {% for acadterm in acadterms %}
+              <option value="{{ acadterm.name }}">{{ acadterm.title }}</option>
+            {% endfor %}
+            </select>
+          </div>
+          <div class="grid p-5 border-t border-t-gray-200">
+             <input type="submit" class="btn btn-sm btn-primary justify-center" value="Get Started">
+          </div>
+       </form>
+       </div>
+      </div>
+     </div>
+     <script>
+      window.onload = () => {
+        const modalEl = KTDom.getElement('#modal_welcome_message');
+        const modal = KTModal.getInstance(modalEl);
+        modal?.show();
+    };
+     </script>
+    {% endblock %}
+  <!--end::Welcome Modal and scripts-->
+  <!--begin::Page scripts-->
+    {% block custom_js %}
+  <script src="assets/edubliss/js/navselect.js">
+  </script>
+    {% endblock %}
+  <script src="assets/edubliss/dist/js/core.bundle.js">
+  </script>
+  <script src="assets/edubliss/dist/vendors/apexcharts/apexcharts.min.js">
+  </script>
+  <script src="assets/edubliss/dist/js/widgets/general.js">
+  </script>
+  <script src="assets/edubliss/dist/js/layouts/demo1.js">
+  </script>
+  <!--end::Page scripts-->
+  <!-- frappe resources -->
+  <script type="text/javascript" src="/assets/js/libs.min.js?ver=1617776598.0"></script>
+  <script type="text/javascript" src="/assets/js/desk.min.js?ver=1617776598.0"></script>
+  <!-- <script type="text/javascript" src="/assets/js/list.min.js?ver=1617776598.0"></script> -->
+  <!-- <script type="text/javascript" src="/assets/js/form.min.js?ver=1617776598.0"></script> -->
+  <script type="text/javascript" src="/assets/js/control.min.js?ver=1617776598.0"></script>
+  <script type="text/javascript" src="/assets/js/erpnext.min.js?ver=1617776598.0"></script>
+
+  <script>frappe.csrf_token = "{{frappe.session.csrf_token}}";</script>
+</body>
+</html>

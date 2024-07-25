@@ -1,0 +1,79 @@
+    <header class="header fixed top-0 z-10 left-0 right-0 flex items-stretch shrink-0 bg-[#fefefe] dark:bg-coal-500" data-sticky="true" data-sticky-class="shadow-sm dark:border-b dark:border-b-coal-100" data-sticky-name="header" id="header">
+     <!-- begin: container -->
+     <div class="container-fixed flex justify-between items-stretch lg:gap-4" id="header_container">
+
+{% include "templates/includes/headnav/edu_headlogo.html" %}
+
+      <div class="flex [.header_&amp;]:below-lg:hidden items-center gap-1.25 text-xs lg:text-sm font-medium mb-2.5 lg:mb-0" data-reparent="true" data-reparent-mode="prepend|lg:prepend" data-reparent-target="#content_container|lg:#header_container">
+          <div class="flex flex-wrap gap-2.5">
+           <span class="badge badge-pill badge-outline badge-dark gap-1 items-center">
+            <i class="ki-solid ki-home">
+            </i>
+            Maryland Prestigious Elementary School 
+           </span>
+           <span class="badge badge-pill badge-outline badge-primary gap-1 items-center">
+            <i class="ki-duotone ki-calendar">
+            </i>
+            2023-2024
+           </span>
+           <span class="badge badge-pill badge-outline badge-info gap-1 items-center">
+            <i class="ki-solid ki-note">
+            </i>
+            2023-2024 (Third Term)
+           </span>
+           <div class="dropdown" data-dropdown="true" data-dropdown-offset="10px, 10px" data-dropdown-placement="bottom-end" data-dropdown-trigger="click|lg:click">
+            <button class="dropdown-toggle btn btn-sm btn-sm-lg hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500">
+            <i class="ki-filled ki-setting-4">
+            </i>
+              Filters
+            </button>
+            <div class="dropdown-content light:border-gray-300 w-full max-w-[320px]">
+             <form id="selectForm" onsubmit="return submitForm()">
+             <div class="grid p-5 border-t border-t-gray-200">
+                 <span class="text-2sm font-semibold text-gray-900 hover:text-primary-active">
+                  School
+                 </span>
+                 {% set companys = frappe.call('edubliss.api.get_company') %}
+                 <select id="company" class="select select-sm bg-dark-light">
+                 {% for company in companys %}
+                  <option value="{{ company.name }}">{{ company.company_name }}</option>
+                 {% endfor %}
+                 </select>
+                 <br>
+                 <span class="text-2sm font-semibold text-gray-900 hover:text-primary-active">
+                  Academic Year
+                 </span>
+                 {% set acadyears = frappe.call('edubliss.api.get_academic_year') %}
+                 <select id="academic_year" class="select select-sm bg-primary-light">
+                 {% for acadyear in acadyears %}
+                  <<option value="{{ acadyear.name }}">{{ acadyear.academic_year_name }}</option>
+                 {% endfor %}
+                 </select>
+                 <br>
+                 <span class="text-2sm font-semibold text-gray-900 hover:text-primary-active">
+                  Academic Term
+                 </span>
+                 {% set acadterms = frappe.call('edubliss.api.get_academic_term') %}
+                 <select id="academic_term" class="select select-sm bg-info-light">
+                 {% for acadterm in acadterms %}
+                  <option value="{{ acadterm.name }}">{{ acadterm.title }}</option>
+                 {% endfor %}
+                 </select>
+             </div>
+             <div class="grid p-5 border-t border-t-gray-200">
+              <input type="submit" class="btn btn-sm btn-primary justify-center" value="Apply">
+             </div>
+             </form>
+            </div>
+           </div>
+          </div>
+<!--        <span class="text-gray-700">
+        {{ title | striptags }}
+       </span> -->
+      </div>
+
+{% include "templates/includes/headnav/edu_subheadnav.html" %}
+
+     </div>
+     <!-- end: container -->
+    </header>

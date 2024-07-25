@@ -1,0 +1,22 @@
+    <header class="header fixed top-0 z-10 left-0 right-0 flex items-stretch shrink-0 bg-[#fefefe] dark:bg-coal-500" data-sticky="true" data-sticky-class="shadow-sm dark:border-b dark:border-b-coal-100" data-sticky-name="header" id="header">
+     <!-- begin: container -->
+     <div class="container-fixed flex justify-between items-stretch lg:gap-4" id="header_container">
+
+{% include "templates/includes/headnav/edu_headlogo.html" %}
+
+      <div class="flex [.header_&amp;]:below-lg:hidden items-center gap-1.25 text-xs lg:text-sm font-medium mb-2.5 lg:mb-0" data-reparent="true" data-reparent-mode="prepend|lg:prepend" data-reparent-target="#content_container|lg:#header_container">
+       <span class="text-gray-600">
+        My Account
+       </span>
+       <i class="ki-filled ki-right text-gray-500 text-3xs">
+       </i>
+       <span class="text-gray-700">
+        {{ title | striptags }}
+       </span>
+      </div>
+
+{% include "templates/includes/headnav/edu_subheadnav.html" %}
+
+     </div>
+     <!-- end: container -->
+    </header>

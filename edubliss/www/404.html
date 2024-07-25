@@ -1,0 +1,51 @@
+{% extends "templates/layout.html" %}
+
+{%- block title -%}{{_("Not Found")}}{%- endblock -%}
+
+{% block body_link %}
+ <body class="flex h-full demo1 header-fixed bg-[#fefefe] dark:bg-coal-500">
+{% endblock %}
+
+{% block sidebar_link %}
+{% endblock %}
+
+{% block headnav_link %}
+{% endblock %}
+
+{% block content %} 
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+     <div class="flex flex-col items-center justify-center h-[95%]">
+      <div class="mb-10">
+       <img alt="image" class="dark:hidden max-h-[160px]" src="assets/edubliss/dist/media/illustrations/19.svg"/>
+       <img alt="image" class="light:hidden max-h-[160px]" src="assets/edubliss/dist/media/illustrations/19-dark.svg"/>
+      </div>
+      <span class="badge badge-primary badge-outline mb-3">
+       404 Error
+      </span>
+      <h3 class="text-2.5xl font-semibold text-gray-900 text-center mb-2">
+       We have lost this page
+      </h3>
+      <div class="text-md font-medium text-center text-gray-600 mb-10">
+       The requested page is missing. Check the URL or
+       <a class="text-primary font-medium hover:text-primary-active" href="/">
+        Return Home
+       </a>
+       .
+      </div>
+      <div class="relative">
+       <input class="input ps-8 max-w-64" placeholder="Search" type="text" value=""/>
+       <button class="btn btn-clear btn-icon text-gray-500 btn-sm absolute left-0 top-2/4 -translate-y-2/4 ms-1">
+        <i class="ki-filled ki-magnifier">
+        </i>
+       </button>
+      </div>
+     </div>
+    </main>
+{%- endblock -%}
+
+{% block modal_link %}
+{% endblock %}

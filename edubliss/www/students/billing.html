@@ -1,0 +1,184 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Student Billing") }}
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav3.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+
+    {% include "templates/includes/student_header.html" %}
+
+    {% include "templates/includes/student_nav.html" %}
+
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-gray-900">
+         Billing History
+        </h1>
+        <div class="flex items-center gap-2 text-sm font-medium text-gray-600">
+        </div>
+       </div>
+       <div class="flex items-center gap-2.5">
+        <a class="btn btn-sm btn-light" href="#">
+         Billing
+        </a>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="card card-grid min-w-full">
+        <div class="card-header">
+         <h3 class="card-title">
+          Billing and Invoicing
+         </h3>
+<!--          <button class="btn btn-light btn-sm">
+          <i class="ki-filled ki-exit-down">
+          </i>
+          Download PDF
+         </button> -->
+        </div>
+        <div class="card-body">
+         <div data-datatable="true" data-datatable-page-size="20">
+          <div class="scrollable-x-auto">
+           <table class="table table-border" data-datatable-table="true">
+            <thead>
+             <tr>
+              <th class="w-14">
+               <input class="checkbox checkbox-sm" data-datatable-check="true" type="checkbox"/>
+              </th>
+              <th class="min-w-[200px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Title
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="w-[170px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Status
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="w-[170px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Date
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="w-[170px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Grand Total
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="w-[170px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Outstanding
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="w-[100px]">
+              </th>
+             </tr>
+            </thead>
+            <tbody>
+            {% for invoice in sales_invoices %}
+             <tr>
+              <td>
+               <input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/>
+              </td>
+              <td>
+               <a class="leading-none font-semibold text-sm text-gray-900 hover:text-primary" href="#">        
+               {{ invoice.title }}
+               </a>
+              </td>
+              <td>
+               {% if invoice.status == 'Draft' %}
+               <div class="badge badge-sm badge-info badge-outline">
+                {% elif invoice.status == 'Overdue' %}
+               <div class="badge badge-sm badge-danger badge-outline">
+                {% elif invoice.status == 'Cancelled' %}
+               <div class="badge badge-sm badge-danger badge-outline">
+                {% elif invoice.status == 'Unpaid' %}
+               <div class="badge badge-sm badge-warning badge-outline">
+                {% elif invoice.status == 'Partly Paid' %}
+               <div class="badge badge-sm badge-warning badge-outline">
+                {% elif invoice.status == 'Paid' %}
+               <div class="badge badge-sm badge-success badge-outline">
+                {% elif invoice.status == 'Return' %}
+               <div class="badge badge-sm badge-dark badge-outline">
+                {% else %}
+               <div class="badge badge-sm badge-primary badge-outline">
+                {% endif %}
+                {{ invoice.status }}
+               </div>
+              </td>
+              <td>
+               {{ invoice.posting_date }}
+              </td>
+              <td>
+               {{ frappe.format(invoice.grand_total, {'fieldtype': 'Currency'}) }}
+              </td>
+              <td>
+               {{ frappe.format(invoice.outstanding_amount, {'fieldtype': 'Currency'}) }}
+              </td>
+              <td class="text-center">
+               <a class="btn btn-link" href="/printview?doctype=Sales%20Invoice&name={{ invoice.name }}&format=Standard" target="_blank">
+                {{ invoice.name }}
+               </a>
+              </td>
+             </tr>
+             {% endfor %}
+            </tbody>
+           </table>
+          </div>
+          <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
+           <div class="flex items-center gap-2 order-2 md:order-1">
+            Show
+            <select class="select select-sm w-16" data-datatable-size="true" name="perpage">
+            </select>
+            per page
+           </div>
+           <div class="flex items-center gap-4 order-1 md:order-2">
+            <span data-datatable-info="true">
+            </span>
+            <div class="pagination" data-datatable-pagination="true">
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+    </main>
+{% endblock %}

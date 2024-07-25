@@ -1,0 +1,16 @@
+{
+  "name": "edubliss",
+  "version": "1.0.0",
+  "description": "School Portal and Dashboard Extension",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tailwindcss -i ./edubliss/templates/base.css -o ./edubliss/public/css/styles.css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}
