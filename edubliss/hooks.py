@@ -240,3 +240,14 @@ website_route_rules = [
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+fixtures = [{
+  'dt' : 'Custom Field', 'filters':[
+    [
+      'name', 'in', [
+        'Student-custom_prev_school',
+        'Student-custom_tab_7',
+        'Student-custom_school'
+      ]
+    ]
+  ]
+}]
