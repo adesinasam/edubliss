@@ -1,6 +1,6 @@
 app_name = "edubliss"
 app_title = "edubliss"
-app_publisher = "BWH"
+app_publisher = "Adesina"
 app_description = "School Portal and Dashboard Extension"
 app_email = "support@glistercp.com.ng"
 app_license = "mit"

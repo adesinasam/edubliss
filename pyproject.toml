@@ -1,7 +1,7 @@
 [project]
 name = "edubliss"
 authors = [
-    { name = "BWH", email = "hussain@frappe.io"}
+    { name = "Adesina", email = "support @glistercp.com.ng"}
 ]
 description = "School Portal and Dashboard Extension"
 requires-python = ">=3.10"
