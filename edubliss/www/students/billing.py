@@ -4,33 +4,53 @@ from frappe import _
 no_cache = 1
 
 def get_context(context):
+
     docname = frappe.form_dict.docname
 
-    # Ensure the user is logged in
+    # login
     if frappe.session.user == "Guest":
         frappe.throw(_("You need to be logged in to access this page"), frappe.PermissionError)
 
     context.current_user = frappe.get_doc("User", frappe.session.user)
-    context.docname = docname
-    context.active_subroute = 'billing'
+
+    # nav
+    context.active_route = "students"
+    context.active_subroute = "student_list"
+    context.active_student_route = "billing"
+
+    context.docname = frappe.form_dict.docname
+
+    edubliss_session = frappe.call('edubliss.api.get_edubliss_user_session')
+    if edubliss_session:
+        context.edublisession = edubliss_session
+        company = edubliss_session.school
+        acadyear = edubliss_session.academic_year
+        acadterm = edubliss_session.academic_term
+    else:
+        context.edublisession = _("Welcome")  # Assuming welcome is a placeholder message
+        company = None
+
+    context.company = edubliss_session.school
+    context.acadyear = edubliss_session.academic_year
+    context.acadterm = edubliss_session.academic_term
+    context.program = frappe.call(
+        'edubliss.api.get_student_program',
+         student=docname, 
+         academic_year=acadyear, 
+         academic_term=acadterm
+    )
+
+    context.companys = frappe.call('edubliss.api.get_company')
+    context.acadyears = frappe.call('edubliss.api.get_academic_year')
+    context.acadterms = frappe.call('edubliss.api.get_academic_term')
+    context.sales_invoices = frappe.call('edubliss.api.get_sales_invoices', company=company)
+    context.students = frappe.call('edubliss.api.get_students', company=company)
 
     # Try to fetch the Student document and handle errors if it doesn't exist
     try:
         context.students = frappe.get_doc("Student", docname)
     except frappe.DoesNotExistError:
         frappe.throw(_("Student not found"), frappe.DoesNotExistError)
-    
-    # Ensure the customer field exists on the student document
-    # if not hasattr(context.students, 'customer'):
-    #     frappe.throw(_("The student document does not have a customer field"), frappe.ValidationError)
 
-    # Fetch sales invoices
-    sales_invoices = frappe.get_all(
-        "Sales Invoice",
-        filters={"customer": context.students.customer},
-        fields=["name", "title", "status", "posting_date", "grand_total", "outstanding_amount", "customer"],
-        order_by="posting_date desc"
-    )
-    context.sales_invoices = sales_invoices
 
     return context
