@@ -1,0 +1,70 @@
+      {% if edublisession == 'Welcome' %}
+     <div class="modal" data-modal="true" data-modal-backdrop-static="true" id="modal_welcome_message">
+      <div class="modal-content modal-center max-w-[600px] w-full" >
+       <div class="modal-header">
+        <h3 class="modal-title">
+          {%- if brand_html -%}
+          <span class="default-logo min-h-[20px] max-w-[20px]">
+          {{ brand_html }}
+          </span>
+          {%- elif banner_image -%}
+          <img src='{{ banner_image }}' class="default-logo min-h-[20px] max-w-[20px]">
+          {%- endif -%}
+        </h3>
+       </div>
+       <div class="modal-body scrollable-y py-0 my-5 pl-6 pr-3 mr-3 h-[300px] max-h-[95%]">
+        <div class="mb-10 flex flex-col items-center">
+         <img alt="image" class="dark:hidden max-h-[140px]" src="assets/edubliss/dist/media/illustrations/21.svg"/>
+         <img alt="image" class="light:hidden max-h-[140px]" src="assets/edubliss/dist/media/illustrations/21-dark.svg"/>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 text-center mb-3">
+         Welcome Onboard
+        </h3>
+        <div class="text-2sm font-medium text-center text-gray-600 mb-7">
+         We're thrilled to have you on board and excited for
+         <br/>
+         the journey ahead together.
+        </div>
+        <form  id="userForm" action="/api/method/edubliss.api.submit_form" method="post">
+          <input type="hidden" name="csrf_token" value="{{frappe.session.csrf_token}}">
+          <input type="hidden" name="user" value="{{ current_user.name }}">
+          <input type="hidden" name="user_full_name" value="{{ current_user.user_full_name }}">
+          <input type="hidden" name="username" value="{{ current_user.username }}">
+          <input type="hidden" name="initial_url" value="{{ frappe.request.url }}">
+          <div class="grid p-5 border-t border-t-gray-200">
+            <span class="text-2sm font-semibold text-primary hover:text-primary-active">
+                School
+            </span>
+            <select id="company" name="company" class="select select-sm bg-dark-light" required>
+              <option value=""> Select School </option>
+            {% for company in companys %}
+              <option value="{{ company.name }}">{{ company.company_name }}</option>
+            {% endfor %}
+            </select>
+            <br>
+            <span class="text-2sm font-semibold text-primary hover:text-primary-active">
+              Academic Term
+            </span>
+            <select id="academic_term" name="academic_term" class="select select-sm bg-info-light" required>
+              <option value=""> Select Academic Term </option>
+            {% for acadterm in acadterms %}
+              <option value="{{ acadterm.name }}">{{ acadterm.title }}</option>
+            {% endfor %}
+            </select>
+          </div>
+          <div class="grid p-5 border-t border-t-gray-200">
+             <input type="submit" class="btn btn-sm btn-primary justify-center" value="Get Started">
+          </div>
+       </form>
+       </div>
+      </div>
+     </div>
+     <script>
+      window.onload = () => {
+        const modalEl = KTDom.getElement('#modal_welcome_message');
+        const modal = KTModal.getInstance(modalEl);
+        modal?.show();
+    };
+     </script>
+     {% endif %}
+

@@ -1,3 +1,4 @@
+    {% if frappe.session.user != 'Guest' %}
       <div class="flex items-center gap-2 lg:gap-3.5">
        <button class="btn btn-icon btn-icon-lg size-9 rounded-full hover:bg-primary-light hover:text-primary text-gray-500" data-modal-toggle="#search_modal">
         <i class="ki-filled ki-magnifier">
@@ -1622,7 +1623,6 @@
          </div>
         </div>
        </div>
-    {% if frappe.session.user != 'Guest' %}
        <div class="menu" data-menu="true">
         <div class="menu-item" data-menu-item-offset="20px, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
          <div class="menu-toggle btn btn-icon rounded-full">
@@ -1894,5 +1894,5 @@
          </div>
         </div>
        </div>
-    {% endif %}
       </div>
+    {% endif %}

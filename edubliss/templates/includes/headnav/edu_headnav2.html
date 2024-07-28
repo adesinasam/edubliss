@@ -6,20 +6,20 @@
 
       <div class="flex [.header_&amp;]:below-lg:hidden items-center gap-1.25 text-xs lg:text-sm font-medium mb-2.5 lg:mb-0" data-reparent="true" data-reparent-mode="prepend|lg:prepend" data-reparent-target="#content_container|lg:#header_container">
           <div class="flex flex-wrap gap-2.5">
-           <span class="badge badge-pill badge-outline badge-dark gap-1 items-center">
+           <span class="badge badge-pill badge-dark gap-1 items-center">
             <i class="ki-solid ki-home">
             </i>
-            Maryland Prestigious Elementary School 
+            {{ edublisession.school or "" }} 
            </span>
            <span class="badge badge-pill badge-outline badge-primary gap-1 items-center">
             <i class="ki-duotone ki-calendar">
             </i>
-            2023-2024
+            {{ edublisession.academic_year or "" }} 
            </span>
            <span class="badge badge-pill badge-outline badge-info gap-1 items-center">
             <i class="ki-solid ki-note">
             </i>
-            2023-2024 (Third Term)
+            {{ edublisession.academic_term or "" }} 
            </span>
            <div class="dropdown" data-dropdown="true" data-dropdown-offset="10px, 10px" data-dropdown-placement="bottom-end" data-dropdown-trigger="click|lg:click">
             <button class="dropdown-toggle btn btn-sm btn-sm-lg hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500">
@@ -28,48 +28,42 @@
               Filters
             </button>
             <div class="dropdown-content light:border-gray-300 w-full max-w-[320px]">
-             <form id="selectForm" onsubmit="return submitForm()">
-             <div class="grid p-5 border-t border-t-gray-200">
-                 <span class="text-2sm font-semibold text-gray-900 hover:text-primary-active">
-                  School
-                 </span>
-                 {% set companys = frappe.call('edubliss.api.get_company') %}
-                 <select id="company" class="select select-sm bg-dark-light">
-                 {% for company in companys %}
+              {% if edublisession != 'Welcome' %}
+             <form  id="userForm" action="/api/method/edubliss.api.submit_form" method="post">
+              <input type="hidden" name="csrf_token" value="{{frappe.session.csrf_token}}">
+              <input type="hidden" name="user" value="{{ current_user.name }}">
+              <input type="hidden" name="user_full_name" value="{{ current_user.user_full_name }}">
+              <input type="hidden" name="username" value="{{ current_user.username }}">
+              <input type="hidden" name="initial_url" value="{{ frappe.request.url }}">
+              <div class="grid p-5 border-t border-t-gray-200">
+                <span class="text-2sm font-semibold text-primary hover:text-primary-active">
+                School
+                </span>
+                <select id="company" name="company" class="select select-sm bg-dark-light">
+                  <option value=""> Select School </option>
+                {% for company in companys %}
                   <option value="{{ company.name }}">{{ company.company_name }}</option>
-                 {% endfor %}
-                 </select>
-                 <br>
-                 <span class="text-2sm font-semibold text-gray-900 hover:text-primary-active">
-                  Academic Year
-                 </span>
-                 {% set acadyears = frappe.call('edubliss.api.get_academic_year') %}
-                 <select id="academic_year" class="select select-sm bg-primary-light">
-                 {% for acadyear in acadyears %}
-                  <<option value="{{ acadyear.name }}">{{ acadyear.academic_year_name }}</option>
-                 {% endfor %}
-                 </select>
-                 <br>
-                 <span class="text-2sm font-semibold text-gray-900 hover:text-primary-active">
+                {% endfor %}
+                </select>
+                <br>
+                <span class="text-2sm font-semibold text-primary hover:text-primary-active">
                   Academic Term
-                 </span>
-                 {% set acadterms = frappe.call('edubliss.api.get_academic_term') %}
-                 <select id="academic_term" class="select select-sm bg-info-light">
-                 {% for acadterm in acadterms %}
+                </span>
+                <select id="academic_term" name="academic_term" class="select select-sm bg-info-light" required>
+                  <option value=""> Select Academic Term </option>
+                {% for acadterm in acadterms %}
                   <option value="{{ acadterm.name }}">{{ acadterm.title }}</option>
-                 {% endfor %}
-                 </select>
-             </div>
-             <div class="grid p-5 border-t border-t-gray-200">
-              <input type="submit" class="btn btn-sm btn-primary justify-center" value="Apply">
-             </div>
+                {% endfor %}
+                </select>
+              </div>
+              <div class="grid p-5 border-t border-t-gray-200">
+                <input type="submit" class="btn btn-sm btn-primary justify-center" value="Filter">
+              </div>
              </form>
+             {%  endif %}
             </div>
            </div>
           </div>
-<!--        <span class="text-gray-700">
-        {{ title | striptags }}
-       </span> -->
       </div>
 
 {% include "templates/includes/headnav/edu_subheadnav.html" %}

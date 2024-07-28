@@ -1,0 +1,139 @@
+{% extends "templates/layout.html" %}
+
+{%- block title -%}{{_("Admission Enquiry")}}{%- endblock -%}
+
+{% block body_link %}
+ <body class="flex h-full demo1 header-fixed bg-[#fefefe] dark:bg-coal-500">
+{% endblock %}
+
+{% block sidebar_link %}
+{% endblock %}
+
+{% block headnav_link %}
+{% include "templates/includes/headnav/edu_headnav.html" %}
+{% endblock %}
+
+{% block content %} 
+
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed">
+        <div>
+         <style>
+          .entry-callout-bg {
+        background-image: url('/assets/edubliss/dist/media/images/2600x1600/2.png');
+    }
+    .dark .entry-callout-bg {
+        background-image: url('/assets/edubliss/dist/media/images/2600x1600/2-dark.png');
+    }
+         </style>
+         <div class="h-full h-full bg-info-light">
+          <div class="card-body p-10 bg-[length:80%] [background-position:175%_25%] bg-no-repeat entry-callout-bg">
+           <div class="flex flex-col justify-center gap-4">
+            <div class="flex -space-x-2">
+             <div id="clock" class="flex clock hover:z-5 relative"><b></b></div>
+            </div>
+            <h2 class="text-1.5xl font-semibold text-gray-900">
+             Welcome to 
+             <br/>
+             <a class="link" href="#">
+              Maryland Prestigious Intl Schools
+             </a>
+            </h2>
+            <p class="text-sm font-medium text-gray-700 leading-5.5">
+             MPIS community is a place where everyone values each other. 
+             <br/>
+             Our mission is to ensure success in 
+             <br/>
+             all areas of development.
+            </p>
+           </div>
+          </div>
+          <div class="card-footer justify-center">
+           <a class="btn btn-link" href="/">
+            Learn More
+           </a>
+          </div>
+         </div>
+        </div>
+     </div>
+     <!-- end: container -->
+
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="gap-5 pb-7.5">
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="card card-grid min-w-full">
+        <div class="card-header flex-wrap gap-2">
+         <h3 class="card-title font-medium text-sm">
+          Student Admissions
+         </h3>
+        </div>
+        <div class="card-body">
+          <div class="scrollable-x-auto">
+           <table class="table align-middle text-gray-700 font-medium text-sm">
+            <tbody>
+            {% for admission in admissions %}
+             <tr>
+              <td>
+               <span class="badge badge-dot size-1.5 badge-success">
+               </span>
+               <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/admissions/{{ admission.name | replace(' ', '-') }}">
+               {{ admission.title }}
+               </a>
+              </td>
+              <td>
+                Academic Year <br>
+               {{ admission.academic_year }}
+              </td>
+              <td>
+                Start on <br>
+               {{ admission.admission_start_date.strftime("%B %d, %Y") }}
+              </td>
+              <td>
+                Ends on <br>
+               {{ admission.admission_end_date.strftime("%B %d, %Y") }}
+              </td>
+              <td>
+               <div class="menu" data-menu="true">
+                <div class="menu-item" data-menu-item-offset="0, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
+                 <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
+                  <i class="ki-filled ki-dots-vertical">
+                  </i>
+                 </button>
+                 <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
+                  <div class="menu-item">
+                   <a class="menu-link" href="/admissions/{{ admission.name | replace(' ', '-') }}">
+                    <span class="menu-icon">
+                     <i class="ki-filled ki-search-list">
+                     </i>
+                    </span>
+                    <span class="menu-title">
+                     View
+                    </span>
+                   </a>
+                  </div>
+                 </div>
+                </div>
+               </div>
+              </td>
+             </tr>
+               {% endfor %}
+            </tbody>
+           </table>
+          </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+    </main>
+{%- endblock -%}
+
+{% block modal_link %}
+{% endblock %}

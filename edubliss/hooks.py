@@ -42,7 +42,7 @@ app_license = "mit"
 # ----------
 
 # application home page (will override Website Settings)
-# home_page = "login"
+home_page = "portal"
 
 # website user home page (by Role)
 # role_home_page = {
@@ -52,7 +52,7 @@ app_license = "mit"
 website_route_rules = [
     {"from_route": "/students/profile/<docname>", "to_route": "students/profile"},
     {"from_route": "/students/billing/<docname>", "to_route": "students/billing"},
-    {"from_route": "/students/ledger/<docname>", "to_route": "students/ledger"}
+    {"from_route": "/students/ledger/<docname>", "to_route": "students/ledger"},
 ]
 
 # Generators

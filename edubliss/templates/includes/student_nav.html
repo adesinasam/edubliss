@@ -4,7 +4,7 @@
        <div class="grid">
         <div class="scrollable-x-auto">
          <div class="menu gap-3" data-menu="true">
-          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_subroute == 'profile' or active_subroute == 'settings' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'profile' or active_student_route == 'settings' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
            <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" tabindex="0">
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
              Account Home
@@ -15,14 +15,14 @@
             </span>
            </div>
            <div class="menu-dropdown menu-default py-2 min-w-[200px]">
-            <div class="menu-item {% if active_subroute == 'profile' %}active{% endif %}">
+            <div class="menu-item {% if active_student_route == 'profile' %}active{% endif %}">
              <a class="menu-link" href="/students/profile/{{docname}}" tabindex="0">
               <span class="menu-title">
                Profile
               </span>
              </a>
             </div>
-            <div class="menu-item {% if active_subroute == 'settings' %}active{% endif %}">
+            <div class="menu-item {% if active_student_route == 'settings' %}active{% endif %}">
              <a class="menu-link" href="/students/settings/{{docname}}" tabindex="0">
               <span class="menu-title">
                Family Info
@@ -31,35 +31,35 @@
             </div>
            </div>
           </div>
-          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_subroute == 'enrollment' %}here{% endif %}">
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'enrollment' %}here{% endif %}">
            <a class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" href="/students/enrollment/{{docname}}" tabindex="0">
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
              Enrollment
             </span>
            </a>
           </div>
-          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_subroute == 'attendance' %}here{% endif %}">
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'attendance' %}here{% endif %}">
            <a class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" href="/students/attendance/{{docname}}" tabindex="0">
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
              Class Schedule
             </span>
            </a>
           </div>
-          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_subroute == 'attendance' %}here{% endif %}">
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'attendance' %}here{% endif %}">
            <a class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" href="/students/attendance/{{docname}}" tabindex="0">
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
              Attendance
             </span>
            </a>
           </div>          
-          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_subroute == 'report_card' %}here{% endif %}">
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'report_card' %}here{% endif %}">
            <a class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" href="/students/report_card/{{docname}}" tabindex="0">
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
              Report Cards
             </span>
            </a>
           </div>
-          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_subroute == 'billing' or active_subroute == 'ledger' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'billing' or active_student_route == 'ledger' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
            <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" tabindex="0">
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
              Billing
@@ -70,14 +70,14 @@
             </span>
            </div>
            <div class="menu-dropdown menu-default py-2 min-w-[200px]">
-            <div class="menu-item {% if active_subroute == 'billing' %}active{% endif %}">
+            <div class="menu-item {% if active_student_route == 'billing' %}active{% endif %}">
              <a class="menu-link" href="/students/billing/{{docname}}" tabindex="0">
               <span class="menu-title">
                Billing
               </span>
              </a>
             </div>
-            <div class="menu-item {% if active_subroute == 'ledger' %}active{% endif %}">
+            <div class="menu-item {% if active_student_route == 'ledger' %}active{% endif %}">
              <a class="menu-link" href="/students/ledger/{{docname}}" tabindex="0">
               <span class="menu-title">
                Student Ledger
@@ -86,14 +86,14 @@
             </div>
            </div>
           </div>
-          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_subroute == 'health' %}here{% endif %}">
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'health' %}here{% endif %}">
            <a class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" href="/students/health/{{docname}}" tabindex="0">
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
              Medical Info
             </span>
            </a>
           </div>
-          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_subroute == 'communications' or active_subroute == 'activity' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'communications' or active_student_route == 'activity' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
            <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" tabindex="0">
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
              More
@@ -104,14 +104,14 @@
             </span>
            </div>
            <div class="menu-dropdown menu-default py-2 min-w-[200px]">
-            <div class="menu-item {% if active_subroute == 'communications' %}active{% endif %}">
+            <div class="menu-item {% if active_student_route == 'communications' %}active{% endif %}">
              <a class="menu-link" href="/students/notifications/{{students.user}}" tabindex="0">
               <span class="menu-title">
                Communications
               </span>
              </a>
             </div>
-            <div class="menu-item {% if active_subroute == 'activity' %}activity{% endif %}">
+            <div class="menu-item {% if active_student_route == 'activity' %}activity{% endif %}">
              <a class="menu-link" href="/students/activity/{{students.user}}" tabindex="0">
               <span class="menu-title">
                Activity

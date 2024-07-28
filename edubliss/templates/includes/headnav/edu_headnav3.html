@@ -13,6 +13,48 @@
        <span class="text-gray-700">
         {{ title | striptags }}
        </span>
+          <div class="flex flex-wrap gap-2.5">
+           <span class="gap-2">
+           </span>
+           <span class="badge badge-pill badge-outline badge-info gap-1 items-center">
+            <i class="ki-solid ki-note">
+            </i>
+            {{ edublisession.academic_term or "" }} 
+           </span>
+           <div class="dropdown" data-dropdown="true" data-dropdown-offset="10px, 10px" data-dropdown-placement="bottom-end" data-dropdown-trigger="click|lg:click">
+            <button class="dropdown-toggle btn btn-sm btn-sm-lg hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500">
+            <i class="ki-filled ki-setting-4">
+            </i>
+              Filters
+            </button>
+            <div class="dropdown-content light:border-gray-300 w-full max-w-[320px]">
+              {% if edublisession != 'Welcome' %}
+             <form  id="userForm" action="/api/method/edubliss.api.submit_form" method="post">
+              <input type="hidden" name="csrf_token" value="{{frappe.session.csrf_token}}">
+              <input type="hidden" name="user" value="{{ current_user.name }}">
+              <input type="hidden" name="user_full_name" value="{{ current_user.user_full_name }}">
+              <input type="hidden" name="username" value="{{ current_user.username }}">
+              <input type="hidden" name="initial_url" value="{{ frappe.request.url }}">
+              <input type="hidden" name="company" value="{{ company }}">
+              <div class="grid p-5 border-t border-t-gray-200">
+                <span class="text-2sm font-semibold text-primary hover:text-primary-active">
+                  Academic Term
+                </span>
+                <select id="academic_term" name="academic_term" class="select select-sm bg-info-light" required>
+                  <option value=""> Select Academic Term </option>
+                {% for acadterm in acadterms %}
+                  <option value="{{ acadterm.name }}">{{ acadterm.title }}</option>
+                {% endfor %}
+                </select>
+              </div>
+              <div class="grid p-5 border-t border-t-gray-200">
+                <input type="submit" class="btn btn-sm btn-primary justify-center" value="Filter">
+              </div>
+             </form>
+             {%  endif %}
+            </div>
+           </div>
+          </div>
       </div>
 
 {% include "templates/includes/headnav/edu_subheadnav.html" %}

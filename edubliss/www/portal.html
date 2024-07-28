@@ -1,0 +1,249 @@
+{% extends "templates/layout.html" %}
+
+{%- block title -%}{{_("Home")}}{%- endblock -%}
+
+{% block body_link %}
+ <body class="flex h-full demo1 header-fixed bg-[#fefefe] dark:bg-coal-500">
+{% endblock %}
+
+{% block sidebar_link %}
+{% endblock %}
+
+{% block headnav_link %}
+{% include "templates/includes/headnav/edu_headnav.html" %}
+{% endblock %}
+
+{% block content %} 
+
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed">
+        <div>
+         <style>
+          .entry-callout-bg {
+        background-image: url('/assets/edubliss/dist/media/images/2600x1600/2.png');
+    }
+    .dark .entry-callout-bg {
+        background-image: url('/assets/edubliss/dist/media/images/2600x1600/2-dark.png');
+    }
+         </style>
+         <div class="h-full h-full bg-info-light">
+          <div class="card-body p-10 bg-[length:80%] [background-position:175%_25%] bg-no-repeat entry-callout-bg">
+           <div class="flex flex-col justify-center gap-4">
+            <div class="flex -space-x-2">
+             <div id="clock" class="flex clock hover:z-5 relative"><b></b></div>
+            </div>
+            <h2 class="text-1.5xl font-semibold text-gray-900">
+             Welcome to 
+             <br/>
+             <a class="link" href="#">
+              Maryland Prestigious Intl Schools
+             </a>
+            </h2>
+            <p class="text-sm font-medium text-gray-700 leading-5.5">
+             MPIS community is a place where everyone values each other. 
+             <br/>
+             Our mission is to ensure success in 
+             <br/>
+             all areas of development.
+            </p>
+           </div>
+          </div>
+          <div class="card-footer justify-center">
+           <a class="btn btn-link" href="/">
+            Learn More
+           </a>
+          </div>
+         </div>
+        </div>
+     </div>
+     <!-- end: container -->
+
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="gap-5 pb-7.5">
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 lg:gap-7.5">
+       <div class="card p-5 lg:p-7.5 lg:pt-7">
+        <div class="flex flex-col gap-4">
+         <div class="flex items-center justify-between gap-2">
+          <i class="ki-filled ki-badge text-2xl link">
+          </i>
+         </div>
+         <div class="flex flex-col gap-3">
+          <a class="text-base font-semibold leading-none text-gray-900 hover:text-primary-active" href="/">
+           Personal info
+          </a>
+          <span class="text-2sm font-medium text-gray-600 leading-5">
+           We're open to partnerships, guest posts, promo bannersand more.
+          </span>
+         </div>
+        </div>
+       </div>
+       <div class="card p-5 lg:p-7.5 lg:pt-7">
+        <div class="flex flex-col gap-4">
+         <div class="flex items-center justify-between gap-2">
+          <i class="ki-filled ki-security-user text-2xl link">
+          </i>
+         </div>
+         <div class="flex flex-col gap-3">
+          <a class="text-base font-semibold leading-none text-gray-900 hover:text-primary-active" href="html/demo1/account/security/security-log.html">
+           Login &amp; Security
+          </a>
+          <span class="text-2sm font-medium text-gray-600 leading-5">
+           Safeguarding your information with strong authentication measures.
+          </span>
+         </div>
+        </div>
+       </div>
+       <div class="card p-5 lg:p-7.5 lg:pt-7">
+        <div class="flex flex-col gap-4">
+         <div class="flex items-center justify-between gap-2">
+          <i class="ki-filled ki-cheque text-2xl link">
+          </i>
+         </div>
+         <div class="flex flex-col gap-3">
+          <a class="text-base font-semibold leading-none text-gray-900 hover:text-primary-active" href="html/demo1/account/billing/basic.html">
+           Billing &amp; Payments
+          </a>
+          <span class="text-2sm font-medium text-gray-600 leading-5">
+           Simplify payments today with secure, user-friendly transaction processes.
+          </span>
+         </div>
+        </div>
+       </div>
+       <div class="card p-5 lg:p-7.5 lg:pt-7">
+        <div class="flex flex-col gap-4">
+         <div class="flex items-center justify-between gap-2">
+          <i class="ki-filled ki-notification-on text-2xl link">
+          </i>
+         </div>
+         <div class="flex flex-col gap-3">
+          <a class="text-base font-semibold leading-none text-gray-900 hover:text-primary-active" href="html/demo1/account/notifications.html">
+           Notifications
+          </a>
+          <span class="text-2sm font-medium text-gray-600 leading-5">
+           Keep updated with important notices and event reminders.
+          </span>
+         </div>
+        </div>
+       </div>
+       <div class="card p-5 lg:p-7.5 lg:pt-7">
+        <div class="flex flex-col gap-4">
+         <div class="flex items-center justify-between gap-2">
+          <i class="ki-filled ki-dropbox text-2xl link">
+          </i>
+         </div>
+         <div class="flex flex-col gap-3">
+          <a class="text-base font-semibold leading-none text-gray-900 hover:text-primary-active" href="html/demo1/account/integrations.html">
+           Integrations
+          </a>
+          <span class="text-2sm font-medium text-gray-600 leading-5">
+           Enhance Workflows with Advanced Integrations.
+          </span>
+         </div>
+        </div>
+       </div>
+       <div class="card p-5 lg:p-7.5 lg:pt-7">
+        <div class="flex flex-col gap-4">
+         <div class="flex items-center justify-between gap-2">
+          <i class="ki-filled ki-book text-2xl link">
+          </i>
+         </div>
+         <div class="flex flex-col gap-3">
+          <a class="text-base font-semibold leading-none text-gray-900 hover:text-primary-active" href="/">
+           e-Learning
+          </a>
+          <span class="text-2sm font-medium text-gray-600 leading-5">
+           Online courses.
+          </span>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="bg-inverse">
+        <div class="card-body flex flex-col items-center gap-2.5 py-7.5">
+         <div class="flex justify-center p-7.5 py-9">
+          <img alt="image" class="dark:hidden max-h-[230px]" src="assets/edubliss/dist/media/illustrations/28.svg"/>
+          <img alt="image" class="light:hidden max-h-[230px]" src="assets/edubliss/dist/media/illustrations/28-dark.svg"/>
+         </div>
+         <div class="flex flex-col gap-5 lg:gap-7.5">
+          <div class="flex flex-col gap-3 text-center">
+           <h2 class="text-1.5xl font-semibold text-gray-900">
+            New Student Onboarding and Registration
+           </h2>
+           <p class="text-sm font-medium text-gray-700">
+            Studying in our state-of-the-art facility remains one of the 
+            <br/>
+            best decisions you will make in life.
+           </p>
+          </div>
+          <div class="flex justify-center mb-5">
+           <a class="btn btn-primary" href="/">
+            Admission Enquiry
+           </a>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="grid lg:grid-cols-2 gap-5 lg:gap-7.5">
+        <div class="card">
+         <div class="card-body px-10 py-7.5 lg:pr-12.5">
+          <div class="flex flex-wrap md:flex-nowrap items-center gap-6 md:gap-10">
+           <div class="flex flex-col items-start gap-3">
+            <h2 class="text-1.5xl font-semibold text-gray-900">
+             Questions ?
+            </h2>
+            <p class="text-sm font-medium text-gray-700 leading-5.5 mb-2.5">
+             Visit our Help Center for detailed assistance on billing, payments, and subscriptions.
+            </p>
+           </div>
+           <img alt="image" class="dark:hidden max-h-[150px]" src="assets/edubliss/dist/media/illustrations/29.svg"/>
+           <img alt="image" class="light:hidden max-h-[150px]" src="assets/edubliss/dist/media/illustrations/29-dark.svg"/>
+          </div>
+         </div>
+         <div class="card-footer justify-center">
+          <a class="btn btn-link" href="">
+           Go to Help Center
+          </a>
+         </div>
+        </div>
+        <div class="card">
+         <div class="card-body px-10 py-7.5 lg:pr-12.5">
+          <div class="flex flex-wrap md:flex-nowrap items-center gap-6 md:gap-10">
+           <div class="flex flex-col items-start gap-3">
+            <h2 class="text-1.5xl font-semibold text-gray-900">
+             Contact Support
+            </h2>
+            <p class="text-sm font-medium text-gray-700 leading-5.5 mb-2.5">
+             Need assistance? Contact our support team for prompt, personalized help your queries &amp; concerns.
+            </p>
+           </div>
+           <img alt="image" class="dark:hidden max-h-[150px]" src="assets/edubliss/dist/media/illustrations/31.svg"/>
+           <img alt="image" class="light:hidden max-h-[150px]" src="assets/edubliss/dist/media/illustrations/31-dark.svg"/>
+          </div>
+         </div>
+         <div class="card-footer justify-center">
+          <a class="btn btn-link" href="">
+           Contact Support
+          </a>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+    </main>
+{%- endblock -%}
+
+{% block modal_link %}
+{% endblock %}

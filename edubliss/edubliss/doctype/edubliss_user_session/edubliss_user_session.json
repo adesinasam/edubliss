@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:user",
  "creation": "2024-07-25 08:12:18.412953",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -80,10 +81,11 @@
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-07-25 08:48:15.937858",
+ "modified": "2024-07-26 04:42:00.153024",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Edubliss User Session",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
