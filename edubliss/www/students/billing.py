@@ -43,14 +43,20 @@ def get_context(context):
     context.companys = frappe.call('edubliss.api.get_company')
     context.acadyears = frappe.call('edubliss.api.get_academic_year')
     context.acadterms = frappe.call('edubliss.api.get_academic_term')
-    context.sales_invoices = frappe.call('edubliss.api.get_sales_invoices', company=company)
-    context.students = frappe.call('edubliss.api.get_students', company=company)
 
     # Try to fetch the Student document and handle errors if it doesn't exist
     try:
         context.students = frappe.get_doc("Student", docname)
+        customer = context.students.customer
     except frappe.DoesNotExistError:
         frappe.throw(_("Student not found"), frappe.DoesNotExistError)
+
+    # Fetch sales invoices
+    context.sales_invoices = frappe.call(
+        'edubliss.api.get_student_invoices', 
+        customer=customer, 
+        company=company
+        )
 
 
     return context

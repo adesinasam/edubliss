@@ -27,43 +27,25 @@
          Student Ledger
         </h1>
         <div class="flex items-center gap-2 text-sm font-medium text-gray-600">
+         Account Statement 
         </div>
        </div>
        <div class="flex items-center gap-2.5">
         <a class="btn btn-sm btn-light" href="#">
-         Order History
+         Payment History
         </a>
        </div>
       </div>
      </div>
      <!-- end: container -->
      <!-- begin: container -->
-     <div class="container-fixed">
-      <!-- begin: grid -->
-      <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 lg:gap-7.5">
-       <div class="col-span-2">
-        <div class="flex flex-col gap-5 lg:gap-7.5">
-         <div class="card">
-          <div class="card-body lg:py-7.5">
-           <div class="flex flex-col items-stretch gap-5 lg:gap-7.5">
-            <div class="flex items-center flex-wrap gap-2 lg:gap-5">
-             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
-              <span class="text-gray-900 text-md leading-none font-semibold">
-               $769.00
-              </span>
-              <span class="text-gray-600 text-2sm font-medium">
-               Annual Total
-              </span>
-             </div>
-             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
-              <span class="text-gray-900 text-md leading-none font-semibold">
-               $69.00
-              </span>
-              <span class="text-gray-600 text-2sm font-medium">
-               Next Bill Amount
-              </span>
-             </div>
-            <div class="flex items-center flex-wrap gap-2 lg:gap-5">
+    <div class="container-fixed">
+     <div class="grid gap-5 lg:gap-7.5">
+        <div class="card">
+         <div class="card-body lg:py-7.5">
+          <div class="flex flex-wrap gap-7.5">
+           <div class="flex flex-col gap-5 lg:gap-7.5 grow">
+            <div class="flex items-center flex-wrap gap-3 lg:gap-5">
              <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
               <span class="text-gray-900 text-md leading-none font-semibold">
                $769.00
@@ -88,166 +70,130 @@
                Next Billing Date
               </span>
              </div>
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
+              <span class="text-gray-900 text-md leading-none font-semibold">
+               $769.00
+              </span>
+              <span class="text-gray-600 text-2sm font-medium">
+               Annual Total
+              </span>
+             </div>
             </div>
            </div>
           </div>
          </div>
-         <div class="card grow">
-          <div class="card-header">
-           <h3 class="card-title">
-            Ledger
-           </h3>
-           <button class="btn btn-light btn-sm">
-            <i class="ki-filled ki-exit-down">
-            </i>
-            Download All
-           </button>
-          </div>
+        </div>
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="card card-grid min-w-full">
+        <div class="card-header">
+         <h3 class="card-title">
+         </h3>
+        </div>
+        <div class="card-body">
           <div class="card-table scrollable-x-auto">
-           <table class="table">
-            <thead>
-             <tr>
-              <th class="min-w-52">
-               Invoice
-              </th>
-              <th class="min-w-24 text-right">
-               Status
-              </th>
-              <th class="min-w-32 text-right">
-               Date
-              </th>
-              <th class="min-w-20 text-right">
-               Amount
-              </th>
-              <th class="w-8">
-              </th>
-             </tr>
-            </thead>
-            <tbody>
-             <tr>
-              <td class="text-sm font-medium text-gray-700">
-               Invoice-2024-xd912c
-              </td>
-              <td class="lg:text-right">
-               <div class="badge badge-sm badge-warning badge-outline">
-                Upcoming
-               </div>
-              </td>
-              <td class="text-sm font-medium text-gray-700 lg:text-right">
-               6 Aug, 2024
-              </td>
-              <td class="text-sm text-gray-700 font-medium lg:text-right">
-               $24.00
-              </td>
-              <td>
-               <div class="btn btn-sm btn-icon btn-clear btn-primary">
-                <i class="ki-filled ki-exit-down">
-                </i>
-               </div>
-              </td>
-             </tr>
-             <tr>
-              <td class="text-sm font-medium text-gray-700">
-               Invoice-2024-rq857m
-              </td>
-              <td class="lg:text-right">
-               <div class="badge badge-sm badge-success badge-outline">
-                Paid
-               </div>
-              </td>
-              <td class="text-sm font-medium text-gray-700 lg:text-right">
-               17 Jun, 2024
-              </td>
-              <td class="text-sm text-gray-700 font-medium lg:text-right">
-               $29.99
-              </td>
-              <td>
-               <div class="btn btn-sm btn-icon btn-clear btn-primary">
-                <i class="ki-filled ki-exit-down">
-                </i>
-               </div>
-              </td>
-             </tr>
-             <tr>
-              <td class="text-sm font-medium text-gray-700">
-               Invoice-2024-jk563z
-              </td>
-              <td class="lg:text-right">
-               <div class="badge badge-sm badge-success badge-outline">
-                Paid
-               </div>
-              </td>
-              <td class="text-sm font-medium text-gray-700 lg:text-right">
-               30 Apr, 2024
-              </td>
-              <td class="text-sm text-gray-700 font-medium lg:text-right">
-               $24.00
-              </td>
-              <td>
-               <div class="btn btn-sm btn-icon btn-clear btn-primary">
-                <i class="ki-filled ki-exit-down">
-                </i>
-               </div>
-              </td>
-             </tr>
-             <tr>
-              <td class="text-sm font-medium text-gray-700">
-               Invoice-2024-hg234x
-              </td>
-              <td class="lg:text-right">
-               <div class="badge badge-sm badge-danger badge-outline">
-                Declined
-               </div>
-              </td>
-              <td class="text-sm font-medium text-gray-700 lg:text-right">
-               21 Apr, 2024
-              </td>
-              <td class="text-sm text-gray-700 font-medium lg:text-right">
-               $6.59
-              </td>
-              <td>
-               <div class="btn btn-sm btn-icon btn-clear btn-primary">
-                <i class="ki-filled ki-exit-down">
-                </i>
-               </div>
-              </td>
-             </tr>
-             <tr>
-              <td class="text-sm font-medium text-gray-700">
-               Invoice-2024-lp098y
-              </td>
-              <td class="lg:text-right">
-               <div class="badge badge-sm badge-success badge-outline">
-                Paid
-               </div>
-              </td>
-              <td class="text-sm font-medium text-gray-700 lg:text-right">
-               14 mar, 2024
-              </td>
-              <td class="text-sm text-gray-700 font-medium lg:text-right">
-               $24.00
-              </td>
-              <td>
-               <div class="btn btn-sm btn-icon btn-clear btn-primary">
-                <i class="ki-filled ki-exit-down">
-                </i>
-               </div>
-              </td>
-             </tr>
-            </tbody>
-           </table>
+            <table class="table table-border">
+             <thead>
+              <tr>
+                <th></th>
+                <th class="w-[170px]">Posting Date</th>
+                <th class="w-[200px]">Student</th>
+                <th class="w-[170px]"><span class="sort">Debit</th>
+                <th class="w-[170px]">Credit</th>
+                <th class="w-[170px]">Balance</th>
+                <th class="w-[170px]">Voucher Type</th>
+                <th class="w-[170px]">Voucher No</th>
+                <th class="w-[200px]">Remarks</th>
+              </tr>
+             </thead>
+             <tbody>
+              {% set total_debit = 0 %}
+              {% set total_credit = 0 %}
+              {% set balance = 0 %}
+              {% for ledger in ledgers %}
+                    {% set debit = ledger.debit if ledger.debit is not none else 0 %}
+                    {% set credit = ledger.credit if ledger.credit is not none else 0 %}
+                    {% set total_debit = total_debit + debit %}
+                    {% set total_credit = total_credit + credit %}
+                    {% set balance = balance + debit - credit %}
+              <tr>
+               <td>{{ loop.index }}</td>
+               <td>{{ ledger.posting_date }}</td>
+               <td>
+                 <span class="leading-none font-semibold text-sm text-gray-900 hover:text-primary">{{ ledger.party }}</span>
+               </td>
+               <td>{{ frappe.format(debit, {'fieldtype': 'Currency'}) }}</td>
+               <td>{{ frappe.format(credit, {'fieldtype': 'Currency'})}}</td>
+               <td>{{ frappe.format(balance, {'fieldtype': 'Currency'}) }}</td>
+               <td>{{ ledger.voucher_type }}</td>
+               <td class="text-center">
+                  <a class="btn btn-link" href="/printview?doctype={{ ledger.voucher_type }}&name={{ ledger.voucher_no }}&format=Standard" target="_blank">{{ ledger.voucher_no }}</a>
+               </td>
+               <td>{{ ledger.remarks }}</td>
+              </tr>
+              {% endfor %}
+             </tbody>
+             <tfoot>
+              <tr>
+               <td colspan="3"><b>Total</b></td>
+               <td><b>{{ frappe.format(total_debit, {'fieldtype': 'Currency'}) }}</b></td>
+               <td><b>{{ frappe.format(total_credit, {'fieldtype': 'Currency'}) }}</b></td>
+               <td><b>{{ frappe.format(balance, {'fieldtype': 'Currency'}) }}</b></td>
+               <td colspan="3"></td>
+              </tr>
+             </tfoot>
+            </table>
           </div>
-          <div class="card-footer justify-center">
-           <a class="btn btn-link" href="#">
-            View all Payments
-           </a>
-          </div>
-         </div>
         </div>
        </div>
       </div>
-      <!-- end: grid -->
+       <div class="grid lg:grid-cols-2 gap-5 lg:gap-7.5">
+        <div class="card">
+         <div class="card-body px-10 py-7.5 lg:pr-12.5">
+          <div class="flex flex-wrap md:flex-nowrap items-center gap-6 md:gap-10">
+           <div class="flex flex-col items-start gap-3">
+            <h2 class="text-1.5xl font-semibold text-gray-900">
+             Questions ?
+            </h2>
+            <p class="text-sm font-medium text-gray-700 leading-5.5 mb-2.5">
+             Visit our Help Center for detailed assistance on billing, payments, subscriptions and more.
+            </p>
+           </div>
+           <img alt="image" class="dark:hidden max-h-[150px]" src="assets/edubliss/dist/media/illustrations/29.svg"/>
+           <img alt="image" class="light:hidden max-h-[150px]" src="assets/edubliss/dist/media/illustrations/29-dark.svg"/>
+          </div>
+         </div>
+         <div class="card-footer justify-center">
+          <a class="btn btn-link" href="https://wa.me/+2347043257997">
+          <i class="ki-filled ki-whatsapp">
+          </i>
+           Chat us on Whatsapp
+          </a>
+         </div>
+        </div>
+        <div class="card">
+         <div class="card-body px-10 py-7.5 lg:pr-12.5">
+          <div class="flex flex-wrap md:flex-nowrap items-center gap-6 md:gap-10">
+           <div class="flex flex-col items-start gap-3">
+            <h2 class="text-1.5xl font-semibold text-gray-900">
+             Contact Support
+            </h2>
+            <p class="text-sm font-medium text-gray-700 leading-5.5 mb-2.5">
+             Need assistance? Contact our support team for prompt, personalized help your queries &amp; concerns.
+            </p>
+           </div>
+           <img alt="image" class="dark:hidden max-h-[150px]" src="assets/edubliss/dist/media/illustrations/31.svg"/>
+           <img alt="image" class="light:hidden max-h-[150px]" src="assets/edubliss/dist/media/illustrations/31-dark.svg"/>
+          </div>
+         </div>
+         <div class="card-footer justify-center">
+          <a class="btn btn-link" href="">
+           Contact Support
+          </a>
+         </div>
+        </div>
+       </div>
      </div>
+    </div>
      <!-- end: container -->
     </main>
 {% endblock %}

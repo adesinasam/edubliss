@@ -1627,9 +1627,9 @@
         <div class="menu-item" data-menu-item-offset="20px, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
          <div class="menu-toggle btn btn-icon rounded-full">
           {% if current_user.user_image  %}
-          <img alt="" class="size-9 rounded-full border-2 border-success shrink-0" src="{{ current_user.user_image }}" title="{{  current_user.full_name }}">
+          <img alt="" class="size-9 rounded-full  shrink-0" src="{{ current_user.user_image }}" title="{{  current_user.full_name }}">
           {% else %}
-          <img alt="" class="size-9 rounded-full border-2 border-success shrink-0" src="assets/edubliss/dist/media/avatars/blank.svg" title="{{  current_user.full_name }}">
+          <img alt="" class="size-9 rounded-full shrink-0" src="assets/edubliss/dist/media/avatars/blank.svg" title="{{  current_user.full_name }}">
           {% endif %}
           </img>
          </div>

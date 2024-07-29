@@ -28,6 +28,45 @@ def get_student_program(student, academic_year, academic_term):
     return doc_data
 
 @frappe.whitelist()
+def get_student_invoices(customer=None, company=None):
+    filters = {}
+    if customer:
+        filters = {
+            'customer': customer,
+            'company': company
+        }
+    return frappe.get_all(
+        'Sales Invoice', 
+        filters=filters, 
+        fields=[
+        'name', 'title', 'status', 'posting_date', 'grand_total', 
+        'outstanding_amount', 'customer', 'company'
+        ], 
+        order_by="posting_date desc"
+        )
+
+@frappe.whitelist()
+def get_student_ledger(customer=None, company=None):
+    filters = {
+        'party_type': 'Customer',
+        'is_cancelled': 0
+    }
+    if customer:
+        filters['party'] = customer
+    if company:
+        filters['company'] = company
+
+    return frappe.get_all(
+        'GL Entry', 
+        filters=filters, 
+        fields=[
+            'name', 'posting_date', 'account', 'party', 'cost_center', 
+            'debit', 'credit', 'company', 'remarks', 'voucher_no', 'voucher_type'
+        ], 
+        order_by="posting_date asc"
+    )
+
+@frappe.whitelist()
 def get_edubliss_user_session():
     try:
         return frappe.get_doc('Edubliss User Session', frappe.session.user)
@@ -41,7 +80,12 @@ def get_sales_invoices(company=None):
     filters = {}
     if company:
         filters['company'] = company
-    return frappe.get_all('Sales Invoice', filters=filters, fields=['name', 'title', 'status', 'posting_date', 'grand_total', 'outstanding_amount', 'customer'])
+    return frappe.get_all(
+        'Sales Invoice', 
+        filters=filters, 
+        fields=['name', 'title', 'status', 'posting_date', 'grand_total', 
+        'outstanding_amount', 'customer']
+        )
 
 @frappe.whitelist()
 def get_students(company=None):
