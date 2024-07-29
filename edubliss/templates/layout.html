@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html class="h-full" data-theme="true" data-theme-mode="light" lang="en">
- <head><base href="/">
+ <head><base href="/dashboard">
     <meta charset="utf-8" />
-
-    {% block meta_block %}
-        {% include "templates/includes/meta_block.html" %}
-    {% endblock %}
-
     <title>{% block title %}{{ title | striptags }}{% endblock %}</title>
+
+    <meta charset="utf-8"/>
+    <meta content="follow, index" name="robots"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <meta content="" name="description"/>
 
     {% block favicon %}
     <link rel="shortcut icon" href="{{ (favicon or "/assets/frappe/images/frappe-favicon.svg") | abs_url }}" type="image/x-icon">
