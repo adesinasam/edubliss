@@ -110,11 +110,11 @@
               {% set total_credit = 0 %}
               {% set balance = 0 %}
               {% for ledger in ledgers %}
-                    {% set debit = ledger.debit if ledger.debit is not none else 0 %}
-                    {% set credit = ledger.credit if ledger.credit is not none else 0 %}
-                    {% set total_debit = total_debit + debit %}
-                    {% set total_credit = total_credit + credit %}
-                    {% set balance = balance + debit - credit %}
+                {% set debit = ledger.debit if ledger.debit is not none else 0 %}
+                {% set credit = ledger.credit if ledger.credit is not none else 0 %}
+                {% set total_debit = total_debit + debit %}
+                {% set total_credit = total_credit + credit %}
+                {% set balance = balance + debit - credit %}
               <tr>
                <td>{{ loop.index }}</td>
                <td>{{ ledger.posting_date }}</td>

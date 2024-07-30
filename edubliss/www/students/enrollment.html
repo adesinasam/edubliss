@@ -1,0 +1,238 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Student Billing") }}
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav3.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+
+    {% include "templates/includes/student_header.html" %}
+
+    {% include "templates/includes/student_nav.html" %}
+
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-gray-900">
+         Enrollment
+        </h1>
+        <div class="flex items-center gap-2 text-sm font-medium text-gray-600">
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <!-- begin: grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
+       <div class="col-span-1">
+        <div class="grid gap-5 lg:gap-7.5">
+         <div class="card">
+          <div class="card-header">
+           <h3 class="card-title">
+            Program Enrollment
+           </h3>
+          </div>
+          <div class="card-body pt-3.5 pb-3.5">
+           <table class="table-auto">
+            <tbody>
+             <tr>
+              <td class="text-sm font-medium text-gray-500 pb-3 pe-4 lg:pe-8">
+               Program:
+              </td>
+              <td class="text-sm font-medium text-gray-800 pb-3">
+               {{ program.program or "" }}
+              </td>
+             </tr>
+             <tr>
+              <td class="text-sm font-medium text-gray-500 pb-3 pe-4 lg:pe-8">
+               Academic Year:
+              </td>
+              <td class="text-sm font-medium text-gray-800 pb-3">
+               {{ program.academic_year or "" }}
+              </td>
+             </tr>
+             <tr>
+              <td class="text-sm font-medium text-gray-500 pb-3 pe-4 lg:pe-8">
+               Academic Term:
+              </td>
+              <td class="text-sm font-medium text-gray-800 pb-3">
+               {{ program.academic_term or "" }}
+              </td>
+             </tr>
+             <tr>
+              <td class="text-sm font-medium text-gray-500 pb-3 pe-4 lg:pe-8">
+               Enrollment Date:
+              </td>
+              <td class="text-sm font-medium text-gray-800 pb-3">
+               {{ program.enrollment_date or "" }}
+              </td>
+             </tr>
+             <tr>
+              <td class="text-sm font-medium text-gray-500 pb-3 pe-4 lg:pe-8">
+               Student Category:
+              </td>
+              <td class="text-sm font-medium text-gray-800 pb-3">
+               {{ program.student_category or "" }}
+              </td>
+             </tr>
+             <tr>
+              <td class="text-sm font-medium text-gray-500 pb-3 pe-4 lg:pe-8">
+               Student Batch:
+              </td>
+              <td class="text-sm font-medium text-gray-800 pb-3">
+               {{ program.student_batch_name or "" }}
+              </td>
+             </tr>
+            </tbody>
+           </table>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="col-span-2">
+        <div class="flex flex-col gap-5 lg:gap-7.5">
+         <div class="flex flex-col gap-5 lg:gap-7.5">
+          <div class="card">
+           <div class="card-header">
+            <h3 class="card-title">
+             Course Enrollment
+            </h3>
+           </div>
+           <div class="card-table scrollable-x-auto">
+            <table class="table text-right">
+             <thead>
+              <tr>
+               <th class="w-[30px]">
+               </th>
+               <th class="text-left min-w-[150px]">
+                Course
+               </th>
+               <th class="min-w-[100px]">
+                Program
+               </th>
+               <th class="min-w-[100px]">
+                Enrollment Date
+               </th>
+               <th class="w-[30px]">
+               </th>
+              </tr>
+             </thead>
+             <tbody>
+             {% if courses %}
+             {% for course in courses %}
+              <tr>
+               <td>
+                {{ loop.index }}
+               </td>
+               <td class="text-left">
+                <span class="text-sm font-semibold text-gray-900 hover:text-primary">
+                 {{ course.course }}
+                </span>
+               </td>
+               <td class="text-sm text-gray-700 font-medium">
+                {{ course.program }}
+               </td>
+               <td class="text-sm font-medium text-gray-700">
+                {{ course.enrollment_date }}
+               </td>
+               <td class="text-left">
+<!--                 <div class="menu" data-menu="true">
+                 <div class="menu-item" data-menu-item-offset="0, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
+                  <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
+                   <i class="ki-filled ki-dots-vertical">
+                   </i>
+                  </button>
+                  <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
+                   <div class="menu-item">
+                    <a class="menu-link" href="#">
+                     <span class="menu-icon">
+                      <i class="ki-filled ki-search-list">
+                      </i>
+                     </span>
+                     <span class="menu-title">
+                      View
+                     </span>
+                    </a>
+                   </div>
+                   <div class="menu-item">
+                    <a class="menu-link" href="#">
+                     <span class="menu-icon">
+                      <i class="ki-filled ki-file-up">
+                      </i>
+                     </span>
+                     <span class="menu-title">
+                      Export
+                     </span>
+                    </a>
+                   </div>
+                   <div class="menu-separator">
+                   </div>
+                   <div class="menu-item">
+                    <a class="menu-link" href="#">
+                     <span class="menu-icon">
+                      <i class="ki-filled ki-pencil">
+                      </i>
+                     </span>
+                     <span class="menu-title">
+                      Edit
+                     </span>
+                    </a>
+                   </div>
+                   <div class="menu-item">
+                    <a class="menu-link" href="#">
+                     <span class="menu-icon">
+                      <i class="ki-filled ki-copy">
+                      </i>
+                     </span>
+                     <span class="menu-title">
+                      Make a copy
+                     </span>
+                    </a>
+                   </div>
+                   <div class="menu-separator">
+                   </div>
+                   <div class="menu-item">
+                    <a class="menu-link" href="#">
+                     <span class="menu-icon">
+                      <i class="ki-filled ki-trash">
+                      </i>
+                     </span>
+                     <span class="menu-title">
+                      Remove
+                     </span>
+                    </a>
+                   </div>
+                  </div>
+                 </div>
+                </div> -->
+               </td>
+              </tr>
+             {% endfor %}
+             {% endif %}
+             </tbody>
+            </table>
+           </div>
+           <div class="card-footer justify-center">
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <!-- end: grid -->
+     </div>
+     <!-- end: container -->
+    </main>
+{% endblock %}

@@ -16,7 +16,7 @@ def get_context(context):
     # nav
     context.active_route = "students"
     context.active_subroute = "student_list"
-    context.active_student_route = "billing"
+    context.active_student_route = "enrollment"
 
     context.docname = frappe.form_dict.docname
 
@@ -46,7 +46,8 @@ def get_context(context):
         program = ''  # or set a default value if required        
 
     if program:
-        context.program = program    
+        context.program = program
+        program_enrollment = context.program.name   
     else:
         context.program = _("Welcome")  # or set a default value if required
 
@@ -61,12 +62,18 @@ def get_context(context):
     except frappe.DoesNotExistError:
         frappe.throw(_("Student not found"), frappe.DoesNotExistError)
 
-    # Fetch sales invoices
-    context.sales_invoices = frappe.call(
-        'edubliss.api.get_student_invoices', 
-        customer=customer, 
-        company=company
-        )
+    # Try to fetch the Student Courses document and handle errors if it doesn't exist
+    try:
+        courses = frappe.call(
+            'edubliss.api.get_student_courses',
+            student=docname, 
+            program_enrollment=program_enrollment
+            )
+    except Exception as e:
+        courses = None  # or set a default value if required        
+
+    if courses:
+        context.courses = courses    
 
 
     return context

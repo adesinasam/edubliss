@@ -17,7 +17,7 @@ def process_selected_values(company, academic_year, academic_term):
     }
 
 @frappe.whitelist()
-def get_student_program(student, academic_year, academic_term):
+def get_student_program(student=None, academic_year=None, academic_term=None):
     filters = {
         'student': student,
         'academic_year': academic_year,
@@ -26,6 +26,25 @@ def get_student_program(student, academic_year, academic_term):
 
     doc_data = frappe.get_doc('Program Enrollment', filters)
     return doc_data
+
+@frappe.whitelist()
+def get_student_courses(student=None, program_enrollment=None):
+    filters = {}
+
+    if student:
+        filters['student'] = student
+    if program_enrollment:
+        filters['program_enrollment'] = program_enrollment
+
+    return frappe.get_all(
+        'Course Enrollment', 
+        filters=filters, 
+        fields=[
+        'name', 'program_enrollment', 'program', 'enrollment_date', 
+        'student_name', 'student', 'course'
+        ], 
+        order_by="course asc"
+        )
 
 @frappe.whitelist()
 def get_student_invoices(customer=None, company=None):

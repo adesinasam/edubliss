@@ -33,12 +33,22 @@ def get_context(context):
     context.company = edubliss_session.school
     context.acadyear = edubliss_session.academic_year
     context.acadterm = edubliss_session.academic_term
-    context.program = frappe.call(
-        'edubliss.api.get_student_program',
-         student=docname, 
-         academic_year=acadyear, 
-         academic_term=acadterm
-    )
+
+    # Try to fetch the Student Program document and handle errors if it doesn't exist
+    try:
+        program = frappe.call(
+            'edubliss.api.get_student_program',
+            student=docname, 
+            academic_year=acadyear, 
+            academic_term=acadterm
+        )
+    except Exception as e:
+        program = ''  # or set a default value if required        
+
+    if program:
+        context.program = program    
+    else:
+        context.program = _("Welcome")  # or set a default value if required
 
     context.companys = frappe.call('edubliss.api.get_company')
     context.acadyears = frappe.call('edubliss.api.get_academic_year')
@@ -51,7 +61,7 @@ def get_context(context):
     except frappe.DoesNotExistError:
         frappe.throw(_("Student not found"), frappe.DoesNotExistError)
 
-    # Fetch sales invoices
+    # Fetch student ledger
     context.ledgers = frappe.call(
         'edubliss.api.get_student_ledger', 
         customer=customer, 
