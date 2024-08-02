@@ -50,6 +50,9 @@ home_page = "portal"
 # }
 
 website_route_rules = [
+    {"from_route": "/", "to_route": "portal"},
+    {"from_route": "/index", "to_route": "portal"},
+    {"from_route": "/dashboard/index", "to_route": "dashboard"},
     {"from_route": "/students/profile/<docname>", "to_route": "students/profile"},
     {"from_route": "/students/billing/<docname>", "to_route": "students/billing"},
     {"from_route": "/students/enrollment/<docname>", "to_route": "students/enrollment"},

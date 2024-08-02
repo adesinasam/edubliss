@@ -1785,7 +1785,7 @@
             </div>
            </div> -->
            <div class="menu-item">
-            <a class="menu-link" href="/app">
+            <a class="menu-link" href="{% if active_route == 'portal' %}/dashboard{% else %}/app{% endif %}">
              <span class="menu-icon">
               <i class="ki-filled ki-message-programming">
               </i>

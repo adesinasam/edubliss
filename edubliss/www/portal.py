@@ -1,5 +1,6 @@
 import frappe
 from frappe import _
+from frappe.website.utils import get_home_page
 
 no_cache = 1
 
