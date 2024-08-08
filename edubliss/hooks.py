@@ -32,6 +32,9 @@ app_license = "mit"
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
+doctype_js = {
+    "Program": "public/js/pages/program.js"
+    }
 
 # Svg Icons
 # ------------------
@@ -40,7 +43,6 @@ app_license = "mit"
 
 # Home Pages
 # ----------
-
 # application home page (will override Website Settings)
 home_page = "portal"
 
@@ -131,14 +133,11 @@ website_route_rules = [
 # Document Events
 # ---------------
 # Hook on document methods and events
-
-# doc_events = {
-#     "*": {
-#         "after_insert": [
-#             "edubliss.api.process_selected_values"
-#         ]
-#     }
-# }
+doc_events = {
+  "Program Enrollment": {
+    "on_submit": "edubliss.edubliss.programenrol.setup"
+  }
+}
 # doc_events = {
 # 	"*": {
 # 		"on_update": "method",
@@ -250,7 +249,14 @@ fixtures = [{
       'name', 'in', [
         'Student-custom_prev_school',
         'Student-custom_tab_7',
-        'Student-custom_school'
+        'Student-custom_school',
+        'Course-custom_disabled',
+        'Course-custom_subject',
+        'Course-custom_course_category',
+        'Course-custom_course_code',
+        'Program-custom_school',
+        'Program Course-custom_type',
+        'Program Enrollment-custom_school'
       ]
     ]
   ]

@@ -94,8 +94,6 @@
     {% endblock %}
   <!--end::Welcome Modal and scripts-->
   <!--begin::Page scripts-->
-    {% block custom_js %}
-    {% endblock %}
   <script src="assets/edubliss/dist/js/core.bundle.js">
   </script>
   <script src="assets/edubliss/dist/vendors/apexcharts/apexcharts.min.js">
@@ -104,6 +102,8 @@
   </script>
   <script src="assets/edubliss/dist/js/layouts/demo1.js">
   </script>
+    {% block custom_js %}
+    {% endblock %}
   <!--end::Page scripts-->
   <!-- frappe resources -->
   <script>frappe.csrf_token = "{{frappe.session.csrf_token}}";</script>

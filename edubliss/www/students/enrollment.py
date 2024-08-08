@@ -3,6 +3,25 @@ from frappe import _
 
 no_cache = 1
 
+def get_program_course_name(program_courses, course):
+    for program_course in program_courses:
+        if program_course['course'] == course:
+            return program_course['course_name']
+    return ""
+
+def get_program_course_required(program_courses, course):
+    for program_course in program_courses:
+        if program_course['course'] == course:
+            return program_course['required']
+    return ""
+
+def get_program_course_code(course):
+    try:
+        course_doc = frappe.get_doc('Course', course)
+        return course_doc.custom_course_code
+    except frappe.DoesNotExistError:
+        return ""
+
 def get_context(context):
 
     docname = frappe.form_dict.docname
@@ -34,7 +53,7 @@ def get_context(context):
     context.acadyear = edubliss_session.academic_year
     context.acadterm = edubliss_session.academic_term
 
-    # Try to fetch the Student Program document and handle errors if it doesn't exist
+    # Try to fetch the Student Program Enrollment document and handle errors if it doesn't exist
     try:
         program = frappe.call(
             'edubliss.api.get_student_program',
@@ -48,6 +67,36 @@ def get_context(context):
     if program:
         context.program = program
         program_enrollment = context.program.name   
+        program_name = context.program.program
+        context.program_courses = frappe.call('edubliss.api.get_program_courses', program=program_name)
+
+        # Try to fetch the Student Group document and handle errors if it doesn't exist
+        try:
+            sections = frappe.call('edubliss.api.get_student_groups', student=docname, program=program_name)
+        except Exception as e:
+            sections = None  # or set a default value if required        
+
+        if sections:
+            context.sections = sections    
+
+        # Try to fetch the Student Courses document and handle errors if it doesn't exist
+        try:
+            courses = frappe.call(
+                'edubliss.api.get_student_courses',
+                student=docname, 
+                program_enrollment=program_enrollment
+                )
+        except Exception as e:
+            courses = None  # or set a default value if required        
+
+        if courses:
+            context.courses = courses    
+
+        # Add custom filters to the context
+        context['get_program_course_name'] = get_program_course_name
+        context['get_program_course_required'] = get_program_course_required
+        context['get_program_course_code'] = get_program_course_code
+
     else:
         context.program = _("Welcome")  # or set a default value if required
 
@@ -62,18 +111,6 @@ def get_context(context):
     except frappe.DoesNotExistError:
         frappe.throw(_("Student not found"), frappe.DoesNotExistError)
 
-    # Try to fetch the Student Courses document and handle errors if it doesn't exist
-    try:
-        courses = frappe.call(
-            'edubliss.api.get_student_courses',
-            student=docname, 
-            program_enrollment=program_enrollment
-            )
-    except Exception as e:
-        courses = None  # or set a default value if required        
-
-    if courses:
-        context.courses = courses    
 
 
     return context

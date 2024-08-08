@@ -21,11 +21,28 @@ def get_student_program(student=None, academic_year=None, academic_term=None):
     filters = {
         'student': student,
         'academic_year': academic_year,
-        'academic_term': academic_term
+        'academic_term': academic_term,
+        'docstatus': ['<', 2]
     }
+    return frappe.get_doc('Program Enrollment', filters)
 
-    doc_data = frappe.get_doc('Program Enrollment', filters)
-    return doc_data
+@frappe.whitelist()
+def get_student_groups(student, program=None):
+    student_group = frappe.qb.DocType("Student Group")
+    student_group_students = frappe.qb.DocType("Student Group Student")
+
+    student_group_query = (
+        frappe.qb.from_(student_group)
+        .inner_join(student_group_students)
+        .on(student_group.name == student_group_students.parent)
+        .select(student_group_students.parent)
+        .where(student_group_students.student == student)
+        .where(student_group.program == program)
+        .where(student_group.disabled == 0)
+        .run(as_dict=1)
+    )
+
+    return student_group_query[0]['parent'] if student_group_query else None
 
 @frappe.whitelist()
 def get_student_courses(student=None, program_enrollment=None):
@@ -45,6 +62,14 @@ def get_student_courses(student=None, program_enrollment=None):
         ], 
         order_by="course asc"
         )
+
+@frappe.whitelist(allow_guest=True)
+def get_program_courses(program):
+    return frappe.get_all(
+        "Program Course",
+        filters={"parent": program},
+        fields=["course", "course_name", "required"]
+    )
 
 @frappe.whitelist()
 def get_student_invoices(customer=None, company=None):
@@ -112,6 +137,17 @@ def get_students(company=None):
     if company:
         filters['custom_school'] = company
     return frappe.get_all('Student', filters=filters, fields=['student_name', 'name', 'enabled', 'custom_school', 'joining_date', 'student_email_id', 'image'])
+
+@frappe.whitelist()
+def get_teachers():
+    return frappe.get_all('Instructor', fields=['instructor_name', 'name', 'employee', 'gender', 'status', 'department', 'image'])
+
+@frappe.whitelist()
+def get_programs(company=None):
+    filters = {}
+    if company:
+        filters['custom_school'] = company
+    return frappe.get_all('Program', filters=filters, fields=['program_name', 'name', 'program_abbreviation', 'custom_school', 'department', 'hero_image'])
 
 @frappe.whitelist(allow_guest=True)
 def get_company():

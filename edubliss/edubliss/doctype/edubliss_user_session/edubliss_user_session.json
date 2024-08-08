@@ -81,7 +81,7 @@
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-07-26 04:42:00.153024",
+ "modified": "2024-08-07 20:26:17.891765",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Edubliss User Session",
@@ -97,6 +97,18 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "if_owner": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "All",
    "share": 1,
    "write": 1
   }

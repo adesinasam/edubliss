@@ -4,34 +4,33 @@ from frappe import _
 no_cache = 1
 
 def get_context(context):
-    # Redirect guest users to the portal
+
+    # login
     if frappe.session.user == "Guest":
         frappe.throw(_("You need to be logged in to access this page"), frappe.PermissionError)
 
-    # Fetch the current user's details
     context.current_user = frappe.get_doc("User", frappe.session.user)
 
-    # Set the active route for navigation
-    context.active_route = "dashboards"
+    # nav
+    context.active_route = "teachers"
+    context.active_subroute = "student_list"
 
-    # Get session information
     edubliss_session = frappe.call('edubliss.api.get_edubliss_user_session')
     if edubliss_session:
         context.edublisession = edubliss_session
         company = edubliss_session.school
     else:
-        context.edublisession = _("Welcome")  # Placeholder message
-        context.request_url = frappe.request.url  # Placeholder message
+        context.edublisession = _("Welcome")  # Assuming welcome is a placeholder message
         company = None
 
-    # Fetch necessary data
     context.companys = frappe.call('edubliss.api.get_company')
     context.acadyears = frappe.call('edubliss.api.get_academic_year')
     context.acadterms = frappe.call('edubliss.api.get_academic_term')
     context.sales_invoices = frappe.call('edubliss.api.get_sales_invoices', company=company)
     context.students = frappe.call('edubliss.api.get_students', company=company)
+    context.teachers = frappe.call('edubliss.api.get_teachers')
 
-    # Count various entities
+    # Count
     if company:
         context.student_count = frappe.db.count('Student', filters={'custom_school': company})
     else:

@@ -1,0 +1,171 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("School") }}
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav2.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-gray-900">
+         Schools
+        </h1>
+        <div class="flex items-center flex-wrap gap-1.5 font-medium">
+         <span class="text-md text-gray-600">
+          All Schools:
+         </span>
+         <span class="text-md text-ray-800 font-semibold me-2">
+          {{ company_count }}
+         </span>
+         <span class="text-md text-gray-600">
+          Active
+         </span>
+         <span class="text-md text-gray-800 font-semibold">
+          {{ company_count }}
+         </span>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="card card-grid min-w-full">
+        <div class="card-body">
+         <div data-datatable="true" data-datatable-page-size="10">
+          <div class="scrollable-x-auto">
+           <table class="table table-auto table-border" data-datatable-table="true">
+            <thead>
+             <tr>
+              <th class="w-[60px] text-center">
+              </th>
+              <th class="min-w-[300px]">
+               <span class="sort asc">
+                <span class="sort-label">
+                 School
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[80px] text-center">
+               <span class="sort">
+                <span class="sort-label">
+                 Students
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[100px] text-center">
+               <span class="sort">
+                <span class="sort-label">
+                 Status
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="w-[150px] text-center">
+               <span class="sort">
+                <span class="sort-label">
+                 Parent
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="w-[60px]">
+              </th>
+             </tr>
+            </thead>
+            <tbody>
+            {% for company in companys %}
+             <tr>
+              <td class="text-center">
+                <span class="badge badge-dot size-1.5 badge-primary">
+                </span>              
+              </td>
+              <td>
+               <div class="flex items-center gap-2.5">
+                <img alt="" class="rounded-full size-7 shrink-0" src="{% if company.company_logo  %}{{company.company_logo}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/>
+                <div class="flex flex-col">
+                 <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/app/company/{{ company.name }}">
+                  {{ company.company_name }}
+                  <br>
+                 <span class="text-2sm font-medium text-gray-600 hover:text-primary-active">
+                  {{ company.abbr }}
+                 </span>
+                 </a>
+                </div>
+               </div>
+              </td>
+              <td class="text-center">
+               {{ get_company_students(company.name) }}
+              </td>
+              <td>
+               <div class="flex items-center gap-1.5">
+                  {% if not company.is_group %}
+                 <span class="badge badge-pill badge-outline badge-success gap-1 items-center">
+                  <span class="badge badge-dot size-1.5 badge-success">
+                  </span>
+                    Active
+                 </span>
+                  {% else %}
+                 <span class="badge badge-pill badge-outline badge-danger gap-1 items-center">
+                  <span class="badge badge-dot size-1.5 badge-danger">
+                  </span>
+                    Disabled
+                 </span>
+                  {% endif %}
+               </div>
+              </td>
+              <td class="text-center">
+               {{ company.parent_company }}
+              </td>
+              <td>
+               <div class="flex justify-center">
+                <a class="btn btn-link" href="/app/company/{{ company.name }}">
+                 View
+                </a>
+               </div>
+              </td>
+             </tr>
+               {% endfor %}
+            </tbody>
+           </table>
+          </div>
+          <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
+           <div class="flex items-center gap-2 order-2 md:order-1">
+            Show
+            <select class="select select-sm w-16" data-datatable-size="true" name="perpage">
+            </select>
+            per page
+           </div>
+           <div class="flex items-center gap-4 order-1 md:order-2">
+            <span data-datatable-info="true">
+            </span>
+            <div class="pagination" data-datatable-pagination="true">
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+    </main>
+{% endblock %}

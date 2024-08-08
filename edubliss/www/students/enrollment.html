@@ -1,7 +1,7 @@
 {% extends "templates/layout.html" %}
 
 {% block title %}
-{{ _("Student Billing") }}
+{{ _("Student Enrollment") }}
 {% endblock %}
 
 {% block headnav_link %}
@@ -38,21 +38,49 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
        <div class="col-span-1">
         <div class="grid gap-5 lg:gap-7.5">
-         <div class="card">
+         <div class="card bg-info-light">
           <div class="card-header">
-           <h3 class="card-title">
-            Program Enrollment
+           <h3 class="card-title text-gray-800">
+            Program
+           {% if program.docstatus == 1 %}
+            <i class="ki-solid ki-verify text-success text-sm" data-tooltip="#tooltip_right1" data-tooltip-placement="right">
+            </i>
+            <div class="tooltip" id="tooltip_right1">
+             Approved
+            </div>
+           {% elif program.docstatus == 0 %}        
+            <i class="ki-solid ki-information text-danger text-sm" data-tooltip="#tooltip_right2" data-tooltip-placement="right">
+            </i>
+            <div class="tooltip" id="tooltip_right2">
+             Pending
+            </div>
+           {% endif %}        
            </h3>
+           {%if program.docstatus %}
+           <a href="/app/program-enrollment/{{ program.name }}" class="btn btn-sm btn-secondary">
+            <i class="ki-outline ki-setting-2">
+            </i>
+            Edit
+           </a>
+           {% endif %}
           </div>
           <div class="card-body pt-3.5 pb-3.5">
            <table class="table-auto">
             <tbody>
              <tr>
               <td class="text-sm font-medium text-gray-500 pb-3 pe-4 lg:pe-8">
-               Program:
+               Class:
               </td>
               <td class="text-sm font-medium text-gray-800 pb-3">
                {{ program.program or "" }}
+              </td>
+             </tr>
+             <tr>
+              <td class="text-sm font-medium text-gray-500 pb-3 pe-4 lg:pe-8">
+               Section:
+              </td>
+              <td class="text-sm font-medium text-gray-800 pb-3">
+               {{ sections or "" }}
               </td>
              </tr>
              <tr>
@@ -104,14 +132,24 @@
        <div class="col-span-2">
         <div class="flex flex-col gap-5 lg:gap-7.5">
          <div class="flex flex-col gap-5 lg:gap-7.5">
-          <div class="card">
+          <div class="card bg-secondary">
            <div class="card-header">
             <h3 class="card-title">
-             Course Enrollment
+             Subjects
             </h3>
+           {%if program.docstatus %}
+           <button class="btn btn-sm btn-primary" data-tooltip="#custom_tooltip">
+            <i class="ki-outline ki-plus text-sm">
+            </i>
+            Add Elective
+           </button>
+           <div class="hidden rounded-xl shadow-default p-3 bg-light border border-gray-200 text-gray-700 text-xs font-normal" id="custom_tooltip">
+             Enrol Student into Elective Subjects.
+            </div>
+           {% endif %}
            </div>
            <div class="card-table scrollable-x-auto">
-            <table class="table text-right">
+            <table class="table text-center">
              <thead>
               <tr>
                <th class="w-[30px]">
@@ -120,10 +158,10 @@
                 Course
                </th>
                <th class="min-w-[100px]">
-                Program
+                Code
                </th>
                <th class="min-w-[100px]">
-                Enrollment Date
+                Type
                </th>
                <th class="w-[30px]">
                </th>
@@ -142,13 +180,25 @@
                 </span>
                </td>
                <td class="text-sm text-gray-700 font-medium">
-                {{ course.program }}
+                    {{ get_program_course_code(course.course) }}
                </td>
                <td class="text-sm font-medium text-gray-700">
-                {{ course.enrollment_date }}
+                    {% if get_program_course_required(program_courses, course.course) == 1 %}
+                 <span class="badge badge-success badge-outline rounded-[30px]">
+                  <span class="size-1.5 rounded-full bg-success me-1.5">
+                  </span>
+                    Core
+                 </span>
+                    {% else %}
+                 <span class="badge badge-warning badge-outline rounded-[30px]">
+                  <span class="size-1.5 rounded-full bg-warning me-1.5">
+                  </span>
+                    Elective
+                 </span>
+                    {% endif %}
                </td>
                <td class="text-left">
-<!--                 <div class="menu" data-menu="true">
+                <div class="menu" data-menu="true">
                  <div class="menu-item" data-menu-item-offset="0, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
                   <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
                    <i class="ki-filled ki-dots-vertical">
@@ -166,21 +216,10 @@
                      </span>
                     </a>
                    </div>
-                   <div class="menu-item">
-                    <a class="menu-link" href="#">
-                     <span class="menu-icon">
-                      <i class="ki-filled ki-file-up">
-                      </i>
-                     </span>
-                     <span class="menu-title">
-                      Export
-                     </span>
-                    </a>
-                   </div>
                    <div class="menu-separator">
                    </div>
                    <div class="menu-item">
-                    <a class="menu-link" href="#">
+                    <a class="menu-link" href="/app/course-enrollment/{{ course.name }}">
                      <span class="menu-icon">
                       <i class="ki-filled ki-pencil">
                       </i>
@@ -190,18 +229,7 @@
                      </span>
                     </a>
                    </div>
-                   <div class="menu-item">
-                    <a class="menu-link" href="#">
-                     <span class="menu-icon">
-                      <i class="ki-filled ki-copy">
-                      </i>
-                     </span>
-                     <span class="menu-title">
-                      Make a copy
-                     </span>
-                    </a>
-                   </div>
-                   <div class="menu-separator">
+<!--                    <div class="menu-separator">
                    </div>
                    <div class="menu-item">
                     <a class="menu-link" href="#">
@@ -213,10 +241,10 @@
                       Remove
                      </span>
                     </a>
-                   </div>
+                   </div> -->
                   </div>
                  </div>
-                </div> -->
+                </div>
                </td>
               </tr>
              {% endfor %}
