@@ -47,7 +47,7 @@
        <div class="menu-item {% if active_route == 'school' %}here show{% endif %}" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
         <div class="menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0">
          <span class="menu-icon items-start text-gray-500 dark:text-gray-400 w-[20px]">
-          <i class="ki-filled ki-profile-circle text-lg">
+          <i class="ki-filled ki-bank text-lg">
           </i>
          </span>
          <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-link-hover:!text-primary">
@@ -76,6 +76,52 @@
            </span>
            <span class="menu-title text-2sm font-medium text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
             Default Settings
+           </span>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="menu-item {% if active_route == 'Admission' %}here show{% endif %}" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
+        <div class="menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0">
+         <span class="menu-icon items-start text-gray-500 dark:text-gray-400 w-[20px]">
+          <i class="ki-filled ki-notepad text-lg">
+          </i>
+         </span>
+         <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-link-hover:!text-primary">
+          Admission
+         </span>
+         <span class="menu-arrow text-gray-400 w-[20px] shrink-0 justify-end ml-1 mr-[-10px]">
+          <i class="ki-filled ki-plus text-2xs menu-item-show:hidden">
+          </i>
+          <i class="ki-filled ki-minus text-2xs hidden menu-item-show:inline-flex">
+          </i>
+         </span>
+        </div>
+        <div class="menu-accordion gap-0.5 pl-[10px] relative before:absolute before:left-[20px] before:top-0 before:bottom-0 before:border-l before:border-gray-200">
+         <div class="menu-item {% if active_subroute == 'enquiries' %}active{% endif %}">
+          <div class="menu-link gap-[14px] pl-[10px] pr-[10px] py-[8px] border border-transparent items-center grow menu-item-active:bg-secondary-active dark:menu-item-active:bg-coal-300 dark:menu-item-active:border-gray-100 menu-item-active:rounded-lg hover:bg-secondary-active dark:hover:bg-coal-300 dark:hover:border-gray-100 hover:rounded-lg" href="/admin/school" tabindex="0">
+           <span class="menu-bullet flex w-[6px] relative before:absolute before:top-0 before:size-[6px] before:rounded-full before:-translate-x-1/2 before:-translate-y-1/2 menu-item-active:before:bg-primary menu-item-hover:before:bg-primary">
+           </span>
+           <span class="menu-title text-2sm font-medium text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
+            Admission Enquiries
+           </span>
+          </div>
+         </div>
+         <div class="menu-item {% if active_subroute == 'applicant' %}active{% endif %}">
+          <div class="menu-link gap-[14px] pl-[10px] pr-[10px] py-[8px] border border-transparent items-center grow menu-item-active:bg-secondary-active dark:menu-item-active:bg-coal-300 dark:menu-item-active:border-gray-100 menu-item-active:rounded-lg hover:bg-secondary-active dark:hover:bg-coal-300 dark:hover:border-gray-100 hover:rounded-lg" href="/dashboard" tabindex="0">
+           <span class="menu-bullet flex w-[6px] relative before:absolute before:top-0 before:size-[6px] before:rounded-full before:-translate-x-1/2 before:-translate-y-1/2 menu-item-active:before:bg-primary menu-item-hover:before:bg-primary">
+           </span>
+           <span class="menu-title text-2sm font-medium text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
+            Student Applicant
+           </span>
+          </div>
+         </div>
+         <div class="menu-item {% if active_subroute == 'application' %}active{% endif %}">
+          <div class="menu-link gap-[14px] pl-[10px] pr-[10px] py-[8px] border border-transparent items-center grow menu-item-active:bg-secondary-active dark:menu-item-active:bg-coal-300 dark:menu-item-active:border-gray-100 menu-item-active:rounded-lg hover:bg-secondary-active dark:hover:bg-coal-300 dark:hover:border-gray-100 hover:rounded-lg" href="/dashboard" tabindex="0">
+           <span class="menu-bullet flex w-[6px] relative before:absolute before:top-0 before:size-[6px] before:rounded-full before:-translate-x-1/2 before:-translate-y-1/2 menu-item-active:before:bg-primary menu-item-hover:before:bg-primary">
+           </span>
+           <span class="menu-title text-2sm font-medium text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
+            Application Form
            </span>
           </div>
          </div>
@@ -112,54 +158,92 @@
            </span>
           </a>
          </div>
-<!--          <div class="menu-item">
-          <a class="menu-link gap-[14px] pl-[10px] pr-[10px] py-[8px] border border-transparent items-center grow menu-item-active:bg-secondary-active dark:menu-item-active:bg-coal-300 dark:menu-item-active:border-gray-100 menu-item-active:rounded-lg hover:bg-secondary-active dark:hover:bg-coal-300 dark:hover:border-gray-100 hover:rounded-lg" href="/dashboard" tabindex="0">
+         <div class="menu-item {% if active_subroute == 'student_section' %}active{% endif %}">
+          <a class="menu-link gap-[14px] pl-[10px] pr-[10px] py-[8px] border border-transparent items-center grow menu-item-active:bg-secondary-active dark:menu-item-active:bg-coal-300 dark:menu-item-active:border-gray-100 menu-item-active:rounded-lg hover:bg-secondary-active dark:hover:bg-coal-300 dark:hover:border-gray-100 hover:rounded-lg" href="/students/sections" tabindex="0">
            <span class="menu-bullet flex w-[6px] relative before:absolute before:top-0 before:size-[6px] before:rounded-full before:-translate-x-1/2 before:-translate-y-1/2 menu-item-active:before:bg-primary menu-item-hover:before:bg-primary">
            </span>
            <span class="menu-title text-2sm font-medium text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
-            Re-enrol Students
+            Student Section
            </span>
           </a>
-         </div> -->
+         </div>
         </div>
        </div>
-       <div class="menu-item {% if active_route == 'program' %}active{% endif %}">
-        <a class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="/admin/program" tabindex="0">
-         <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
-          <i class="ki-filled ki-notepad text-lg">
+       <div class="menu-item {% if active_route == 'program' %}here show{% endif %}" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
+        <div class="menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0">
+         <span class="menu-icon items-start text-gray-500 dark:text-gray-400 w-[20px]">
+          <i class="ki-filled ki-questionnaire-tablet text-lg">
           </i>
          </span>
-         <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
+         <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-link-hover:!text-primary">
           Class & Subjects
          </span>
-        </a>
-       </div>
-       <div class="menu-item {% if active_route == 'teachers' %}active{% endif %}">
-         <a class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="/teachers/list" tabindex="0">
-         <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
-          <i class="ki-filled ki-user-tick text-lg">
+         <span class="menu-arrow text-gray-400 w-[20px] shrink-0 justify-end ml-1 mr-[-10px]">
+          <i class="ki-filled ki-plus text-2xs menu-item-show:hidden">
+          </i>
+          <i class="ki-filled ki-minus text-2xs hidden menu-item-show:inline-flex">
           </i>
          </span>
-         <span class="menu-title text-sm font-semibold text-gray-700">
+        </div>
+        <div class="menu-accordion gap-0.5 pl-[10px] relative before:absolute before:left-[20px] before:top-0 before:bottom-0 before:border-l before:border-gray-200">
+         <div class="menu-item {% if active_subroute == 'programs' %}active{% endif %}">
+          <a class="menu-link gap-[14px] pl-[10px] pr-[10px] py-[8px] border border-transparent items-center grow menu-item-active:bg-secondary-active dark:menu-item-active:bg-coal-300 dark:menu-item-active:border-gray-100 menu-item-active:rounded-lg hover:bg-secondary-active dark:hover:bg-coal-300 dark:hover:border-gray-100 hover:rounded-lg" href="/admin/program" tabindex="0">
+           <span class="menu-bullet flex w-[6px] relative before:absolute before:top-0 before:size-[6px] before:rounded-full before:-translate-x-1/2 before:-translate-y-1/2 menu-item-active:before:bg-primary menu-item-hover:before:bg-primary">
+           </span>
+           <span class="menu-title text-2sm font-medium text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
+            Class Subjects
+           </span>
+          </a>
+         </div>
+         <div class="menu-item {% if active_subroute == 'section_list' %}active{% endif %}">
+          <a class="menu-link gap-[14px] pl-[10px] pr-[10px] py-[8px] border border-transparent items-center grow menu-item-active:bg-secondary-active dark:menu-item-active:bg-coal-300 dark:menu-item-active:border-gray-100 menu-item-active:rounded-lg hover:bg-secondary-active dark:hover:bg-coal-300 dark:hover:border-gray-100 hover:rounded-lg" href="/admin/sections" tabindex="0">
+           <span class="menu-bullet flex w-[6px] relative before:absolute before:top-0 before:size-[6px] before:rounded-full before:-translate-x-1/2 before:-translate-y-1/2 menu-item-active:before:bg-primary menu-item-hover:before:bg-primary">
+           </span>
+           <span class="menu-title text-2sm font-medium text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
+            Class Section
+           </span>
+          </a>
+         </div>
+        </div>
+       </div>
+       <div class="menu-item {% if active_route == 'teachers' %}here show{% endif %}" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
+        <div class="menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0">
+         <span class="menu-icon items-start text-gray-500 dark:text-gray-400 w-[20px]">
+          <i class="ki-filled ki-user-square text-lg">
+          </i>
+         </span>
+         <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-link-hover:!text-primary">
           Teachers
          </span>
-        </a>
+         <span class="menu-arrow text-gray-400 w-[20px] shrink-0 justify-end ml-1 mr-[-10px]">
+          <i class="ki-filled ki-plus text-2xs menu-item-show:hidden">
+          </i>
+          <i class="ki-filled ki-minus text-2xs hidden menu-item-show:inline-flex">
+          </i>
+         </span>
+        </div>
+        <div class="menu-accordion gap-0.5 pl-[10px] relative before:absolute before:left-[20px] before:top-0 before:bottom-0 before:border-l before:border-gray-200">
+         <div class="menu-item {% if active_subroute == 'teacher_list' %}active{% endif %}">
+          <a class="menu-link gap-[14px] pl-[10px] pr-[10px] py-[8px] border border-transparent items-center grow menu-item-active:bg-secondary-active dark:menu-item-active:bg-coal-300 dark:menu-item-active:border-gray-100 menu-item-active:rounded-lg hover:bg-secondary-active dark:hover:bg-coal-300 dark:hover:border-gray-100 hover:rounded-lg" href="/teachers/list" tabindex="0">
+           <span class="menu-bullet flex w-[6px] relative before:absolute before:top-0 before:size-[6px] before:rounded-full before:-translate-x-1/2 before:-translate-y-1/2 menu-item-active:before:bg-primary menu-item-hover:before:bg-primary">
+           </span>
+           <span class="menu-title text-2sm font-medium text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
+            Teachers Information
+           </span>
+          </a>
+         </div>
+        </div>
        </div>
-       <div class="menu-item">
-        <div class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="" tabindex="0">
+       <div class="menu-item {% if active_route == 'parents' %}active{% endif %}">
+        <a class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="/parents/list" tabindex="0">
          <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
           <i class="ki-filled ki-users text-lg">
           </i>
          </span>
-         <span class="menu-title text-sm font-semibold text-gray-700">
+         <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
           Parents
          </span>
-         <span class="menu-badge mr-[-10px]">
-          <span class="badge badge-xs">
-           Soon
-          </span>
-         </span>
-        </div>
+        </a>
        </div>
        <div class="menu-item">
         <div class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="" tabindex="0">
@@ -185,7 +269,7 @@
        <div class="menu-item">
         <div class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="" tabindex="0">
          <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
-          <i class="ki-filled ki-users text-lg">
+          <i class="ki-filled ki-calendar-edit text-lg">
           </i>
          </span>
          <span class="menu-title text-sm font-semibold text-gray-700">
@@ -201,7 +285,7 @@
        <div class="menu-item">
         <div class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="" tabindex="0">
          <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
-          <i class="ki-filled ki-questionnaire-tablet text-lg">
+          <i class="ki-filled ki-calendar-2 text-lg">
           </i>
          </span>
          <span class="menu-title text-sm font-semibold text-gray-700">
@@ -217,7 +301,7 @@
        <div class="menu-item">
         <div class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="" tabindex="0">
          <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
-          <i class="ki-filled ki-handcart text-lg">
+          <i class="ki-filled ki-tab-tablet text-lg">
           </i>
          </span>
          <span class="menu-title text-sm font-semibold text-gray-700">
@@ -238,7 +322,7 @@
        <div class="menu-item">
         <div class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="" tabindex="0">
          <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
-          <i class="ki-filled ki-some-files text-lg">
+          <i class="ki-filled ki-cheque text-lg">
           </i>
          </span>
          <span class="menu-title text-sm font-semibold text-gray-700">
@@ -254,7 +338,7 @@
        <div class="menu-item">
         <div class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="" tabindex="0">
          <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
-          <i class="ki-filled ki-note-2 text-lg">
+          <i class="ki-filled ki-financial-schedule text-lg">
           </i>
          </span>
          <span class="menu-title text-sm font-semibold text-gray-700">

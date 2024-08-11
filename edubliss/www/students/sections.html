@@ -1,0 +1,177 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Class") }}
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav2.html" %}
+{% endblock %}
+
+{% block content %}
+<main class="grow content pt-5" id="content" role="content">
+  <!-- begin: container -->
+  <div class="container-fixed" id="content_container"></div>
+  <!-- end: container -->
+  <!-- begin: container -->
+  <div class="container-fixed">
+    <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+      <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-gray-900">Class Section</h1>
+        <div class="flex items-center gap-2 text-sm font-medium text-gray-600"></div>
+      </div>
+    </div>
+  </div>
+  <!-- end: container -->
+  <!-- begin: container -->
+  <div class="container-fixed">
+    <!-- begin: grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
+      <div class="col-span-1">
+        <div class="grid gap-5 lg:gap-7.5">
+          <div class="card">
+            <div class="card-header bg-info">
+              <h3 class="card-title text-light">Section</h3>
+              <a href="app/student-group/new-student-group">
+                <i class="ki-solid ki-abstract-10 text-sm text-light" data-tooltip="#program_tooltip" data-tooltip-placement="bottom"></i>
+                <div class="hidden rounded shadow-default p-3 bg-light border border-gray-300 text-gray-800 text-xs font-normal" id="program_tooltip">Add Section</div>
+              </a>
+            </div>
+            <div class="card-body bg-secondary pt-3.5 pb-3.5">
+              <table class="table-auto">
+                <tbody>
+                  {% for section in sections %}
+                  <tr>
+                    <td>
+                      <a href="/students/sections?section_name={{ section.student_group_name }}" class="dropdown" data-dropdown="true" data-dropdown-placement="right-start" data-dropdown-trigger="click">
+                      <button class="dropdown-toggle btn btn-info btn-clear {% if section.student_group_name == selected_section %}active{% endif %}">
+                        {{ section.student_group_name }}
+                      </button>
+                       <div class="dropdown-content w-full max-w-72 bg-info-light">
+                        <div class="p-4 text-sm text-gray-900 font-medium">
+                         {{ section.student_group_name }} Details
+                         <span>
+                          <i class="ki-filled ki-black-right text-md"></i>
+                         </span>
+                        </div>
+                        <div class="border-b border-b-gray-200">
+                        </div>
+                        <div class="scrollable-y m-2 p-4 h-[150px] text-sm text-gray-700">
+                          Program: {{ section.program }}
+                          <br>
+                          Status:
+                          <span class="badge  badge-xs badge-pill badge-outline {{ 'badge-success' if section.disabled == 0 else 'badge-danger' }} gap-1 items-center">
+                            {{ 'Active' if section.disabled == 0 else 'Disabled' }}
+                          </span>
+                          <br>
+                          Batch: {{ section.batch }}
+                          <br>
+                          Teachers: {{ get_section_teachers(section.student_group_name) }}
+                          <br>
+                          Term: {{ section.academic_term }}
+                        </div>
+                       </div>
+                      </a>
+                    </td>
+                    <td>
+                      <a href="/app/student-group/{{ section.student_group_name }}" data-tooltip="#sects_tooltip"  data-tooltip-placement="top">
+                        <i class="ki-filled ki-pencil text-sm text-info">
+                        </i>                        
+                        <div id="sects_tooltip" class="hidden rounded-xl shadow-default tooltip bg-info border border-gray-200 text-light text-xs font-normal">
+                           Edit
+                        </div>
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-span-2">
+        <div class="flex flex-col gap-5 lg:gap-7.5">
+          <div class="flex flex-col gap-5 lg:gap-7.5">
+            <div class="card bg-secondary">
+              <div class="card-header">
+                <h3 class="card-title">Students</h3>
+                {% if selected_section %}
+                <h4 class="card-title text-gray-700">{{ selected_section }}</h4>
+                {% endif %}
+              </div>
+              <div class="card-table scrollable-x-auto">
+                <table class="table text-center">
+                  <thead>
+                    <tr>
+                      <th class="text-left min-w-[200px]">Student</th>
+                      <th class="min-w-[100px]">Row Number</th>
+                      <th class="min-w-[100px]">Status</th>
+                      <th class="text-left min-w-[150px]">Student ID</th>
+                      <th class="w-[30px]"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for student in students %}
+                    <tr>
+                      <td class="text-left">
+                        <a href="/students/profile/{{ student.student}}" class="text-sm font-semibold text-gray-900 hover:text-primary">
+                            {{ student.student_name}}
+                        </span>
+                      </td>
+                      <td class="text-sm text-gray-700 font-medium">
+                            {{ student.group_roll_number or "" }}
+                      </td>
+                      <td class="text-sm font-medium text-gray-700">
+                        <span class="badge {{ 'badge-success' if student.active else 'badge-warning' }} badge-outline rounded-[30px]">
+                          <span class="size-1.5 rounded-full {{ 'bg-success' if student.active else 'bg-warning' }} me-1.5"></span>
+                          {{ 'Active' if student.active else 'Disabled' }}
+                        </span>
+                      </td>
+                      <td class="text-sm text-gray-700 font-medium">
+                            {{ student.student}}
+                      </td>
+                      <td class="text-left">
+                        <div class="menu" data-menu="true">
+                          <div class="menu-item" data-menu-item-offset="0, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
+                            <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
+                              <i class="ki-filled ki-dots-vertical"></i>
+                            </button>
+                            <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
+                              <div class="menu-item">
+                                <a href="/students/profile/{{ student.student}}" class="menu-link" >
+                                  <span class="menu-icon">
+                                    <i class="ki-filled ki-search-list"></i>
+                                  </span>
+                                  <span class="menu-title">View</span>
+                                </a>
+                              </div>
+                              <div class="menu-separator"></div>
+                              <div class="menu-item">
+                                <a class="menu-link" href="/app/student/{{ student.student }}">
+                                  <span class="menu-icon">
+                                    <i class="ki-filled ki-pencil"></i>
+                                  </span>
+                                  <span class="menu-title">Edit</span>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="card-footer justify-center"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end: grid -->
+  </div>
+  <!-- end: container -->
+</main>
+{% endblock %}

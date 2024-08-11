@@ -1,0 +1,60 @@
+     <div class="flex flex-nowrap items-center lg:items-end justify-between border-b border-b-gray-200 dark:border-b-coal-100 gap-6 mb-5 lg:mb-10">
+      <!-- begin: container -->
+      <div class="container-fixed">
+       <div class="grid">
+        <div class="scrollable-x-auto">
+         <div class="menu gap-3" data-menu="true">
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_teacher_route == 'profile' or active_teacher_route == 'settings' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
+           <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" tabindex="0">
+            <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
+             Account Home
+            </span>
+            <span class="menu-arrow">
+             <i class="ki-filled ki-down text-2xs text-gray-500 menu-item-active:text-primary menu-item-here:text-primary menu-item-show:text-primary menu-link-hover:text-primary">
+             </i>
+            </span>
+           </div>
+           <div class="menu-dropdown menu-default py-2 min-w-[200px]">
+            <div class="menu-item {% if active_teacher_route == 'profile' %}active{% endif %}">
+             <a class="menu-link" href="/teachers/profile/{{docname}}" tabindex="0">
+              <span class="menu-title">
+               Profile
+              </span>
+             </a>
+            </div>
+            <div class="menu-item {% if active_teacher_route == 'settings' %}active{% endif %}">
+             <div class="menu-link" href="/teachers/settings/{{docname}}" tabindex="0">
+              <span class="menu-title">
+               Employment Details
+              </span>
+             </div>
+            </div>
+           </div>
+          </div>
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_teacher_route == 'enrollment' %}here{% endif %}">
+           <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" href="/teachers/enrollment/{{docname}}" tabindex="0">
+            <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
+             Subjects
+            </span>
+           </div>
+          </div>
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_teacher_route == 'attendance' %}here{% endif %}">
+           <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" href="/teachers/attendance/{{docname}}" tabindex="0">
+            <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
+             Class Schedule
+            </span>
+           </div>
+          </div>
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_teacher_route == 'attendance' %}here{% endif %}">
+           <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" href="/teachers/attendance/{{docname}}" tabindex="0">
+            <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
+             Task
+            </span>
+           </div>
+          </div>          
+         </div>
+        </div>
+       </div>
+      </div>
+      <!-- end: container -->
+     </div>

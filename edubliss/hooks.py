@@ -1,5 +1,5 @@
 app_name = "edubliss"
-app_title = "edubliss"
+app_title = "Edubliss"
 app_publisher = "Adesina"
 app_description = "School Portal and Dashboard Extension"
 app_email = "support@glistercp.com.ng"
@@ -8,6 +8,24 @@ app_license = "mit"
 
 # Includes in <head>
 # ------------------
+fixtures = [{
+  'dt' : 'Custom Field', 'filters':[
+    [
+      'name', 'in', [
+        'Student-custom_prev_school',
+        'Student-custom_tab_7',
+        'Student-custom_school',
+        'Course-custom_disabled',
+        'Course-custom_subject',
+        'Course-custom_course_category',
+        'Course-custom_course_code',
+        'Program-custom_school',
+        'Program Course-custom_type',
+        'Program Enrollment-custom_school'
+      ]
+    ]
+  ]
+}]
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/edubliss/css/edubliss.css"
@@ -59,6 +77,7 @@ website_route_rules = [
     {"from_route": "/students/billing/<docname>", "to_route": "students/billing"},
     {"from_route": "/students/enrollment/<docname>", "to_route": "students/enrollment"},
     {"from_route": "/students/ledger/<docname>", "to_route": "students/ledger"},
+    {"from_route": "/teachers/profile/<docname>", "to_route": "teachers/profile"},
 ]
 
 # Generators
@@ -243,21 +262,3 @@ doc_events = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
-fixtures = [{
-  'dt' : 'Custom Field', 'filters':[
-    [
-      'name', 'in', [
-        'Student-custom_prev_school',
-        'Student-custom_tab_7',
-        'Student-custom_school',
-        'Course-custom_disabled',
-        'Course-custom_subject',
-        'Course-custom_course_category',
-        'Course-custom_course_code',
-        'Program-custom_school',
-        'Program Course-custom_type',
-        'Program Enrollment-custom_school'
-      ]
-    ]
-  ]
-}]

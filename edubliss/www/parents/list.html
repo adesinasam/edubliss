@@ -1,7 +1,7 @@
 {% extends "templates/layout.html" %}
 
 {% block title %}
-{{ _("Student") }}
+{{ _("Parent") }}
 {% endblock %}
 
 {% block headnav_link %}
@@ -19,26 +19,20 @@
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
         <h1 class="text-xl font-semibold leading-none text-gray-900">
-         Students
+         Parents
         </h1>
         <div class="flex items-center flex-wrap gap-1.5 font-medium">
          <span class="text-md text-gray-600">
-          All Students:
+          All Parents:
          </span>
          <span class="text-md text-ray-800 font-semibold me-2">
-          {{ student_count }}
-         </span>
-         <span class="text-md text-gray-600">
-          Active
-         </span>
-         <span class="text-md text-gray-800 font-semibold">
-          {{ student_countactive }}
+          {{ parent_count }}
          </span>
         </div>
        </div>
        <div class="flex items-center gap-2.5">
-        <a class="btn btn-sm btn-primary" href="/app/student/new-student-">
-         Add Student
+        <a class="btn btn-sm btn-primary" href="/app/guardian/new-guardian">
+         Add Parent
         </a>
        </div>
       </div>
@@ -50,7 +44,7 @@
        <div class="card card-grid min-w-full">
         <div class="card-header flex-wrap gap-2">
          <h3 class="card-title font-medium text-sm">
-          <!-- Showing 10 of {{ student_count }} Students -->
+          <!-- Showing 10 of {{ parent_count }} Parents -->
          </h3>
          <div class="flex flex-wrap gap-2 lg:gap-5">
           <div class="flex">
@@ -61,35 +55,6 @@
             </input>
            </label>
           </div>
-<!--           <div class="flex flex-wrap gap-2.5">
-           <select class="select select-sm w-28">
-            <option value="1">
-             Active
-            </option>
-            <option value="2">
-             Disabled
-            </option>
-            <option value="2">
-             Pending
-            </option>
-           </select>
-           <select class="select select-sm w-28">
-            <option value="1">
-             Latest
-            </option>
-            <option value="2">
-             Older
-            </option>
-            <option value="3">
-             Oldest
-            </option>
-           </select>
-           <button class="btn btn-sm btn-outline btn-primary">
-            <i class="ki-filled ki-setting-4">
-            </i>
-            Filters
-           </button>
-          </div> -->
          </div>
         </div>
         <div class="card-body">
@@ -104,6 +69,24 @@
               <th class="min-w-[300px]">
                <span class="sort asc">
                 <span class="sort-label">
+                 Parent
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[150px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Parent Code
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[100px]">
+               <span class="sort">
+                <span class="sort-label">
                  Student
                 </span>
                 <span class="sort-icon">
@@ -113,34 +96,16 @@
               <th class="min-w-[150px]">
                <span class="sort">
                 <span class="sort-label">
-                 Student ID
+                 Mobile No
                 </span>
                 <span class="sort-icon">
                 </span>
                </span>
               </th>
-              <th class="min-w-[150px]">
+              <th class="min-w-[300px]">
                <span class="sort">
                 <span class="sort-label">
-                 Status
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
-              </th>
-              <th class="min-w-[150px]">
-               <span class="sort">
-                <span class="sort-label">
-                 Joining Date
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
-              </th>
-              <th class="w-[100px] text-center">
-               <span class="sort">
-                <span class="sort-label">
-                 Invoices
+                 Address
                 </span>
                 <span class="sort-icon">
                 </span>
@@ -151,53 +116,35 @@
              </tr>
             </thead>
             <tbody>
-            {% for student in students %}
+            {% for parent in parents %}
              <tr>
               <td class="text-center">
                <input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/>
               </td>
               <td>
                <div class="flex items-center gap-2.5">
-                <img alt="" class="rounded-full size-7 shrink-0" src="{% if student.image  %}{{student.image}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/>
+                <img alt="" class="rounded-full size-7 shrink-0" src="{% if parent.image  %}{{parent.image}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/>
                 <div class="flex flex-col">
-                 <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/students/profile/{{ student.name }}">
-                  {{ student.student_name }}
+                 <div class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/parents/profile/{{ parent.name }}">
+                  {{ parent.guardian_name }}
                  <span class="text-2sm font-medium text-gray-600 hover:text-primary-active">
-                  {{ student.student_email_id }}
+                  {{ parent.email_id or "" }}
                  </span>
-                 </a>
+                 </div>
                 </div>
                </div>
               </td>
               <td>
-               {{ student.name }}
+               {{ parent.name }}
               </td>
               <td>
-               <div class="flex items-center gap-1.5">
-                  {% if student.enabled == 1 %}
-                 <span class="badge badge-pill badge-outline badge-success gap-1 items-center">
-                  <span class="badge badge-dot size-1.5 badge-success">
-                  </span>
-                    Active
-                 </span>
-                  {% else %}
-                 <span class="badge badge-pill badge-outline badge-danger gap-1 items-center">
-                  <span class="badge badge-dot size-1.5 badge-danger">
-                  </span>
-                    Disabled
-                 </span>
-                  {% endif %}
-               </div>
+               {{ get_parent_students(parent.name) }}
               </td>
               <td>
-               {{ student.joining_date }}
+               {{ parent.mobile_number }}
               </td>
               <td>
-               <div class="flex justify-center">
-                <a class="btn btn-link" href="/students/billing/{{ student.name }}">
-                 View
-                </a>
-               </div>
+               {{ parent.custom_contact_address }}
               </td>
               <td>
                <div class="menu" data-menu="true">
@@ -208,7 +155,7 @@
                  </button>
                  <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
                   <div class="menu-item">
-                   <a class="menu-link" href="/students/profile/{{ student.name }}">
+                   <div class="menu-link" href="/students/profile/{{ parent.name }}">
                     <span class="menu-icon">
                      <i class="ki-filled ki-search-list">
                      </i>
@@ -216,12 +163,12 @@
                     <span class="menu-title">
                      View
                     </span>
-                   </a>
+                   </div>
                   </div>
                   <div class="menu-separator">
                   </div>
                   <div class="menu-item">
-                   <a class="menu-link" href="/app/student/{{ student.name }}">
+                   <a class="menu-link" href="/app/guardian/{{ parent.name }}">
                     <span class="menu-icon">
                      <i class="ki-filled ki-pencil">
                      </i>

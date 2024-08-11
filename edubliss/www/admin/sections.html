@@ -1,7 +1,7 @@
 {% extends "templates/layout.html" %}
 
 {% block title %}
-{{ _("Student") }}
+{{ _("Class Section") }}
 {% endblock %}
 
 {% block headnav_link %}
@@ -19,26 +19,20 @@
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
         <h1 class="text-xl font-semibold leading-none text-gray-900">
-         Students
+         Sections
         </h1>
         <div class="flex items-center flex-wrap gap-1.5 font-medium">
          <span class="text-md text-gray-600">
-          All Students:
+          All Sections:
          </span>
          <span class="text-md text-ray-800 font-semibold me-2">
-          {{ student_count }}
-         </span>
-         <span class="text-md text-gray-600">
-          Active
-         </span>
-         <span class="text-md text-gray-800 font-semibold">
-          {{ student_countactive }}
+          {{ section_count }}
          </span>
         </div>
        </div>
        <div class="flex items-center gap-2.5">
-        <a class="btn btn-sm btn-primary" href="/app/student/new-student-">
-         Add Student
+        <a class="btn btn-sm btn-primary" href="/app/student-group/new-instructor-">
+         Add Section
         </a>
        </div>
       </div>
@@ -50,7 +44,7 @@
        <div class="card card-grid min-w-full">
         <div class="card-header flex-wrap gap-2">
          <h3 class="card-title font-medium text-sm">
-          <!-- Showing 10 of {{ student_count }} Students -->
+          <!-- Showing 10 of {{ section_count }} Sections -->
          </h3>
          <div class="flex flex-wrap gap-2 lg:gap-5">
           <div class="flex">
@@ -61,35 +55,6 @@
             </input>
            </label>
           </div>
-<!--           <div class="flex flex-wrap gap-2.5">
-           <select class="select select-sm w-28">
-            <option value="1">
-             Active
-            </option>
-            <option value="2">
-             Disabled
-            </option>
-            <option value="2">
-             Pending
-            </option>
-           </select>
-           <select class="select select-sm w-28">
-            <option value="1">
-             Latest
-            </option>
-            <option value="2">
-             Older
-            </option>
-            <option value="3">
-             Oldest
-            </option>
-           </select>
-           <button class="btn btn-sm btn-outline btn-primary">
-            <i class="ki-filled ki-setting-4">
-            </i>
-            Filters
-           </button>
-          </div> -->
          </div>
         </div>
         <div class="card-body">
@@ -101,10 +66,10 @@
               <th class="w-[60px] text-center">
                <input class="checkbox checkbox-sm" data-datatable-check="true" type="checkbox"/>
               </th>
-              <th class="min-w-[300px]">
+              <th class="min-w-[200px]">
                <span class="sort asc">
                 <span class="sort-label">
-                 Student
+                 Section
                 </span>
                 <span class="sort-icon">
                 </span>
@@ -113,13 +78,13 @@
               <th class="min-w-[150px]">
                <span class="sort">
                 <span class="sort-label">
-                 Student ID
+                 Program
                 </span>
                 <span class="sort-icon">
                 </span>
                </span>
               </th>
-              <th class="min-w-[150px]">
+              <th class="min-w-[80px]">
                <span class="sort">
                 <span class="sort-label">
                  Status
@@ -128,19 +93,37 @@
                 </span>
                </span>
               </th>
-              <th class="min-w-[150px]">
+<!--               <th class="min-w-[80px]">
                <span class="sort">
                 <span class="sort-label">
-                 Joining Date
+                 Student
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th> -->
+              <th class="min-w-[200px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Batch
                 </span>
                 <span class="sort-icon">
                 </span>
                </span>
               </th>
-              <th class="w-[100px] text-center">
+              <th class="min-w-[300px]">
+               <span class="sort asc">
+                <span class="sort-label">
+                 Section Teacher
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[200px]">
                <span class="sort">
                 <span class="sort-label">
-                 Invoices
+                 Academic Term
                 </span>
                 <span class="sort-icon">
                 </span>
@@ -151,52 +134,43 @@
              </tr>
             </thead>
             <tbody>
-            {% for student in students %}
+            {% for section in sections %}
              <tr>
               <td class="text-center">
                <input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/>
               </td>
               <td>
                <div class="flex items-center gap-2.5">
-                <img alt="" class="rounded-full size-7 shrink-0" src="{% if student.image  %}{{student.image}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/>
                 <div class="flex flex-col">
-                 <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/students/profile/{{ student.name }}">
-                  {{ student.student_name }}
-                 <span class="text-2sm font-medium text-gray-600 hover:text-primary-active">
-                  {{ student.student_email_id }}
-                 </span>
+                 <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/students/sections?section_name={{ section.student_group_name }}">
+                  {{ section.student_group_name }}
                  </a>
                 </div>
                </div>
               </td>
               <td>
-               {{ student.name }}
+               <a class="btn btn-link" href="/admin/program?program_name={{ section.program }}">
+               {{ section.program }}
+               </a>
               </td>
               <td>
                <div class="flex items-center gap-1.5">
-                  {% if student.enabled == 1 %}
-                 <span class="badge badge-pill badge-outline badge-success gap-1 items-center">
-                  <span class="badge badge-dot size-1.5 badge-success">
+                 <span class="badge badge-pill badge-outline {{ 'badge-success' if section.disabled == 0 else 'badge-danger' }} gap-1 items-center">
+                  <span class="badge badge-dot size-1.5 {{ 'badge-success' if section.disabled == 0 else 'badge-danger' }}">
                   </span>
-                    Active
+                    {{ 'Active' if section.disabled == 0 else 'Disabled' }}
                  </span>
-                  {% else %}
-                 <span class="badge badge-pill badge-outline badge-danger gap-1 items-center">
-                  <span class="badge badge-dot size-1.5 badge-danger">
-                  </span>
-                    Disabled
-                 </span>
-                  {% endif %}
                </div>
               </td>
               <td>
-               {{ student.joining_date }}
+               {{ section.batch }}
+              </td>
+              <td>
+               {{ get_section_teachers(section.student_group_name) }}
               </td>
               <td>
                <div class="flex justify-center">
-                <a class="btn btn-link" href="/students/billing/{{ student.name }}">
-                 View
-                </a>
+               {{ section.academic_term }}
                </div>
               </td>
               <td>
@@ -208,7 +182,7 @@
                  </button>
                  <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
                   <div class="menu-item">
-                   <a class="menu-link" href="/students/profile/{{ student.name }}">
+                   <a class="menu-link" href="/students/sections?section_name={{ section.student_group_name }}">
                     <span class="menu-icon">
                      <i class="ki-filled ki-search-list">
                      </i>
@@ -221,7 +195,7 @@
                   <div class="menu-separator">
                   </div>
                   <div class="menu-item">
-                   <a class="menu-link" href="/app/student/{{ student.name }}">
+                   <a class="menu-link" href="/app/student-group/{{ section.student_group_name }}">
                     <span class="menu-icon">
                      <i class="ki-filled ki-pencil">
                      </i>

@@ -33,7 +33,7 @@ def get_context(context):
 
     # Set active route for navigation
     context.active_route = "program"
-    context.active_subroute = "program"
+    context.active_subroute = "programs"
 
     # Fetch edubliss session details
     edubliss_session = frappe.call('edubliss.api.get_edubliss_user_session')

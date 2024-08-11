@@ -71,6 +71,15 @@ def get_program_courses(program):
         fields=["course", "course_name", "required"]
     )
 
+@frappe.whitelist(allow_guest=True)
+def get_section_students(section):
+    return frappe.get_all(
+        "Student Group Student",
+        filters={"parent": section},
+        fields=["student", "student_name", "group_roll_number", "active"],
+        order_by="group_roll_number asc"
+    )
+
 @frappe.whitelist()
 def get_student_invoices(customer=None, company=None):
     filters = {}
@@ -136,18 +145,63 @@ def get_students(company=None):
     filters = {}
     if company:
         filters['custom_school'] = company
-    return frappe.get_all('Student', filters=filters, fields=['student_name', 'name', 'enabled', 'custom_school', 'joining_date', 'student_email_id', 'image'])
+    return frappe.get_all(
+        'Student', 
+        filters=filters, 
+        fields=['student_name', 'name', 'enabled', 'custom_school', 
+        'joining_date', 'student_email_id', 'image']
+        )
 
 @frappe.whitelist()
-def get_teachers():
-    return frappe.get_all('Instructor', fields=['instructor_name', 'name', 'employee', 'gender', 'status', 'department', 'image'])
+def get_teachers(company=None):
+    instructors = frappe.qb.DocType("Instructor")
+    employees = frappe.qb.DocType("Employee")
+
+    instructors_query = (
+        frappe.qb.from_(instructors)
+        .inner_join(employees)
+        .on(instructors.employee == employees.name)
+        .select('*')
+        .where(employees.company == company)
+        .run(as_dict=1)
+    )
+    return instructors_query if instructors_query else []
+
+@frappe.whitelist()
+def get_parents():
+    return frappe.get_all(
+        'Guardian', 
+        fields=['guardian_name', 'name', 'user', 'mobile_number', 
+        'occupation', 'email_address', 'custom_contact_address', 'image']
+        )
 
 @frappe.whitelist()
 def get_programs(company=None):
     filters = {}
     if company:
         filters['custom_school'] = company
-    return frappe.get_all('Program', filters=filters, fields=['program_name', 'name', 'program_abbreviation', 'custom_school', 'department', 'hero_image'])
+    return frappe.get_all(
+        'Program', 
+        filters=filters, 
+        fields=['program_name', 'name', 'program_abbreviation', 
+        'custom_school', 'department', 'hero_image']
+        )
+
+@frappe.whitelist()
+def get_sections(company=None):
+    student_groups = frappe.qb.DocType("Student Group")
+    programs = frappe.qb.DocType("Program")
+
+    sections_query = (
+        frappe.qb.from_(student_groups)
+        .inner_join(programs)
+        .on(student_groups.program == programs.name)
+        .select('*')
+        .where(programs.custom_school == company)
+        .where(student_groups.group_based_on == 'Batch')
+        .run(as_dict=1)
+    )
+    return sections_query if sections_query else []
 
 @frappe.whitelist(allow_guest=True)
 def get_company():

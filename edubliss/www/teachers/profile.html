@@ -1,7 +1,7 @@
 {% extends "templates/layout.html" %}
 
 {% block title %}
-{{ _("Student Profile") }}
+{{ _("Teacher Profile") }}
 {% endblock %}
 
 {% block headnav_link %}
@@ -15,23 +15,23 @@
      </div>
      <!-- end: container -->
 
-    {% include "templates/includes/student_header.html" %}
+    {% include "templates/includes/teacher_header.html" %}
 
-    {% include "templates/includes/student_nav.html" %}
+    {% include "templates/includes/teacher_nav.html" %}
 
      <!-- begin: container -->
      <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
         <h1 class="text-xl font-semibold leading-none text-gray-900">
-         {{students.student_name}}
+         {{teachers.instructor_name}}
         </h1>
        </div>
        <div class="flex items-center gap-2.5">
-        <a class="btn btn-sm btn-light" href="/app/student/{{students.name}}">
+        <a class="btn btn-sm btn-light" href="/app/instructor/{{teachers.name}}">
          Edit Profile
         </a>
-        <div class="btn btn-sm btn-primary" href="/student/settings">
+        <div class="btn btn-sm btn-primary" href="/teacher/settings">
          Account Settings
         </div>
        </div>
@@ -57,7 +57,7 @@
               First Name
              </td>
              <td class="py-2 text-gray-700 text-sm">
-              {{students.first_name}}
+              {{employees.first_name}}
              </td>
             </tr>
             <tr>
@@ -65,7 +65,7 @@
               Middle Name
              </td>
              <td class="py-2 text-gray-700 text-sm">
-              {{students.middle_name}}
+              {{employees.middle_name}}
              </td>
             </tr>
             <tr>
@@ -73,15 +73,15 @@
               Last Name
              </td>
              <td class="py-2 text-gray-700 text-sm">
-              {{students.last_name}}
+              {{employees.last_name}}
              </td>
             </tr>
             <tr>
              <td class="py-2">
-              Admission ID
+              Staff ID
              </td>
              <td class="py-2 text-gray-700 text-sm">
-              {{students.name}}
+              {{employees.name}}
              </td>
             </tr>
             <tr>
@@ -89,7 +89,7 @@
               Joining Date
              </td>
              <td class="py-2 text-gray-700 text-sm">
-              {{students.joining_date}}
+              {{employees.date_of_joining}}
              </td>
             </tr>
             <tr>
@@ -97,13 +97,13 @@
               Status
              </td>
              <td class="py-3 text-gray-700">
-                {% if students.enabled == 1 %}
+                {% if teachers.status == 'Active' %}
               <span class="badge badge-sm badge-outline badge-success">
                Active
               </span>
               {% else %}
-              <span class="badge badge-sm badge-outline badge-danger">
-               Disabled
+              <span class="badge badge-sm badge-outline badge-warning">
+               Left
               </span>
               {% endif %}
              </td>
@@ -121,10 +121,10 @@
            <table class="table align-middle text-sm text-gray-500">
             <tr>
              <td class="py-3">
-              Student Email
+              Teacher's Email
              </td>
              <td class="py-3 text-gray-700 text-sm">
-              {{students.student_email_id}}
+              {{employees.user_id}}
              </td>
             </tr>
             <tr>
@@ -132,15 +132,15 @@
               Birthday
              </td>
              <td class="py-3 text-gray-700 text-sm">
-              {{students.date_of_birth}}
+              {{employees.date_of_birth}}
              </td>
             </tr>
             <tr>
              <td class="py-3">
-              Student Contact
+              Teacher Contact
              </td>
              <td class="py-3 text-gray-700 text-sm">
-              {{students.student_mobile_number}}
+              {{employees.cell_number}}
              </td>
             </tr>
             <tr>
@@ -148,7 +148,7 @@
               Gender
              </td>
              <td class="py-3 text-gray-700 text-sm">
-              {{students.gender}}
+              {{employees.gender}}
              </td>
             </tr>
             <tr>
@@ -156,7 +156,7 @@
               Address
              </td>
              <td class="py-3 text-gray-600 text-2sm">
-              {{students.address_line_1 or 'You have no an address yet'}} 
+              {{employees.address_line_1 or 'You have no an address yet'}} 
              </td>
             </tr>
            </table>
@@ -184,9 +184,9 @@
            <span class="text-gray-700 text-sm font-medium block mb-5">
             Discover promotions crafted to match your preferences.
            </span>
-           <div class="btn btn-dark btn-sm" href="#">
+           <a class="btn btn-dark btn-sm" href="#">
             Start Now
-           </div>
+           </a>
           </div>
          </div>
          <div class="card">
