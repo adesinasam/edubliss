@@ -51,7 +51,9 @@ fixtures = [{
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 doctype_js = {
-    "Program": "public/js/pages/program.js"
+    "Program": "public/js/pages/program.js",
+    "Fee Structure": "public/js/pages/fee_structure.js",
+    "Quotation": "public/js/pages/quotation.js"
     }
 
 # Svg Icons

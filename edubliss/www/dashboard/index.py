@@ -21,6 +21,7 @@ def get_context(context):
         company = edubliss_session.school
     else:
         context.edublisession = _("Welcome")  # Placeholder message
+        context.education_settings = frappe.call('edubliss.api.get_education_setting')
         context.request_url = frappe.request.url  # Placeholder message
         company = None
 

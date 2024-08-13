@@ -30,6 +30,7 @@
           <input type="hidden" name="user" value="{{ current_user.name }}">
           <input type="hidden" name="user_full_name" value="{{ current_user.user_full_name }}">
           <input type="hidden" name="username" value="{{ current_user.username }}">
+          <input type="hidden" name="academic_term" value="{{ education_settings.current_academic_term }}">
           <input type="hidden" name="initial_url" value="{{ frappe.request.url }}">
           <div class="grid p-5 border-t border-t-gray-200">
             <span class="text-2sm font-semibold text-primary hover:text-primary-active">
@@ -41,7 +42,7 @@
               <option value="{{ company.name }}">{{ company.company_name }}</option>
             {% endfor %}
             </select>
-            <br>
+<!--             <br>
             <span class="text-2sm font-semibold text-primary hover:text-primary-active">
               Academic Term
             </span>
@@ -50,7 +51,7 @@
             {% for acadterm in acadterms %}
               <option value="{{ acadterm.name }}">{{ acadterm.title }}</option>
             {% endfor %}
-            </select>
+            </select> -->
           </div>
           <div class="grid p-5 border-t border-t-gray-200">
              <input type="submit" class="btn btn-sm btn-primary justify-center" value="Get Started">
