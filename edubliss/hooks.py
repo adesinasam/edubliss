@@ -21,7 +21,9 @@ fixtures = [{
         'Course-custom_course_code',
         'Program-custom_school',
         'Program Course-custom_type',
-        'Program Enrollment-custom_school'
+        'Program Enrollment-custom_school',
+        'Item-custom_fee_component_type',
+        'Sales Invoice Item-custom_fee_component_type'
       ]
     ]
   ]
