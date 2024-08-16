@@ -1,4 +1,4 @@
-frappe.ui.form.on('Quotation', {
+frappe.ui.form.on('Sales Order', {
     refresh(frm) {
         // your code here
         cur_frm.add_fetch('custom_student_class',  'custom_school',  'company');        // your code here

@@ -55,7 +55,9 @@ fixtures = [{
 doctype_js = {
     "Program": "public/js/pages/program.js",
     "Fee Structure": "public/js/pages/fee_structure.js",
-    "Quotation": "public/js/pages/quotation.js"
+    "Quotation": "public/js/pages/quotation.js",
+    "Sales Order": "public/js/pages/sorder.js",
+    "Sales Invoice": "public/js/pages/sinvoice.js"    
     }
 
 # Svg Icons
