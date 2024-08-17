@@ -57,7 +57,8 @@ doctype_js = {
     "Fee Structure": "public/js/pages/fee_structure.js",
     "Quotation": "public/js/pages/quotation.js",
     "Sales Order": "public/js/pages/sorder.js",
-    "Sales Invoice": "public/js/pages/sinvoice.js"    
+    "Sales Invoice": "public/js/pages/sinvoice.js",
+    "Lead": "public/js/pages/lead.js"    
     }
 
 # Svg Icons

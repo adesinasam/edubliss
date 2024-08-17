@@ -315,3 +315,75 @@ def get_students(company=None):
     if company:
         filters['custom_school'] = company
     return frappe.get_all('Student', filters=filters, fields=['student_name', 'name', 'enabled', 'custom_school', 'joining_date', 'student_email_id', 'image'])
+
+@frappe.whitelist()
+def create_applicant(source_name):
+
+    frappe.publish_realtime(
+        "create_student_progress", {"progress": [1, 4]}, user=frappe.session.user
+    )
+    student_applicant = get_mapped_doc(
+        "Lead",
+        source_name,
+        {
+            "Lead": {
+                "doctype": "Student Applicant",
+                "field_map": {
+                    "name": "lead_name",
+                    "custom_school": "company",
+                    "program": "phone_1",
+                    "academic_year": "fax_1",
+                    "academic_term": "company",
+                    "date_of_birth": "phone_1",
+                    "fax": "fax_1",
+                },
+            }
+        },
+        ignore_permissions=True,
+    )
+    student_applicant.save()
+
+    items = []
+        items.append({
+            's_warehouse': detail.warehouse,
+            'item_code': detail.empty_bottle_item_code,
+            'qty': detail.empty_bottle_qty,
+            'transfer_qty': detail.empty_bottle_qty,
+            'uom': detail.uom,
+            'stock_uom': detail.stock_uom,
+            'conversion_factor': detail.conversion_factor,
+            'basic_rate': float(detail.empty_bottle_rate),
+            'project': detail.project,
+            'cost_center': detail.cost_center
+        })
+        items.append({
+            's_warehouse': detail.warehouse,
+            'item_code': detail.empty_bottle_item_code,
+            'qty': detail.empty_bottle_qty,
+            'transfer_qty': detail.empty_bottle_qty,
+            'uom': detail.uom,
+            'stock_uom': detail.stock_uom,
+            'conversion_factor': detail.conversion_factor,
+            'basic_rate': float(detail.empty_bottle_rate),
+            'project': detail.project,
+            'cost_center': detail.cost_center
+        })
+
+    lead = frappe.db.get_value(
+        "Lead",
+        source_name,
+        ["student_category", "program", "academic_year"],
+        as_dict=True,
+    )
+    student_applicant = frappe.new_doc("Student Applicant")
+    student_applicant.student = lead.lead_nam
+    student_applicant.student_category = lead.student_category
+    student_applicant.student_name = lead.student_name
+    student_applicant.program = lead.program
+    student_applicant.academic_year = lead.academic_year
+    student_applicant.save()
+
+    frappe.publish_realtime(
+        "create_student_progress", {"progress": [2, 4]}, user=frappe.session.user
+    )
+    return student_applicant
