@@ -1,5 +1,8 @@
 import frappe
 from frappe import _
+from frappe.utils import get_url
+from frappe.email.doctype.email_group.email_group import add_subscribers
+from frappe.model.mapper import get_mapped_doc
 from frappe.utils import cstr, flt, getdate, nowdate
 from frappe.utils.dateutils import get_dates_from_timegrain
 
@@ -320,7 +323,7 @@ def get_students(company=None):
 def create_applicant(source_name):
 
     frappe.publish_realtime(
-        "create_student_progress", {"progress": [1, 4]}, user=frappe.session.user
+        "create_applicant_progress", {"progress": [1, 4]}, user=frappe.session.user
     )
     student_applicant = get_mapped_doc(
         "Lead",
@@ -330,60 +333,93 @@ def create_applicant(source_name):
                 "doctype": "Student Applicant",
                 "field_map": {
                     "name": "lead_name",
-                    "custom_school": "company",
-                    "program": "phone_1",
-                    "academic_year": "fax_1",
-                    "academic_term": "company",
-                    "date_of_birth": "phone_1",
-                    "fax": "fax_1",
                 },
             }
         },
         ignore_permissions=True,
     )
-    student_applicant.save()
-
-    items = []
-        items.append({
-            's_warehouse': detail.warehouse,
-            'item_code': detail.empty_bottle_item_code,
-            'qty': detail.empty_bottle_qty,
-            'transfer_qty': detail.empty_bottle_qty,
-            'uom': detail.uom,
-            'stock_uom': detail.stock_uom,
-            'conversion_factor': detail.conversion_factor,
-            'basic_rate': float(detail.empty_bottle_rate),
-            'project': detail.project,
-            'cost_center': detail.cost_center
-        })
-        items.append({
-            's_warehouse': detail.warehouse,
-            'item_code': detail.empty_bottle_item_code,
-            'qty': detail.empty_bottle_qty,
-            'transfer_qty': detail.empty_bottle_qty,
-            'uom': detail.uom,
-            'stock_uom': detail.stock_uom,
-            'conversion_factor': detail.conversion_factor,
-            'basic_rate': float(detail.empty_bottle_rate),
-            'project': detail.project,
-            'cost_center': detail.cost_center
-        })
 
     lead = frappe.db.get_value(
         "Lead",
         source_name,
-        ["student_category", "program", "academic_year"],
+        ["company", "custom_student_email", "custom_desired_academic_year", "custom_desired_academic_term", "custom_fathers_name", "custom_fathers_mobile_no", "email_id", "custom_mothers_name", "custom_mothers_mobile_no", "custom_mothers_email", "custom_fathers_occupation", "custom_fathers_designation", "custom_mothers_occupation", "custom_mothers_designation"],
         as_dict=True,
     )
-    student_applicant = frappe.new_doc("Student Applicant")
-    student_applicant.student = lead.lead_nam
-    student_applicant.student_category = lead.student_category
-    student_applicant.student_name = lead.student_name
-    student_applicant.program = lead.program
-    student_applicant.academic_year = lead.academic_year
+
+    guardians = []
+
+    # Create and save Father Guardian
+    if lead.custom_fathers_name:
+        student_father = frappe.new_doc("Guardian")
+        student_father.guardian_name = lead.custom_fathers_name
+        student_father.mobile_number = lead.custom_fathers_mobile_no
+        student_father.email_address = lead.email_id
+        student_father.occupation = lead.custom_fathers_occupation
+        student_father.designation = lead.custom_fathers_designation
+        student_father.save()
+    
+        guardians.append({
+            'guardian': student_father.name,
+            'guardian_name': lead.custom_fathers_name,
+            'relation': 'Father'
+        })
+
+    # Create and save Mother Guardian
+    if lead.custom_mothers_name:
+        student_mother = frappe.new_doc("Guardian")
+        student_mother.guardian_name = lead.custom_mothers_name
+        student_mother.mobile_number = lead.custom_mothers_mobile_no
+        student_mother.email_address = lead.custom_mothers_email
+        student_mother.occupation = lead.custom_mothers_occupation
+        student_mother.designation = lead.custom_mothers_designation
+        student_mother.save()
+    
+        guardians.append({
+            'guardian': student_mother.name,
+            'guardian_name': lead.custom_mothers_name,
+            'relation': 'Mother'
+        })
+
+    # Assign guardians to the student applicant as child document objects
+    for guardian in guardians:
+        student_applicant.append('guardians', guardian)
+
+    student_applicant.custom_school = lead.company
+    student_applicant.student_email_id = lead.custom_student_email
+    student_applicant.academic_year = lead.custom_desired_academic_year
+    student_applicant.academic_term = lead.custom_desired_academic_term
+    student_applicant.application_date = nowdate()
+    student_applicant.application_status = "Approved"
+    student_applicant.paid = 1
     student_applicant.save()
 
+    # Update the status of the Lead to 'Converted'
+    frappe.db.set_value("Lead", source_name, "status", "Converted")
+    frappe.db.commit()
+
     frappe.publish_realtime(
-        "create_student_progress", {"progress": [2, 4]}, user=frappe.session.user
+        "create_applicant_progress", {"progress": [2, 4]}, user=frappe.session.user
     )
+
     return student_applicant
+
+def send_lead_status_email(doc, method):
+    """Send an email using an email template when the Lead status is updated."""
+    if doc.status and doc.get_db_value("status") != doc.status:
+        # Fetch the email template
+        email_template = frappe.get_doc("Email Template", "Lead Status Update")
+
+        # Render the template with the Lead document
+        subject = frappe.render_template(email_template.subject, {"doc": doc})
+        message = frappe.render_template(email_template.response_html, {"doc": doc})
+
+        # Send the email
+        recipients = [doc.email_id]  # Assuming email_id field holds the lead's email address
+        frappe.sendmail(
+            recipients=recipients,
+            subject=subject,
+            message=message
+        )
+
+        frappe.msgprint(f"Email sent to {', '.join(recipients)} for status update.")
+
