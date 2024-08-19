@@ -1,5 +1,6 @@
     {% if frappe.session.user != 'Guest' %}
       <div class="flex items-center gap-2 lg:gap-3.5">
+       {% if "Academics User" in user_roles %}
        <div class="dropdown" data-dropdown="true" data-dropdown-offset="10px, 10px" data-dropdown-placement="bottom-end" data-dropdown-trigger="click|lg:click">
         <button class="dropdown-toggle btn btn-sm btn-sm-lg hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500">
          <i class="ki-filled ki-abstract-10">
@@ -64,6 +65,7 @@
          </div>
         </div>
        </div>
+       {% endif %}
        <button class="btn btn-icon btn-icon-lg size-9 rounded-full hover:bg-primary-light hover:text-primary text-gray-500" data-modal-toggle="#search_modal">
         <i class="ki-filled ki-magnifier">
         </i>
@@ -179,6 +181,7 @@
          </div>
         </div>
        </div>       
+       {% if "Academics User" in user_roles %}
        <div class="dropdown" data-dropdown="true" data-dropdown-offset="70px, 10px" data-dropdown-placement="bottom-end" data-dropdown-trigger="click|lg:click">
         <button class="dropdown-toggle btn btn-icon btn-icon-lg relative cursor-pointer size-9 rounded-full hover:bg-primary-light hover:text-primary dropdown-open:bg-primary-light dropdown-open:text-primary text-gray-500">
          <i class="ki-filled ki-notification-on">
@@ -1370,6 +1373,7 @@
          </div>
         </div>
        </div>
+       {% endif %}
        <div class="menu" data-menu="true">
         <div class="menu-item" data-menu-item-offset="20px, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
          <div class="menu-toggle btn btn-icon rounded-full">
@@ -1402,6 +1406,7 @@
           <div class="menu-separator">
           </div>
           <div class="flex flex-col" data-menu-dismiss="true">
+           {% if "Academics User" in user_roles %}
            <div class="menu-item">
             <a class="menu-link" href="/me">
              <span class="menu-icon">
@@ -1413,6 +1418,7 @@
              </span>
             </a>
            </div>
+           {% endif %}
            <div class="menu-item">
             <a class="menu-link" href="/update-profile/{{ current_user.name }}">
              <span class="menu-icon">
@@ -1425,7 +1431,7 @@
             </a>
            </div>
            <div class="menu-item">
-            <a class="menu-link" href="{% if active_route == 'portal' %}/dashboard{% else %}/app{% endif %}">
+            <a class="menu-link" href="{% if active_route == 'portal' %}/dashboard{% elif 'Academics User' in user_roles %}/app{% endif %}">
              <span class="menu-icon">
               <i class="ki-filled ki-message-programming">
               </i>
@@ -1435,6 +1441,7 @@
              </span>
             </a>
            </div>
+           {% if "Academics User" in user_roles %}
            <div class="menu-item" data-menu-item-offset="-10px, 0" data-menu-item-placement="left-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:hover">
             <div class="menu-link">
              <span class="menu-icon">
@@ -1506,6 +1513,7 @@
              </div>
             </div>
            </div>
+           {% endif %}
           </div>
           <div class="menu-separator">
           </div>

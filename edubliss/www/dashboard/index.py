@@ -9,7 +9,29 @@ def get_context(context):
         frappe.throw(_("You need to be logged in to access this page"), frappe.PermissionError)
 
     # Fetch the current user's details
-    context.current_user = frappe.get_doc("User", frappe.session.user)
+    current_user = frappe.get_doc("User", frappe.session.user)
+    context.current_user = current_user
+
+    # Fetch the roles of the current user
+    user_roles = frappe.get_roles(frappe.session.user)
+    context.user_roles = user_roles
+    
+    if "Parent" in user_roles:
+        guardian = frappe.get_list("Guardian", filters={"email_address": frappe.session.user}, limit_page_length=1)
+        if guardian:
+            parents = frappe.get_doc("Guardian", guardian[0].name)
+        else:
+            parents = ''
+        if parents:
+            context.parents = parents
+        else:
+            context.parents = ''
+
+    # Split the company name into parts
+    parts = current_user.full_name.split(" ")
+
+    # Create the abbreviation by taking the first letter of each part
+    context.abbr = "".join([p[0] for p in parts[:2] if p])
 
     # Set the active route for navigation
     context.active_route = "dashboards"
@@ -38,7 +60,7 @@ def get_context(context):
     else:
         context.student_count = frappe.db.count('Student')
 
-    context.course_count = frappe.db.count('LMS Course')
+    context.course_count = frappe.db.count('Course')
     context.teacher_count = frappe.db.count('Instructor')
 
     return context
