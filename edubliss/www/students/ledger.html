@@ -126,7 +126,7 @@
                <td>{{ frappe.format(balance, {'fieldtype': 'Currency'}) }}</td>
                <td>{{ ledger.voucher_type }}</td>
                <td class="text-center">
-                  <a class="btn btn-link" href="/printview?doctype={{ ledger.voucher_type }}&name={{ ledger.voucher_no }}&format=Standard" target="_blank">{{ ledger.voucher_no }}</a>
+                  <a class="btn btn-link" href="/printview?doctype={{ ledger.voucher_type }}&name={{ ledger.voucher_no }}" target="_blank">{{ ledger.voucher_no }}</a>
                </td>
                <td>{{ ledger.remarks }}</td>
               </tr>

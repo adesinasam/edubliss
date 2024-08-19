@@ -3,6 +3,13 @@ from frappe import _
 
 no_cache = 1
 
+def get_student_student(student):
+    try:
+        student_doc = frappe.get_doc('Student', student)
+        return student_doc
+    except Exception as e:
+        return ''       
+
 def get_context(context):
 
     docname = frappe.form_dict.docname
@@ -14,9 +21,9 @@ def get_context(context):
     context.current_user = frappe.get_doc("User", frappe.session.user)
 
     # nav
-    context.active_route = "students"
-    context.active_subroute = "student_list"
-    context.active_student_route = "billing"
+    context.active_route = "parents"
+    context.active_subroute = "parent_list"
+    context.active_parent_route = "profile"
 
     context.docname = frappe.form_dict.docname
 
@@ -54,18 +61,16 @@ def get_context(context):
     context.acadyears = frappe.call('edubliss.api.get_academic_year')
     context.acadterms = frappe.call('edubliss.api.get_academic_term')
 
-    # Try to fetch the Student document and handle errors if it doesn't exist
     try:
-        context.students = frappe.get_doc("Student", docname)
-        customer = context.students.customer
+        context.parents = frappe.get_doc("Guardian", docname)
+        parent = context.parents
     except frappe.DoesNotExistError:
-        frappe.throw(_("Student not found"), frappe.DoesNotExistError)
+        frappe.throw(_("Parent not found"), frappe.DoesNotExistError)
 
-    # Fetch sales invoices
-    context.sales_invoices = frappe.call(
-        'edubliss.api.get_student_invoices', 
-        customer=customer
-        )
+    # Try to fetch the Student document and handle errors if it doesn't exist
+    if parent:
+        context.students = parent.get("students")
+        context['get_student_student'] = get_student_student
 
 
     return context

@@ -3,6 +3,13 @@ from frappe import _
 
 no_cache = 1
 
+def get_parent_parent(parent):
+    try:
+        parent_doc = frappe.get_doc('Guardian', parent)
+        return parent_doc
+    except Exception as e:
+        return ''       
+
 def get_context(context):
 
     docname = frappe.form_dict.docname
@@ -16,7 +23,7 @@ def get_context(context):
     # nav
     context.active_route = "students"
     context.active_subroute = "student_list"
-    context.active_student_route = "billing"
+    context.active_student_route = "family"
 
     context.docname = frappe.form_dict.docname
 
@@ -57,15 +64,13 @@ def get_context(context):
     # Try to fetch the Student document and handle errors if it doesn't exist
     try:
         context.students = frappe.get_doc("Student", docname)
-        customer = context.students.customer
+        student = context.students
     except frappe.DoesNotExistError:
         frappe.throw(_("Student not found"), frappe.DoesNotExistError)
 
-    # Fetch sales invoices
-    context.sales_invoices = frappe.call(
-        'edubliss.api.get_student_invoices', 
-        customer=customer
-        )
-
+    if student:
+        context.parents = student.get("guardians")
+        context['get_parent_parent'] = get_parent_parent
+        context.siblings = student.get("siblings")
 
     return context

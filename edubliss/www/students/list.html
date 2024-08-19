@@ -151,7 +151,8 @@
              </tr>
             </thead>
             <tbody>
-            {% for student in students %}
+             {% if students %}
+              {% for student in students %}
              <tr>
               <td class="text-center">
                <input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/>
@@ -237,6 +238,11 @@
               </td>
              </tr>
                {% endfor %}
+             {% else %}
+             <tr>
+              <td colspan="7" class="text-center">No student found.</td>
+             </tr>
+             {% endif %}
             </tbody>
            </table>
           </div>

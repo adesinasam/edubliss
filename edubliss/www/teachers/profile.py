@@ -53,7 +53,7 @@ def get_context(context):
     context.companys = frappe.call('edubliss.api.get_company')
     context.acadyears = frappe.call('edubliss.api.get_academic_year')
     context.acadterms = frappe.call('edubliss.api.get_academic_term')
-    context.teachers = frappe.call('edubliss.api.get_teachers')
+    # context.teachers = frappe.call('edubliss.api.get_teachers')
 
     # Try to fetch the Student document and handle errors if it doesn't exist
     try:

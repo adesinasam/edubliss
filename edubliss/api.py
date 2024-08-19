@@ -84,12 +84,11 @@ def get_section_students(section):
     )
 
 @frappe.whitelist()
-def get_student_invoices(customer=None, company=None):
+def get_student_invoices(customer=None):
     filters = {}
     if customer:
         filters = {
-            'customer': customer,
-            'company': company
+            'customer': customer
         }
     return frappe.get_all(
         'Sales Invoice', 
@@ -177,6 +176,14 @@ def get_parents():
         fields=['guardian_name', 'name', 'user', 'mobile_number', 
         'occupation', 'email_address', 'custom_contact_address', 'image']
         )
+
+@frappe.whitelist()
+def get_parent_student(parent):
+    return frappe.get_all(
+        "Guardian Student",
+        filters={"parent": parent},
+        fields=["student", "student_name"]
+    )
 
 @frappe.whitelist()
 def get_programs(company=None):

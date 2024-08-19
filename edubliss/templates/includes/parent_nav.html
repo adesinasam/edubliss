@@ -1,0 +1,33 @@
+     <div class="flex flex-nowrap items-center lg:items-end justify-between border-b border-b-gray-200 dark:border-b-coal-100 gap-6 mb-5 lg:mb-10">
+      <!-- begin: container -->
+      <div class="container-fixed">
+       <div class="grid">
+        <div class="scrollable-x-auto">
+         <div class="menu gap-3" data-menu="true">
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_parent_route == 'profile' %}here{% endif %}">
+           <a class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" href="/parents/profile/{{docname}}" tabindex="0">
+            <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
+             Account Home
+            </span>
+           </a>
+          </div>
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_parent_route == 'enrollment' %}here{% endif %}">
+           <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" href="/parents/enrollment/{{docname}}" tabindex="0">
+            <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
+             Invoices
+            </span>
+           </div>
+          </div>
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_parent_route == 'attendance' %}here{% endif %}">
+           <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" href="/parents/attendance/{{docname}}" tabindex="0">
+            <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
+             Activities
+            </span>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <!-- end: container -->
+     </div>

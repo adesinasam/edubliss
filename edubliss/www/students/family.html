@@ -1,0 +1,224 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Family Info") }}
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav3.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+
+    {% include "templates/includes/student_header.html" %}
+
+    {% include "templates/includes/student_nav.html" %}
+
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-gray-900">
+         Student Family
+        </h1>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <!-- begin: grid -->
+     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
+     {% if parents %}
+     {% for parent in parents %}
+      <div class="col-span-1">
+        <div class="grid gap-5 lg:gap-7.5">
+         <div class="card min-w-full bg-primary-light">
+          <div class="card-header">
+           <h3 class="card-title">
+            {{parent.relation}} Info
+           </h3>
+           <a class="btn btn-light btn-sm" href="/parents/profile/{{ parent.guardian }}">
+            <i class="ki-filled ki-exit-right">
+            </i>
+            View Profile
+           </a>
+          </div>
+          <div class="card-table scrollable-x-auto pb-3">
+           <table class="table align-middle text-sm text-gray-500">
+            <tr>
+             <td class="py-2">
+              Name:
+             </td>
+             <td class="py-2 text-gray-700 text-sm">
+              <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/parents/profile/{{ parent.guardian }}">
+                  {{parent.guardian_name}}
+                 </a>
+             </td>
+            </tr>
+            <tr>
+             <td class="py-2">
+              Email:
+             </td>
+             <td class="py-2">
+              <a class="text-gray-700 text-sm hover:text-primary-active" href="mailto:{{get_parent_parent(parent.guardian).email_address}}">
+              {{ get_parent_parent(parent.guardian).email_address or '' }}
+              </a>
+             </td>
+            </tr>
+            <tr>
+             <td class="py-2">
+              Phone:
+             </td>
+             <td class="py-2 text-gray-700 text-sm">
+              {{get_parent_parent(parent.guardian).mobile_number or ""}}
+             </td>
+            </tr>
+            <tr>
+             <td class="py-2">
+              Occupation:
+             </td>
+             <td class="py-2 text-gray-700 text-sm">
+              {{get_parent_parent(parent.guardian).occupation or ""}}
+             </td>
+            </tr>
+            <tr>
+             <td class="py-2">
+              Address:
+             </td>
+             <td class="py-2 text-gray-700 text-sm">
+              {{get_parent_parent(parent.guardian).custom_contact_address or ""}}
+             </td>
+            </tr>
+            </table>
+          </div>
+         </div>
+        </div>
+      </div>
+     {% endfor %}
+     {% endif %}
+     </div>
+      <!-- end: grid -->
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="card card-grid min-w-full">
+        <div class="card-header flex-wrap gap-2">
+         <h3 class="card-title font-medium text-sm">
+          Siblings
+         </h3>
+         <div class="flex flex-wrap gap-2 lg:gap-5">
+          <div class="flex">
+           <label class="input input-sm">
+            <i class="ki-filled ki-magnifier">
+            </i>
+            <input placeholder="Search users" type="text" value="">
+            </input>
+           </label>
+          </div>
+         </div>
+        </div>
+        <div class="card-body">
+          <div class="scrollable-x-auto">
+           <table class="table table-auto table-border">
+            <thead>
+             <tr>
+              <th class="w-[60px] text-center">
+              </th>
+              <th class="min-w-[300px]">
+                 Name
+              </th>
+              <th class="min-w-[150px]">
+                 Gender
+              </th>
+              <th class="min-w-[100px]">
+                 Is MPIS Student
+              </th>
+              <th class="min-w-[150px]">
+                 Student ID
+              </th>
+              <th class="min-w-[300px]">
+                 Program
+              </th>
+             </tr>
+            </thead>
+            <tbody>
+            {% if siblings %}
+              {% for sibling in siblings %}
+             <tr>
+              <td class="text-center">
+                {{ loop.index }}
+              </td>
+              <td>
+                 <div class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px">
+                  {{ sibling.full_name }}
+                 </div>
+              </td>
+              <td>
+               {{ sibling.gender }}
+              </td>
+              <td>
+               <div class="flex items-center gap-1.5">
+                  {% if sibling.studying_in_same_institute == 'Yes' %}
+                 <span class="badge badge-pill badge-outline badge-success gap-1 items-center">
+                  <span class="badge badge-dot size-1.5 badge-success">
+                  </span>
+                    Yes
+                 </span>
+                  {% else %}
+                 <span class="badge badge-pill badge-outline badge-warning gap-1 items-center">
+                  <span class="badge badge-dot size-1.5 badge-warning">
+                  </span>
+                    No
+                 </span>
+                  {% endif %}
+               </div>
+              </td>
+              <td>
+               <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/students/profile/{{ sibling.student }}" >
+                {{ sibling.student }}
+               </a>
+              </td>
+              <td>
+               <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/admin/program?program_name={{ sibling.program }}" >
+               {{ sibling.program }}
+               </a>
+              </td>
+             </tr>
+              {% endfor %}
+             {% else %}
+             <tr>
+              <td colspan="6" class="text-center">No sibling found.</td>
+             </tr>
+              {% endif %} 
+            </tbody>
+           </table>
+          </div>
+          <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
+           <div class="flex items-center gap-2 order-2 md:order-1">
+            Show
+            <select class="select select-sm w-16" data-datatable-size="true" name="perpage">
+            </select>
+            per page
+           </div>
+           <div class="flex items-center gap-4 order-1 md:order-2">
+            <span data-datatable-info="true">
+            </span>
+            <div class="pagination" data-datatable-pagination="true">
+            </div>
+           </div>
+          </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+    </main>
+{% endblock %}

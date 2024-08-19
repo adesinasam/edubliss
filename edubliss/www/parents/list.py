@@ -4,18 +4,10 @@ from frappe import _
 no_cache = 1
 
 def get_parent_students(parent):
-    guardian = frappe.qb.DocType("Guardian")
-    guardian_student = frappe.qb.DocType("Guardian Student")
+    guardian = frappe.get_doc("Guardian", parent)
+    guardian_student = guardian.get("students")
 
-    guardian_student_query = (
-        frappe.qb.from_(guardian)
-        .inner_join(guardian_student)
-        .on(guardian.name == guardian_student.parent)
-        .select(guardian_student.student)
-        .where(guardian.name == parent)
-        .run(as_dict=1)
-    )
-    return len(guardian_student_query)
+    return len(guardian_student)
 
 def get_context(context):
 

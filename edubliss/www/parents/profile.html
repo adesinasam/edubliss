@@ -1,0 +1,218 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Parent Profile") }}
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav3.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+
+    {% include "templates/includes/parent_nav.html" %}
+
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-gray-900">
+         Profile
+        </h1>
+       </div>
+       <div class="flex items-center gap-2.5">
+        <a class="btn btn-sm btn-light" href="/app/guardian/{{parents.name}}">
+         Edit Profile
+        </a>
+        <div class="btn btn-sm btn-primary" href="/parent/settings">
+         Account Settings
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <!-- begin: grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
+      <div class="col-span-1">
+        <div class="grid gap-5 lg:gap-7.5">
+         <div class="card min-w-full">
+          <div class="card-header">
+           <h3 class="card-title">
+            Parent Info
+           </h3>
+          </div>
+          <div class="card-table scrollable-x-auto pb-3">
+           <table class="table align-middle text-sm text-gray-500">
+            <tr>
+             <td class="py-2">
+              Name:
+             </td>
+             <td class="py-2 text-gray-700 text-sm">
+              {{parents.guardian_name}}
+             </td>
+            </tr>
+            <tr>
+             <td class="py-2">
+              Email:
+             </td>
+             <td class="py-2">
+              <a class="text-gray-700 text-sm hover:text-primary-active" href="mailto:{{parents.email_address}}">
+              {{parents.email_address or ""}}
+              </a>
+             </td>
+            </tr>
+            <tr>
+             <td class="py-2">
+              Phone:
+             </td>
+             <td class="py-2 text-gray-700 text-sm">
+              {{parents.mobile_number or ""}}
+             </td>
+            </tr>
+            <tr>
+             <td class="py-2">
+              Occupation:
+             </td>
+             <td class="py-2 text-gray-700 text-sm">
+              {{parents.occupation or ""}}
+             </td>
+            </tr>
+            <tr>
+             <td class="py-2">
+              Address:
+             </td>
+             <td class="py-2 text-gray-700 text-sm">
+              {{parents.custom_contact_address or ""}}
+             </td>
+            </tr>
+            </table>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="col-span-1">
+        <div class="flex flex-col gap-5 lg:gap-7.5">
+         <div class="card">
+          <div class="card-header">
+           <h3 class="card-title">
+            Students
+           </h3>
+           <div class="menu" data-menu="true">
+           </div>
+          </div>
+          <div class="card-table scrollable-x-auto">
+           <div class="scrollable-auto">
+            <table class="table align-middle text-2sm text-gray-600">
+             <tr class="bg-gray-100">
+              <th class="text-start font-medium min-w-48 py-2.5">
+               Name
+              </th>
+              <th class="text-right font-medium min-w-20 py-2.5">
+               Status
+              </th>
+              <th class="text-right font-medium min-w-20 py-2.5">
+               Invoices
+              </th>
+              <th class="min-w-16">
+              </th>
+             </tr>
+             {% if students %}
+             {% for student in students %}
+             <tr>
+              <td>
+               <div class="flex items-center grow gap-2.5">
+                <img alt="" class="rounded-full size-9 shrink-0" src="{% if get_student_student(student.student).image  %}{{get_student_student(student.student).image}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/>
+                <div class="flex flex-col gap-1">
+                 <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/students/profile/{{ student.student }}">
+                  {{ student.student_name }}
+                 </a>
+                 <span class="text-xs font-normal text-gray-600 leading-3">
+                  {{ get_student_student(student.student).student_email_id or '' }}
+                 </span>
+                </div>
+               </div>
+              </td>
+              <td class="py-2 text-right">
+               <div class="flex items-center gap-1.5">
+                  {% if get_student_student(student.student).enabled == 1 %}
+                 <span class="badge badge-pill badge-outline badge-success gap-1 items-center">
+                  <span class="badge badge-dot size-1.5 badge-success">
+                  </span>
+                    Active
+                 </span>
+                  {% else %}
+                 <span class="badge badge-pill badge-outline badge-danger gap-1 items-center">
+                  <span class="badge badge-dot size-1.5 badge-danger">
+                  </span>
+                    Disabled
+                 </span>
+                  {% endif %}
+               </div>
+              </td>
+              <td class="py-2 text-right">
+               <a class="btn btn-link" href="/students/billing/{{ student.student }}">
+                 View
+                </a>
+              </td>
+              <td class="text-right">
+               <div class="menu inline-flex" data-menu="true">
+                <div class="menu-item" data-menu-item-offset="0, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
+                 <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
+                  <i class="ki-filled ki-dots-vertical">
+                  </i>
+                 </button>
+                 <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
+                  <div class="menu-item">
+                   <a class="menu-link" href="/students/profile/{{ student.student }}">
+                    <span class="menu-icon">
+                     <i class="ki-filled ki-search-list">
+                     </i>
+                    </span>
+                    <span class="menu-title">
+                     View
+                    </span>
+                   </a>
+                  </div>
+                  <div class="menu-separator">
+                  </div>
+                  <div class="menu-item">
+                   <a class="menu-link" href="/app/student/{{ student.student }}">
+                    <span class="menu-icon">
+                     <i class="ki-filled ki-pencil">
+                     </i>
+                    </span>
+                    <span class="menu-title">
+                     Edit
+                    </span>
+                   </a>
+                  </div>
+                 </div>
+                </div>
+               </div>
+              </td>
+             </tr>
+             {% endfor %}
+             {% else %}
+             <tr>
+              <td colspan="4" class="text-center">No student found.</td>
+             </tr>
+             {% endif %}
+            </table>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <!-- end: grid -->
+     </div>
+     <!-- end: container -->
+    </main>
+{% endblock %}

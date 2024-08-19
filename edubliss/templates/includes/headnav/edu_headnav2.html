@@ -6,18 +6,18 @@
 
       <div class="flex [.header_&amp;]:below-lg:hidden items-center gap-1.25 text-xs lg:text-sm font-medium mb-2.5 lg:mb-0" data-reparent="true" data-reparent-mode="prepend|lg:prepend" data-reparent-target="#content_container|lg:#header_container">
           <div class="flex flex-wrap gap-2.5">
-           <span class="badge badge-pill badge-dark gap-1 items-center">
+           <span class="badge badge-pill badge-outline badge-primary gap-1 items-center">
             <i class="ki-solid ki-home">
             </i>
             {{ edublisession.school or "" }} 
            </span>
-           <span class="badge badge-pill badge-outline badge-primary gap-1 items-center">
+<!--            <span class="badge badge-pill badge-outline badge-primary gap-1 items-center">
             <i class="ki-duotone ki-calendar">
             </i>
             {{ edublisession.academic_year or "" }} 
-           </span>
+           </span> -->
            <span class="badge badge-pill badge-outline badge-info gap-1 items-center">
-            <i class="ki-solid ki-note">
+            <i class="ki-solid ki-calendar">
             </i>
             {{ edublisession.academic_term or "" }} 
            </span>

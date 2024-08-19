@@ -125,12 +125,12 @@
                <div class="flex items-center gap-2.5">
                 <img alt="" class="rounded-full size-7 shrink-0" src="{% if parent.image  %}{{parent.image}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/>
                 <div class="flex flex-col">
-                 <div class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/parents/profile/{{ parent.name }}">
+                 <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/parents/profile/{{ parent.name }}">
                   {{ parent.guardian_name }}
                  <span class="text-2sm font-medium text-gray-600 hover:text-primary-active">
                   {{ parent.email_id or "" }}
                  </span>
-                 </div>
+                 </a>
                 </div>
                </div>
               </td>
@@ -155,7 +155,7 @@
                  </button>
                  <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
                   <div class="menu-item">
-                   <div class="menu-link" href="/students/profile/{{ parent.name }}">
+                   <a class="menu-link" href="/parents/profile/{{ parent.name }}">
                     <span class="menu-icon">
                      <i class="ki-filled ki-search-list">
                      </i>
@@ -163,7 +163,7 @@
                     <span class="menu-title">
                      View
                     </span>
-                   </div>
+                   </a>
                   </div>
                   <div class="menu-separator">
                   </div>
