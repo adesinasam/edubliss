@@ -88,6 +88,7 @@ def get_student_invoices(customer=None):
     filters = {}
     if customer:
         filters = {
+            'docstatus': 1,
             'customer': customer
         }
     return frappe.get_all(
@@ -98,6 +99,25 @@ def get_student_invoices(customer=None):
         'outstanding_amount', 'customer', 'company'
         ], 
         order_by="posting_date desc"
+        )
+
+@frappe.whitelist()
+def get_student_orders(customer=None):
+    filters = {}
+    if customer:
+        filters = {
+            'docstatus': 1,
+            'customer': customer,
+            'billing_status': 'Not Billed'
+        }
+    return frappe.get_all(
+        'Sales Order', 
+        filters=filters, 
+        fields=[
+        'name', 'title', 'status', 'transaction_date', 'grand_total', 
+        'student', 'customer', 'company'
+        ], 
+        order_by="transaction_date desc"
         )
 
 @frappe.whitelist()
@@ -198,7 +218,7 @@ def get_programs(company=None):
         )
 
 @frappe.whitelist()
-def get_sections(company=None):
+def get_sections(company=None, academic_term=None):
     student_groups = frappe.qb.DocType("Student Group")
     programs = frappe.qb.DocType("Program")
 
@@ -208,6 +228,7 @@ def get_sections(company=None):
         .on(student_groups.program == programs.name)
         .select('*')
         .where(programs.custom_school == company)
+        .where(student_groups.academic_term == academic_term)
         .where(student_groups.group_based_on == 'Batch')
         .run(as_dict=1)
     )

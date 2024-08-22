@@ -66,7 +66,8 @@
         </div>
        </div>
        {% endif %}
-       <button class="btn btn-icon btn-icon-lg size-9 rounded-full hover:bg-primary-light hover:text-primary text-gray-500" data-modal-toggle="#search_modal">
+       <button class="btn btn-icon btn-icon-lg size-9 rounded-full hover:bg-primary-light hover:text-primary text-gray-500"> 
+        <!-- data-modal-toggle="#search_modal" -->
         <i class="ki-filled ki-magnifier">
         </i>
        </button>
@@ -1430,6 +1431,7 @@
              </span>
             </a>
            </div>
+           {% if "Academics User" in user_roles %}
            <div class="menu-item">
             <a class="menu-link" href="{% if active_route == 'portal' %}/dashboard{% elif 'Academics User' in user_roles %}/app{% endif %}">
              <span class="menu-icon">
@@ -1437,10 +1439,38 @@
               </i>
              </span>
              <span class="menu-title">
-              Switch to Desk
+              Switch to {% if active_route == 'portal' %}Dashboard{% elif 'Academics User' in user_roles %}Desk{% endif %}
              </span>
             </a>
            </div>
+           {% else %}
+           {% if active_route == 'portal' %}
+           <div class="menu-item">
+            <a class="menu-link" href="/dashboard">
+             <span class="menu-icon">
+              <i class="ki-filled ki-message-programming">
+              </i>
+             </span>
+             <span class="menu-title">
+              Switch to Dashboard
+             </span>
+            </a>
+           </div>
+           {% endif %}
+           {% endif %}
+           {% if active_route != 'portal' %}
+           <div class="menu-item">
+            <a class="menu-link" href="/portal">
+             <span class="menu-icon">
+              <i class="ki-filled ki-wlan">
+              </i>
+             </span>
+             <span class="menu-title">
+              View Website
+             </span>
+            </a>
+           </div>
+           {% endif %}
            {% if "Academics User" in user_roles %}
            <div class="menu-item" data-menu-item-offset="-10px, 0" data-menu-item-placement="left-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:hover">
             <div class="menu-link">

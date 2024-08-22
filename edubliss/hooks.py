@@ -34,8 +34,11 @@ fixtures = [{
 # app_include_js = "/assets/edubliss/js/edubliss.js"
 
 # include js, css files in header of web template
-# web_include_css = "/assets/edubliss/css/edubliss.css"
-# web_include_js = "/assets/edubliss/js/edubliss.js"
+# web_include_css = "/assets/edubliss/css/styles.css"
+# web_include_css = "/assets/edubliss/dist/css/styles.css"
+# web_include_js = "/assets/edubliss/dist/js/core.bundle.js"
+# web_include_js = "/assets/edubliss/dist/js/widgets/general.js"
+# web_include_js = "/assets/edubliss/dist/js/layouts/demo1.js"
 
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "edubliss/public/scss/website"

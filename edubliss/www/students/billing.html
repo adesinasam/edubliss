@@ -43,7 +43,110 @@
        <div class="card card-grid min-w-full">
         <div class="card-header">
          <h3 class="card-title">
-          Billing and Invoicing
+          Incoming Billing
+         </h3>
+        </div>
+        <div class="card-body">
+          <div class="scrollable-x-auto">
+           <table class="table table-border">
+            <thead>
+             <tr>
+              <th class="w-14">
+              </th>
+              <th class="min-w-[200px]">
+                 Title
+              </th>
+              <th class="w-[170px]">
+                 Status
+              </th>
+              <th class="w-[170px]">
+                 Date
+              </th>
+              <th class="w-[170px]">
+                 Grand Total
+              </th>
+              <th class="w-[170px]">
+                 Pay
+              </th>
+              <th class="w-[100px]">
+              </th>
+             </tr>
+            </thead>
+            <tbody>
+            {% if sales_orders %}
+            {% for order in sales_orders %}
+             <tr>
+              <td>
+                {{ loop.index }}
+              </td>
+              <td>
+               <a class="leading-none font-semibold text-sm text-gray-900 hover:text-primary" href="/printview?doctype=Sales%20Order&name={{ order.name }}" target="_blank">        
+               {{ order.customer_name or order.customer}}
+               </a>
+              </td>
+              <td>
+               {% if order.status == 'Draft' %}
+               <div class="badge badge-sm badge-info badge-outline">
+                {% elif order.status == 'Overdue' %}
+               <div class="badge badge-sm badge-danger badge-outline">
+                {% elif order.status == 'Cancelled' %}
+               <div class="badge badge-sm badge-danger badge-outline">
+                {% elif order.status == 'To Deliver and Bill' %}
+               <div class="badge badge-sm badge-warning badge-outline">
+                {% elif order.status == 'Partly Paid' %}
+               <div class="badge badge-sm badge-warning badge-outline">
+                {% elif order.status == 'Completed' %}
+               <div class="badge badge-sm badge-success badge-outline">
+                {% elif order.status == 'Return' %}
+               <div class="badge badge-sm badge-dark badge-outline">
+                {% else %}
+               <div class="badge badge-sm badge-primary badge-outline">
+                {% endif %}
+                {{ order.status }}
+               </div>
+              </td>
+              <td>
+               {{ order.transaction_date }}
+              </td>
+              <td>
+               {{ frappe.format(order.grand_total, {'fieldtype': 'Currency'}) }}
+              </td>
+              <td>
+
+              </td>
+              <td class="text-center">
+               <a class="btn btn-link" href="/printview?doctype=Sales%20Order&name={{ order.name }}" target="_blank">
+                {{ order.name }}
+               </a>
+              </td>
+             </tr>
+             {% endfor %}
+             {% else %}
+             <tr>
+              <td colspan="7" class="text-center">No Incoming Billing found.</td>
+             </tr>
+             {% endif %}
+            </tbody>
+           </table>
+          </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="card card-grid min-w-full">
+        <div class="card-header">
+         <h3 class="card-title">
+          Invoice and Payments
          </h3>
         </div>
         <div class="card-body">
@@ -105,13 +208,14 @@
              </tr>
             </thead>
             <tbody>
+            {% if sales_invoices %}
             {% for invoice in sales_invoices %}
              <tr>
               <td>
                <input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/>
               </td>
               <td>
-               <a class="leading-none font-semibold text-sm text-gray-900 hover:text-primary" href="#">        
+               <a class="leading-none font-semibold text-sm text-gray-900 hover:text-primary" href="/printview?doctype=Sales%20Invoice&name={{ invoice.name }}" target="_blank">        
                {{ invoice.title }}
                </a>
               </td>
@@ -152,6 +256,11 @@
               </td>
              </tr>
              {% endfor %}
+             {% else %}
+             <tr>
+              <td colspan="7" class="text-center">No Invoice found.</td>
+             </tr>
+             {% endif %}
             </tbody>
            </table>
           </div>

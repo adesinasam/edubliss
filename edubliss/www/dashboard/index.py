@@ -17,15 +17,18 @@ def get_context(context):
     context.user_roles = user_roles
     
     if "Parent" in user_roles:
-        guardian = frappe.get_list("Guardian", filters={"email_address": frappe.session.user}, limit_page_length=1)
+        guardian = frappe.get_list("Guardian", filters={"user": frappe.session.user}, limit_page_length=1)
         if guardian:
-            parents = frappe.get_doc("Guardian", guardian[0].name)
-        else:
-            parents = ''
-        if parents:
-            context.parents = parents
+            context.parents = frappe.get_doc("Guardian", guardian[0].name)
         else:
             context.parents = ''
+
+    if "Student" in user_roles:
+        student = frappe.get_list("Student", filters={"student_email_id": frappe.session.user}, limit_page_length=1)
+        if student:
+            context.studentss = frappe.get_doc("Student", student[0].name)
+        else:
+            context.studentss = ''
 
     # Split the company name into parts
     parts = current_user.full_name.split(" ")
@@ -41,11 +44,13 @@ def get_context(context):
     if edubliss_session:
         context.edublisession = edubliss_session
         company = edubliss_session.school
+        acadterm = edubliss_session.academic_term
     else:
         context.edublisession = _("Welcome")  # Placeholder message
         context.education_settings = frappe.call('edubliss.api.get_education_setting')
         context.request_url = frappe.request.url  # Placeholder message
         company = None
+        acadterm = None
 
     # Fetch necessary data
     context.companys = frappe.call('edubliss.api.get_company')
