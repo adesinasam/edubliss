@@ -31,8 +31,8 @@
         </div>
        </div>
        <div class="flex items-center gap-2.5">
-        <a class="btn btn-sm btn-light" href="#">
-         Payment History
+        <a class="btn btn-sm btn-light" href="/students/billing/{{ students.name }}">
+         Billing
         </a>
        </div>
       </div>
@@ -48,34 +48,10 @@
             <div class="flex items-center flex-wrap gap-3 lg:gap-5">
              <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
               <span class="text-gray-900 text-md leading-none font-semibold">
-               $769.00
+               {{ frappe.format(balance, {'fieldtype': 'Currency'}) }}
               </span>
               <span class="text-gray-600 text-2sm font-medium">
-               Annual Total
-              </span>
-             </div>
-             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
-              <span class="text-gray-900 text-md leading-none font-semibold">
-               $69.00
-              </span>
-              <span class="text-gray-600 text-2sm font-medium">
-               Next Bill Amount
-              </span>
-             </div>
-             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
-              <span class="text-gray-900 text-md leading-none font-semibold">
-               23 Aug, 24
-              </span>
-              <span class="text-gray-600 text-2sm font-medium">
-               Next Billing Date
-              </span>
-             </div>
-             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
-              <span class="text-gray-900 text-md leading-none font-semibold">
-               $769.00
-              </span>
-              <span class="text-gray-600 text-2sm font-medium">
-               Annual Total
+               Total Outstanding
               </span>
              </div>
             </div>
@@ -98,7 +74,7 @@
                 <th></th>
                 <th class="min-w-[150px]">Posting Date</th>
                 <th class="min-w-[200px]">Student</th>
-                <th class="min-w-[150px]"><span class="sort">Debit</th>
+                <th class="min-w-[150px]">Debit</th>
                 <th class="min-w-[150px]">Credit</th>
                 <th class="min-w-[150px]">Balance</th>
                 <th class="min-w-[170px]">Voucher Type</th>
@@ -107,31 +83,7 @@
               </tr>
              </thead>
              <tbody>
-              {% set total_debit = 0 %}
-              {% set total_credit = 0 %}
-              {% set balance = 0 %}
-              {% for ledger in ledgers %}
-                {% set debit = ledger.debit if ledger.debit is not none else 0 %}
-                {% set credit = ledger.credit if ledger.credit is not none else 0 %}
-                {% set total_debit = total_debit + debit %}
-                {% set total_credit = total_credit + credit %}
-                {% set balance = balance + debit - credit %}
-              <tr>
-               <td>{{ loop.index }}</td>
-               <td>{{ ledger.posting_date }}</td>
-               <td>
-                 <span class="leading-none font-semibold text-sm text-gray-900 hover:text-primary">{{ ledger.party }}</span>
-               </td>
-               <td>{{ frappe.format(debit, {'fieldtype': 'Currency'}) }}</td>
-               <td>{{ frappe.format(credit, {'fieldtype': 'Currency'})}}</td>
-               <td>{{ frappe.format(balance, {'fieldtype': 'Currency'}) }}</td>
-               <td>{{ ledger.voucher_type }}</td>
-               <td class="text-center">
-                  <a class="btn btn-link" href="/printview?doctype={{ ledger.voucher_type }}&name={{ ledger.voucher_no }}" target="_blank">{{ ledger.voucher_no }}</a>
-               </td>
-               <td>{{ ledger.remarks }}</td>
-              </tr>
-              {% endfor %}
+              {{ tbody_content | safe }}
              </tbody>
              <tfoot>
               <tr>
@@ -188,7 +140,7 @@
           </div>
          </div>
          <div class="card-footer justify-center">
-          <a class="btn btn-link" href="">
+          <a class="btn btn-link" href="https://mpischool.com/contact/" target="_blank">
            Contact Support
           </a>
          </div>

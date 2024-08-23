@@ -30,8 +30,8 @@
         </div>
        </div>
        <div class="flex items-center gap-2.5">
-        <a class="btn btn-sm btn-light" href="#">
-         Billing
+        <a class="btn btn-sm btn-light" href="/students/ledger/{{ students.name }}">
+         Ledger 
         </a>
        </div>
       </div>
@@ -40,6 +40,48 @@
      <!-- begin: container -->
      <div class="container-fixed">
       <div class="grid gap-5 lg:gap-7.5">
+        <!-- <div class="card">
+         <div class="card-body lg:py-7.5">
+          <div class="flex flex-wrap gap-7.5">
+           <div class="flex flex-col gap-5 lg:gap-7.5 grow">
+            <div class="flex items-center flex-wrap gap-3 lg:gap-5">
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
+              <span class="text-gray-900 text-md leading-none font-semibold">
+               $769.00
+              </span>
+              <span class="text-gray-600 text-2sm font-medium">
+               Annual Total
+              </span>
+             </div>
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
+              <span class="text-gray-900 text-md leading-none font-semibold">
+               $69.00
+              </span>
+              <span class="text-gray-600 text-2sm font-medium">
+               Next Bill Amount
+              </span>
+             </div>
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
+              <span class="text-gray-900 text-md leading-none font-semibold">
+               23 Aug, 24
+              </span>
+              <span class="text-gray-600 text-2sm font-medium">
+               Next Billing Date
+              </span>
+             </div>
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
+              <span class="text-gray-900 text-md leading-none font-semibold">
+               $769.00
+              </span>
+              <span class="text-gray-600 text-2sm font-medium">
+               Annual Total
+              </span>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div> -->
        <div class="card card-grid min-w-full">
         <div class="card-header">
          <h3 class="card-title">
@@ -123,7 +165,7 @@
              {% endfor %}
              {% else %}
              <tr>
-              <td colspan="7" class="text-center">No Incoming Billing found.</td>
+              <td colspan="7" class="text-center">No Incoming Bill found.</td>
              </tr>
              {% endif %}
             </tbody>

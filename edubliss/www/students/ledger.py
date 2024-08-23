@@ -19,12 +19,6 @@ def get_context(context):
     user_roles = frappe.get_roles(frappe.session.user)
     context.user_roles = user_roles
 
-    # Split the company name into parts
-    parts = current_user.full_name.split(" ")
-
-    # Create the abbreviation by taking the first letter of each part
-    context.abbr = "".join([p[0] for p in parts[:2] if p])
-
     # nav
     context.active_route = "students"
     context.active_subroute = "student_list"
@@ -74,11 +68,46 @@ def get_context(context):
         frappe.throw(_("Student not found"), frappe.DoesNotExistError)
 
     # Fetch student ledger
-    context.ledgers = frappe.call(
+    ledgers = frappe.call(
         'edubliss.api.get_student_ledger', 
         customer=customer, 
         company=company
         )
+    context.ledgers = ledgers
 
+    # Initialize totals and balance
+    total_debit = 0
+    total_credit = 0
+    balance = 0
+    
+    # Start generating the tbody content
+    tbody_content = ''
+    
+    for index, ledger in enumerate(ledgers, start=1):
+        debit = ledger.debit or 0
+        credit = ledger.credit or 0
+        total_debit += debit
+        total_credit += credit
+        balance += debit - credit
+        
+        tbody_content += f'''
+        <tr>
+            <td>{index}</td>
+            <td>{ledger.posting_date}</td>
+            <td><span class="leading-none font-semibold text-sm text-gray-900 hover:text-primary">{ledger.party}</span></td>
+            <td>{frappe.format_value(debit, {"fieldtype": "Currency"})}</td>
+            <td>{frappe.format_value(credit, {"fieldtype": "Currency"})}</td>
+            <td>{frappe.format_value(balance, {"fieldtype": "Currency"})}</td>
+            <td>{ledger.voucher_type}</td>
+            <td class="text-center"><a class="btn btn-link" href="/printview?doctype={ledger.voucher_type}&name={ledger.voucher_no}" target="_blank">{ledger.voucher_no}</a></td>
+            <td>{ledger.remarks}</td>
+        </tr>
+        '''
+
+    context.tbody_content = tbody_content
+    context.total_debit = total_debit
+    context.total_credit = total_credit
+    context.balance = balance
+    
 
     return context
