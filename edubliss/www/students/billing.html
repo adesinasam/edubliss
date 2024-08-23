@@ -153,11 +153,6 @@
               <td>
                {{ frappe.format(order.grand_total, {'fieldtype': 'Currency'}) }}
               </td>
-              <td>
-               <a class="btn btn-xs btn-dark text-2sm text-light" href="/orders/{{ order.name }}">
-                  Pay
-               </a>
-              </td>
               <td class="text-center">
                <a class="btn btn-link" href="/printview?doctype=Sales%20Order&name={{ order.name }}" target="_blank">
                 {{ order.name }}
