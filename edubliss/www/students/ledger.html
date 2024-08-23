@@ -46,12 +46,30 @@
           <div class="flex flex-wrap gap-7.5">
            <div class="flex flex-col gap-5 lg:gap-7.5 grow">
             <div class="flex items-center flex-wrap gap-3 lg:gap-5">
+             {% if "Academics User" in user_roles %}
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
+              <span class="text-gray-900 text-md leading-none font-semibold">
+               {{ frappe.format(total_debit, {'fieldtype': 'Currency'}) }}
+              </span>
+              <span class="text-gray-600 text-2sm font-medium">
+               Total Fees
+              </span>
+             </div>
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
+              <span class="text-gray-900 text-md leading-none font-semibold">
+               {{ frappe.format(total_credit, {'fieldtype': 'Currency'}) }}
+              </span>
+              <span class="text-gray-600 text-2sm font-medium">
+               Total Payment
+              </span>
+             </div>
+             {% endif %}
              <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
               <span class="text-gray-900 text-md leading-none font-semibold">
                {{ frappe.format(balance, {'fieldtype': 'Currency'}) }}
               </span>
               <span class="text-gray-600 text-2sm font-medium">
-               Total Outstanding
+               Balance Due
               </span>
              </div>
             </div>
@@ -78,7 +96,7 @@
                 <th class="min-w-[150px]">Credit</th>
                 <th class="min-w-[150px]">Balance</th>
                 <th class="min-w-[170px]">Voucher Type</th>
-                <th class="min-w-[170px]">Voucher No</th>
+                <th class="min-w-[200px]">Voucher No</th>
                 <th class="min-w-[300px]">Remarks</th>
               </tr>
              </thead>

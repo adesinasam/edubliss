@@ -98,7 +98,7 @@
               <th class="min-w-[200px]">
                  Title
               </th>
-              <th class="w-[170px]">
+              <th class="w-[200px]">
                  Status
               </th>
               <th class="w-[170px]">
@@ -108,9 +108,9 @@
                  Grand Total
               </th>
               <th class="w-[170px]">
-                 Pay
               </th>
               <th class="w-[100px]">
+                 Pay
               </th>
              </tr>
             </thead>
@@ -154,11 +154,18 @@
                {{ frappe.format(order.grand_total, {'fieldtype': 'Currency'}) }}
               </td>
               <td>
-
+               <a class="btn btn-xs btn-dark text-2sm text-light" href="/orders/{{ order.name }}">
+                  Pay
+               </a>
               </td>
               <td class="text-center">
                <a class="btn btn-link" href="/printview?doctype=Sales%20Order&name={{ order.name }}" target="_blank">
                 {{ order.name }}
+               </a>
+              </td>
+              <td>
+               <a class="btn btn-xs btn-dark text-2sm text-light" href="/orders/{{ order.name }}">
+                  Pay
                </a>
               </td>
              </tr>
@@ -245,6 +252,8 @@
                 </span>
                </span>
               </th>
+              <th class="w-[170px]">
+              </th>
               <th class="w-[100px]">
               </th>
              </tr>
@@ -295,6 +304,13 @@
                <a class="btn btn-link" href="/printview?doctype=Sales%20Invoice&name={{ invoice.name }}" target="_blank">
                 {{ invoice.name }}
                </a>
+              </td>
+              <td>
+               {% if invoice.outstanding_amount>0 %}
+               <a class="btn btn-xs btn-dark text-2sm text-light" href="/invoices/{{ invoice.name }}">
+                  Pay
+               </a>
+               {% endif %}
               </td>
              </tr>
              {% endfor %}
