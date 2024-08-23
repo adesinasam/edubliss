@@ -25,11 +25,13 @@
          Hello {{ current_user.first_name }}
         </div>
        </div>
+       {% if "Academics User" in user_roles %}
        <div class="flex items-center gap-2.5">
         <a class="btn btn-sm btn-light" href="/me">
          View Profile
         </a>
        </div>
+       {% endif %}
       </div>
      </div>
      <!-- end: container -->

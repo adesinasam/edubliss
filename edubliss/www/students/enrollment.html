@@ -56,12 +56,14 @@
             </div>
            {% endif %}        
            </h3>
+           {% if "Academics User" in user_roles %}
            {%if program.docstatus %}
            <a href="/app/program-enrollment/{{ program.name }}" class="btn btn-sm btn-secondary">
             <i class="ki-outline ki-setting-2">
             </i>
             Edit
            </a>
+           {% endif %}
            {% endif %}
           </div>
           <div class="card-body pt-3.5 pb-3.5">
@@ -137,6 +139,7 @@
             <h3 class="card-title">
              Subjects
             </h3>
+           {% if "Academics User" in user_roles %}
            {%if program.docstatus %}
            <button class="btn btn-sm btn-primary" data-tooltip="#custom_tooltip">
             <i class="ki-outline ki-plus text-sm">
@@ -146,6 +149,7 @@
            <div class="hidden rounded-xl shadow-default p-3 bg-light border border-gray-200 text-gray-700 text-xs font-normal" id="custom_tooltip">
              Enrol Student into Elective Subjects.
             </div>
+           {% endif %}
            {% endif %}
            </div>
            <div class="card-table scrollable-x-auto">
@@ -206,7 +210,7 @@
                   </button>
                   <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
                    <div class="menu-item">
-                    <a class="menu-link" href="#">
+                    <div class="menu-link" href="#">
                      <span class="menu-icon">
                       <i class="ki-filled ki-search-list">
                       </i>
@@ -214,8 +218,9 @@
                      <span class="menu-title">
                       View
                      </span>
-                    </a>
+                    </div>
                    </div>
+                   {% if "Academics User" in user_roles %}
                    <div class="menu-separator">
                    </div>
                    <div class="menu-item">
@@ -229,7 +234,8 @@
                      </span>
                     </a>
                    </div>
-<!--                    <div class="menu-separator">
+                   {% endif %}
+                   <!-- <div class="menu-separator">
                    </div>
                    <div class="menu-item">
                     <a class="menu-link" href="#">
@@ -248,6 +254,10 @@
                </td>
               </tr>
              {% endfor %}
+             {% else %}
+             <tr>
+              <td colspan="5" class="text-center">No Subject found.</td>
+             </tr>
              {% endif %}
              </tbody>
             </table>

@@ -43,11 +43,13 @@
            <h3 class="card-title">
             {{parent.relation}} Info
            </h3>
+           {% if "Academics User" in user_roles %}
            <a class="btn btn-light btn-sm" href="/parents/profile/{{ parent.guardian }}">
             <i class="ki-filled ki-exit-right">
             </i>
             View Profile
            </a>
+           {% endif %}
           </div>
           <div class="card-table scrollable-x-auto pb-3">
            <table class="table align-middle text-sm text-gray-500">
@@ -114,16 +116,6 @@
          <h3 class="card-title font-medium text-sm">
           Siblings
          </h3>
-         <div class="flex flex-wrap gap-2 lg:gap-5">
-          <div class="flex">
-           <label class="input input-sm">
-            <i class="ki-filled ki-magnifier">
-            </i>
-            <input placeholder="Search users" type="text" value="">
-            </input>
-           </label>
-          </div>
-         </div>
         </div>
         <div class="card-body">
           <div class="scrollable-x-auto">
@@ -202,18 +194,6 @@
            </table>
           </div>
           <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
-           <div class="flex items-center gap-2 order-2 md:order-1">
-            Show
-            <select class="select select-sm w-16" data-datatable-size="true" name="perpage">
-            </select>
-            per page
-           </div>
-           <div class="flex items-center gap-4 order-1 md:order-2">
-            <span data-datatable-info="true">
-            </span>
-            <div class="pagination" data-datatable-pagination="true">
-            </div>
-           </div>
           </div>
         </div>
        </div>

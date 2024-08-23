@@ -28,9 +28,11 @@
         </h1>
        </div>
        <div class="flex items-center gap-2.5">
+        {% if "Academics User" in user_roles %}
         <a class="btn btn-sm btn-light" href="/app/student/{{students.name}}">
          Edit Profile
         </a>
+        {% endif %}
         <div class="btn btn-sm btn-primary" href="/student/settings">
          Account Settings
         </div>
