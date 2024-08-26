@@ -10,10 +10,10 @@
     <meta content="" name="description"/>
 
     {% block favicon %}
-    <link rel="shortcut icon" href="{{ (favicon or "/assets/frappe/images/frappe-favicon.svg") | abs_url }}" type="image/x-icon">
-    <link href="{{ (favicon or "/assets/frappe/images/frappe-favicon.svg") | abs_url }}" rel="apple-touch-icon" sizes="180x180"/>
-    <link href="{{ (favicon or "/assets/frappe/images/frappe-favicon.svg") | abs_url }}" rel="icon" sizes="32x32" type="image/x-icon"/>
-    <link href="{{ (favicon or "/assets/frappe/images/frappe-favicon.svg") | abs_url }}" rel="icon" sizes="16x16" type="image/x-icon"/>
+    <link rel="shortcut icon" href="{{ (favicon or '/assets/frappe/images/frappe-favicon.svg') | abs_url }}" type="image/x-icon">
+    <link href="{{ (favicon or '/assets/frappe/images/frappe-favicon.svg') | abs_url }}" rel="apple-touch-icon" sizes="180x180"/>
+    <link href="{{ (favicon or '/assets/frappe/images/frappe-favicon.svg') | abs_url }}" rel="icon" sizes="32x32" type="image/x-icon"/>
+    <link href="{{ (favicon or '/assets/frappe/images/frappe-favicon.svg') | abs_url }}" rel="icon" sizes="16x16" type="image/x-icon"/>
     {% endblock %}
 
     <link rel="canonical" href="{{ canonical }}">
@@ -94,14 +94,10 @@
     {% endblock %}
   <!--end::Welcome Modal and scripts-->
   <!--begin::Page scripts-->
-  <script src="assets/edubliss/dist/js/core.bundle.js">
-  </script>
-  <script src="assets/edubliss/dist/vendors/apexcharts/apexcharts.min.js">
-  </script>
-  <script src="assets/edubliss/dist/js/widgets/general.js">
-  </script>
-  <script src="assets/edubliss/dist/js/layouts/demo1.js">
-  </script>
+  <script src="assets/edubliss/dist/js/core.bundle.js"></script>
+  <script src="assets/edubliss/dist/vendors/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/edubliss/dist/js/widgets/general.js"></script>
+  <script src="assets/edubliss/dist/js/layouts/demo1.js"></script>
     {% block custom_js %}
     {% endblock %}
   <!--end::Page scripts-->

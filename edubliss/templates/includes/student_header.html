@@ -25,9 +25,13 @@
          <div class="flex gap-1.25 items-center">
           <i class="ki-filled ki-abstract-41 text-gray-500 text-sm">
           </i>
+           {% if program != 'Welcome' %}
           <span class="text-gray-600">
-           {{ students.custom_school or "" }}
+           {{ program.custom_school}}
           </span>
+           {% else %}
+           <span class="badge badge-circle badge-outline badge-danger">Not Enrolled</span>           
+           {% endif %}
          </div>
          <div class="flex gap-1.25 items-center">
           <i class="ki-filled ki-geolocation text-gray-500 text-sm">
