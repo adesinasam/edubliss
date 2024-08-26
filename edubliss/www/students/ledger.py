@@ -70,8 +70,7 @@ def get_context(context):
     # Fetch student ledger
     ledgers = frappe.call(
         'edubliss.api.get_student_ledger', 
-        customer=customer, 
-        company=company
+        customer=customer 
         )
     context.ledgers = ledgers
 

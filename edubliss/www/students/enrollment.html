@@ -210,7 +210,7 @@
                   </button>
                   <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
                    <div class="menu-item">
-                    <div class="menu-link" href="#">
+                    <a class="menu-link" href="/students/enrollment/{{ students.name }}?course_name={{ course.course }}">
                      <span class="menu-icon">
                       <i class="ki-filled ki-search-list">
                       </i>
@@ -218,7 +218,7 @@
                      <span class="menu-title">
                       View
                      </span>
-                    </div>
+                    </a>
                    </div>
                    {% if "Academics User" in user_roles %}
                    <div class="menu-separator">
@@ -273,4 +273,8 @@
      </div>
      <!-- end: container -->
     </main>
+{% endblock %}
+
+{% block welcome_link %}
+{% include "templates/includes/course_plan.html" %}
 {% endblock %}

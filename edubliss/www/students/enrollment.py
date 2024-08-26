@@ -123,6 +123,17 @@ def get_context(context):
     except frappe.DoesNotExistError:
         frappe.throw(_("Student not found"), frappe.DoesNotExistError)
 
+    # Fetch courses based on the selected section, if any
+    course_name = frappe.form_dict.get('course_name')
+    if course_name:
+        context.selected_course = course_name
+        context.course_plan = frappe.call('edubliss.api.get_course_plan', course=course_name)
+        context.course_plan_1 = frappe.call('edubliss.api.get_course_plan_terms', course=course_name, terms='First Term')
+        context.course_plan_2 = frappe.call('edubliss.api.get_course_plan_terms', course=course_name, terms='Second Term')
+        context.course_plan_3 = frappe.call('edubliss.api.get_course_plan_terms', course=course_name, terms='Third Term')
+    else:
+        context.selected_course = None
+        context.course_plan = []
 
 
     return context

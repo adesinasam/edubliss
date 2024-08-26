@@ -1,0 +1,89 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-08-25 03:33:09.279561",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "assessment_structure_section",
+  "date",
+  "terms",
+  "week",
+  "type",
+  "max_score",
+  "questions",
+  "topics_from_curriculum"
+ ],
+ "fields": [
+  {
+   "fieldname": "assessment_structure_section",
+   "fieldtype": "Section Break",
+   "label": "Assessment Structure"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "terms",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Terms",
+   "options": "\nFirst Term\nSecond Term\nThird Term",
+   "reqd": 1
+  },
+  {
+   "fieldname": "week",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Week",
+   "options": "\nWeek 1\nWeek 2\nWeek 3\nWeek 4\nWeek 5\nWeek 6\nWeek 7\nWeek 8\nWeek 9\nWeek 10\nWeek 11\nWeek 12",
+   "reqd": 1
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Type",
+   "options": "\nAssignment - 1\nAssignment - 2\nAssignment - 3\nSuper Assignment - 1\nSuper Assignment - 2\nUnit Assessment - 1\nUnit Assessment - 2\nUnit Assessment - 3\nUnit Assessment - 4\nTermy Project\nTerminal Examination",
+   "reqd": 1
+  },
+  {
+   "fieldname": "max_score",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Max Score",
+   "reqd": 1
+  },
+  {
+   "fieldname": "questions",
+   "fieldtype": "Data",
+   "label": "Questions"
+  },
+  {
+   "fieldname": "topics_from_curriculum",
+   "fieldtype": "Small Text",
+   "label": "Topics from Curriculum",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-08-25 03:39:15.593762",
+ "modified_by": "Administrator",
+ "module": "Edubliss",
+ "name": "Assessment Structure",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

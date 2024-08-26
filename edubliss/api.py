@@ -83,6 +83,27 @@ def get_section_students(section):
         order_by="group_roll_number asc"
     )
 
+@frappe.whitelist(allow_guest=True)
+def get_course_plan(course):
+    return frappe.get_all(
+        "Course Scheme of Work",
+        filters={"parent": course},
+        fields=["date", "terms", "week_num", "topic", "sub_topic", "objectives", "status", "periods"],
+        order_by="week_num asc"
+    )
+
+@frappe.whitelist(allow_guest=True)
+def get_course_plan_terms(course, terms):
+    return frappe.get_all(
+        "Course Scheme of Work",
+        filters={
+            'parent': course,
+            'terms': terms
+        },
+        fields=["date", "terms", "week_num", "topic", "sub_topic", "objectives", "status", "periods"],
+        order_by="week_num asc"
+    )
+
 @frappe.whitelist()
 def get_student_invoices(customer=None):
     filters = {}
@@ -451,3 +472,24 @@ def send_lead_status_email(doc, method):
 
         frappe.msgprint(f"Email sent to {', '.join(recipients)} for status update.")
 
+@frappe.whitelist()
+def get_course_schedule_for_student(program_name, student_groups):
+    student_groups = [sg.get("label") for sg in student_groups]
+
+    schedule = frappe.db.get_list(
+        "Course Schedule",
+        fields=[
+            "schedule_date",
+            "room",
+            "class_schedule_color",
+            "course",
+            "from_time",
+            "to_time",
+            "instructor",
+            "title",
+            "name",
+        ],
+        filters={"program": program_name, "student_group": ["in", student_groups]},
+        order_by="schedule_date asc",
+    )
+    return schedule
