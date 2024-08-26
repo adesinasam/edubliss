@@ -73,10 +73,71 @@ def get_context(context):
     except Exception as e:
         customer = None
 
-    # Fetch sales invoices
+    # Fetch sales orders
     if customer:
-        context.sales_invoices = frappe.call('edubliss.api.get_student_invoices', customer=customer)
-        context.sales_orders = frappe.call('edubliss.api.get_student_orders', customer=customer)
+        sales_orders = frappe.call('edubliss.api.get_student_orders', customer=customer)
+        context.sales_orders_html = generate_sales_orders_html(sales_orders)
 
+        sales_invoices = frappe.call('edubliss.api.get_student_invoices', customer=customer)
+        context.sales_invoices_html = generate_sales_invoices_html(sales_invoices)
 
     return context
+
+def generate_sales_orders_html(sales_orders):
+    if not sales_orders:
+        return '<tr><td colspan="7" class="text-center">No Incoming Bill found.</td></tr>'
+    
+    rows = []
+    for idx, order in enumerate(sales_orders, start=1):
+        status_badge = get_status_badge(order.status)
+        row = f"""
+        <tr>
+            <td>{idx}</td>
+            <td><a class="leading-none font-semibold text-sm text-gray-900 hover:text-primary" href="/printview?doctype=Sales%20Order&name={order['name']}" target="_blank">{order['customer']}</a></td>
+            <td>{status_badge}</td>
+            <td>{order['transaction_date']}</td>
+            <td>{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
+            <td class="text-center"><a class="btn btn-link" href="/printview?doctype=Sales%20Order&name={order['name']}" target="_blank">{order['name']}</a></td>
+            <td><a class="btn btn-xs btn-dark text-2sm text-light" href="/orders/{order['name']}">Pay</a></td>
+        </tr>
+        """
+        rows.append(row)
+    
+    return ''.join(rows)
+
+def generate_sales_invoices_html(sales_invoices):
+    if not sales_invoices:
+        return '<tr><td colspan="7" class="text-center">No Invoice found.</td></tr>'
+    
+    rows = []
+    for invoice in sales_invoices:
+        status_badge = get_status_badge(invoice.status)
+        payment_button = f'<a class="btn btn-xs btn-dark text-2sm text-light" href="/invoices/{invoice.name}">Pay</a>' if invoice['outstanding_amount'] > 0 else ''
+        row = f"""
+        <tr>
+            <td><input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/></td>
+            <td><a class="leading-none font-semibold text-sm text-gray-900 hover:text-primary" href="/printview?doctype=Sales%20Invoice&name={invoice['name']}" target="_blank">{invoice['title']}</a></td>
+            <td>{status_badge}</td>
+            <td>{invoice['posting_date']}</td>
+            <td>{frappe.format(invoice['grand_total'], {'fieldtype': 'Currency'})}</td>
+            <td>{frappe.format(invoice['outstanding_amount'], {'fieldtype': 'Currency'})}</td>
+            <td class="text-center"><a class="btn btn-link" href="/printview?doctype=Sales%20Invoice&name={invoice['name']}" target="_blank">{invoice['name']}</a></td>
+            <td>{payment_button}</td>
+        </tr>
+        """
+        rows.append(row)
+    
+    return ''.join(rows)
+
+def get_status_badge(status):
+    badge_classes = {
+        'Draft': 'badge-info',
+        'Overdue': 'badge-danger',
+        'Cancelled': 'badge-danger',
+        'To Deliver and Bill': 'badge-warning',
+        'Partly Paid': 'badge-warning',
+        'Completed': 'badge-success',
+        'Return': 'badge-dark',
+    }
+    badge_class = badge_classes.get(status, 'badge-primary')
+    return f'<div class="badge badge-sm {badge_class} badge-outline">{status}</div>'

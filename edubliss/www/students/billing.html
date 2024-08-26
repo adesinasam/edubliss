@@ -114,61 +114,7 @@
              </tr>
             </thead>
             <tbody>
-            {% if sales_orders %}
-            {% for order in sales_orders %}
-             <tr>
-              <td>
-                {{ loop.index }}
-              </td>
-              <td>
-               <a class="leading-none font-semibold text-sm text-gray-900 hover:text-primary" href="/printview?doctype=Sales%20Order&name={{ order.name }}" target="_blank">        
-               {{ order.customer_name or order.customer}}
-               </a>
-              </td>
-              <td>
-               {% if order.status == 'Draft' %}
-               <div class="badge badge-sm badge-info badge-outline">
-                {% elif order.status == 'Overdue' %}
-               <div class="badge badge-sm badge-danger badge-outline">
-                {% elif order.status == 'Cancelled' %}
-               <div class="badge badge-sm badge-danger badge-outline">
-                {% elif order.status == 'To Deliver and Bill' %}
-               <div class="badge badge-sm badge-warning badge-outline">
-                {% elif order.status == 'Partly Paid' %}
-               <div class="badge badge-sm badge-warning badge-outline">
-                {% elif order.status == 'Completed' %}
-               <div class="badge badge-sm badge-success badge-outline">
-                {% elif order.status == 'Return' %}
-               <div class="badge badge-sm badge-dark badge-outline">
-                {% else %}
-               <div class="badge badge-sm badge-primary badge-outline">
-                {% endif %}
-                {{ order.status }}
-               </div>
-              </td>
-              <td>
-               {{ order.transaction_date }}
-              </td>
-              <td>
-               {{ frappe.format(order.grand_total, {'fieldtype': 'Currency'}) }}
-              </td>
-              <td class="text-center">
-               <a class="btn btn-link" href="/printview?doctype=Sales%20Order&name={{ order.name }}" target="_blank">
-                {{ order.name }}
-               </a>
-              </td>
-              <td>
-               <a class="btn btn-xs btn-dark text-2sm text-light" href="/orders/{{ order.name }}">
-                  Pay
-               </a>
-              </td>
-             </tr>
-             {% endfor %}
-             {% else %}
-             <tr>
-              <td colspan="7" class="text-center">No Incoming Bill found.</td>
-             </tr>
-             {% endif %}
+               {{ sales_orders_html | safe }}
             </tbody>
            </table>
           </div>
@@ -253,67 +199,8 @@
              </tr>
             </thead>
             <tbody>
-            {% if sales_invoices %}
-            {% for invoice in sales_invoices %}
-             <tr>
-              <td>
-               <input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/>
-              </td>
-              <td>
-               <a class="leading-none font-semibold text-sm text-gray-900 hover:text-primary" href="/printview?doctype=Sales%20Invoice&name={{ invoice.name }}" target="_blank">        
-               {{ invoice.title }}
-               </a>
-              </td>
-              <td>
-               {% if invoice.status == 'Draft' %}
-               <div class="badge badge-sm badge-info badge-outline">
-                {% elif invoice.status == 'Overdue' %}
-               <div class="badge badge-sm badge-danger badge-outline">
-                {% elif invoice.status == 'Cancelled' %}
-               <div class="badge badge-sm badge-danger badge-outline">
-                {% elif invoice.status == 'Unpaid' %}
-               <div class="badge badge-sm badge-warning badge-outline">
-                {% elif invoice.status == 'Partly Paid' %}
-               <div class="badge badge-sm badge-warning badge-outline">
-                {% elif invoice.status == 'Paid' %}
-               <div class="badge badge-sm badge-success badge-outline">
-                {% elif invoice.status == 'Return' %}
-               <div class="badge badge-sm badge-dark badge-outline">
-                {% else %}
-               <div class="badge badge-sm badge-primary badge-outline">
-                {% endif %}
-                {{ invoice.status }}
-               </div>
-              </td>
-              <td>
-               {{ invoice.posting_date }}
-              </td>
-              <td>
-               {{ frappe.format(invoice.grand_total, {'fieldtype': 'Currency'}) }}
-              </td>
-              <td>
-               {{ frappe.format(invoice.outstanding_amount, {'fieldtype': 'Currency'}) }}
-              </td>
-              <td class="text-center">
-               <a class="btn btn-link" href="/printview?doctype=Sales%20Invoice&name={{ invoice.name }}" target="_blank">
-                {{ invoice.name }}
-               </a>
-              </td>
-              <td>
-               {% if invoice.outstanding_amount>0 %}
-               <a class="btn btn-xs btn-dark text-2sm text-light" href="/invoices/{{ invoice.name }}">
-                  Pay
-               </a>
-               {% endif %}
-              </td>
-             </tr>
-             {% endfor %}
-             {% else %}
-             <tr>
-              <td colspan="7" class="text-center">No Invoice found.</td>
-             </tr>
-             {% endif %}
-            </tbody>
+               {{ sales_invoices_html | safe }}
+           </tbody>
            </table>
           </div>
           <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
