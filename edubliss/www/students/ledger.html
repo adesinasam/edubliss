@@ -66,10 +66,26 @@
              {% endif %}
              <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
               <span class="text-gray-900 text-md leading-none font-semibold">
+               {% if balance > 0 %}
                {{ frappe.format(balance, {'fieldtype': 'Currency'}) }}
+               {% else %}
+               {{ frappe.format(0.00, {'fieldtype': 'Currency'}) }}
+               {% endif %}               
               </span>
               <span class="text-gray-600 text-2sm font-medium">
                Balance Due
+              </span>
+             </div>
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
+              <span class="text-gray-900 text-md leading-none font-semibold">
+               {% if balance < 0 %}
+               {{ frappe.format(abs(balance), {'fieldtype': 'Currency'}) }}
+               {% else %}
+               {{ frappe.format(0.00, {'fieldtype': 'Currency'}) }}
+               {% endif %}               
+              </span>
+              <span class="text-gray-600 text-2sm font-medium">
+               Deposit
               </span>
              </div>
             </div>

@@ -1,50 +1,96 @@
-<!DOCTYPE html>
-<html>
-<head>
+{% extends "templates/layout.html" %}
+
+{%- block title -%}{{_("Calendar")}}{%- endblock -%}
+
+{% block custom_link %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.js"></script>
-</head>
-<body>
+{% endblock %}
 
-<div id="calendar" style="width: 100%; height: 600px; border: 1px solid #000;"></div>
+{% block body_link %}
+ <body class="flex h-full demo1 header-fixed bg-[#fefefe] dark:bg-coal-500">
+{% endblock %}
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        plugins: [ 'dayGrid' ],
-        events: function(fetchInfo, successCallback, failureCallback) {
-            var programName = 'Explorer';
-            var studentGroups = [{ label: 'EXP - Premium' }];  // Ensure this is an array of objects
+{% block sidebar_link %}
+{% endblock %}
 
-            fetch(`/api/method/edubliss.api.get_course_schedule_for_student?program_name=${encodeURIComponent(programName)}&student_groups=${encodeURIComponent(JSON.stringify(studentGroups))}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message) {
-                        const events = data.message.map(event => ({
-                            title: event.title,
-                            start: `${event.schedule_date}T${event.from_time}`,
-                            end: `${event.schedule_date}T${event.to_time}`,
-                            description: event.course,
-                            color: event.class_schedule_color // Optional: colorize events based on this field
-                        }));
-                        successCallback(events);
-                    } else {
-                        console.error('No data returned:', data);
-                        failureCallback('No data returned');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching events:', error);
-                    failureCallback(error);
-                });
-        }
-    });
-    calendar.render();
-});
-</script>
+{% block headnav_link %}
+{% endblock %}
+
+{% block content %} 
+
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed">
+        <div>
+         <style>
+          .entry-callout-bg {
+        background-image: url('/assets/edubliss/dist/media/images/2600x1600/2.png');
+    }
+    .dark .entry-callout-bg {
+        background-image: url('/assets/edubliss/dist/media/images/2600x1600/2-dark.png');
+    }
+         </style>
+         <div class="h-full h-full bg-info-light">
+          <div class="card-body p-10 bg-[length:80%] [background-position:175%_25%] bg-no-repeat entry-callout-bg">
+           <div class="flex flex-col justify-center gap-4">
+            <div class="flex -space-x-2">
+             <div id="clock" class="flex clock hover:z-5 relative"><b></b></div>
+            </div>
+            <h2 class="text-1.5xl font-semibold text-gray-900">
+             Welcome to 
+             <br/>
+             <a class="link" href="#">
+              Maryland Prestigious Intl Schools
+             </a>
+            </h2>
+            <p class="text-sm font-medium text-gray-700 leading-5.5">
+             MPIS community is a place where everyone values each other. 
+             <br/>
+             Our mission is to ensure success in 
+             <br/>
+             all areas of development.
+            </p>
+           </div>
+          </div>
+          <div class="card-footer justify-center">
+           <a class="btn btn-link" href="/admission">
+            Apply Now
+           </a>
+          </div>
+         </div>
+        </div>
+     </div>
+     <!-- end: container -->
+
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="gap-5 pb-7.5">
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="card card-grid min-w-full">
+        <div class="card-header flex-wrap gap-2">
+         <h3 class="card-title font-medium text-sm">
+          Calendar
+         </h3>
+        </div>
+        <div class="card-body">
+            <div id="calendar" style="width: 100%; height: 600px; border: 0px solid #000;"></div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+    </main>
+{%- endblock -%}
+
+{% block custom_js %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
@@ -61,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
         calendar.render();
     });
 </script>
+{% endblock %}
 
-</body>
-</html>
+{% block modal_link %}
+{% endblock %}
