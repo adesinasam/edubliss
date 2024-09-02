@@ -135,7 +135,7 @@ def generate_sales_invoices_html(sales_invoices):
     rows = []
     for invoice in sales_invoices:
         status_badge = get_status_badge(invoice.status)
-        payment_button = f'<a class="btn btn-xs btn-dark text-2sm text-light" href="/api/method/edubliss.edubliss.payment_request.make_payment_request?dn={invoice.name}&dt=Sales%20Invoice&submit_doc=1&amt={invoice['outstanding_amount']}&order_type=Shopping%20Cart">Pay</a>' if invoice['outstanding_amount'] > 0 else ''
+        payment_button = f'<a class="btn btn-xs btn-dark text-2sm text-light" href="/api/method/edubliss.edubliss.payment_request.make_payment_request?dn={invoice["name"]}&dt=Sales%20Invoice&submit_doc=1&amt={invoice["outstanding_amount"]}&order_type=Shopping%20Cart">Pay</a>' if invoice['outstanding_amount'] > 0 else ''
         row = f"""
         <tr>
             <td><input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/></td>
