@@ -73,6 +73,29 @@ def get_context(context):
     except Exception as e:
         customer = None
 
+    # Fetch student ledger
+    ledgers = frappe.call(
+        'edubliss.api.get_student_ledger', 
+        customer=customer 
+        )
+    context.ledgers = ledgers
+
+    # Initialize totals and balance
+    total_debit = 0
+    total_credit = 0
+    balance = 0
+    
+    for index, ledger in enumerate(ledgers, start=1):
+        debit = ledger.debit or 0
+        credit = ledger.credit or 0
+        total_debit += debit
+        total_credit += credit
+        balance += debit - credit
+        
+    context.total_debit = total_debit
+    context.total_credit = total_credit
+    context.balance = balance
+
     # Fetch sales orders
     if customer:
         sales_orders = frappe.call('edubliss.api.get_student_orders', customer=customer)
@@ -98,7 +121,7 @@ def generate_sales_orders_html(sales_orders):
             <td>{order['transaction_date']}</td>
             <td>{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
             <td class="text-center"><a class="btn btn-link" href="/printview?doctype=Sales%20Order&name={order['name']}" target="_blank">{order['name']}</a></td>
-            <td><a class="btn btn-xs btn-dark text-2sm text-light" href="/orders/{order['name']}">Pay</a></td>
+            <td><a class="btn btn-xs btn-dark text-2sm text-light" href="/api/method/edubliss.edubliss.payment_request.make_payment_request?dn={order['name']}&dt=Sales%20Order&submit_doc=1&amt={order['grand_total']}&order_type=Shopping%20Cart">Pay</a></td>
         </tr>
         """
         rows.append(row)
@@ -112,7 +135,7 @@ def generate_sales_invoices_html(sales_invoices):
     rows = []
     for invoice in sales_invoices:
         status_badge = get_status_badge(invoice.status)
-        payment_button = f'<a class="btn btn-xs btn-dark text-2sm text-light" href="/invoices/{invoice.name}">Pay</a>' if invoice['outstanding_amount'] > 0 else ''
+        payment_button = f'<a class="btn btn-xs btn-dark text-2sm text-light" href="/api/method/edubliss.edubliss.payment_request.make_payment_request?dn={invoice.name}&dt=Sales%20Invoice&submit_doc=1&amt={invoice['outstanding_amount']}&order_type=Shopping%20Cart">Pay</a>' if invoice['outstanding_amount'] > 0 else ''
         row = f"""
         <tr>
             <td><input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/></td>

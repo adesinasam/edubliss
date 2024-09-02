@@ -163,7 +163,7 @@ website_route_rules = [
 # Hook on document methods and events
 doc_events = {
   "Program Enrollment": {
-    "on_submit": "edubliss.edubliss.programenrol.setup"
+    "on_submit": "edubliss.edubliss.program_enrollment.setup"
   }
 }
 # doc_events = {
