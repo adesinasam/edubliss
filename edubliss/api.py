@@ -211,6 +211,23 @@ def get_teachers(company=None):
     return instructors_query if instructors_query else []
 
 @frappe.whitelist()
+def get_course_student(course=None, academic_term=None, company=None):
+    course_enrol = frappe.qb.DocType("Course Enrollment")
+    program_enrol = frappe.qb.DocType("Program Enrollment")
+
+    course_enrol_query = (
+        frappe.qb.from_(course_enrol)
+        .inner_join(program_enrol)
+        .on(course_enrol.program_enrollment == program_enrol.name)
+        .select('*')
+        .where(course_enrol.course == course)
+        .where(program_enrol.academic_term == academic_term)
+        .where(program_enrol.custom_school == company)
+        .run(as_dict=1)
+    )
+    return course_enrol_query if course_enrol_query else []
+
+@frappe.whitelist()
 def get_parents():
     return frappe.get_all(
         'Guardian', 

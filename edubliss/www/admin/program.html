@@ -87,9 +87,9 @@
                     <tr>
                       <td>{{ loop.index }}</td>
                       <td class="text-left">
-                        <span class="text-sm font-semibold text-gray-900 hover:text-primary">
+                        <div href="/admin/program?program_name={{ selected_program }}&course_name={{ course.course }}" class="text-sm font-semibold text-gray-900 hover:text-primary">
                             {{ course.course }}
-                        </span>
+                        </div>
                       </td>
                       <td class="text-sm text-gray-700 font-medium">
                             {{ get_program_course_code(course.course) or '' }}
@@ -114,7 +114,7 @@
                             </button>
                             <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
                               <div class="menu-item">
-                                <a class="menu-link" href="/admin/program?program_name={{ selected_program }}&course_name={{ course.course }}">
+                                <a class="menu-link" href="/admin/course/overview/{{ course.course }}">
                                   <span class="menu-icon">
                                     <i class="ki-filled ki-search-list"></i>
                                   </span>
