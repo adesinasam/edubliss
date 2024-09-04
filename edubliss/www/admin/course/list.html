@@ -1,7 +1,7 @@
 {% extends "templates/layout.html" %}
 
 {% block title %}
-{{ _("Teacher") }}
+{{ _("Course") }}
 {% endblock %}
 
 {% block headnav_link %}
@@ -19,20 +19,20 @@
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
         <h1 class="text-xl font-semibold leading-none text-gray-900">
-         Teachers
+         Courses
         </h1>
         <div class="flex items-center flex-wrap gap-1.5 font-medium">
          <span class="text-md text-gray-600">
-          All Teachers:
+          All Courses:
          </span>
          <span class="text-md text-ray-800 font-semibold me-2">
-          {{ teacher_count }}
+          {{ course_count }}
          </span>
         </div>
        </div>
        <div class="flex items-center gap-2.5">
-        <a class="btn btn-sm btn-primary" href="/app/instructor/new-instructor-">
-         Add Teacher
+        <a class="btn btn-sm btn-primary" href="/app/course/new-course-">
+         Add Course
         </a>
        </div>
       </div>
@@ -44,7 +44,7 @@
        <div class="card card-grid min-w-full">
         <div class="card-header flex-wrap gap-2">
          <h3 class="card-title font-medium text-sm">
-          <!-- Showing 10 of {{ teacher_count }} Teachers -->
+          <!-- Showing 10 of {{ course_count }} Courses -->
          </h3>
          <div class="flex flex-wrap gap-2 lg:gap-5">
           <div class="flex">
@@ -69,7 +69,16 @@
               <th class="min-w-[300px]">
                <span class="sort asc">
                 <span class="sort-label">
-                 Teacher
+                 Course
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[100px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Course ID
                 </span>
                 <span class="sort-icon">
                 </span>
@@ -78,7 +87,7 @@
               <th class="min-w-[150px]">
                <span class="sort">
                 <span class="sort-label">
-                 Teacher ID
+                 Subject
                 </span>
                 <span class="sort-icon">
                 </span>
@@ -96,7 +105,7 @@
               <th class="min-w-[200px]">
                <span class="sort">
                 <span class="sort-label">
-                 Department
+                 Course Category
                 </span>
                 <span class="sort-icon">
                 </span>
@@ -105,7 +114,7 @@
               <th class="w-[100px] text-center">
                <span class="sort">
                 <span class="sort-label">
-                 Gender
+                 Department
                 </span>
                 <span class="sort-icon">
                 </span>
@@ -116,44 +125,41 @@
              </tr>
             </thead>
             <tbody>
-            {% for teacher in teachers %}
+            {% for course in courses %}
              <tr>
               <td class="text-center">
                <input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/>
               </td>
               <td>
                <div class="flex items-center gap-2.5">
-                <img alt="" class="rounded-full size-7 shrink-0" src="{% if teacher.image  %}{{teacher.image}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/>
                 <div class="flex flex-col">
-                 <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/teachers/profile/{{ teacher.instructor_name }}">
-                  {{ teacher.instructor_name }}
-                 <span class="text-2sm font-medium text-gray-600 hover:text-primary-active">
-                  
-                 </span>
+                 <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/admin/course/overview/{{ course.name }}">
+                  {{ course.course_name or ""}}
                  </a>
                 </div>
                </div>
               </td>
               <td>
-               <a class="btn btn-link" href="/app/employee/{{ teacher.employee }}">
-                {{ teacher.employee }}
-               </a>
+                {{ course.custom_course_code or ""}}
+              </td>
+              <td>
+                {{ course.custom_subject or ""}}
               </td>
               <td>
                <div class="flex items-center gap-1.5">
-                 <span class="badge badge-pill badge-outline {{ 'badge-success' if teacher.status == 'Active' else 'badge-danger' }} gap-1 items-center">
-                  <span class="badge badge-dot size-1.5 {{ 'badge-success' if teacher.status == 'Active' else 'badge-danger' }}">
+                 <span class="badge badge-pill badge-outline {{ 'badge-success' if course.custom_disabled == 0 else 'badge-danger' }} gap-1 items-center">
+                  <span class="badge badge-dot size-1.5 {{ 'badge-success' if course.custom_disabled == 0 else 'badge-danger' }}">
                   </span>
-                    {{ 'Active' if teacher.status == 'Active' else 'Left' }}
+                    {{ 'Active' if course.custom_disabled == 0 else 'Disabled' }}
                  </span>
                </div>
               </td>
               <td>
-               {{ teacher.department }}
+               {{ course.custom_course_category or ""}}
               </td>
               <td>
                <div class="flex justify-center">
-               {{ teacher.gender }}
+               {{ course.department or ""}}
                </div>
               </td>
               <td>
@@ -165,7 +171,7 @@
                  </button>
                  <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
                   <div class="menu-item">
-                   <a class="menu-link" href="/teachers/profile/{{ teacher.instructor_name }}">
+                   <a class="menu-link" href="/admin/courses/overview/{{ course.name }}">
                     <span class="menu-icon">
                      <i class="ki-filled ki-search-list">
                      </i>
@@ -178,7 +184,7 @@
                   <div class="menu-separator">
                   </div>
                   <div class="menu-item">
-                   <a class="menu-link" href="/app/instructor/{{ teacher.instructor_name }}">
+                   <a class="menu-link" href="/app/course/{{ course.course_name }}">
                     <span class="menu-icon">
                      <i class="ki-filled ki-pencil">
                      </i>
