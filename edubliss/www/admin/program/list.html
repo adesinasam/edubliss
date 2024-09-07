@@ -1,0 +1,156 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Class") }}
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav2.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-gray-900">
+         Classes
+        </h1>
+        <div class="flex items-center flex-wrap gap-1.5 font-medium">
+         <span class="text-md text-gray-600">
+          All Class:
+         </span>
+         <span class="text-md text-ray-800 font-semibold me-2">
+          {{ program_count }}
+         </span>
+        </div>
+       </div>
+       <div class="flex items-center gap-2.5">
+        <a class="btn btn-sm btn-primary" href="/app/program/new-program-">
+         Add Class
+        </a>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="card card-grid min-w-full">
+        <div class="card-header flex-wrap gap-2">
+         <h3 class="card-title font-medium text-sm">
+          <!-- Showing {{ student_count }} Students -->
+         </h3>
+        </div>
+        <div class="card-body">
+         <div data-datatable="true" data-datatable-page-size="10">
+          <div class="scrollable-x-auto">
+           <table class="table table-auto table-border" data-datatable-table="true">
+            <thead>
+             <tr>
+              <th class="w-[60px] text-center">
+              </th>
+              <th class="min-w-[300px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Class
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[60px]">
+               <span class="sort asc">
+                <span class="sort-label">
+                 Class Abbreviation
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[200px]">
+               <span class="sort">
+                <span class="sort-label">
+                 School
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="w-[100px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Department
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="w-[60px]">
+              </th>
+             </tr>
+            </thead>
+            <tbody>
+             {% if programs %}
+              {% for program in programs %}
+             <tr>
+              <td>
+               {{ loop.index }}
+              </td>
+              <td>
+               <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/admin/program/program?program_name={{ program.name}}">
+                {{ program.program_name or "" }}
+               </a>
+              </td>
+              <td>
+               {{ program.program_abbreviation or "" }}
+              </td>
+              <td>
+               {{ program.custom_school or "" }}
+              </td>
+              <td>
+               {{ program.department or ""}}
+              </td>
+              <td>
+                <a class="btn btn-secondary btn-xs" href="/admin/program/program?program_name={{ program.name}}">
+                 <i class="ki-filled ki-eye text-primary text-2xl">
+                 </i>
+                </a>
+              </td>
+             </tr>
+               {% endfor %}
+             {% else %}
+             <tr>
+              <td colspan="6" class="text-center">No outline found.</td>
+             </tr>
+             {% endif %}
+            </tbody>
+           </table>
+          </div>
+          <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
+           <div class="flex items-center gap-2 order-2 md:order-1">
+            Show
+            <select class="select select-sm w-16" data-datatable-size="true" name="perpage">
+            </select>
+            per page
+           </div>
+           <div class="flex items-center gap-4 order-1 md:order-2">
+            <span data-datatable-info="true">
+            </span>
+            <div class="pagination" data-datatable-pagination="true">
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+    </main>
+{% endblock %}

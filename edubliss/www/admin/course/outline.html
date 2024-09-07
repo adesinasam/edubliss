@@ -48,8 +48,6 @@
            <table class="table table-auto table-border" data-datatable-table="true">
             <thead>
              <tr>
-              <th class="w-[60px] text-center">
-              </th>
               <th class="min-w-[150px]">
                <span class="sort asc">
                 <span class="sort-label">
@@ -104,14 +102,6 @@
               {% for outline in outlines %}
              <tr>
               <td>
-               <div class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px">
-                <button class="btn btn-light btn-xs" data-collapse="#collapsible_content_{{ loop.index }}">
-                 <i class="ki-filled ki-down text-info text-2xl">
-                 </i>
-                </button>
-               </div>
-              </td>
-              <td>
                {{ outline.date or ""}}
               </td>
               <td>
@@ -128,8 +118,8 @@
               </td>
               <td>
                <div class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px">
-                <button class="btn btn-light btn-xs" data-collapse="#collapsible_content_{{ loop.index }}">
-                 <i class="ki-filled ki-eye text-info text-2xl">
+                <button class="btn btn-info btn-xs" data-collapse="#collapsible_content_{{ loop.index }}">
+                 <i class="ki-filled ki-eye text-gray-600 text-2xl">
                  </i>
                 </button>
                </div>

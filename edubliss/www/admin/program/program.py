@@ -52,6 +52,8 @@ def get_context(context):
     if edubliss_session:
         context.edublisession = edubliss_session
         company = edubliss_session.school
+        acadyear = edubliss_session.academic_year
+        acadterm = edubliss_session.academic_term
     else:
         context.edublisession = _("Welcome")  # Placeholder message
         company = None
@@ -70,9 +72,11 @@ def get_context(context):
         context['get_program_course_code'] = get_program_course_code
         context['get_program_course_subject'] = get_program_course_subject
         context['get_program_course_category'] = get_program_course_category
+        context.lmsbatches = frappe.call('edubliss.api.get_program_lms_batch', program=program_name, acadyear=acadyear)
     else:
         context.selected_program = None
         context.courses = []
+        context.lmsbatches = []
 
     # Fetch courses based on the selected section, if any
     course_name = frappe.form_dict.get('course_name')

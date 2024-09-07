@@ -26,7 +26,7 @@ def get_context(context):
     context.abbr = "".join([p[0] for p in parts[:2] if p])
 
     # nav
-    context.active_route = "course"
+    context.active_route = "courses"
     context.active_subroute = "course_list"
     context.active_parent_route = "outline"
 

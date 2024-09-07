@@ -210,6 +210,20 @@ def get_teachers(company=None):
     )
     return instructors_query if instructors_query else []
 
+@frappe.whitelist(allow_guest=True)
+def get_program_lms_batch(program=None, acadyear=None):
+    return frappe.get_all('LMS Batch', 
+        filters={
+        'published': 1, 
+        'custom_program': program, 
+        'custom_academic_year': acadyear
+        }, 
+        fields=[
+            'name', 'title', 'published', 'custom_program', 'start_date', 'end_date', 
+            'custom_academic_year', 'start_time', 'end_time', 'timezone', 'description'
+        ], 
+        order_by="title asc")
+
 @frappe.whitelist()
 def get_course_student(course=None, academic_term=None, company=None):
     course_enrol = frappe.qb.DocType("Course Enrollment")
