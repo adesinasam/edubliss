@@ -57,12 +57,13 @@
       </div>
       <div class="col-span-2">
         <div class="flex flex-col gap-5 lg:gap-7.5">
-          {% if lmsbatches %}
             <div class="card bg-secondary">
               <div class="card-header">
                 <h3 class="card-title">LMS Batch</h3>
+                <div class="text-gray-900">{{ selected_program }}</div>
               </div>
-              <div class="card-body scrollable-x-auto">
+              <div class="card-body scrollable-x-auto bg-primary-light">
+               {% if lmsbatches %}
                 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-5 lg:gap-7.5">
                   {% for lmsbatch in lmsbatches %} 
                    <a class="card p-5 lg:px-7 lg:py-6 bg-secondary" href="/lms/batches/details/{{ lmsbatch.name }}">
@@ -91,10 +92,14 @@
                    </a>
                   {% endfor %}
                 </div>
+               {% else %}
+                <div class="text-center text-sm text-gray-700 leading-5">
+                  No LMS Batch found
+                </div>
+               {% endif %}
               </div>
               <div class="card-footer justify-center"></div>
             </div>
-          {% endif %}
         </div>
       </div>
     </div>

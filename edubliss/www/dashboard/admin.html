@@ -1,0 +1,435 @@
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <!-- begin: grid -->
+       <div class="grid lg:grid-cols-3 gap-5 lg:gap-7.5 items-stretch">
+        <div class="lg:col-span-1">
+         <div class="grid grid-cols-2 gap-5 lg:gap-7.5 h-full items-stretch">
+          <style>
+           .channel-stats-bg {background-image: url('/assets/edubliss/dist/media/images/2600x1600/bg-3.png');} 
+           .dark .channel-stats-bg {background-image: url('/assets/edubliss/dist/media/images/2600x1600/bg-3-dark.png');}
+          </style>
+          <div class="card flex-col justify-between gap-6 h-full bg-cover bg-[right_top_-1.7rem] bg-no-repeat channel-stats-bg">
+           <img alt="" class="w-7 mt-4 ms-5" src="assets/edubliss/dist/media/images/icons/team.png"/>
+           <div class="flex flex-col gap-1 pb-4 px-5">
+            <a href="/students/list">
+            <span class="text-3xl font-semibold text-gray-900">
+             {{ student_count }}
+            </span>
+            <span class="text-2sm font-medium text-gray-600">
+             Students
+            </span>
+            </a>
+           </div>
+          </div>
+          <div class="card flex-col justify-between gap-6 h-full bg-cover bg-[right_top_-1.7rem] bg-no-repeat channel-stats-bg">
+           <img alt="" class="w-7 mt-4 ms-5" src="assets/edubliss/dist/media/images/icons/user-circle.svg"/>
+           <div class="flex flex-col gap-1 pb-4 px-5">
+            <span class="text-3xl font-semibold text-gray-900">
+             {{teacher_count}}
+            </span>
+            <span class="text-2sm font-medium text-gray-600">
+             Teachers
+            </span>
+           </div>
+          </div>
+          <div class="card flex-col justify-between gap-6 h-full bg-cover bg-[right_top_-1.7rem] bg-no-repeat channel-stats-bg">
+           <img alt="" class="w-7 mt-4 ms-5" src="assets/edubliss/dist/media/images/icons/time.png"/>
+           <div class="flex flex-col gap-1 pb-4 px-5">
+            <span class="text-3xl font-semibold text-gray-900">
+             1
+            </span>
+            <span class="text-2sm font-medium text-gray-600">
+             Upcoming Event
+            </span>
+           </div>
+          </div>
+          <div class="card flex-col justify-between gap-6 h-full bg-cover bg-[right_top_-1.7rem] bg-no-repeat channel-stats-bg">
+           <img alt="" class="dark:hidden w-7 mt-4 ms-5" src="assets/edubliss/dist/media/images/icons/police-id.png"/>
+           <img alt="" class="light:hidden w-7 mt-4 ms-5" src="assets/edubliss/dist/media/images/icons/police-id.png"/>
+           <div class="flex flex-col gap-1 pb-4 px-5">
+            <span class="text-3xl font-semibold text-gray-900">
+             200
+            </span>
+            <span class="text-2sm font-medium text-gray-600">
+             New Admissions
+            </span>
+           </div>
+          </div>
+         </div>
+        </div>
+        <div class="lg:col-span-2">
+         <div class="card h-full">
+          <div class="card-header">
+           <h3 class="card-title">
+            New Admissions
+           </h3>
+           <div class="flex gap-5">
+            <select class="select select-sm w-28" name="select">
+             <!--<option value="1">
+              1 month
+             </option>
+             <option value="2">
+              3 month
+             </option>
+             <option value="3">
+              6 month
+             </option>
+             <option selected="" value="4">
+              12 month
+             </option> -->
+            </select>
+           </div>
+          </div>
+          <div class="card-body flex flex-col justify-end items-stretch grow px-3 py-1">
+           <div id="earnings_chart">
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+       <!-- end: grid -->
+       <!-- begin: grid -->
+       <div class="grid lg:grid-cols-3 gap-5 lg:gap-7.5 items-stretch">
+        <div class="lg:col-span-1">
+         <div class="card h-full">
+          <div class="card-header">
+           <h3 class="card-title">
+            Academics and LMS Overview
+           </h3>
+          </div>
+          <div class="card-body flex flex-col gap-4 p-5 lg:p-7.5 lg:pt-4">
+           <div class="grid gap-3">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+             <div class="flex items-center gap-1.5">
+              <i class="ki-filled ki-teacher text-base text-info">
+              </i>
+              <span class="text-sm font-medium text-gray-800">
+               Classes
+              </span>
+             </div>
+             <div class="flex items-center text-sm font-medium text-gray-800 gap-6">
+              <span class="lg:text-right">
+               7
+              </span>
+             </div>
+            </div>
+            <div class="flex items-center justify-between flex-wrap gap-2">
+             <div class="flex items-center gap-1.5">
+              <i class="ki-filled ki-clipboard text-base text-warning">
+              </i>
+              <span class="text-sm font-medium text-gray-800">
+               Section
+              </span>
+             </div>
+             <div class="flex items-center text-sm font-medium text-gray-800 gap-6">
+              <span class="lg:text-right">
+               5
+              </span>
+             </div>
+            </div>
+           <div class="border-b border-gray-300">
+           </div>
+            <div class="flex items-center justify-between flex-wrap gap-2">
+             <div class="flex items-center gap-1.5">
+              <i class="ki-filled ki-book text-base text-primary">
+              </i>
+              <span class="text-sm font-medium text-gray-800">
+               Subjects
+              </span>
+             </div>
+             <div class="flex items-center text-sm font-medium text-gray-800 gap-6">
+              <span class="lg:text-right">
+               13
+              </span>
+             </div>
+            </div>
+            <div class="flex items-center justify-between flex-wrap gap-2">
+             <div class="flex items-center gap-1.5">
+              <i class="ki-filled ki-note text-base text-danger">
+              </i>
+              <span class="text-sm font-medium text-gray-800">
+               Courses
+              </span>
+             </div>
+             <div class="flex items-center text-sm font-medium text-gray-800 gap-6">
+              <span class="lg:text-right">
+               {{course_count}}
+              </span>
+             </div>
+            </div>
+            <div class="flex items-center justify-between flex-wrap gap-2">
+             <div class="flex items-center gap-1.5">
+              <i class="ki-filled ki-award text-base text-success">
+              </i>
+              <span class="text-sm font-medium text-gray-800">
+               Assessment
+              </span>
+             </div>
+             <div class="flex items-center text-sm font-medium text-gray-800 gap-6">
+              <span class="lg:text-right">
+               20
+              </span>
+             </div>
+            </div>
+          </div>
+          </div>
+         </div>
+        </div>
+        <div class="lg:col-span-2">
+         <div class="grid">
+         <div class="card card-grid min-w-full">
+          <div class="card-header py-5 flex-wrap">
+           <h3 class="card-title">
+            Students
+           </h3>
+          </div>
+          <div class="card-body">
+           <div data-datatable="true" data-datatable-page-size="5">
+            <div class="scrollable-x-auto">
+             <table class="table table-auto table-border" data-datatable-table="true">
+              <thead>
+               <tr>
+                <th class="min-w-[250px]">
+                 <span class="sort asc">
+                  <span class="sort-label">
+                   Student Name
+                  </span>
+                  <span class="sort-icon">
+                  </span>
+                 </span>
+                </th>
+                <th class="min-w-[120px]">
+                 <span class="sort">
+                  <span class="sort-label">
+                   Student ID
+                  </span>
+                  <span class="sort-icon">
+                  </span>
+                 </span>
+                </th>
+                <th class="min-w-[120px]">
+                 <span class="sort">
+                  <span class="sort-label">
+                   Status
+                  </span>
+                  <span class="sort-icon">
+                  </span>
+                 </span>
+                </th>
+                <th class="min-w-[160px]">
+                 <span class="sort">
+                  <span class="sort-label">
+                   Joined Date
+                  </span>
+                  <span class="sort-icon">
+                  </span>
+                 </span>
+                </th>
+               </tr>
+              </thead>
+              <tbody>
+                {% for student in students %}
+               <tr>
+                <td>
+                 <div class="flex items-center gap-2.5">
+                  <div class="">
+                   <img class="h-9 rounded-full" src="{% if student.image  %}{{student.image}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/>
+                  </div>
+                  <div class="flex flex-col gap-0.5">
+                   <a class="leading-none font-semibold text-sm text-gray-900 hover:text-primary" href="/students/profile/{{ student.name }}">
+                    {{ student.student_name }}
+                   <span class="text-2sm font-medium text-gray-600 hover:text-primary-active">
+                    {{ student.student_email_id }}
+                   </span>
+                   </a>
+                  </div>
+                 </div>
+                </td>
+                <td>
+                 <div class="flex items-center gap-1.5">
+                  <span class="leading-none text-gray-700">
+                   {{ student.name }}
+                  </span>
+                 </div>
+                </td>
+                <td>
+                  {% if student.enabled == 1 %}
+                 <span class="badge badge-pill badge-outline badge-success gap-1 items-center">
+                  <span class="badge badge-dot size-1.5 badge-success">
+                  </span>
+                    Active
+                 </span>
+                  {% else %}
+                 <span class="badge badge-pill badge-outline badge-danger gap-1 items-center">
+                  <span class="badge badge-dot size-1.5 badge-danger">
+                  </span>
+                    Disabled
+                 </span>
+                  {% endif %}
+                </td>
+                <td>
+                 {{ student.joining_date }}
+                </td>
+               </tr>
+               {% endfor %}
+              </tbody>
+             </table>
+            </div>
+            <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
+             <div class="flex items-center gap-2 order-2 md:order-1">
+              Show
+              <select class="select select-sm w-16" data-datatable-size="true" name="perpage1">
+              </select>
+              per page
+             </div>
+             <div class="flex items-center gap-4 order-1 md:order-2">
+              <span data-datatable-info="true">
+              </span>
+              <div class="pagination" data-datatable-pagination="true">
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+        </div>
+       </div>
+       <!-- end: grid -->
+       <!-- begin: grid -->
+       <div class="card card-grid min-w-full">
+        <div class="card-header">
+         <h3 class="card-title">
+          Billing and Invoicing
+         </h3>
+          <!--<button class="btn btn-light btn-sm">
+          <i class="ki-filled ki-exit-down">
+          </i>
+          Download PDF
+         </button> -->
+        </div>
+        <div class="card-body">
+         <div data-datatable="true" data-datatable-page-size="10">
+          <div class="scrollable-x-auto">
+           <table class="table table-border" data-datatable-table="true">
+            <thead>
+             <tr>
+              <th class="min-w-[200px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Title
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="w-[170px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Status
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="w-[170px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Date
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="w-[170px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Grand Total
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="w-[170px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Outstanding
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="w-[100px]">
+              </th>
+             </tr>
+            </thead>
+            <tbody>
+            {% for invoice in sales_invoices %}
+             <tr>
+              <td>
+               <a class="leading-none font-semibold text-sm text-gray-900 hover:text-primary" href="#">        
+               {{ invoice.title }}
+               </a>
+              </td>
+              <td>
+               {% if invoice.status == 'Draft' %}
+               <div class="badge badge-sm badge-info badge-outline">
+                {% elif invoice.status == 'Overdue' %}
+               <div class="badge badge-sm badge-danger badge-outline">
+                {% elif invoice.status == 'Cancelled' %}
+               <div class="badge badge-sm badge-danger badge-outline">
+                {% elif invoice.status == 'Unpaid' %}
+               <div class="badge badge-sm badge-warning badge-outline">
+                {% elif invoice.status == 'Partly Paid' %}
+               <div class="badge badge-sm badge-warning badge-outline">
+                {% elif invoice.status == 'Paid' %}
+               <div class="badge badge-sm badge-success badge-outline">
+                {% elif invoice.status == 'Return' %}
+               <div class="badge badge-sm badge-dark badge-outline">
+                {% else %}
+               <div class="badge badge-sm badge-primary badge-outline">
+                {% endif %}
+                {{ invoice.status }}
+               </div>
+              </td>
+              <td>
+               {{ invoice.posting_date }}
+              </td>
+              <td>
+               {{ frappe.format(invoice.grand_total, {'fieldtype': 'Currency'}) }}
+              </td>
+              <td>
+               {{ frappe.format(invoice.outstanding_amount, {'fieldtype': 'Currency'}) }}
+              </td>
+              <td class="text-center">
+               <a class="btn btn-link" href="/printview?doctype=Sales%20Invoice&name={{ invoice.name }}">
+                {{ invoice.name }}
+               </a>
+              </td>
+             </tr>
+             {% endfor %}
+            </tbody>
+           </table>
+          </div>
+          <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
+           <div class="flex items-center gap-2 order-2 md:order-1">
+            Show
+            <select class="select select-sm w-16" data-datatable-size="true" name="perpage2">
+            </select>
+            per page
+           </div>
+           <div class="flex items-center gap-4 order-1 md:order-2">
+            <span data-datatable-info="true">
+            </span>
+            <div class="pagination" data-datatable-pagination="true">
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+       <!-- end: grid -->
+      </div>
+     </div>
+     <!-- end: container -->

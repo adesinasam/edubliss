@@ -201,8 +201,8 @@ def get_teachers(company=None):
     employees = frappe.qb.DocType("Employee")
 
     instructors_query = (
-        frappe.qb.from_(instructors)
-        .inner_join(employees)
+        frappe.qb.from_(employees)
+        .inner_join(instructors)
         .on(instructors.employee == employees.name)
         .select('*')
         .where(employees.company == company)

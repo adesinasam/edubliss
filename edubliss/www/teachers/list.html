@@ -125,7 +125,7 @@
                <div class="flex items-center gap-2.5">
                 <img alt="" class="rounded-full size-7 shrink-0" src="{% if teacher.image  %}{{teacher.image}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/>
                 <div class="flex flex-col">
-                 <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/teachers/profile/{{ teacher.instructor_name }}">
+                 <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/teachers/profile/{{ teacher.name }}">
                   {{ teacher.instructor_name }}
                  <span class="text-2sm font-medium text-gray-600 hover:text-primary-active">
                   
@@ -165,7 +165,7 @@
                  </button>
                  <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
                   <div class="menu-item">
-                   <a class="menu-link" href="/teachers/profile/{{ teacher.instructor_name }}">
+                   <a class="menu-link" href="/teachers/profile/{{ teacher.name }}">
                     <span class="menu-icon">
                      <i class="ki-filled ki-search-list">
                      </i>
@@ -178,7 +178,7 @@
                   <div class="menu-separator">
                   </div>
                   <div class="menu-item">
-                   <a class="menu-link" href="/app/instructor/{{ teacher.instructor_name }}">
+                   <a class="menu-link" href="/app/instructor/{{ teacher.name }}">
                     <span class="menu-icon">
                      <i class="ki-filled ki-pencil">
                      </i>

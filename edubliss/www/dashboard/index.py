@@ -3,6 +3,20 @@ from frappe import _
 
 no_cache = 1
 
+def get_teachers():
+    instructors = frappe.qb.DocType("Instructor")
+    employees = frappe.qb.DocType("Employee")
+
+    instructors_query = (
+        frappe.qb.from_(employees)
+        .inner_join(instructors)
+        .on(instructors.employee == employees.name)
+        .select('*')
+        .where(employees.user_id == frappe.session.user)
+        .run(as_dict=1)
+    )
+    return instructors_query if instructors_query else []
+
 def get_context(context):
     # Redirect guest users to the portal
     if frappe.session.user == "Guest":
@@ -29,6 +43,13 @@ def get_context(context):
             context.studentss = frappe.get_doc("Student", student[0].name)
         else:
             context.studentss = ''
+
+    if "Instructor" in user_roles:
+        teacher = get_teachers()
+        if teacher:
+            context.teachers = frappe.get_doc("Instructor", teacher[0].name)
+        else:
+            context.teachers = ''
 
     # Split the company name into parts
     parts = current_user.full_name.split(" ")
