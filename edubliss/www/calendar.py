@@ -3,7 +3,7 @@ from frappe import _
 
 @frappe.whitelist(allow_guest=True)
 def get_events():
-    events = frappe.get_all('Event', fields=['name', 'subject', 'starts_on', 'ends_on', 'all_day'])
+    events = frappe.get_all('Event', fields=['name', 'subject', 'starts_on', 'ends_on', 'color', 'all_day'])
     
     # Transforming the data to match FullCalendar's event format
     event_list = []
@@ -13,6 +13,7 @@ def get_events():
             'title': event.subject,
             'start': event.starts_on,
             'end': event.ends_on,
+            'color': event.color,
             'allDay': event.all_day
         })
 

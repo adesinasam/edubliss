@@ -8,6 +8,8 @@
   "date",
   "week_num",
   "terms",
+  "assessment_group",
+  "assessment_type",
   "curriculum",
   "topic",
   "sub_topic",
@@ -99,12 +101,27 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Lesson Plan & Note"
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "fieldname": "assessment_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Assessment Type",
+   "options": "\nClass Activities\nHomework - 1\nQuiz - 1\nQuiz -  2\nHomework - 2\nMid Term - Project\nQuiz - 3\nSuper Assignment - 1\nQuiz - 4\nHomework 3\nSuper Assignment - 2\nExamination\nMarking and Recording"
+  },
+  {
+   "fieldname": "assessment_group",
+   "fieldtype": "Link",
+   "label": "Assessment Group",
+   "options": "Assessment Group"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-09-01 11:58:21.263798",
+ "modified": "2024-09-09 17:34:45.525188",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Course Scheme of Work",

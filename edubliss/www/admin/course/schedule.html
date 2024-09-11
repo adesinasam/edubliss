@@ -1,0 +1,101 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Course Schedule") }}
+{% endblock %}
+
+{% block custom_link %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.js"></script>
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav2.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+
+    {% include "templates/includes/course_nav.html" %}
+
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-gray-900">
+         {{docname}}
+        </h1>
+        <div class="flex items-center flex-wrap gap-1.5 font-medium">
+         <span class="text-md text-gray-600">
+          Course Schedule
+         </span>
+        </div>
+       </div>
+       <div class="flex items-center gap-2.5">
+        <div class="btn btn-sm btn-primary" href="/app/course-enrollment/new-course-enrollment-">
+         Enroll Student
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="card card-grid min-w-full">
+        <div class="card-body">
+            <div id="calendar"  class="bg-secondary text-gray-900 text-sm rounded-lg shadow-md" style="width: 100%; height: 600px; border: 0px solid #000;"></div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+    </main>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: [ 'dayGrid' ],
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridDay,dayGridWeek,dayGridMonth'
+            },
+            defaultView: 'dayGridMonth', // Default view on page load
+            editable: true,
+            events: function(fetchInfo, successCallback, failureCallback) {
+                const course = "{{ docname }}"; // Ensure this is rendering correctly
+                const academic_term = "{{ acadterm }}"; // Ensure this is rendering correctly
+
+                console.log("Course:", course);
+                console.log("Academic Term:", academic_term);
+
+                fetch('/api/method/edubliss.api.get_course_schedule?course={{ docname }}&academic_term={{ acadterm }}', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    successCallback(data.message.message);
+                })
+                .catch(error => {
+                    console.error('Error fetching events:', error);
+                    failureCallback(error);
+                });
+            }
+        });
+        calendar.render();
+    });
+</script>
+{% endblock %}

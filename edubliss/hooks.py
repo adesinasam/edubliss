@@ -23,7 +23,9 @@ fixtures = [{
         'Program Course-custom_type',
         'Program Enrollment-custom_school',
         'Item-custom_fee_component_type',
-        'Sales Invoice Item-custom_fee_component_type'
+        'Sales Invoice Item-custom_fee_component_type',
+        'Assessment Result Tool-custom_course',
+        'Assessment Result Tool-custom_assessment_group'
       ]
     ]
   ]
@@ -90,6 +92,7 @@ website_route_rules = [
     {"from_route": "/admin/course/overview/<docname>", "to_route": "admin/course/overview"},
     {"from_route": "/admin/course/students/<docname>", "to_route": "admin/course/students"},
     {"from_route": "/admin/course/outline/<docname>", "to_route": "admin/course/outline"},
+    {"from_route": "/admin/course/schedule/<docname>", "to_route": "admin/course/schedule"},
 ]
 
 # Generators

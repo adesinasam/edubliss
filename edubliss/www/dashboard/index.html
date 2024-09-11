@@ -4,6 +4,13 @@
 {{ _("Dasboard") }}
 {% endblock %}
 
+{% block custom_link %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.js"></script>
+{% endblock %}
+
 {% block headnav_link %}
     {% include "templates/includes/headnav/edu_headnav2.html" %}
 {% endblock %}
@@ -171,6 +178,34 @@
      <!-- end: container -->
     {% endif %}
 
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="gap-5 pb-7.5">
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+       <!-- begin: grid -->
+       <div class="grid lg:grid-cols-3 gap-5 lg:gap-7.5 items-stretch">
+        <div class="lg:col-span-1">
+        </div>
+        <div class="lg:col-span-2">
+         <div class="card card-grid min-w-full">
+          <div class="card-header flex-wrap gap-2">
+           <h3 class="card-title font-medium text-sm">
+            Event
+           </h3>
+          </div>
+          <div class="card-body">
+            <div id="calendar"  class="bg-light text-xs text-gray-900 rounded-lg shadow-md" style="width: 100%; height: 600px; border: 0px solid #000;"></div>
+          </div>
+         </div>
+        </div>
+       </div>
+       <!-- end: grid -->
+     </div>
+     <!-- end: container -->
     </main>
 
     <script>
@@ -186,6 +221,41 @@
         setInterval(updateClock, 1000);
         updateClock();
     </script>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: [ 'dayGrid' ],
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridDay,dayGridWeek,dayGridMonth'
+            },
+            defaultView: 'dayGridMonth', // Default view on page load
+            editable: true,
+            events: function(fetchInfo, successCallback, failureCallback) {
+                fetch('/api/method/edubliss.www.calendar.get_events', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    successCallback(data.message.message);
+                })
+                .catch(error => {
+                    console.error('Error fetching events:', error);
+                    failureCallback(error);
+                });
+            }
+        });
+        calendar.render();
+    });
+</script>
 {% endblock %}
 
 {% block welcome_link %}

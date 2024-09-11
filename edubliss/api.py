@@ -524,3 +524,37 @@ def get_course_schedule_for_student(program_name, student_groups):
         order_by="schedule_date asc",
     )
     return schedule
+
+@frappe.whitelist(allow_guest=True)
+def get_course_schedule(course, academic_term):
+    events = frappe.get_all(
+        "Course Schedule",
+        fields=[
+            "schedule_date",
+            "room",
+            "class_schedule_color",
+            "course",
+            "custom_academic_year",
+            "custom_academic_term",
+            "from_time",
+            "to_time",
+            "instructor",
+            "title",
+            "name",
+            "color"
+        ],
+        filters={"course": course, "custom_academic_term": academic_term}
+    )
+    
+    # Transforming the data to match FullCalendar's event format
+    event_list = []
+    for event in events:
+        event_list.append({
+            'id': event.name,
+            'title': event.title,
+            'start': event.schedule_date,
+            'end': event.schedule_date,
+            'color': event.color
+        })
+
+    return {'message': event_list}
