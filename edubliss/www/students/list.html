@@ -57,39 +57,10 @@
            <label class="input input-sm">
             <i class="ki-filled ki-magnifier">
             </i>
-            <input placeholder="Search users" type="text" value="">
+            <input id="search-input" placeholder="Search students" type="text" value="">
             </input>
            </label>
           </div>
-<!--           <div class="flex flex-wrap gap-2.5">
-           <select class="select select-sm w-28">
-            <option value="1">
-             Active
-            </option>
-            <option value="2">
-             Disabled
-            </option>
-            <option value="2">
-             Pending
-            </option>
-           </select>
-           <select class="select select-sm w-28">
-            <option value="1">
-             Latest
-            </option>
-            <option value="2">
-             Older
-            </option>
-            <option value="3">
-             Oldest
-            </option>
-           </select>
-           <button class="btn btn-sm btn-outline btn-primary">
-            <i class="ki-filled ki-setting-4">
-            </i>
-            Filters
-           </button>
-          </div> -->
          </div>
         </div>
         <div class="card-body">
@@ -268,3 +239,100 @@
      <!-- end: container -->
     </main>
 {% endblock %}
+
+{% block custom_js %}
+<script type="application/json" id="student-data">
+    {{ students | json }}
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById('search-input');
+    const tableBody = document.querySelector('tbody');
+    const studentData = JSON.parse(document.getElementById('student-data').textContent);
+
+    // Function to render students
+    function renderStudents(students) {
+        tableBody.innerHTML = ''; // Clear the table
+
+        if (students.length > 0) {
+            students.forEach(function(student, index) {
+                const studentStatus = student.enabled == 1 
+                    ? `<span class="badge badge-pill badge-outline badge-success gap-1 items-center">
+                        <span class="badge badge-dot size-1.5 badge-success"></span> Active</span>`
+                    : `<span class="badge badge-pill badge-outline badge-danger gap-1 items-center">
+                        <span class="badge badge-dot size-1.5 badge-danger"></span> Disabled</span>`;
+
+                const row = `<tr>
+                    <td class="text-center">
+                        <input class="checkbox checkbox-sm" type="checkbox" value="1"/>
+                    </td>
+                    <td>
+                        <div class="flex items-center gap-2.5">
+                            <img alt="" class="rounded-full size-7 shrink-0" src="${student.image || 'assets/edubliss/dist/media/avatars/blank.png'}"/>
+                            <div class="flex flex-col">
+                                <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/students/profile/${student.name}">
+                                    ${student.student_name}
+                                </a>
+                                <span class="text-2sm font-medium text-gray-600 hover:text-primary-active">
+                                    ${student.student_email_id || ''}
+                                </span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${student.name || ''}</td>
+                    <td>${studentStatus}</td>
+                    <td>${student.joining_date || ''}</td>
+                    <td class="text-center">
+                        <a class="btn btn-link" href="/students/billing/${student.name}">View</a>
+                    </td>
+                    <td>
+                        <div class="menu">
+                            <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
+                                <i class="ki-filled ki-dots-vertical"></i>
+                            </button>
+                            <div class="menu-dropdown w-full max-w-[175px]">
+                                <a class="menu-link" href="/students/profile/${student.name}">
+                                    <span class="menu-icon">
+                                        <i class="ki-filled ki-search-list"></i>
+                                    </span> View
+                                </a>
+                                <div class="menu-separator"></div>
+                                <a class="menu-link" href="/app/student/${student.name}">
+                                    <span class="menu-icon">
+                                        <i class="ki-filled ki-pencil"></i>
+                                    </span> Edit
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        } else {
+            tableBody.innerHTML = `<tr><td colspan="7" class="text-center">No student found.</td></tr>`;
+        }
+    }
+
+    // Initial render of all students
+    renderStudents(studentData);
+
+    // Search logic
+    searchInput.addEventListener('input', function() {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        const filteredStudents = studentData.filter(function(student) {
+            return (student.student_name && student.student_name.toLowerCase().includes(searchTerm)) ||
+                   (student.student_email_id && student.student_email_id.toLowerCase().includes(searchTerm)) ||
+                   (student.name && student.name.toLowerCase().includes(searchTerm)) ||
+                   (student.joining_date && student.joining_date.toLowerCase().includes(searchTerm)) ||
+                   (student.enabled == 1 && searchTerm === 'active') ||
+                   (student.enabled == 0 && searchTerm === 'disabled');
+        });
+
+        // Render filtered students
+        renderStudents(filteredStudents);
+    });
+});
+</script>
+{% endblock %}
+

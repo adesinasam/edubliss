@@ -51,7 +51,7 @@
            <label class="input input-sm">
             <i class="ki-filled ki-magnifier">
             </i>
-            <input placeholder="Search users" type="text" value="">
+            <input id="search-input" placeholder="Search parents" type="text" value="">
             </input>
            </label>
           </div>
@@ -183,7 +183,7 @@
                </div>
               </td>
              </tr>
-               {% endfor %}
+            {% endfor %}
             </tbody>
            </table>
           </div>
@@ -208,4 +208,91 @@
      </div>
      <!-- end: container -->
     </main>
+{% endblock %}
+
+{% block custom_js %}
+<script type="application/json" id="parent-data">
+    {{ parents | json }}
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById('search-input');
+    const tableBody = document.querySelector('tbody');
+    const parentData = JSON.parse(document.getElementById('parent-data').textContent);
+
+    // Function to render parents
+    function renderParents(parents) {
+        tableBody.innerHTML = ''; // Clear the table
+
+        if (parents.length > 0) {
+            parents.forEach(function(parent) {
+                const row = `<tr>
+                    <td class="text-center">
+                        <input class="checkbox checkbox-sm" type="checkbox" value="1"/>
+                    </td>
+                    <td>
+                        <div class="flex items-center gap-2.5">
+                            <img alt="" class="rounded-full size-7 shrink-0" src="${parent.image || 'assets/edubliss/dist/media/avatars/blank.png'}"/>
+                            <div class="flex flex-col">
+                                <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/parents/profile/${parent.name}">
+                                    ${parent.guardian_name}
+                                    <span class="text-2sm font-medium text-gray-600 hover:text-primary-active">
+                                        ${parent.email_id || ''}
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${parent.name}</td>
+                    <td>${parent.students || ''}</td>
+                    <td>${parent.mobile_number || ''}</td>
+                    <td>${parent.custom_contact_address || ''}</td>
+                    <td>
+                        <div class="menu">
+                            <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
+                                <i class="ki-filled ki-dots-vertical"></i>
+                            </button>
+                            <div class="menu-dropdown w-full max-w-[175px]">
+                                <a class="menu-link" href="/parents/profile/${parent.name}">
+                                    <span class="menu-icon">
+                                        <i class="ki-filled ki-search-list"></i>
+                                    </span> View
+                                </a>
+                                <div class="menu-separator"></div>
+                                <a class="menu-link" href="/app/guardian/${parent.name}">
+                                    <span class="menu-icon">
+                                        <i class="ki-filled ki-pencil"></i>
+                                    </span> Edit
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        } else {
+            tableBody.innerHTML = `<tr><td colspan="7" class="text-center">No parents found.</td></tr>`;
+        }
+    }
+
+    // Initial render of all parents
+    renderParents(parentData);
+
+    // Search logic
+    searchInput.addEventListener('input', function() {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        const filteredParents = parentData.filter(function(parent) {
+            return (parent.guardian_name && parent.guardian_name.toLowerCase().includes(searchTerm)) ||
+                   (parent.name && parent.name.toLowerCase().includes(searchTerm)) ||
+                   (parent.mobile_number && parent.mobile_number.toLowerCase().includes(searchTerm)) ||
+                   (parent.email_id && parent.email_id.toLowerCase().includes(searchTerm));
+        });
+
+        // Render filtered parents
+        renderParents(filteredParents);
+    });
+});
+   
+</script>
 {% endblock %}

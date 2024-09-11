@@ -46,6 +46,16 @@
          <h3 class="card-title font-medium text-sm">
           <!-- Showing {{ student_count }} Students -->
          </h3>
+         <div class="flex flex-wrap gap-2 lg:gap-5">
+          <div class="flex">
+           <label class="input input-sm">
+            <i class="ki-filled ki-magnifier">
+            </i>
+            <input id="search-input" placeholder="Search class" type="text" value="">
+            </input>
+           </label>
+          </div>
+         </div>
         </div>
         <div class="card-body">
          <div data-datatable="true" data-datatable-page-size="10">
@@ -153,4 +163,60 @@
      </div>
      <!-- end: container -->
     </main>
+{% endblock %}
+
+{% block custom_js %}
+<script type="application/json" id="program-data">
+    {{ programs | json }}
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById('search-input');
+    const tableBody = document.querySelector('tbody');
+    const programData = JSON.parse(document.getElementById('program-data').textContent);
+
+    // Function to render programs
+    function renderPrograms(programs) {
+        tableBody.innerHTML = ''; // Clear the table
+
+        programs.forEach(function(program, index) {
+            const row = `<tr>
+                <td>${index + 1}</td>
+                <td>
+                    <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/admin/program/program?program_name=${program.name}">
+                        ${program.program_name || ""}
+                    </a>
+                </td>
+                <td>${program.program_abbreviation || ""}</td>
+                <td>${program.custom_school || ""}</td>
+                <td>${program.department || ""}</td>
+                <td>
+                    <a class="btn btn-secondary btn-xs" href="/admin/program/program?program_name=${program.name}">
+                        <i class="ki-filled ki-eye text-primary text-2xl"></i>
+                    </a>
+                </td>
+            </tr>`;
+            tableBody.innerHTML += row;
+        });
+    }
+
+    // Initial render of all programs
+    renderPrograms(programData);
+
+    // Search logic
+    searchInput.addEventListener('input', function() {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        const filteredPrograms = programData.filter(function(program) {
+            return (program.program_name && program.program_name.toLowerCase().includes(searchTerm)) ||
+                   (program.program_abbreviation && program.program_abbreviation.toLowerCase().includes(searchTerm)) ||
+                   (program.custom_school && program.custom_school.toLowerCase().includes(searchTerm)) ||
+                   (program.department && program.department.toLowerCase().includes(searchTerm));
+        });
+
+        // Render filtered programs
+        renderPrograms(filteredPrograms);
+    });
+});  
+</script>
 {% endblock %}

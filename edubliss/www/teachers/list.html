@@ -51,7 +51,7 @@
            <label class="input input-sm">
             <i class="ki-filled ki-magnifier">
             </i>
-            <input placeholder="Search users" type="text" value="">
+            <input id="search-input" placeholder="Search teachers" type="text" value="">
             </input>
            </label>
           </div>
@@ -218,4 +218,99 @@
      </div>
      <!-- end: container -->
     </main>
+{% endblock %}
+
+{% block custom_js %}
+<script type="application/json" id="teacher-data">
+    {{ teachers | json }}
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.getElementById('search-input');
+    const tableBody = document.querySelector('tbody');
+    const teacherData = JSON.parse(document.getElementById('teacher-data').textContent);
+
+    // Function to render teachers
+    function renderTeachers(teachers) {
+        tableBody.innerHTML = ''; // Clear the table
+
+        if (teachers.length > 0) {
+            teachers.forEach(function(teacher) {
+                const teacherStatus = teacher.status === 'Active' 
+                    ? `<span class="badge badge-pill badge-outline badge-success gap-1 items-center">
+                        <span class="badge badge-dot size-1.5 badge-success"></span> Active</span>`
+                    : `<span class="badge badge-pill badge-outline badge-danger gap-1 items-center">
+                        <span class="badge badge-dot size-1.5 badge-danger"></span> Left</span>`;
+
+                const row = `<tr>
+                    <td class="text-center">
+                        <input class="checkbox checkbox-sm" type="checkbox" value="1"/>
+                    </td>
+                    <td>
+                        <div class="flex items-center gap-2.5">
+                            <img alt="" class="rounded-full size-7 shrink-0" src="${teacher.image || 'assets/edubliss/dist/media/avatars/blank.png'}"/>
+                            <div class="flex flex-col">
+                                <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/teachers/profile/${teacher.name}">
+                                    ${teacher.instructor_name}
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <a class="btn btn-link" href="/app/employee/${teacher.employee}">
+                            ${teacher.employee}
+                        </a>
+                    </td>
+                    <td>${teacherStatus}</td>
+                    <td>${teacher.department || ''}</td>
+                    <td class="text-center">${teacher.gender || ''}</td>
+                    <td>
+                        <div class="menu">
+                            <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
+                                <i class="ki-filled ki-dots-vertical"></i>
+                            </button>
+                            <div class="menu-dropdown w-full max-w-[175px]">
+                                <a class="menu-link" href="/teachers/profile/${teacher.name}">
+                                    <span class="menu-icon">
+                                        <i class="ki-filled ki-search-list"></i>
+                                    </span> View
+                                </a>
+                                <div class="menu-separator"></div>
+                                <a class="menu-link" href="/app/instructor/${teacher.name}">
+                                    <span class="menu-icon">
+                                        <i class="ki-filled ki-pencil"></i>
+                                    </span> Edit
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        } else {
+            tableBody.innerHTML = `<tr><td colspan="7" class="text-center">No teacher found.</td></tr>`;
+        }
+    }
+
+    // Initial render of all teachers
+    renderTeachers(teacherData);
+
+    // Search logic
+    searchInput.addEventListener('input', function() {
+        const searchTerm = searchInput.value.toLowerCase();
+
+        const filteredTeachers = teacherData.filter(function(teacher) {
+            return (teacher.instructor_name && teacher.instructor_name.toLowerCase().includes(searchTerm)) ||
+                   (teacher.employee && teacher.employee.toLowerCase().includes(searchTerm)) ||
+                   (teacher.department && teacher.department.toLowerCase().includes(searchTerm)) ||
+                   (teacher.gender && teacher.gender.toLowerCase().includes(searchTerm)) ||
+                   (teacher.status === 'Active' && searchTerm === 'active') ||
+                   (teacher.status !== 'Active' && searchTerm === 'left');
+        });
+
+        // Render filtered teachers
+        renderTeachers(filteredTeachers);
+    });
+});
+</script>
 {% endblock %}
