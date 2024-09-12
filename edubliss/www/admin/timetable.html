@@ -1,0 +1,153 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Class Timetable") }}
+{% endblock %}
+
+{% block custom_link %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.js"></script>
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav2.html" %}
+{% endblock %}
+
+{% block content %}
+<main class="grow content pt-5" id="content" role="content">
+  <!-- begin: container -->
+  <div class="container-fixed" id="content_container"></div>
+  <!-- end: container -->
+  <!-- begin: container -->
+  <div class="container-fixed">
+    <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+      <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-gray-900">Class Schedule</h1>
+        <div class="flex items-center gap-2 text-sm font-medium text-gray-600"></div>
+      </div>
+    </div>
+  </div>
+  <!-- end: container -->
+  <!-- begin: container -->
+  <div class="container-fixed">
+    <!-- begin: grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
+      <div class="col-span-1">
+        <div class="grid gap-5 lg:gap-7.5">
+          <div class="card">
+            <div class="card-header bg-warning">
+              <h3 class="card-title text-light">Section</h3>
+              {% if "Academics User" in user_roles %}
+              <a href="app/course-scheduling-tool">
+                <i class="ki-solid ki-abstract-10 text-sm text-light" data-tooltip="#program_tooltip" data-tooltip-placement="bottom"></i>
+                <div class="hidden rounded shadow-default p-3 bg-light border border-gray-300 text-gray-800 text-xs font-normal" id="program_tooltip">Course Schedule Tool</div>
+              </a>
+              {% endif %}
+            </div>
+            <div class="card-body bg-warning-light pt-3.5 pb-3.5">
+              <table class="table-auto">
+                <tbody>
+                  {% for section in sections %}
+                  <tr>
+                    <td>
+                      <a class="btn btn-warning btn-clear {% if section.student_group_name == selected_section %}active{% endif %}" href="/admin/timetable?section_name={{ section.student_group_name }}" data-tooltip="true" data-tooltip-placement="right">
+                        {{ section.student_group_name }}
+                       <div class="popover shadow-lg max-w-72 bg-secondary" style="z-index: 100; position: fixed; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(142px, 50.6667px, 0px);" data-popper-placement="right">
+                        <div class="popover-header font-semibold text-gray-900">
+                        <div class="p-4 text-sm text-gray-900 font-medium">
+                         {{ section.student_group_name }} Details
+                         <span>
+                          <i class="ki-filled ki-black-right text-md"></i>
+                         </span>
+                        </div>
+                        </div>
+                       <div class="popover-body">
+                        <div class="scrollable-y m-2 p-4 h-[150px] text-sm text-gray-700">
+                          Program: {{ section.program }}
+                          <br>
+                          Status:
+                          <span class="badge  badge-xs badge-pill badge-outline {{ 'badge-success' if section.disabled == 0 else 'badge-danger' }} gap-1 items-center">
+                            {{ 'Active' if section.disabled == 0 else 'Disabled' }}
+                          </span>
+                          <br>
+                          Batch: {{ section.batch }}
+                          <br>
+                          Teachers: {{ get_section_teachers(section.student_group_name) }}
+                          <br>
+                          Term: {{ section.academic_term }}
+                        </div>
+                       </div>
+                       </div>
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-span-2">
+        <div class="flex flex-col gap-5 lg:gap-7.5">
+          <div class="flex flex-col gap-5 lg:gap-7.5">
+           {% if selected_section %} 
+            <div class="card bg-secondary">
+              <div class="card-header">
+                <h3 class="card-title">Schedule</h3>
+                {% if selected_section %}
+                <h4 class="card-title text-gray-700">{{ selected_section }}</h4>
+                {% endif %}
+              </div>
+              <div class="card-body">
+                <div id="calendar"  class="bg-secondary text-gray-900 text-sm rounded-lg shadow-md" style="width: 100%; height: 600px; border: 0px solid #000;"></div>
+              </div>
+              <div class="card-footer justify-center"></div>
+            </div>
+           {% endif %} 
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end: grid -->
+  </div>
+  <!-- end: container -->
+</main>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: [ 'dayGrid' ],
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridDay,dayGridWeek,dayGridMonth'
+            },
+            defaultView: 'dayGridMonth', // Default view on page load
+            editable: true,
+            events: function(fetchInfo, successCallback, failureCallback) {
+                fetch('/api/method/edubliss.api.get_section_schedule?student_group={{ selected_section }}&academic_term={{ acadterm }}', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    successCallback(data.message.message);
+                })
+                .catch(error => {
+                    console.error('Error fetching events:', error);
+                    failureCallback(error);
+                });
+            }
+        });
+        calendar.render();
+    });
+</script>
+{% endblock %}

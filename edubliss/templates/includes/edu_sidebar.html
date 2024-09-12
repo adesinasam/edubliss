@@ -288,6 +288,11 @@
            <span class="menu-title text-2sm font-medium text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
             Course Category
            </span>
+           <span class="menu-badge mr-[-10px]">
+            <span class="badge badge-xs">
+             Soon
+            </span>
+           </span>
           </div>
          </div>
          <!-- <div class="menu-item {% if active_subroute == 'course_category' %}active{% endif %}">
@@ -323,37 +328,27 @@
          Schedules & Communication
         </span>
        </div>
-       <div class="menu-item">
-        <div class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="" tabindex="0">
+       <div class="menu-item {% if active_route == 'timetable' %}active{% endif %}">
+        <a class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="/admin/timetable" tabindex="0">
          <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
           <i class="ki-filled ki-calendar-edit text-lg">
           </i>
          </span>
-         <span class="menu-title text-sm font-semibold text-gray-700">
+         <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
           Class Schedule
          </span>
-         <span class="menu-badge mr-[-10px]">
-          <span class="badge badge-xs">
-           Soon
-          </span>
-         </span>
-        </div>
+        </a>
        </div>
-       <div class="menu-item">
-        <div class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="" tabindex="0">
+       <div class="menu-item {% if active_route == 'events' %}active{% endif %}">
+        <a class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="/admin/events" tabindex="0">
          <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
           <i class="ki-filled ki-calendar-2 text-lg">
           </i>
          </span>
-         <span class="menu-title text-sm font-semibold text-gray-700">
+         <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
           Events
          </span>
-         <span class="menu-badge mr-[-10px]">
-          <span class="badge badge-xs">
-           Soon
-          </span>
-         </span>
-        </div>
+        </a>
        </div>
        <div class="menu-item">
         <div class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="" tabindex="0">

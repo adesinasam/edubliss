@@ -93,6 +93,7 @@
       <div class="col-span-2">
         <div class="flex flex-col gap-5 lg:gap-7.5">
           <div class="flex flex-col gap-5 lg:gap-7.5">
+            {% if selected_section %}
             <div class="card bg-secondary">
               <div class="card-header">
                 <h3 class="card-title">Students</h3>
@@ -112,6 +113,7 @@
                     </tr>
                   </thead>
                   <tbody>
+                   {% if students %}
                     {% for student in students %}
                     <tr>
                       <td class="text-left">
@@ -161,11 +163,17 @@
                       </td>
                     </tr>
                     {% endfor %}
+                   {% else %}
+                    <tr>
+                     <td colspan="5" class="text-center">No students found.</td>
+                    </tr>
+                   {% endif %}
                   </tbody>
                 </table>
               </div>
               <div class="card-footer justify-center"></div>
             </div>
+            {% endif %}
           </div>
         </div>
       </div>

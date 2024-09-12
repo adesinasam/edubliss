@@ -56,6 +56,7 @@ fixtures = [{
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 doctype_js = {
     "Program": "public/js/pages/program.js",
+    "Course Scheduling Tool": "public/js/pages/course_scheduling_tool.js",
     "Fee Structure": "public/js/pages/fee_structure.js",
     "Quotation": "public/js/pages/quotation.js",
     "Sales Order": "public/js/pages/sorder.js",

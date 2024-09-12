@@ -57,6 +57,7 @@
       </div>
       <div class="col-span-2">
         <div class="flex flex-col gap-5 lg:gap-7.5">
+          {% if selected_program %}
             <div class="card bg-secondary">
               <div class="card-header">
                 <h3 class="card-title">LMS Batch</h3>
@@ -100,6 +101,7 @@
               </div>
               <div class="card-footer justify-center"></div>
             </div>
+          {% endif %}  
         </div>
       </div>
     </div>
@@ -113,11 +115,12 @@
   </div>
   <!-- end: container -->
   <!-- begin: container -->
+  {% if selected_program %}
   <div class="container-fixed">
     <div class="grid gap-5 lg:gap-7.5">
       <div class="card card-grid min-w-full bg-secondary">
         <div class="card-header flex-wrap gap-2">
-          <h3 class="card-title">Subjects</h3>
+          <h3 class="card-title">{{ selected_program }} Subjects</h3>
           {% if selected_program %}
           <a href="/app/program/{{ selected_program }}" class="btn btn-sm btn-primary" data-tooltip="#custom_tooltip">
             <i class="ki-outline ki-plus text-sm"></i>
@@ -206,6 +209,7 @@
       </div>
     </div>
   </div>
+  {% endif %}
   <!-- end: container -->
 </main>
 {% endblock %}

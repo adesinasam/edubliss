@@ -1,0 +1,95 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Events") }}
+{% endblock %}
+
+{% block custom_link %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.js"></script>
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav2.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-gray-900">
+         Event
+        </h1>
+        <div class="flex items-center gap-2 text-sm font-medium text-gray-600">
+        </div>
+       </div>
+       {% if "Academics User" in user_roles %}
+       <div class="flex items-center gap-2.5">
+        <a class="btn btn-sm btn-light" href="/app/event/new-event-">
+         Add Event
+        </a>
+       </div>
+       {% endif %}
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+         <div class="card card-grid min-w-full">
+          <div class="card-header flex-wrap gap-2">
+           <h3 class="card-title font-medium text-sm">
+           </h3>
+          </div>
+          <div class="card-body">
+            <div id="calendar"  class="bg-light text-xs text-gray-900 rounded-lg shadow-md" style="width: 100%; height: 600px; border: 0px solid #000;"></div>
+          </div>
+         </div>
+      </div>
+     </div>
+     <!-- end: container -->
+    </main>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: [ 'dayGrid' ],
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridDay,dayGridWeek,dayGridMonth'
+            },
+            defaultView: 'dayGridMonth', // Default view on page load
+            editable: true,
+            events: function(fetchInfo, successCallback, failureCallback) {
+                fetch('/api/method/edubliss.www.calendar.get_events', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    successCallback(data.message.message);
+                })
+                .catch(error => {
+                    console.error('Error fetching events:', error);
+                    failureCallback(error);
+                });
+            }
+        });
+        calendar.render();
+    });
+</script>
+{% endblock %}
