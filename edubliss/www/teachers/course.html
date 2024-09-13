@@ -1,0 +1,162 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Teacher Subjects") }}
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav3.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+
+    {% include "templates/includes/teacher_header.html" %}
+
+    {% include "templates/includes/teacher_nav.html" %}
+
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-gray-900">
+         Subjects
+        </h1>
+       </div>
+       <div class="flex items-center gap-2.5">
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="card card-grid min-w-full">
+        <div class="card-header flex-wrap gap-2">
+         <h3 class="card-title font-medium text-sm">
+         </h3>
+        </div>
+        <div class="card-body">
+         <div data-datatable="true" data-datatable-page-size="10">
+          <div class="scrollable-x-auto">
+           <table class="table table-auto table-border" data-datatable-table="true">
+            <thead>
+             <tr>
+              <th class="w-[60px] text-center">
+               <input class="checkbox checkbox-sm" data-datatable-check="true" type="checkbox"/>
+              </th>
+              <th class="min-w-[250px]">
+               <span class="sort asc">
+                <span class="sort-label">
+                 Course
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[200px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Program
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[200px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Academic Term
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[150px] text-center">
+               <span class="sort">
+                <span class="sort-label">
+                 Academic Year
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[200px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Class Section
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[200px]">
+                Others
+              </th>
+             </tr>
+            </thead>
+            <tbody>
+             {% if courses %}
+              {% for course in courses %}
+             <tr>
+              <td class="text-center">
+               <input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/>
+              </td>
+              <td>
+                 <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/courses/profile/{{ course.course }}">
+                  {{ course.course }}
+                 </a>
+              </td>
+              <td>
+               {{ course.program }}
+              </td>
+              <td>
+               {{ course.academic_term }}
+              </td>
+              <td>
+               <div class="flex justify-center">
+               {{ course.academic_year }}
+               </div>
+              </td>
+              <td>
+               {{ course.student_group }}
+              </td>
+              <td>
+               {{ course.other_details }}
+              </td>
+             </tr>
+               {% endfor %}
+             {% else %}
+             <tr>
+              <td colspan="7" class="text-center">No subjects found.</td>
+             </tr>
+             {% endif %}
+            </tbody>
+           </table>
+          </div>
+          <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
+           <div class="flex items-center gap-2 order-2 md:order-1">
+            Show
+            <select class="select select-sm w-16" data-datatable-size="true" name="perpage">
+            </select>
+            per page
+           </div>
+           <div class="flex items-center gap-4 order-1 md:order-2">
+            <span data-datatable-info="true">
+            </span>
+            <div class="pagination" data-datatable-pagination="true">
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+    </main>
+{% endblock %}

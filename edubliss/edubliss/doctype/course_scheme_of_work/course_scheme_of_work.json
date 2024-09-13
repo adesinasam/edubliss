@@ -7,6 +7,7 @@
  "field_order": [
   "date",
   "week_num",
+  "academic_term",
   "terms",
   "assessment_group",
   "assessment_type",
@@ -116,12 +117,22 @@
    "fieldtype": "Link",
    "label": "Assessment Group",
    "options": "Assessment Group"
+  },
+  {
+   "allow_in_quick_entry": 1,
+   "fieldname": "academic_term",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Academic Term",
+   "options": "Academic Term",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-09-09 17:34:45.525188",
+ "modified": "2024-09-13 07:46:19.467169",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Course Scheme of Work",
