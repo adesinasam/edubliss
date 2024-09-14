@@ -235,3 +235,84 @@
      <!-- end: container -->
     </main>
 {% endblock %}
+
+{% block custom_js %}
+<script>
+async function openModalWithFetch(orderName, doctype) {
+    console.log("Order Name:", orderName);
+    console.log("Doctype:", doctype);
+
+    // Fetch order details from the Frappe API
+    try {
+        let response;
+        if (doctype === 'Sales%20Order') {  // Correct comparison with '==='
+            response = await fetch(`/api/method/edubliss.api.get_order_details?order_name=${orderName}`);
+        } else {
+            response = await fetch(`/api/method/edubliss.api.get_invoice_details?order_name=${orderName}`);
+        }
+
+        const data = await response.json();
+
+        if (data.message) {
+            // Populate modal content with fetched data
+            document.getElementById('payModalTitle').innerText = `Pay Fee - ${data.message.name}`;
+            document.getElementById('payModalBody').innerHTML = `
+              <div class="flex flex-col gap-5 mb-3.5">
+               <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                <label class="form-label max-w-56">Student</label>
+                <div class="flex items-center justify-between flex-nowrap grow gap-2.5">
+                 <span class="text-sm text-gray-900">${data.message.customer}</span>
+                </div>
+               </div>
+               <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                <label class="form-label max-w-56">Student ID</label>
+                <div class="text-sm text-gray-900">${data.message.student}</div>
+               </div>
+               <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                <label class="form-label max-w-56">Program</label>
+                 <div class="text-sm text-gray-900">${data.message.program}</div>
+               </div>
+               <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+                <label class="form-label max-w-56">Amount</label>
+                <input id="paymentAmount" class="input" name="amount" type="text" data-modal-autofocus="true" value="${data.message.grand_total}" required/>
+               </div>
+               <div class="flex justify-end">
+                <button class="btn btn-sm btn-dark" onclick="proceedToPayment('${doctype}','${data.message.name}', document.getElementById('paymentAmount').value)">
+                 <i class="ki-filled ki-credit-cart"></i>
+                 Proceed to Payment
+                </button>
+               </div>
+              </div>
+            `;
+            // Show the modal
+            const modalEl = KTDom.getElement('#payModal');
+            const modal = KTModal.getInstance(modalEl);
+            modal?.show();
+        } else {
+            console.error('Error fetching data:', data.error);
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
+    }
+}
+
+// Function to handle "Proceed to Payment" button click
+function proceedToPayment(doctype, orderName, amount) {
+    if (!amount) {
+        alert("Please enter a valid amount.");
+        return;
+    }
+
+    // Construct the URL for the payment request with dynamic amount
+    const paymentUrl = `/api/method/edubliss.edubliss.payment_request.make_payment_request?dn=${orderName}&dt=${doctype}&submit_doc=1&amt=${amount}&order_type=Shopping%20Cart`;
+
+    // Redirect the user to the payment URL
+    window.location.href = paymentUrl;
+}
+</script>
+
+{% endblock %}
+
+{% block welcome_link %}
+{% include "templates/includes/modal/pay.html" %}
+{% endblock %}

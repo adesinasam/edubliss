@@ -73,7 +73,7 @@
             defaultView: 'dayGridMonth', // Default view on page load
             editable: true,
             events: function(fetchInfo, successCallback, failureCallback) {
-                fetch('/api/method/edubliss.www.calendar.get_events', {
+                fetch(`/api/method/edubliss.www.calendar.get_events`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -87,9 +87,85 @@
                     console.error('Error fetching events:', error);
                     failureCallback(error);
                 });
+            },
+            eventClick: function(info) {
+                // Open a modal or navigate to a detail page using the event ID
+                var eventId = info.event.id;
+                console.log("Event ID:", eventId); // Log the event ID to check
+
+                // Example: Open modal with more event details
+                fetch(`/api/method/edubliss.www.calendar.get_event_details?event_id=${eventId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    // Helper function to format date
+                    function formatDate(dateStr) {
+                        const options = { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' };
+                        return new Intl.DateTimeFormat('en-GB', options).format(new Date(dateStr));
+                    }
+
+                    // Format start and end dates
+                    const formattedStart = formatDate(data.message.start);
+                    const formattedEnd = formatDate(data.message.end);
+
+                    // You can now populate the modal with event details
+                    document.getElementById('eventModalTitle').innerText = data.message.title;
+                    document.getElementById('eventModalBody').innerHTML = `
+                       <div class="flex flex-col gap-3.5 mb-3.5">
+                        <div class="flex items-center gap-2.5">
+                         <span class="text-sm text-gray-600 shrink-0">
+                          Start:
+                         </span>
+                         <div class="text-sm text-gray-900">
+                          ${formattedStart}
+                         </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                         <span class="text-sm text-gray-600 shrink-0">
+                          End:
+                         </span>
+                         <div class="text-sm text-gray-900">
+                          ${formattedEnd}
+                         </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                         <span class="text-sm text-gray-600 shrink-0">
+                          Category:
+                         </span>
+                         <div class="text-sm text-gray-900">
+                          ${data.message.event_category}
+                         </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                         <span class="text-sm text-gray-600 shrink-0">
+                          Description:
+                         </span>
+                        </div>
+                       </div>
+                       <div class="text-sm text-gray-800">
+                        ${data.message.description} 
+                       </div>
+                    `;
+                    const modalEl = KTDom.getElement('#eventModal');
+                    const modal = KTModal.getInstance(modalEl);
+                    modal?.show();
+                })
+                .catch(error => {
+                    console.error('Error fetching event details:', error);
+                });
             }
         });
         calendar.render();
     });
 </script>
+{% endblock %}
+
+{% block welcome_link %}
+{% include "templates/includes/modal/events.html" %}
 {% endblock %}

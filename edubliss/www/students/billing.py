@@ -121,7 +121,7 @@ def generate_sales_orders_html(sales_orders):
             <td>{order['transaction_date']}</td>
             <td>{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
             <td class="text-center"><a class="btn btn-link" href="/printview?doctype=Sales%20Order&name={order['name']}" target="_blank">{order['name']}</a></td>
-            <td><a class="btn btn-xs btn-dark text-2sm text-light" href="/api/method/edubliss.edubliss.payment_request.make_payment_request?dn={order['name']}&dt=Sales%20Order&submit_doc=1&amt={order['grand_total']}&order_type=Shopping%20Cart">Pay</a></td>
+            <td><button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch('{order['name']}','Sales%20Order')">Pay</button></td>
         </tr>
         """
         rows.append(row)
@@ -135,7 +135,7 @@ def generate_sales_invoices_html(sales_invoices):
     rows = []
     for invoice in sales_invoices:
         status_badge = get_status_badge(invoice.status)
-        payment_button = f'<a class="btn btn-xs btn-dark text-2sm text-light" href="/api/method/edubliss.edubliss.payment_request.make_payment_request?dn={invoice["name"]}&dt=Sales%20Invoice&submit_doc=1&amt={invoice["outstanding_amount"]}&order_type=Shopping%20Cart">Pay</a>' if invoice['outstanding_amount'] > 0 else ''
+        payment_button = f'<button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch(\'{invoice["name"]}\',\'Sales%20Invoice\')">Pay</button>' if invoice['outstanding_amount'] > 0 else ''
         row = f"""
         <tr>
             <td><input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/></td>

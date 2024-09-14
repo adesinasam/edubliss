@@ -6,6 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "date",
+  "to_date",
   "week_num",
   "academic_term",
   "terms",
@@ -27,7 +28,8 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Date"
+   "label": "From Date",
+   "reqd": 1
   },
   {
    "fieldname": "terms",
@@ -127,12 +129,20 @@
    "label": "Academic Term",
    "options": "Academic Term",
    "reqd": 1
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "To Date",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-09-13 07:46:19.467169",
+ "modified": "2024-09-14 04:15:49.228286",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Course Scheme of Work",

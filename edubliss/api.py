@@ -636,3 +636,37 @@ def get_section_schedule(student_group, academic_term):
         })
 
     return {'message': event_list}
+
+@frappe.whitelist()
+def get_order_details(order_name):
+    order = frappe.get_doc('Sales Order', order_name)
+    if order:
+        return {
+            'name': order.name,
+            'customer': order.customer,
+            'transaction_date': order.transaction_date,
+            'student': order.student,
+            'program': order.program,
+            'academic_year': order.academic_year,
+            'academic_term': order.academic_term,
+            'grand_total': order.grand_total
+        }
+    else:
+        return {'error': 'Order not found'}
+
+@frappe.whitelist()
+def get_invoice_details(order_name):
+    order = frappe.get_doc('Sales Invoice', order_name)
+    if order:
+        return {
+            'name': order.name,
+            'customer': order.customer,
+            'transaction_date': order.posting_date,
+            'student': order.student,
+            'program': order.program,
+            'academic_year': order.academic_year,
+            'academic_term': order.academic_term,
+            'grand_total': order.outstanding_amount
+        }
+    else:
+        return {'error': 'Order not found'}
