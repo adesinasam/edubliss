@@ -1,7 +1,7 @@
 {% extends "templates/layout.html" %}
 
 {% block title %}
-{{ _("Events") }}
+{{ _("Techers Schedule") }}
 {% endblock %}
 
 {% block custom_link %}
@@ -32,7 +32,7 @@
 {% endblock %}
 
 {% block headnav_link %}
-    {% include "templates/includes/headnav/edu_headnav2.html" %}
+    {% include "templates/includes/headnav/edu_headnav3.html" %}
 {% endblock %}
 
 {% block content %}
@@ -41,30 +41,33 @@
      <div class="container-fixed" id="content_container">
      </div>
      <!-- end: container -->
+
+    {% include "templates/includes/teacher_header.html" %}
+
+    {% include "templates/includes/teacher_nav.html" %}
+
      <!-- begin: container -->
      <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
         <h1 class="text-xl font-semibold leading-none text-gray-900">
-         Event
+         {{teachers.instructor_name}}
         </h1>
-        <div class="flex items-center gap-2 text-sm font-medium text-gray-600">
+        <div class="flex items-center flex-wrap gap-1.5 font-medium">
+         <span class="text-md text-gray-600">
+           Teacher Schedule
+         </span>
         </div>
        </div>
-       {% if "Academics User" in user_roles %}
        <div class="flex items-center gap-2.5">
-        <a class="btn btn-sm btn-light" href="/app/event/new-event-">
-         Add Event
-        </a>
        </div>
-       {% endif %}
       </div>
      </div>
      <!-- end: container -->
      <!-- begin: container -->
      <div class="container-fixed">
       <div class="card grid gap-5 lg:gap-7.5">
-       <div id="calendar"  class="bg-light text-xs text-gray-900 rounded-lg shadow-md" style="width: 100%; height: 600px; border: 0px solid #000;"></div>
+        <div id="calendar"  class="bg-secondary text-gray-900 text-sm rounded-lg shadow-md" style="width: 100%; height: 600px; border: 0px solid #000;"></div>
       </div>
      </div>
      <!-- end: container -->
@@ -79,7 +82,7 @@
             initialView: 'dayGridMonth', // Default view on page load
             editable: true,
             events: function(fetchInfo, successCallback, failureCallback) {
-                fetch(`/api/method/edubliss.www.calendar.get_events`, {
+                fetch('/api/method/edubliss.api.get_teacher_schedule?instructor={{ docname }}&academic_term={{ acadterm }}', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -99,7 +102,7 @@
                 var eventId = info.event.id;
 
                 // Example: Open modal with more event details
-                fetch(`/api/method/edubliss.www.calendar.get_event_details?event_id=${eventId}`, {
+                fetch(`/api/method/edubliss.api.get_schedule_details?event_id=${eventId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -116,11 +119,9 @@
 
                     // Format start and end dates
                     const formattedStart = formatDate(data.message.start);
-                    const formattedEnd = formatDate(data.message.end);
 
                     // You can now populate the modal with event details
-                    document.getElementById('eventModalBody').innerHTML = `
-                      <div class="modal-header">
+                    document.getElementById('eventModalTitle').innerHTML = `
                         <h3 class="modal-title"style="color: ${data.message.color}">
                          ${data.message.title}
                         </h3>
@@ -128,12 +129,12 @@
                          <i class="ki-outline ki-cross">
                          </i>
                         </button>       
-                      </div>
-                      <div class="modal-body scrollable-y py-0 my-5 pl-6 pr-3 mr-3 h-[200px] max-h-[65%]">
+                    `;
+                    document.getElementById('eventModalBody').innerHTML = `
                        <div class="flex flex-col gap-3.5 mb-3.5">
-                        <div class="flex items-center gap-2.5" style="color: ${data.message.color}">
+                        <div class="flex items-center gap-2.5">
                          <span class="text-sm text-gray-600 shrink-0">
-                          Start:
+                          <i class="ki-filled ki-calendar"></i>
                          </span>
                          <div class="text-sm text-gray-900">
                           ${formattedStart}
@@ -141,33 +142,31 @@
                         </div>
                         <div class="flex items-center gap-2.5">
                          <span class="text-sm text-gray-600 shrink-0">
-                          End:
+                          <i class="ki-filled ki-user"></i>
                          </span>
                          <div class="text-sm text-gray-900">
-                          ${formattedEnd}
+                          ${data.message.instructor}
                          </div>
                         </div>
                         <div class="flex items-center gap-2.5">
                          <span class="text-sm text-gray-600 shrink-0">
-                          Category:
+                          <i class="ki-filled ki-time"></i>
                          </span>
                          <div class="text-sm text-gray-900">
-                          ${data.message.event_category}
+                          ${data.message.from_time} - ${data.message.to_time}
                          </div>
                         </div>
                         <div class="flex items-center gap-2.5">
                          <span class="text-sm text-gray-600 shrink-0">
-                          Description:
+                          <i class="ki-filled ki-book"></i>
                          </span>
+                         <div class="text-sm text-gray-900">
+                          ${data.message.student_group}
+                         </div>
                         </div>
                        </div>
-                       <div class="text-sm text-gray-800">
-                        ${data.message.description} 
-                       </div>                      
-                      </div>
-
                     `;
-                    const modalEl = KTDom.getElement('#eventModal');
+                    const modalEl = KTDom.getElement('#scheduleModal');
                     const modal = KTModal.getInstance(modalEl);
                     modal?.show();
                 })
@@ -182,5 +181,5 @@
 {% endblock %}
 
 {% block welcome_link %}
-{% include "templates/includes/modal/events.html" %}
+{% include "templates/includes/modal/schedule.html" %}
 {% endblock %}

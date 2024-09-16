@@ -575,11 +575,14 @@ def get_course_schedule(course, academic_term):
     # Transforming the data to match FullCalendar's event format
     event_list = []
     for event in events:
+        start_datetime = f"{event.schedule_date} {event.from_time}"
+        end_datetime = f"{event.schedule_date} {event.to_time}"
+        
         event_list.append({
             'id': event.name,
             'title': event.title,
-            'start': event.schedule_date,
-            'end': event.schedule_date,
+            'start': start_datetime,
+            'end': end_datetime,
             'color': set_hex_color(event)  # Set color based on the class_schedule_color
         })
 
@@ -627,15 +630,93 @@ def get_section_schedule(student_group, academic_term):
     # Transforming the data to match FullCalendar's event format
     event_list = []
     for event in events:
+        start_datetime = f"{event.schedule_date} {event.from_time}"
+        end_datetime = f"{event.schedule_date} {event.to_time}"
+        
         event_list.append({
             'id': event.name,
             'title': event.title,
-            'start': event.schedule_date,
-            'end': event.schedule_date,
+            'start': start_datetime,
+            'end': end_datetime,
             'color': set_hex_color(event)  # Set color based on the class_schedule_color
         })
 
     return {'message': event_list}
+
+@frappe.whitelist(allow_guest=True)
+def get_teacher_schedule(instructor, academic_term):
+    events = frappe.get_all(
+        "Course Schedule",
+        fields=[
+            "schedule_date",
+            "room",
+            "class_schedule_color",
+            "course",
+            "custom_academic_year",
+            "custom_academic_term",
+            "from_time",
+            "to_time",
+            "instructor",
+            "title",
+            "name",
+            "student_group"
+        ],
+        filters={"instructor": instructor, "custom_academic_term": academic_term}
+    )
+    
+    # Function to set hex color based on the class_schedule_color
+    def set_hex_color(event):
+        colors = {
+            "blue": "#449CF0",
+            "green": "#29CD42",
+            "red": "#CB2929",
+            "orange": "#EC864B",
+            "yellow": "#FFFF00",
+            "teal": "#008080",
+            "violet": "#805df0",
+            "cyan": "#00FFFF",
+            "amber": "#FFBF00",
+            "pink": "#f553b7",
+            "purple": "#af4ff0",
+        }
+        return colors.get(event.class_schedule_color, "#29CD42")  # Default to green
+
+    # Transforming the data to match FullCalendar's event format
+    event_list = []
+    for event in events:
+        start_datetime = f"{event.schedule_date} {event.from_time}"
+        end_datetime = f"{event.schedule_date} {event.to_time}"
+        
+        event_list.append({
+            'id': event.name,
+            'title': event.title,
+            'start': start_datetime,
+            'end': end_datetime,
+            'color': set_hex_color(event)  # Set color based on the class_schedule_color
+        })
+
+    return {'message': event_list}
+
+@frappe.whitelist(allow_guest=True)
+def get_schedule_details(event_id):
+    # Fetch the event details based on the event ID (name)
+    event = frappe.get_doc("Course Schedule", event_id)
+    
+    # Return relevant event details
+    return {
+        'id': event.name,
+        'title': event.title,
+        'start': event.schedule_date,
+        'from_time': event.from_time,
+        'to_time': event.to_time,
+        'color': event.class_schedule_color,
+        'room': event.room,
+        'course': event.course,
+        'custom_academic_year': event.custom_academic_year,
+        'custom_academic_term': event.custom_academic_term,
+        "instructor": event.instructor,
+        "student_group": event.student_group
+    }
 
 @frappe.whitelist()
 def get_order_details(order_name):

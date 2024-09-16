@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block headnav_link %}
-    {% include "templates/includes/headnav/edu_headnav2.html" %}
+    {% include "templates/includes/headnav/edu_headnav3.html" %}
 {% endblock %}
 
 {% block content %}
@@ -43,9 +43,8 @@
          </h3>
         </div>
         <div class="card-body">
-         <div data-datatable="true" data-datatable-page-size="10">
           <div class="scrollable-x-auto">
-           <table class="table table-auto table-border" data-datatable-table="true">
+           <table class="table table-auto" data-datatable-table="true">
             <thead>
              <tr>
               <th class="min-w-[150px]">
@@ -206,21 +205,6 @@
             </tbody>
            </table>
           </div>
-          <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
-           <div class="flex items-center gap-2 order-2 md:order-1">
-            Show
-            <select class="select select-sm w-16" data-datatable-size="true" name="perpage">
-            </select>
-            per page
-           </div>
-           <div class="flex items-center gap-4 order-1 md:order-2">
-            <span data-datatable-info="true">
-            </span>
-            <div class="pagination" data-datatable-pagination="true">
-            </div>
-           </div>
-          </div>
-         </div>
         </div>
        </div>
       </div>

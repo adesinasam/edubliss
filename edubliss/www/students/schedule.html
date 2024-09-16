@@ -5,10 +5,30 @@
 {% endblock %}
 
 {% block custom_link %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.4.2/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.4.2/main.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+    <style>
+      body {
+        background: #edf2f7;
+      }
+      .fc-event {
+        cursor: pointer;
+      }
+      .fc-toolbar-title {
+        font-weight: bold;
+        color: gray-600;
+      }
+
+      /* Responsive styling for the month header */
+      @media (max-width: 600px) {
+        .fc-toolbar-title {
+          font-size: 1.3rem !important; /* Reduce font size for mobile */
+        }
+        .fc-button {
+          font-size: 0.8rem !important; /* Optionally reduce button font size */
+        }
+      }
+    </style>
 {% endblock %}
 
 {% block headnav_link %}
@@ -46,12 +66,8 @@
      <!-- end: container -->
      <!-- begin: container -->
      <div class="container-fixed">
-      <div class="grid gap-5 lg:gap-7.5">
-       <div class="card card-grid min-w-full">
-        <div class="card-body">
-            <div id="calendar"  class="bg-secondary text-gray-900 text-sm rounded-lg shadow-md" style="width: 100%; height: 600px; border: 0px solid #000;"></div>
-        </div>
-       </div>
+      <div class="card grid gap-5 lg:gap-7.5">
+        <div id="calendar"  class="bg-secondary text-gray-900 text-sm rounded-lg shadow-md" style="width: 100%; height: 600px; border: 0px solid #000;"></div>
       </div>
      </div>
      <!-- end: container -->
@@ -63,13 +79,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            plugins: [ 'dayGrid' ],
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridDay,dayGridWeek,dayGridMonth'
-            },
-            defaultView: 'dayGridMonth', // Default view on page load
+            initialView: 'dayGridMonth', // Default view on page load
             editable: true,
             events: function(fetchInfo, successCallback, failureCallback) {
                 fetch('/api/method/edubliss.api.get_section_schedule?student_group={{ sections }}&academic_term={{ acadterm }}', {
@@ -86,9 +96,90 @@
                     console.error('Error fetching events:', error);
                     failureCallback(error);
                 });
+            },
+            eventClick: function(info) {
+                // Open a modal or navigate to a detail page using the event ID
+                var eventId = info.event.id;
+
+                // Example: Open modal with more event details
+                fetch(`/api/method/edubliss.api.get_schedule_details?event_id=${eventId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+
+                    // Helper function to format date
+                    function formatDate(dateStr) {
+                        const options = { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' };
+                        return new Intl.DateTimeFormat('en-GB', options).format(new Date(dateStr));
+                    }
+
+                    // Format start and end dates
+                    const formattedStart = formatDate(data.message.start);
+
+                    // You can now populate the modal with event details
+                    document.getElementById('eventModalTitle').innerHTML = `
+                        <h3 class="modal-title"style="color: ${data.message.color}">
+                         ${data.message.title}
+                        </h3>
+                        <button class="btn btn-xs btn-icon btn-light" data-modal-dismiss="true">
+                         <i class="ki-outline ki-cross">
+                         </i>
+                        </button>       
+                    `;
+                    document.getElementById('eventModalBody').innerHTML = `
+                       <div class="flex flex-col gap-3.5 mb-3.5">
+                        <div class="flex items-center gap-2.5">
+                         <span class="text-sm text-gray-600 shrink-0">
+                          <i class="ki-filled ki-calendar"></i>
+                         </span>
+                         <div class="text-sm text-gray-900">
+                          ${formattedStart}
+                         </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                         <span class="text-sm text-gray-600 shrink-0">
+                          <i class="ki-filled ki-user"></i>
+                         </span>
+                         <div class="text-sm text-gray-900">
+                          ${data.message.instructor}
+                         </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                         <span class="text-sm text-gray-600 shrink-0">
+                          <i class="ki-filled ki-time"></i>
+                         </span>
+                         <div class="text-sm text-gray-900">
+                          ${data.message.from_time} - ${data.message.to_time}
+                         </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                         <span class="text-sm text-gray-600 shrink-0">
+                          <i class="ki-filled ki-book"></i>
+                         </span>
+                         <div class="text-sm text-gray-900">
+                          ${data.message.student_group}
+                         </div>
+                        </div>
+                       </div>
+                    `;
+                    const modalEl = KTDom.getElement('#scheduleModal');
+                    const modal = KTModal.getInstance(modalEl);
+                    modal?.show();
+                })
+                .catch(error => {
+                    console.error('Error fetching event details:', error);
+                });
             }
         });
         calendar.render();
     });
 </script>
+{% endblock %}
+
+{% block welcome_link %}
+{% include "templates/includes/modal/schedule.html" %}
 {% endblock %}
