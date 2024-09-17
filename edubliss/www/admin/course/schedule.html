@@ -61,6 +61,8 @@
         </div>
        </div>
        <div class="flex items-center gap-2.5">
+         <!-- Add the button for toggling weekends -->
+         <div align="right"><button class="btn btn-secondary btn-xs text-sm" id="toggleWeekends">Show Weekends</button></div>
        </div>
       </div>
      </div>
@@ -79,17 +81,20 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
+        var showWeekends = false; // Initially hide weekends
+
         var calendar = new FullCalendar.Calendar(calendarEl, {
             headerToolbar: {
-                left: 'title',
-                right: 'prev,next today'
+                left: 'prev,next',
+                center: 'title',
+                right: 'today timeGridWeek,timeGridDay' // View options
             },
             initialView: 'timeGridWeek', // Week view with time slots
             slotMinTime: "07:00:00", // Start showing time slots from 6 AM
             slotMaxTime: "17:00:00", // End showing time slots at 10 PM
-            weekends: false, // Hide weekends
             allDaySlot: false, // Disable the 'all-day' slot
             editable: true,
+            weekends: showWeekends, // Initially hide weekends
             events: function(fetchInfo, successCallback, failureCallback) {
                 const course = "{{ docname }}"; // Ensure this is rendering correctly
                 const academic_term = "{{ acadterm }}"; // Ensure this is rendering correctly
@@ -190,6 +195,15 @@
                 });
             }
         });
+
+        // Button to toggle weekends
+        var toggleWeekendBtn = document.getElementById('toggleWeekends');
+        toggleWeekendBtn.addEventListener('click', function() {
+            showWeekends = !showWeekends; // Toggle weekends visibility
+            calendar.setOption('weekends', showWeekends); // Update calendar
+            toggleWeekendBtn.textContent = showWeekends ? 'Hide Weekends' : 'Show Weekends'; // Update button text
+        });
+
         calendar.render();
     });
 </script>
