@@ -16,16 +16,19 @@
       }
       .fc-toolbar-title {
         font-weight: bold;
-        color: gray-600;
+        font-size: 1.3rem !important; /* Reduce font size for mobile */
+      }
+      .fc-button {
+        font-size: 0.8rem !important; /* Optionally reduce button font size */
       }
 
       /* Responsive styling for the month header */
       @media (max-width: 600px) {
         .fc-toolbar-title {
-          font-size: 1.3rem !important; /* Reduce font size for mobile */
+          font-size: 0.8rem !important; /* Reduce font size for mobile */
         }
         .fc-button {
-          font-size: 0.8rem !important; /* Optionally reduce button font size */
+          font-size: 0.6rem !important; /* Optionally reduce button font size */
         }
       }
     </style>
@@ -65,7 +68,7 @@
      </div>
      <!-- end: container -->
      <!-- begin: container -->
-     <div class="container-fixed">
+     <div class="container-fluid">
       <div class="card grid gap-5 lg:gap-7.5">
         <div id="calendar"  class="bg-secondary text-gray-900 text-sm rounded-lg shadow-md" style="width: 100%; height: 600px; border: 0px solid #000;"></div>
       </div>
@@ -79,7 +82,15 @@
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth', // Default view on page load
+            headerToolbar: {
+                left: 'title',
+                right: 'prev,next today'
+            },
+            initialView: 'timeGridWeek', // Week view with time slots
+            slotMinTime: "07:00:00", // Start showing time slots from 6 AM
+            slotMaxTime: "17:00:00", // End showing time slots at 10 PM
+            weekends: false, // Hide weekends
+            allDaySlot: false, // Disable the 'all-day' slot
             editable: true,
             events: function(fetchInfo, successCallback, failureCallback) {
                 fetch('/api/method/edubliss.api.get_section_schedule?student_group={{ sections }}&academic_term={{ acadterm }}', {

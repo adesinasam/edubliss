@@ -5,6 +5,7 @@ from frappe.email.doctype.email_group.email_group import add_subscribers
 from frappe.model.mapper import get_mapped_doc
 from frappe.utils import cstr, flt, getdate, nowdate
 from frappe.utils.dateutils import get_dates_from_timegrain
+from datetime import datetime
 
 
 @frappe.whitelist()
@@ -577,12 +578,20 @@ def get_course_schedule(course, academic_term):
     for event in events:
         start_datetime = f"{event.schedule_date} {event.from_time}"
         end_datetime = f"{event.schedule_date} {event.to_time}"
+
+        # Convert to datetime object
+        startdatetime_obj = datetime.strptime(start_datetime, "%Y-%m-%d %H:%M:%S")
+        enddatetime_obj = datetime.strptime(end_datetime, "%Y-%m-%d %H:%M:%S")
+
+        # Convert to ISO 8601 format
+        formatted_startdatetime = startdatetime_obj.isoformat()
+        formatted_endstartdatetime = enddatetime_obj.isoformat()
         
         event_list.append({
             'id': event.name,
             'title': event.title,
-            'start': start_datetime,
-            'end': end_datetime,
+            'start': formatted_startdatetime,
+            'end': formatted_endstartdatetime,
             'color': set_hex_color(event)  # Set color based on the class_schedule_color
         })
 
@@ -632,12 +641,16 @@ def get_section_schedule(student_group, academic_term):
     for event in events:
         start_datetime = f"{event.schedule_date} {event.from_time}"
         end_datetime = f"{event.schedule_date} {event.to_time}"
-        
+
+        # Convert to datetime object
+        startdatetime_obj = datetime.strptime(start_datetime, "%Y-%m-%d %H:%M:%S")
+        enddatetime_obj = datetime.strptime(end_datetime, "%Y-%m-%d %H:%M:%S")
+
         event_list.append({
             'id': event.name,
             'title': event.title,
-            'start': start_datetime,
-            'end': end_datetime,
+            'start': startdatetime_obj,
+            'end': enddatetime_obj,
             'color': set_hex_color(event)  # Set color based on the class_schedule_color
         })
 
@@ -683,15 +696,21 @@ def get_teacher_schedule(instructor, academic_term):
 
     # Transforming the data to match FullCalendar's event format
     event_list = []
+    # Transforming the data to match FullCalendar's event format
+    event_list = []
     for event in events:
         start_datetime = f"{event.schedule_date} {event.from_time}"
         end_datetime = f"{event.schedule_date} {event.to_time}"
-        
+
+        # Convert to datetime object
+        startdatetime_obj = datetime.strptime(start_datetime, "%Y-%m-%d %H:%M:%S")
+        enddatetime_obj = datetime.strptime(end_datetime, "%Y-%m-%d %H:%M:%S")
+
         event_list.append({
             'id': event.name,
             'title': event.title,
-            'start': start_datetime,
-            'end': end_datetime,
+            'start': startdatetime_obj,
+            'end': enddatetime_obj,
             'color': set_hex_color(event)  # Set color based on the class_schedule_color
         })
 
