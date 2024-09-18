@@ -64,7 +64,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 lg:gap-7.5">
          {% for course in lmscourses %}
          <div class="card border-0">
-          <img alt="" class="w-full h-[170px] rounded-t-xl" src="{% if course.image  %}{{course.image}}{% else %}assets/edubliss/dist/media/file-types/image.svg{% endif %}"/>
+          <img alt="" class="w-full h-[170px] rounded-t-xl" src="{% if course.image  %}{{course.image}}{% else %}assets/edubliss/dist/media/images/600x400/25.jpg{% endif %}"/>
           <div class="card-border card-rounded-b flex flex-col gap-2 px-5 py-4.5">
            <a class="text-md font-semibold text-gray-900 hover:text-primary" {% if course.published %}href="/lms/courses/{{ course.name }}"{% endif %}>
             {{course.title}}
@@ -140,7 +140,7 @@
          <div class="card p-5">
           <div class="flex flex-wrap justify-between items-center gap-7">
            <div class="flex flex-wrap items-center gap-5">
-            <img alt="" class="rounded-md max-h-20 max-w-full shrink-0" src="{% if course.image  %}{{course.image}}{% else %}assets/edubliss/dist/media/file-types/image.svg{% endif %}"/>
+            <img alt="" class="rounded-md max-h-20 max-w-full shrink-0" src="{% if course.image  %}{{course.image}}{% else %}assets/edubliss/dist/media/images/600x400/25.jpg{% endif %}"/>
             <div class="grid grid-col gap-1">
              <a class="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" {% if course.published %}href="/lms/courses/{{ course.name }}"{% endif %}>
               {{course.title}}
