@@ -556,23 +556,6 @@ def get_course_schedule(course, academic_term):
         filters={"course": course, "custom_academic_term": academic_term}
     )
     
-    # Function to set hex color based on the class_schedule_color
-    def set_hex_color(event):
-        colors = {
-            "blue": "#449CF0",
-            "green": "#29CD42",
-            "red": "#CB2929",
-            "orange": "#EC864B",
-            "yellow": "#FFFF00",
-            "teal": "#008080",
-            "violet": "#805df0",
-            "cyan": "#00FFFF",
-            "amber": "#FFBF00",
-            "pink": "#f553b7",
-            "purple": "#af4ff0",
-        }
-        return colors.get(event.class_schedule_color, "#29CD42")  # Default to green
-
     # Transforming the data to match FullCalendar's event format
     event_list = []
     for event in events:
@@ -589,7 +572,7 @@ def get_course_schedule(course, academic_term):
         
         event_list.append({
             'id': event.name,
-            'title': event.title,
+            'title': event.course,
             'start': formatted_startdatetime,
             'end': formatted_endstartdatetime,
             'color': set_hex_color(event)  # Set color based on the class_schedule_color
@@ -618,23 +601,6 @@ def get_section_schedule(student_group, academic_term):
         ],
         filters={"student_group": student_group, "custom_academic_term": academic_term}
     )
-    
-    # Function to set hex color based on the class_schedule_color
-    def set_hex_color(event):
-        colors = {
-            "blue": "#449CF0",
-            "green": "#29CD42",
-            "red": "#CB2929",
-            "orange": "#EC864B",
-            "yellow": "#FFFF00",
-            "teal": "#008080",
-            "violet": "#805df0",
-            "cyan": "#00FFFF",
-            "amber": "#FFBF00",
-            "pink": "#f553b7",
-            "purple": "#af4ff0",
-        }
-        return colors.get(event.class_schedule_color, "#29CD42")  # Default to green
 
     # Transforming the data to match FullCalendar's event format
     event_list = []
@@ -648,7 +614,7 @@ def get_section_schedule(student_group, academic_term):
 
         event_list.append({
             'id': event.name,
-            'title': event.title,
+            'title': event.course,
             'start': startdatetime_obj,
             'end': enddatetime_obj,
             'color': set_hex_color(event)  # Set color based on the class_schedule_color
@@ -677,23 +643,6 @@ def get_teacher_schedule(instructor, academic_term):
         filters={"instructor": instructor, "custom_academic_term": academic_term}
     )
     
-    # Function to set hex color based on the class_schedule_color
-    def set_hex_color(event):
-        colors = {
-            "blue": "#449CF0",
-            "green": "#29CD42",
-            "red": "#CB2929",
-            "orange": "#EC864B",
-            "yellow": "#FFFF00",
-            "teal": "#008080",
-            "violet": "#805df0",
-            "cyan": "#00FFFF",
-            "amber": "#FFBF00",
-            "pink": "#f553b7",
-            "purple": "#af4ff0",
-        }
-        return colors.get(event.class_schedule_color, "#29CD42")  # Default to green
-
     # Transforming the data to match FullCalendar's event format
     event_list = []
     # Transforming the data to match FullCalendar's event format
@@ -708,13 +657,30 @@ def get_teacher_schedule(instructor, academic_term):
 
         event_list.append({
             'id': event.name,
-            'title': event.title,
+            'title': event.course,
             'start': startdatetime_obj,
             'end': enddatetime_obj,
             'color': set_hex_color(event)  # Set color based on the class_schedule_color
         })
 
     return {'message': event_list}
+
+# Function to set hex color based on the class_schedule_color
+def set_hex_color(event):
+    colors = {
+        "blue": "#449CF0",
+        "green": "#00d420",
+        "red": "#CB2929",
+        "orange": "#EC864B",
+        "yellow": "#dbdb02",
+        "teal": "#008080",
+        "violet": "#805df0",
+        "cyan": "#00dede",
+        "amber": "#f2b600",
+        "pink": "#f051b3",
+        "purple": "#af4ff0",
+    }
+    return colors.get(event.class_schedule_color, "#00d420")  # Default to green
 
 @frappe.whitelist(allow_guest=True)
 def get_schedule_details(event_id):

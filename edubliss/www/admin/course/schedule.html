@@ -11,12 +11,22 @@
       body {
         background: #edf2f7;
       }
+      /* Calendar headers (e.g., "Sunday", "Monday") */
+      .fc {
+        font-family: 'Arial', sans-serif; /* Custom font family */
+        color: #929496 !important; /* Darker color for day headers */
+      }
       .fc-event {
         cursor: pointer;
+        font-size: 0.65rem !important; /* Reduce font size for mobile */
+        line-height: 1.1; /* Adjust line height for event titles */
+        padding: 0.3rem; /* Add some padding inside the event */
+        border-radius: 4px; /* Round the corners of the event */
       }
       .fc-toolbar-title {
-        font-weight: bold;
+        font-weight: 300;
         font-size: 1.3rem !important; /* Reduce font size for mobile */
+        color: black !important;
       }
       .fc-button {
         font-size: 0.8rem !important; /* Optionally reduce button font size */
@@ -142,7 +152,7 @@
 
                     // You can now populate the modal with event details
                     document.getElementById('eventModalTitle').innerHTML = `
-                        <h3 class="modal-title"style="color: ${data.message.color}">
+                        <h3 class="modal-title" style="color: ${data.message.color}">
                          ${data.message.title}
                         </h3>
                         <button class="btn btn-xs btn-icon btn-light" data-modal-dismiss="true">
