@@ -45,18 +45,18 @@ def get_context(context):
     if edubliss_session:
         context.edublisession = edubliss_session
         company = edubliss_session.school
-        acadterm = edubliss_session.academic_term
+        acadyear = edubliss_session.academic_year
     else:
         context.edublisession = _("Welcome")  # Placeholder message
         company = None
-        acadterm = None
+        acadyear = None
 
     # Fetch necessary data
     context.companys = frappe.call('edubliss.api.get_company')
     context.acadyears = frappe.call('edubliss.api.get_academic_year')
     context.acadterms = frappe.call('edubliss.api.get_academic_term')
     context.programs = frappe.call('edubliss.api.get_programs', company=company)
-    context.sections = frappe.call('edubliss.api.get_sections', company=company, academic_term=acadterm)
+    context.sections = frappe.call('edubliss.api.get_sections', company=company, academic_year=acadyear)
     context['get_section_teachers'] = get_section_teachers
 
     # Fetch courses based on the selected section, if any

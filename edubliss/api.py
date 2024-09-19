@@ -280,7 +280,7 @@ def get_programs(company=None):
         )
 
 @frappe.whitelist()
-def get_sections(company=None, academic_term=None):
+def get_sections(company=None, academic_year=None):
     student_groups = frappe.qb.DocType("Student Group")
     programs = frappe.qb.DocType("Program")
 
@@ -290,7 +290,7 @@ def get_sections(company=None, academic_term=None):
         .on(student_groups.program == programs.name)
         .select('*')
         .where(programs.custom_school == company)
-        .where(student_groups.academic_term == academic_term)
+        .where(student_groups.academic_year == academic_year)
         .where(student_groups.group_based_on == 'Batch')
         .run(as_dict=1)
     )
@@ -536,7 +536,7 @@ def get_course_schedule_for_student(program_name, student_groups):
     return schedule
 
 @frappe.whitelist(allow_guest=True)
-def get_course_schedule(course, academic_term):
+def get_course_schedule(course, academic_year):
     events = frappe.get_all(
         "Course Schedule",
         fields=[
@@ -553,7 +553,7 @@ def get_course_schedule(course, academic_term):
             "name",
             "color"
         ],
-        filters={"course": course, "custom_academic_term": academic_term}
+        filters={"course": course, "custom_academic_year": academic_year}
     )
     
     # Transforming the data to match FullCalendar's event format
@@ -582,7 +582,7 @@ def get_course_schedule(course, academic_term):
 
 
 @frappe.whitelist(allow_guest=True)
-def get_section_schedule(student_group, academic_term):
+def get_section_schedule(student_group, academic_year):
     events = frappe.get_all(
         "Course Schedule",
         fields=[
@@ -599,7 +599,7 @@ def get_section_schedule(student_group, academic_term):
             "name",
             "student_group"
         ],
-        filters={"student_group": student_group, "custom_academic_term": academic_term}
+        filters={"student_group": student_group, "custom_academic_year": academic_year}
     )
 
     # Transforming the data to match FullCalendar's event format
@@ -623,7 +623,7 @@ def get_section_schedule(student_group, academic_term):
     return {'message': event_list}
 
 @frappe.whitelist(allow_guest=True)
-def get_teacher_schedule(instructor, academic_term):
+def get_teacher_schedule(instructor, academic_year):
     events = frappe.get_all(
         "Course Schedule",
         fields=[
@@ -640,7 +640,7 @@ def get_teacher_schedule(instructor, academic_term):
             "name",
             "student_group"
         ],
-        filters={"instructor": instructor, "custom_academic_term": academic_term}
+        filters={"instructor": instructor, "custom_academic_year": academic_year}
     )
     
     # Transforming the data to match FullCalendar's event format

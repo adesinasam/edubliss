@@ -55,6 +55,7 @@ fixtures = [{
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 doctype_js = {
+    "LMS Batch": "public/js/pages/lms_batch.js",
     "Program": "public/js/pages/program.js",
     "Course Scheduling Tool": "public/js/pages/course_scheduling_tool.js",
     "Fee Structure": "public/js/pages/fee_structure.js",

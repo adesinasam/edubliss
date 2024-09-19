@@ -111,19 +111,19 @@
                 </span>
                </span>
               </th>
-              <th class="min-w-[300px]">
-               <span class="sort asc">
+              <th class="min-w-[200px]">
+               <span class="sort">
                 <span class="sort-label">
-                 Section Teacher
+                 Academic Year
                 </span>
                 <span class="sort-icon">
                 </span>
                </span>
               </th>
-              <th class="min-w-[200px]">
-               <span class="sort">
+              <th class="min-w-[300px]">
+               <span class="sort asc">
                 <span class="sort-label">
-                 Academic Term
+                 Section Teacher
                 </span>
                 <span class="sort-icon">
                 </span>
@@ -166,12 +166,12 @@
                {{ section.batch }}
               </td>
               <td>
-               {{ get_section_teachers(section.student_group_name) }}
+               <div class="flex justify-center">
+               {{ section.academic_year }}
+               </div>
               </td>
               <td>
-               <div class="flex justify-center">
-               {{ section.academic_term }}
-               </div>
+               {{ get_section_teachers(section.student_group_name) }}
               </td>
               <td>
                <div class="menu" data-menu="true">

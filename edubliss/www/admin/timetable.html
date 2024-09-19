@@ -19,7 +19,8 @@
       .fc-event {
         cursor: pointer;
         font-size: 0.65rem !important; /* Reduce font size for mobile */
-        line-height: 1.1; /* Adjust line height for event titles */
+        font-weight: 600;
+        line-height: 1.2; /* Adjust line height for event titles */
         padding: 0.3rem; /* Add some padding inside the event */
         border-radius: 4px; /* Round the corners of the event */
       }
@@ -109,7 +110,7 @@
                           <br>
                           Teachers: {{ get_section_teachers(section.student_group_name) }}
                           <br>
-                          Term: {{ section.academic_term }}
+                          Year: {{ section.academic_year }}
                         </div>
                        </div>
                        </div>
@@ -163,7 +164,7 @@
             editable: true,
             weekends: showWeekends, // Initially hide weekends
             events: function(fetchInfo, successCallback, failureCallback) {
-                fetch('/api/method/edubliss.api.get_section_schedule?student_group={{ selected_section }}&academic_term={{ acadterm }}', {
+                fetch('/api/method/edubliss.api.get_section_schedule?student_group={{ selected_section }}&academic_year={{ acadyear }}', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

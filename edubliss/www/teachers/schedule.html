@@ -19,7 +19,8 @@
       .fc-event {
         cursor: pointer;
         font-size: 0.65rem !important; /* Reduce font size for mobile */
-        line-height: 1.1; /* Adjust line height for event titles */
+        font-weight: 600;
+        line-height: 1.2; /* Adjust line height for event titles */
         padding: 0.3rem; /* Add some padding inside the event */
         border-radius: 4px; /* Round the corners of the event */
       }
@@ -108,7 +109,7 @@
             editable: true,
             weekends: showWeekends, // Initially hide weekends
             events: function(fetchInfo, successCallback, failureCallback) {
-                fetch('/api/method/edubliss.api.get_teacher_schedule?instructor={{ docname }}&academic_term={{ acadterm }}', {
+                fetch('/api/method/edubliss.api.get_teacher_schedule?instructor={{ docname }}&academic_year={{ acadyear }}', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
