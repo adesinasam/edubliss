@@ -104,7 +104,6 @@
             </div>
             <div class="flex gap-3 items-center">
              <div class="flex gap-1 items-center">
-              {% if "Academics User" in user_roles %}
                {% if course.published %}
                <a class="text-md font-semibold text-gray-900 hover:text-primary" href="/lms/courses/{{ course.name }}" data-tooltip="#lms_tooltip">
                 <i class="ki-filled ki-eye text-base text-gray-500">
@@ -114,9 +113,9 @@
                 </div>
                </a>
                {% endif %}
-              {% endif %}
              </div>
              <div class="flex gap-1 items-center">
+              {% if "Academics User" in user_roles %}
               <a class="text-md font-semibold text-gray-900 hover:text-primary" href="/app/lms-course/{{ course.name }}" data-tooltip="#sects_tooltip"  data-tooltip-placement="top">
                 <i class="ki-filled ki-pencil text-base text-gray-500">
                 </i>
@@ -124,6 +123,7 @@
                  Edit
                 </div>
               </a>  
+              {% endif %}
              </div>
             </div>
            </div>
@@ -181,7 +181,6 @@
               </span>
                {% endif %}
             </div>
-              {% if "Academics User" in user_roles %}
                {% if course.published %}
             <a class="btn btn-icon btn-light btn-clear btn-sm" href="/lms/courses/{{ course.name }}" data-tooltip="#lms2_tooltip">
                 <i class="ki-filled ki-eye text-base text-gray-500">
@@ -191,7 +190,7 @@
                 </div>
             </a>
                {% endif %}
-              {% endif %}
+              {% if "Academics User" in user_roles %}
             <a class="btn btn-icon btn-light btn-clear btn-sm" href="/app/lms-course/{{ course.name }}" data-tooltip="#sects2_tooltip"  data-tooltip-placement="top">
                 <i class="ki-filled ki-pencil text-base text-gray-500">
                 </i>
@@ -199,6 +198,7 @@
                  Edit
                 </div>
             </a>  
+              {% endif %}
            </div>
           </div>
          </div>

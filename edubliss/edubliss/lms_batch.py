@@ -17,6 +17,21 @@ def get_courses(program):
     )
 
 @frappe.whitelist()
+def get_users_for_student_group(doctype, txt, searchfield, start, page_len, filters):
+    # Get the student group from the filters
+    student_group = filters.get("student_group")
+    
+    # Fetch students from the selected Student Group
+    students = frappe.get_all("Student Group Student", filters={"parent": student_group}, fields=["student"])
+    student_ids = [student.student for student in students]
+    
+    # Fetch user_ids from the Student doctype
+    user_ids = frappe.get_all("Student", filters={"name": ["in", student_ids]}, fields=["user"])
+
+    # Return the user_ids in the format required by Frappe's query function (name and label)
+    return [[user.user, user.user] for user in user_ids]
+
+@frappe.whitelist()
 @frappe.validate_and_sanitize_search_inputs
 def get_program_courses(doctype, txt, searchfield, start, page_len, filters):
     if not filters.get("program"):
