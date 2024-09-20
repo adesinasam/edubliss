@@ -98,6 +98,7 @@ website_route_rules = [
     {"from_route": "/admin/course/overview/<docname>", "to_route": "admin/course/overview"},
     {"from_route": "/admin/course/students/<docname>", "to_route": "admin/course/students"},
     {"from_route": "/admin/course/outline/<docname>", "to_route": "admin/course/outline"},
+    {"from_route": "/admin/course/assessment/<docname>", "to_route": "admin/course/assessment"},
     {"from_route": "/admin/course/schedule/<docname>", "to_route": "admin/course/schedule"},
 ]
 

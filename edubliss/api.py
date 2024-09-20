@@ -31,7 +31,7 @@ def get_student_program(student=None, academic_year=None, academic_term=None):
     return frappe.get_doc('Program Enrollment', filters)
 
 @frappe.whitelist()
-def get_student_groups(student, program=None):
+def get_student_groups(student, program=None, academic_year=None):
     student_group = frappe.qb.DocType("Student Group")
     student_group_students = frappe.qb.DocType("Student Group Student")
 
@@ -42,6 +42,7 @@ def get_student_groups(student, program=None):
         .select(student_group_students.parent)
         .where(student_group_students.student == student)
         .where(student_group.program == program)
+        .where(student_group.academic_year == academic_year)
         .where(student_group.disabled == 0)
         .run(as_dict=1)
     )
