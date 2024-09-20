@@ -61,7 +61,7 @@
        <!-- end: toolbar -->
        <!-- begin: cards -->
        <div id="works_cards">
-        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 lg:gap-7.5">
+        <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-5 lg:gap-7.5">
          {% for course in lmscourses %}
          <div class="card border-0">
           <img alt="" class="w-full h-[170px] rounded-t-xl" src="{% if course.image  %}{{course.image}}{% else %}assets/edubliss/dist/media/images/600x400/25.jpg{% endif %}"/>

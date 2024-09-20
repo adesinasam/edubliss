@@ -1,0 +1,219 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Course Outline") }}
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav3.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+
+    {% include "templates/includes/course_nav.html" %}
+
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-gray-900">
+         {{docname}}
+        </h1>
+        <div class="flex items-center flex-wrap gap-1.5 font-medium">
+         <span class="text-md text-gray-600">
+          Assessment Default
+         </span>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+       <div class="card card-grid min-w-full">
+        <!-- begin: grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
+         <div class="col-span-1">
+          <div class="grid gap-5 lg:gap-7.5">
+           <div class="card h-full border-0">
+            <div class="card-header">
+              <h3 class="card-title">Assessment Structure</h3>
+              <a href="/app/course/{{courses.name}}">
+                <i class="ki-solid ki-abstract-10 text-sm" data-tooltip="#program_tooltip" data-tooltip-placement="bottom"></i>
+                <div class="hidden rounded shadow-default p-3 bg-light border border-gray-300 text-gray-800 text-xs font-normal" id="program_tooltip">Edit Assessment Structure</div>
+              </a>
+            </div>
+            <div class="card-body">
+             <div class="scrollable-x-auto">
+              <table class="table table-auto">
+               <tbody>
+               {% if criterias %}
+                {% for criteria in criterias %}
+                <tr>
+                 <td>
+                  {{ criteria.assessment_criteria or ""}}
+                 </td>
+                 <td>
+                  {{ criteria.weightage or ""}}%
+                 </td>
+                 <td>
+                   <div class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px">
+                    <button class="btn btn-secondary btn-xs">
+                     <i class="ki-filled ki-setting text-gray-600 text-2xl">
+                     </i>
+                    </button>
+                   </div>
+                 </td>
+                </tr>
+                {% endfor %}
+               {% else %}
+                <tr>
+                 <td colspan="3" class="text-center">No criteria found.</td>
+                </tr>
+               {% endif %}
+               </tbody>
+              </table>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="col-span-2">
+          <div class="flex flex-col gap-5 lg:gap-7.5">
+           <div class="card min-w-full border-0">
+            <div class="card-header flex-wrap gap-2">
+             <h3 class="card-title font-medium text-sm">
+              <!-- Showing {{ student_count }} Students -->
+             </h3>
+            </div>
+            <div class="card-body">
+             <div class="scrollable-x-auto">
+              <table class="table table-auto" data-datatable-table="true">
+               <thead>
+                <tr>
+                 <th class="min-w-[150px]">
+                  <span class="sort asc">
+                   <span class="sort-label">
+                     Date
+                   </span>
+                   <span class="sort-icon">
+                   </span>
+                  </span>
+                 </th>
+                 <th class="min-w-[100px]">
+                  <span class="sort">
+                   <span class="sort-label">
+                     Week
+                   </span>
+                   <span class="sort-icon">
+                   </span>
+                  </span>
+                 </th>
+                 <th class="min-w-[150px]">
+                  <span class="sort">
+                   <span class="sort-label">
+                    Assessment Type
+                   </span>
+                   <span class="sort-icon">
+                   </span>
+                  </span>
+                 </th>
+                 <th class="min-w-[150px]">
+                  <span class="sort">
+                   <span class="sort-label">
+                    Assessment Criteria
+                   </span>
+                   <span class="sort-icon">
+                   </span>
+                  </span>
+                 </th>
+                 <th class="min-w-[200px]">
+                  <span class="sort">
+                   <span class="sort-label">
+                    Topic
+                   </span>
+                   <span class="sort-icon">
+                   </span>
+                  </span>
+                 </th>
+                 <th class="min-w-[150px]">
+                  <span class="sort">
+                   <span class="sort-label">
+                    Max Score
+                   </span>
+                   <span class="sort-icon">
+                   </span>
+                  </span>
+                 </th>
+                 <th class="min-w-[150px]">
+                  <span class="sort">
+                   <span class="sort-label">
+                    Weightage
+                   </span>
+                   <span class="sort-icon">
+                   </span>
+                  </span>
+                 </th>
+                 <th class="w-[60px] text-center">
+                 </th>
+                </tr>
+               </thead>
+               <tbody>
+               {% if structures %}
+                {% for structure in structures %}
+                <tr>
+                 <td>
+                  {{ structure.schedule_date or ""}}
+                 </td>
+                 <td>
+                   {{ structure.week_num or "" }}
+                 </td>
+                 <td>
+                   {{ structure.assessment_type or "" }}
+                 </td>
+                 <td>
+                   {{ structure.assessment_criteria or "" }}
+                 </td>
+                 <td class="min-w-[200px] text-center">
+                   {{ structure.topics or "" }}
+                 </td>
+                 <td>
+                   {{ structure.max_score or "" }}
+                 </td>
+                 <td>
+                   {{ structure.weightage or ""}}
+                 </td>
+                 <td>
+                   <div class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px">
+                    <button class="btn btn-info btn-xs">
+                     <i class="ki-filled ki-eye text-gray-600 text-2xl">
+                     </i>
+                    </button>
+                   </div>
+                 </td>
+                </tr>
+                {% endfor %}
+               {% else %}
+                <tr>
+                 <td colspan="9" class="text-center">No outline found.</td>
+                </tr>
+               {% endif %}
+               </tbody>
+              </table>
+             </div>
+            </div>
+          </div>
+         </div>
+        </div>
+       </div>
+       <!-- end: grid -->
+      </div>
+     </div>
+     <!-- end: container -->
+    </main>
+{% endblock %}

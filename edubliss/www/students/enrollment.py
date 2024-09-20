@@ -84,7 +84,12 @@ def get_context(context):
 
         # Try to fetch the Student Group document and handle errors if it doesn't exist
         try:
-            sections = frappe.call('edubliss.api.get_student_groups', student=docname, program=program_name)
+            sections = frappe.call(
+                'edubliss.api.get_student_groups', 
+                student=docname, 
+                program=program_name, 
+                academic_year=acadyear
+                )
         except Exception as e:
             sections = None  # or set a default value if required        
 
