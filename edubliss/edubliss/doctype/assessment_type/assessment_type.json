@@ -25,12 +25,11 @@
    "in_list_view": 1,
    "label": "Assessment Criteria",
    "options": "Assessment Criteria",
-   "reqd": 1,
-   "unique": 1
+   "reqd": 1
   }
  ],
  "links": [],
- "modified": "2024-09-20 09:21:00.631964",
+ "modified": "2024-09-20 12:06:10.659702",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Assessment Type",
