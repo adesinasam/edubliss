@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-    <main class="grow content pt-5" id="content" role="content">
+    <main class="grow content pt-5 bg-gray-100" id="content" role="content">
      <!-- begin: container -->
      <div class="container-fixed" id="content_container">
      </div>
@@ -21,7 +21,7 @@
      <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
-        <h1 class="text-xl font-semibold leading-none text-gray-900">
+        <h1 class="text-xl font-semibold leading-none text-success">
          {{docname}}
         </h1>
         <div class="flex items-center flex-wrap gap-1.5 font-medium">
@@ -31,7 +31,7 @@
         </div>
        </div>
        <div class="flex items-center gap-2.5">
-        <div class="btn btn-sm btn-primary" href="/app/course-enrollment/new-course-enrollment-">
+        <div class="btn btn-sm btn-secondary text-sm" href="/app/course-enrollment/new-course-enrollment-">
          Enroll Student
         </div>
        </div>
@@ -113,7 +113,7 @@
                <input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/>
               </td>
               <td>
-                 <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/students/profile/{{ student.student }}">
+                 <a class="text-sm text-primary hover:text-primary-active mb-px" href="/students/profile/{{ student.student }}">
                   {{ student.student_name }}
                  </a>
               </td>

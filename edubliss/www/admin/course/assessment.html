@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-    <main class="grow content pt-5" id="content" role="content">
+    <main class="grow content pt-5 bg-gray-100" id="content" role="content">
      <!-- begin: container -->
      <div class="container-fixed" id="content_container">
      </div>
@@ -21,7 +21,7 @@
      <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
-        <h1 class="text-xl font-semibold leading-none text-gray-900">
+        <h1 class="text-xl font-semibold leading-none text-success">
          {{docname}}
         </h1>
         <div class="flex items-center flex-wrap gap-1.5 font-medium">
@@ -30,6 +30,13 @@
          </span>
         </div>
        </div>
+       {% if "Academics User" in user_roles %}
+       <div class="flex items-center gap-2.5">
+        <a class="btn btn-sm btn-secondary text-sm" href="/app/course/{{courses.name}}">
+         Edit Assessment
+        </a>
+       </div>
+       {% endif %}
       </div>
      </div>
      <!-- end: container -->
@@ -42,13 +49,13 @@
           <div class="grid gap-5 lg:gap-7.5">
            <div class="card h-full border-0">
             <div class="card-header">
-              <h3 class="card-title">Assessment Structure</h3>
-              <a href="/app/course/{{courses.name}}">
+              <h3 class="card-title">Assessment Cirteria</h3>
+              <!-- <a href="/app/course/{{courses.name}}">
                 <i class="ki-solid ki-abstract-10 text-sm" data-tooltip="#program_tooltip" data-tooltip-placement="bottom"></i>
                 <div class="hidden rounded shadow-default p-3 bg-light border border-gray-300 text-gray-800 text-xs font-normal" id="program_tooltip">Edit Assessment Structure</div>
-              </a>
+              </a> -->
             </div>
-            <div class="card-body">
+            <div class="card-body scrollable h-[200px] py-0 my-4 pr-4 mr-2">
              <div class="scrollable-x-auto">
               <table class="table table-auto">
                <tbody>
@@ -63,10 +70,10 @@
                  </td>
                  <td>
                    <div class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px">
-                    <button class="btn btn-secondary btn-xs">
+                    <!-- <button class="btn btn-secondary btn-xs">
                      <i class="ki-filled ki-setting text-gray-600 text-2xl">
                      </i>
-                    </button>
+                    </button> -->
                    </div>
                  </td>
                 </tr>
@@ -91,75 +98,28 @@
               <!-- Showing {{ student_count }} Students -->
              </h3>
             </div>
-            <div class="card-body">
+            <div class="card-body scrollable h-[200px] py-0 my-4 pr-4 mr-2">
              <div class="scrollable-x-auto">
-              <table class="table table-auto" data-datatable-table="true">
+              <table class="table table-auto">
                <thead>
                 <tr>
-                 <th class="min-w-[150px]">
-                  <span class="sort asc">
-                   <span class="sort-label">
+                 <th class="min-w-[100px]">
                      Date
-                   </span>
-                   <span class="sort-icon">
-                   </span>
-                  </span>
                  </th>
                  <th class="min-w-[100px]">
-                  <span class="sort">
-                   <span class="sort-label">
                      Week
-                   </span>
-                   <span class="sort-icon">
-                   </span>
-                  </span>
-                 </th>
-                 <th class="min-w-[150px]">
-                  <span class="sort">
-                   <span class="sort-label">
-                    Assessment Type
-                   </span>
-                   <span class="sort-icon">
-                   </span>
-                  </span>
-                 </th>
-                 <th class="min-w-[150px]">
-                  <span class="sort">
-                   <span class="sort-label">
-                    Assessment Criteria
-                   </span>
-                   <span class="sort-icon">
-                   </span>
-                  </span>
                  </th>
                  <th class="min-w-[200px]">
-                  <span class="sort">
-                   <span class="sort-label">
+                    Assessment Type
+                 </th>
+                 <th class="min-w-[200px]">
                     Topic
-                   </span>
-                   <span class="sort-icon">
-                   </span>
-                  </span>
                  </th>
-                 <th class="min-w-[150px]">
-                  <span class="sort">
-                   <span class="sort-label">
+                 <th class="min-w-[100px]">
                     Max Score
-                   </span>
-                   <span class="sort-icon">
-                   </span>
-                  </span>
                  </th>
-                 <th class="min-w-[150px]">
-                  <span class="sort">
-                   <span class="sort-label">
+                 <th class="min-w-[100px]">
                     Weightage
-                   </span>
-                   <span class="sort-icon">
-                   </span>
-                  </span>
-                 </th>
-                 <th class="w-[60px] text-center">
                  </th>
                 </tr>
                </thead>
@@ -176,9 +136,6 @@
                  <td>
                    {{ structure.assessment_type or "" }}
                  </td>
-                 <td>
-                   {{ structure.assessment_criteria or "" }}
-                 </td>
                  <td class="min-w-[200px] text-center">
                    {{ structure.topics or "" }}
                  </td>
@@ -188,19 +145,11 @@
                  <td>
                    {{ structure.weightage or ""}}
                  </td>
-                 <td>
-                   <div class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px">
-                    <button class="btn btn-info btn-xs">
-                     <i class="ki-filled ki-eye text-gray-600 text-2xl">
-                     </i>
-                    </button>
-                   </div>
-                 </td>
                 </tr>
                 {% endfor %}
                {% else %}
                 <tr>
-                 <td colspan="9" class="text-center">No outline found.</td>
+                 <td colspan="6" class="text-center">No outline found.</td>
                 </tr>
                {% endif %}
                </tbody>

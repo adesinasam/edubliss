@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-    <main class="grow content pt-5" id="content" role="content">
+    <main class="grow content pt-5 bg-gray-100" id="content" role="content">
      <!-- begin: container -->
      <div class="container-fixed" id="content_container">
      </div>
@@ -21,18 +21,20 @@
      <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
-        <h1 class="text-xl font-semibold leading-none text-gray-900">
-         {{courses.course_name}}
+        <h1 class="text-xl font-semibold leading-none text-success">
+         {{docname}}
         </h1>
+        <div class="flex items-center flex-wrap gap-1.5 font-medium">
+         <span class="text-md text-gray-600">
+          Course Overview
+         </span>
+        </div>
        </div>
        {% if "Academics User" in user_roles %}
        <div class="flex items-center gap-2.5">
-        <a class="btn btn-sm btn-light" href="/app/course/{{courses.name}}">
+        <div class="btn btn-sm btn-secondary text-sm" href="/app/course/{{courses.name}}">
          Edit Course
-        </a>
-        <!-- <div class="btn btn-sm btn-primary" href="/course/settings">
-         Account Settings
-        </div> -->
+        </div>
        </div>
        {% endif %}
       </div>
@@ -110,7 +112,7 @@
           <div class="card-table scrollable-x-auto">
            <div class="scrollable-auto">
             <table class="table align-middle text-2sm text-gray-600">
-             <tr class="bg-gray-100">
+             <tr class="">
               <th class="text-start font-medium min-w-48 py-2.5">
                Title
               </th>
@@ -130,7 +132,7 @@
                <div class="flex items-center grow gap-2.5">
                 <img alt="" class="rounded-full size-9 shrink-0" src="{% if lmscourse.image  %}{{lmscourse.image}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/>
                 <div class="flex flex-col gap-1">
-                 <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" {% if lmscourse.published == 1  %} href="/lms/courses/{{ lmscourse.name }}" {% endif %}>
+                 <a class="text-sm font-semibold text-gray-800 hover:text-primary-active mb-px" {% if lmscourse.published == 1  %} href="/lms/courses/{{ lmscourse.name }}" {% endif %}>
                   {{ lmscourse.title }}
                  </a>
                  <span class="text-xs font-normal text-gray-600 leading-3">

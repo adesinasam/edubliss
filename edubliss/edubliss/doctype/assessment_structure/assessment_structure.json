@@ -15,6 +15,7 @@
   "max_score",
   "weightage",
   "topics",
+  "section_break_upfs",
   "description"
  ],
  "fields": [
@@ -51,6 +52,7 @@
   {
    "fieldname": "schedule_date",
    "fieldtype": "Date",
+   "in_list_view": 1,
    "label": "Schedule Date"
   },
   {
@@ -61,7 +63,6 @@
   {
    "fieldname": "week",
    "fieldtype": "Select",
-   "in_list_view": 1,
    "label": "Week",
    "options": "\nWeek 1\nWeek 2\nWeek 3\nWeek 4\nWeek 5\nWeek 6\nWeek 7\nWeek 8\nWeek 9\nWeek 10\nWeek 11\nWeek 12"
   },
@@ -85,12 +86,16 @@
   {
    "fieldname": "column_break_lnsr",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_upfs",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-09-20 13:20:39.898570",
+ "modified": "2024-09-20 22:46:41.696516",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Assessment Structure",
