@@ -53,15 +53,16 @@ def get_student_groups(student, program=None, academic_year=None):
 def get_student_lmsbatch(student, program, student_group):
     lms_batch = frappe.qb.DocType("LMS Batch")
     batch_student = frappe.qb.DocType("Batch Student")
+    batch_student_group = frappe.qb.DocType("Batch Student Group")
 
     lms_batch_query = (
         frappe.qb.from_(lms_batch)
-        .inner_join(batch_student)
-        .on(lms_batch.name == batch_student.parent)
+        .inner_join(batch_student).on(lms_batch.name == batch_student.parent)
+        .inner_join(batch_student_group).on(lms_batch.name == batch_student_group.parent)
         .select(batch_student.parent)
         .where(batch_student.student == student)
         .where(lms_batch.custom_program == program)
-        .where(lms_batch.custom_student_group == student_group)
+        .where(batch_student_group.student_group == student_group)
         .run(as_dict=1)
     )
 

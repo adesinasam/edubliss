@@ -18,15 +18,37 @@ def get_courses(program):
 
 @frappe.whitelist()
 def get_users_for_student_group(doctype, txt, searchfield, start, page_len, filters):
-    # Get the student group from the filters
-    student_group = filters.get("student_group")
-    
-    # Fetch students from the selected Student Group
-    students = frappe.get_all("Student Group Student", filters={"parent": student_group}, fields=["student"])
+    # Get the student groups from the filters (handling multiple groups)
+    student_groups = filters.get("student_group")
+    excluded_users = filters.get("excluded_users", [])
+
+    if not student_groups:
+        return []
+
+    # Ensure student_groups is a list (handle both single and multiple selections)
+    if isinstance(student_groups, str):
+        student_groups = [student_groups]
+
+    # Fetch students from the selected Student Groups
+    students = frappe.get_all(
+        "Student Group Student", 
+        filters={"parent": ["in", student_groups]}, 
+        fields=["student"]
+    )
     student_ids = [student.student for student in students]
-    
+
+    if not student_ids:
+        return []
+
     # Fetch user_ids from the Student doctype
-    user_ids = frappe.get_all("Student", filters={"name": ["in", student_ids]}, fields=["user"])
+    user_ids = frappe.get_all(
+        "Student", 
+        filters={"name": ["in", student_ids]}, 
+        fields=["user"]
+    )
+
+    # Exclude already selected user IDs
+    user_ids = [user for user in user_ids if user.user not in excluded_users]
 
     # Return the user_ids in the format required by Frappe's query function (name and label)
     return [[user.user, user.user] for user in user_ids]
