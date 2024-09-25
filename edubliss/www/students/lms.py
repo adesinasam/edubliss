@@ -62,7 +62,7 @@ def get_context(context):
     # nav
     context.active_route = "students"
     context.active_subroute = "student_list"
-    context.active_student_route = "enrollment"
+    context.active_student_route = "lms"
 
     context.docname = frappe.form_dict.docname
 

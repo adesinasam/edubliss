@@ -32,9 +32,9 @@
        </div>
        {% if "Academics User" in user_roles %}
        <div class="flex items-center gap-2.5">
-        <div class="btn btn-sm btn-secondary text-sm" href="/app/course/{{courses.name}}">
+        <a class="btn btn-sm btn-secondary text-sm" href="/app/course/{{courses.name}}">
          Edit Course
-        </div>
+        </a>
        </div>
        {% endif %}
       </div>
@@ -109,120 +109,86 @@
            <div class="menu" data-menu="true">
            </div>
           </div>
+          {% if lmscourses %}
+           {% for lmscourse in lmscourses %}
+         <div class="card border-0">
+          <img alt="" class="w-full h-[170px] rounded-t-xl" src="{% if lmscourse.image  %}{{lmscourse.image}}{% else %}assets/edubliss/dist/media/images/600x400/25.jpg{% endif %}"/>
+          <div class="card-border card-rounded-b flex flex-col gap-2 px-5 py-4.5">
+           <a class="text-md font-semibold text-gray-900 hover:text-primary" {% if lmscourse.published %}href="/lms/courses/{{ lmscourse.name }}"{% endif %}>
+            {{lmscourse.title}}
+           </a>
+           <div class="flex items-center justify-between grow">
+            <div class="flex gap-3 items-center">
+             <div class="flex gap-1 items-center">
+               {% if lmscourse.status == "Approved" %}
+              <span class="badge badge-pill badge-xs badge-outline badge-success gap-1 items-center">
+                <span class="badge badge-dot size-1.5 badge-success">
+               {% elif lmscourse.status == "In Progress" %}
+              <span class="badge badge-pill badge-xs badge-outline badge-warning gap-1 items-center">
+                <span class="badge badge-dot size-1.5 badge-warning">
+               {% elif lmscourse.status == "Under Review" %}
+              <span class="badge badge-pill badge-xs badge-outline badge-primary gap-1 items-center">
+                <span class="badge badge-dot size-1.5 badge-primary">
+               {% endif %}
+                </span>
+                  {{ lmscourse.status }}
+              </span>
+             </div>
+             <div class="flex gap-1 items-center">
+               {% if lmscourse.published %}
+              <span class="badge badge-pill badge-xs badge-outline badge-info gap-1 items-center">
+                <span class="badge badge-dot size-1.5 badge-info">
+                </span>
+                  Published
+              </span>
+               {% else %}
+              <span class="badge badge-pill badge-xs badge-outline gap-1 items-center">
+                <span class="badge badge-dot size-1.5 ">
+                </span>
+                  Not Published
+              </span>
+               {% endif %}
+              </div>
+            </div>
+            <div class="flex gap-3 items-center">
+             <div class="flex gap-1 items-center">
+               {% if lmscourse.published %}
+               <a class="text-md font-semibold text-gray-900 hover:text-primary" href="/lms/courses/{{ lmscourse.name }}" data-tooltip="#lms_tooltip">
+                <i class="ki-filled ki-eye text-base text-gray-500">
+                </i>
+                <div id="lms_tooltip" class="rounded-xl tooltip">
+                 View
+                </div>
+               </a>
+               {% endif %}
+             </div>
+             <div class="flex gap-1 items-center">
+              {% if "Academics User" in user_roles %}
+              <a class="text-md font-semibold text-gray-900 hover:text-primary" href="/app/lms-course/{{ lmscourse.name }}" data-tooltip="#sects_tooltip"  data-tooltip-placement="top">
+                <i class="ki-filled ki-pencil text-base text-gray-500">
+                </i>
+                <div id="sects_tooltip" class="hidden rounded-xs shadow-default tooltip border border-gray-200 text-light text-xs font-normal">
+                 Edit
+                </div>
+              </a>
+              {% endif %}
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+           {% endfor %}
+          {% else %}
           <div class="card-table scrollable-x-auto">
            <div class="scrollable-auto">
             <table class="table align-middle text-2sm text-gray-600">
-             <tr class="">
-              <th class="text-start font-medium min-w-48 py-2.5">
-               Title
-              </th>
-              <th class="text-left font-medium min-w-20 py-2.5">
-               Status
-              </th>
-              <th class="text-left font-medium min-w-20 py-2.5">
-               Published
-              </th>
-              <th class="min-w-16">
-              </th>
-             </tr>
-             {% if lmscourses %}
-             {% for lmscourse in lmscourses %}
-             <tr>
-              <td>
-               <div class="flex items-center grow gap-2.5">
-                <img alt="" class="rounded-full size-9 shrink-0" src="{% if lmscourse.image  %}{{lmscourse.image}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/>
-                <div class="flex flex-col gap-1">
-                 <a class="text-sm font-semibold text-gray-800 hover:text-primary-active mb-px" {% if lmscourse.published == 1  %} href="/lms/courses/{{ lmscourse.name }}" {% endif %}>
-                  {{ lmscourse.title }}
-                 </a>
-                 <span class="text-xs font-normal text-gray-600 leading-3">
-                  {{ lmscourse.short_introduction }}
-                 </span>
-                </div>
-               </div>
-              </td>
-              <td class="py-2 text-right">
-               <div class="flex items-center gap-1.5">
-                  {% if lmscourse.status == "Approved" %}
-                 <span class="badge badge-pill badge-outline badge-success gap-1 items-center">
-                  <span class="badge badge-dot size-1.5 badge-success">
-                  {% elif lmscourse.status == "In Progress" %}
-                 <span class="badge badge-pill badge-outline badge-warning gap-1 items-center">
-                  <span class="badge badge-dot size-1.5 badge-warning">
-                  {% elif lmscourse.status == "Under Review" %}
-                 <span class="badge badge-pill badge-outline badge-primary gap-1 items-center">
-                  <span class="badge badge-dot size-1.5 badge-primary">
-                  {% endif %}
-                  </span>
-                    {{ lmscourse.status }}
-                 </span>
-               </div>
-              </td>
-              <td class="py-2 text-right">
-               <div class="flex items-center gap-1.5">
-                  {% if lmscourse.published == 1 %}
-                 <span class="badge badge-pill badge-outline badge-success gap-1 items-center">
-                  <span class="badge badge-dot size-1.5 badge-success">
-                  </span>
-                    Yes
-                 </span>
-                  {% else %}
-                 <span class="badge badge-pill badge-outline badge-danger gap-1 items-center">
-                  <span class="badge badge-dot size-1.5 badge-danger">
-                  </span>
-                    No
-                 </span>
-                  {% endif %}
-               </div>
-              </td>
-              <td class="text-right">
-               <div class="menu inline-flex" data-menu="true">
-                <div class="menu-item" data-menu-item-offset="0, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
-                 <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
-                  <i class="ki-filled ki-dots-vertical">
-                  </i>
-                 </button>
-                 <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
-                  <div class="menu-item">
-                   <a class="menu-link" {% if lmscourse.published == 1  %} href="/lms/courses/{{ lmscourse.name }}" {% endif %}>
-                    <span class="menu-icon">
-                     <i class="ki-filled ki-search-list">
-                     </i>
-                    </span>
-                    <span class="menu-title">
-                     View
-                    </span>
-                   </a>
-                  </div>
-                  {% if "Academics User" in user_roles %}
-                  <div class="menu-separator">
-                  </div>
-                  <div class="menu-item">
-                   <a class="menu-link" href="/app/lms-course/{{ lmscourse.name }}">
-                    <span class="menu-icon">
-                     <i class="ki-filled ki-pencil">
-                     </i>
-                    </span>
-                    <span class="menu-title">
-                     Edit
-                    </span>
-                   </a>
-                  </div>
-                  {% endif %}
-                 </div>
-                </div>
-               </div>
-              </td>
-             </tr>
-             {% endfor %}
-             {% else %}
              <tr>
               <td colspan="4" class="text-center">No LMS Course found.</td>
              </tr>
-             {% endif %}
             </table>
            </div>
           </div>
+          {% endif %}
          </div>
         </div>
        </div>

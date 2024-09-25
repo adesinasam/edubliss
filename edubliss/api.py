@@ -756,3 +756,17 @@ def get_invoice_details(order_name):
         }
     else:
         return {'error': 'Order not found'}
+
+@frappe.whitelist()
+def get_assessment_structure(course):
+    """Returns Assessmemt Structure and their Weightage from Course Master.
+
+    :param Course: Course
+    """
+    return frappe.get_all(
+        "Assessment Structure",
+        fields=["schedule_date", "due_date", "week", "assessment_type", "assessment_criteria", "max_score", "weightage", "topics"],
+        filters={"parent": course},
+        order_by="idx",
+    )
+

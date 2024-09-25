@@ -55,6 +55,7 @@ fixtures = [{
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 doctype_js = {
+    "Assessment Plan": "public/js/pages/assessment_plan.js",
     "LMS Batch": "public/js/pages/lms_batch.js",
     "Program": "public/js/pages/program.js",
     "Course Scheduling Tool": "public/js/pages/course_scheduling_tool.js",
@@ -99,6 +100,7 @@ website_route_rules = [
     {"from_route": "/admin/course/students/<docname>", "to_route": "admin/course/students"},
     {"from_route": "/admin/course/outline/<docname>", "to_route": "admin/course/outline"},
     {"from_route": "/admin/course/assessment/<docname>", "to_route": "admin/course/assessment"},
+    {"from_route": "/admin/course/assessment_plan/<docname>", "to_route": "admin/course/assessment_plan"},
     {"from_route": "/admin/course/schedule/<docname>", "to_route": "admin/course/schedule"},
 ]
 
@@ -177,7 +179,10 @@ website_route_rules = [
 doc_events = {
   "Program Enrollment": {
     "on_submit": "edubliss.edubliss.program_enrollment.setup"
-  }
+  },
+  "Course": {
+    "validate": "edubliss.edubliss.course.validate"
+  }  
 }
 # doc_events = {
 # 	"*": {

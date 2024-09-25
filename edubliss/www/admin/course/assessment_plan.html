@@ -26,34 +26,41 @@
         </h1>
         <div class="flex items-center flex-wrap gap-1.5 font-medium">
          <span class="text-md text-gray-600">
-          Assessment Default
+          Assessment Plan
          </span>
         </div>
        </div>
        {% if "Academics User" in user_roles %}
+       {% if assessments %}
        <div class="flex items-center gap-2.5">
-        <a class="btn btn-sm btn-secondary text-sm" href="/app/course/{{courses.name}}">
-         Edit Assessment
+        <a class="btn btn-sm btn-secondary text-sm" href="/app/assessment-plan/{{assessments.name}}">
+         Edit Assessment Plan
         </a>
        </div>
+       {% else %}
+       <div class="flex items-center gap-2.5">
+        <a class="btn btn-sm btn-secondary text-sm" href="app/assessment-plan/new-assessment-plan">
+         Add Assessment Plan
+        </a>
+       </div>
+       {% endif %}
        {% endif %}
       </div>
      </div>
      <!-- end: container -->
+
+    {% include "templates/includes/section_nav.html" %}
+
      <!-- begin: container -->
      <div class="container-fixed">
        <div class="card card-grid min-w-full">
         <!-- begin: grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
-         <div class="col-span-1">
+        <div class="grid grid-cols-1 lg:grid-cols-1 gap-5 lg:gap-7.5">
+         <!-- <div class="col-span-1">
           <div class="grid gap-5 lg:gap-7.5">
            <div class="card h-full border-0">
             <div class="card-header">
               <h3 class="card-title">Cirteria</h3>
-              <!-- <a href="/app/course/{{courses.name}}">
-                <i class="ki-solid ki-abstract-10 text-sm" data-tooltip="#program_tooltip" data-tooltip-placement="bottom"></i>
-                <div class="hidden rounded shadow-default p-3 bg-light border border-gray-300 text-gray-800 text-xs font-normal" id="program_tooltip">Edit Assessment Structure</div>
-              </a> -->
             </div>
             <div class="card-body scrollable h-[200px] py-0 my-4 pr-4 mr-2">
              <div class="scrollable-x-auto">
@@ -66,14 +73,10 @@
                   {{ criteria.assessment_criteria or ""}}
                  </td>
                  <td>
-                  {{ criteria.weightage or ""}}%
+                  {{ criteria.maximum_score }}
                  </td>
                  <td>
                    <div class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px">
-                    <!-- <button class="btn btn-secondary btn-xs">
-                     <i class="ki-filled ki-setting text-gray-600 text-2xl">
-                     </i>
-                    </button> -->
                    </div>
                  </td>
                 </tr>
@@ -89,7 +92,7 @@
             </div>
            </div>
           </div>
-         </div>
+         </div> -->
          <div class="col-span-2">
           <div class="flex flex-col gap-5 lg:gap-7.5">
            <div class="card min-w-full border-0">
@@ -117,9 +120,6 @@
                  </th>
                  <th class="min-w-[250px] text-center">
                     Topic
-                 </th>
-                 <th class="min-w-[100px]">
-                     Week
                  </th>
                 </tr>
                </thead>

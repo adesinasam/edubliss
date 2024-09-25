@@ -59,19 +59,21 @@
   <div class="container-fixed">
     <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
       <div class="flex flex-col justify-center gap-2">
-        <h1 class="text-xl font-semibold leading-none text-gray-900">Class Schedule</h1>
-        <div class="flex items-center gap-2 text-sm font-medium text-gray-600"></div>
+        <h1 class="text-xl font-semibold leading-none text-success">Class Schedule</h1>
       </div>
     </div>
   </div>
   <!-- end: container -->
+
+    {% include "templates/includes/section_nav.html" %}
+
   <!-- begin: container -->
   <div class="container-fixed">
     <!-- begin: grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
+    <div class="grid grid-cols-1 gap-5 lg:gap-7.5">
       <div class="col-span-1">
         <div class="grid gap-5 lg:gap-7.5">
-          <div class="card bg-primary-light">
+          <!-- <div class="card bg-primary-light">
             <div class="card-header">
               <h3 class="card-title text-gray-900">Section</h3>
               {% if "Academics User" in user_roles %}
@@ -126,11 +128,11 @@
         </div>
       </div>
       <div class="col-span-2">
-        <div class="flex flex-col gap-5 lg:gap-7.5">
+        <div class="flex flex-col gap-5 lg:gap-7.5"> -->
           <div class="card flex flex-col gap-5 lg:gap-7.5">
            {% if selected_section %} 
               <div class="card-header">
-                <h3 class="card-title text-gray-900">{{ selected_section }}</h3>
+                <h3 class="card-title text-info">{{ selected_section }}</h3>
                 <!-- Add the button for toggling weekends -->
                 <div align="right"><button class="btn btn-secondary btn-xs text-sm" id="toggleWeekends">Show Weekends</button></div>
               </div>
@@ -138,7 +140,7 @@
            {% endif %} 
           </div>
         </div>
-      </div>
+      <!-- </div> -->
     </div>
     <!-- end: grid -->
   </div>

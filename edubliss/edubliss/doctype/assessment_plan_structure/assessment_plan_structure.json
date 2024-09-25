@@ -3,6 +3,7 @@
  "allow_rename": 1,
  "creation": "2024-09-20 08:19:23.804080",
  "doctype": "DocType",
+ "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "assessment_structure_section",
@@ -27,10 +28,8 @@
   {
    "fieldname": "week",
    "fieldtype": "Select",
-   "in_list_view": 1,
    "label": "Week",
-   "options": "\nWeek 1\nWeek 2\nWeek 3\nWeek 4\nWeek 5\nWeek 6\nWeek 7\nWeek 8\nWeek 9\nWeek 10\nWeek 11\nWeek 12",
-   "reqd": 1
+   "options": "\nWeek 1\nWeek 2\nWeek 3\nWeek 4\nWeek 5\nWeek 6\nWeek 7\nWeek 8\nWeek 9\nWeek 10\nWeek 11\nWeek 12"
   },
   {
    "fieldname": "max_score",
@@ -52,8 +51,7 @@
    "fieldname": "topics",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Topics",
-   "reqd": 1
+   "label": "Topics"
   },
   {
    "fieldname": "schedule_date",
@@ -66,9 +64,7 @@
   {
    "fieldname": "due_date",
    "fieldtype": "Date",
-   "in_list_view": 1,
-   "label": "Due Date",
-   "reqd": 1
+   "label": "Due Date"
   },
   {
    "fieldname": "assessment_type",
@@ -105,7 +101,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-09-20 22:48:50.731295",
+ "modified": "2024-09-25 11:33:42.331758",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Assessment Plan Structure",

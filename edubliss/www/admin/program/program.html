@@ -148,9 +148,9 @@
               <tr>
                 <td>{{ loop.index }}</td>
                 <td class="text-left">
-                  <div href="/admin/program/program?program_name={{ selected_program }}&course_name={{ course.course }}" class="text-sm font-semibold text-gray-900 hover:text-primary">
+                  <a href="/admin/course/overview/{{ course.course }}" class="text-sm font-semibold text-gray-900 hover:text-primary">
                     {{ course.course }}
-                  </div>
+                  </a>
                 </td>
                 <td class="text-sm text-gray-700 font-medium">
                   {{ get_program_course_code(course.course) or '' }}

@@ -1,0 +1,62 @@
+      <!-- begin: container -->
+      <div class="container-fixed">
+       <div class="grid">
+         <div class="flex items-center gap-2.5">
+          <span class="text-md font-medium text-gray-600">
+           Section
+          </span>
+          <div class="menu menu-default" data-menu="true">
+           <div class="menu-item" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="hover">
+            <button class="menu-toggle btn btn-light w-56">
+             <span class="menu-title !text-primary" data-menu-selected="true">
+                {{ selected_section or "Select Student Group" }}
+               </span>
+             <span class="menu-arrow">
+              <i class="ki-outline ki-down">
+              </i>
+             </span>
+            </button>
+            {% if sections %}
+            <div class="menu-dropdown w-56 py-2" data-menu-dismiss="true" style="z-index: 105; position: fixed; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(234.667px, 154px, 0px);">
+             {% for section in sections %}
+             <div class="menu-item {% if section.student_group_name == selected_section %}active{% endif %}">
+              <a class="menu-link" data-menu-version="{{ section.student_group_name }}" href="{{section_url}}?section_name={{ section.student_group_name }}" data-tooltip="true" data-tooltip-placement="right">
+               <span class="menu-title">
+                {{ section.student_group_name }}
+               </span>
+               <span class="menu-badge hidden menu-item-active:inline-flex">
+                <i class="ki-outline ki-check text-gray-600 text-xs">
+                </i>
+               </span>
+                       <div class="popover shadow-lg max-w-72" style="z-index: 100; position: fixed; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(142px, 50.6667px, 0px);" data-popper-placement="right">
+                        <div class="popover-header font-semibold text-gray-900">
+                        <div class="p-4 text-sm text-gray-900 font-medium">
+                         {{ section.student_group_name }}
+                        </div>
+                        </div>
+                       <div class="popover-body">
+                        <div class="scrollable-y m-2 p-4 h-[150px] text-sm text-gray-700">
+                          {{ section.program }}
+                          <br>
+                          <span class="badge  badge-xs badge-pill badge-outline {{ 'badge-success' if section.disabled == 0 else 'badge-danger' }} gap-1 items-center">
+                            {{ 'Active' if section.disabled == 0 else 'Disabled' }}
+                          </span>
+                          <br>
+                          {{ section.batch }}
+                          <br>
+                          {{ section.academic_year }}
+                        </div>
+                       </div>
+                       </div>
+              </a>
+             </div>
+             {% endfor %}
+            </div>
+            {% endif %}
+           </div>
+          </div>
+         </div>
+       </div>
+      </div>
+      <!-- end: container -->
+

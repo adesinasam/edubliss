@@ -46,7 +46,7 @@
          <div class="card bg-info-light">
           <div class="card-header">
            <h3 class="card-title text-gray-800">
-            Program
+            Class
            {% if program.docstatus == 1 %}
             <i class="ki-solid ki-verify text-success text-sm" data-tooltip="#tooltip_right1" data-tooltip-placement="right">
             </i>
@@ -146,11 +146,11 @@
             </h3>
            {% if "Academics User" in user_roles %}
            {%if program.docstatus %}
-           <button class="btn btn-sm btn-primary" data-tooltip="#custom_tooltip">
+           <!-- <button class="btn btn-sm btn-primary" data-tooltip="#custom_tooltip">
             <i class="ki-outline ki-plus text-sm">
             </i>
             Add Elective
-           </button>
+           </button> -->
            <div class="hidden rounded-xl shadow-default p-3 bg-light border border-gray-200 text-gray-700 text-xs font-normal" id="custom_tooltip">
              Enrol Student into Elective Subjects.
             </div>
