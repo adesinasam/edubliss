@@ -104,19 +104,16 @@
                <thead>
                 <tr>
                  <th class="min-w-[150px]">
-                     Date
-                 </th>
-                 <th class="min-w-[200px]">
                     Assessment Type
                  </th>
-                 <th class="min-w-[100px]">
-                    Max Score
-                 </th>
-                 <th class="min-w-[100px]">
-                    Weightage
+                 <th class="min-w-[200px]">
+                    Assessment Criteria
                  </th>
                  <th class="min-w-[250px] text-center">
                     Topic
+                 </th>
+                 <th class="min-w-[100px]">
+                    Weightage
                  </th>
                  <th class="min-w-[100px]">
                      Week
@@ -128,19 +125,16 @@
                 {% for structure in structures %}
                 <tr>
                  <td>
-                  {{ structure.schedule_date or ""}}
-                 </td>
-                 <td>
                    {{ structure.assessment_type or "" }}
                  </td>
                  <td>
-                   {{ structure.max_score or "" }}
-                 </td>
-                 <td>
-                   {{ structure.weightage or ""}}
+                   {{ structure.assessment_criteria or ""}}
                  </td>
                  <td class="min-w-[250px] text-center">
                    {{ structure.topics or "" }}
+                 </td>
+                 <td>
+                   {{ structure.weightage or ""}}
                  </td>
                  <td>
                    {{ structure.week_num or "" }}

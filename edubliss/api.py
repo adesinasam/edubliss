@@ -316,6 +316,25 @@ def get_sections(company=None, academic_year=None):
     )
     return sections_query if sections_query else []
 
+@frappe.whitelist()
+def get_program_sections(company=None, academic_year=None, course=None):
+    student_groups = frappe.qb.DocType("Student Group")
+    programs = frappe.qb.DocType("Program")
+    program_courses = frappe.qb.DocType("Program Course")
+
+    sections_query = (
+        frappe.qb.from_(student_groups)
+        .inner_join(programs).on(student_groups.program == programs.name)
+        .inner_join(program_courses).on(programs.name == program_courses.parent)
+        .select('*')
+        .where(programs.custom_school == company)
+        .where(program_courses.course == course)
+        .where(student_groups.academic_year == academic_year)
+        .where(student_groups.group_based_on == 'Batch')
+        .run(as_dict=1)
+    )
+    return sections_query if sections_query else []
+
 @frappe.whitelist(allow_guest=True)
 def get_company():
     schools = frappe.get_all('Company', filters={'is_group': 0}, fields=['name', 'company_name', 'abbr', 'parent_company', 'email', 'company_logo'])
@@ -765,7 +784,7 @@ def get_assessment_structure(course):
     """
     return frappe.get_all(
         "Assessment Structure",
-        fields=["schedule_date", "due_date", "week", "assessment_type", "assessment_criteria", "max_score", "weightage", "topics"],
+        fields=["week", "assessment_type", "assessment_criteria", "topics", "weightage"],
         filters={"parent": course},
         order_by="idx",
     )

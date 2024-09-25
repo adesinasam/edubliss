@@ -53,10 +53,10 @@
 
      <!-- begin: container -->
      <div class="container-fixed">
-       <div class="card card-grid min-w-full">
-        <!-- begin: grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-1 gap-5 lg:gap-7.5">
-         <!-- <div class="col-span-1">
+      <div class="card card-grid min-w-full">
+       <!-- begin: grid -->
+       <div class="grid grid-cols-1 lg:grid-cols-1 gap-5 lg:gap-7.5">
+        <!-- <div class="col-span-1">
           <div class="grid gap-5 lg:gap-7.5">
            <div class="card h-full border-0">
             <div class="card-header">
@@ -92,8 +92,8 @@
             </div>
            </div>
           </div>
-         </div> -->
-         <div class="col-span-2">
+        </div> -->
+        <div class="col-span-2">
           <div class="flex flex-col gap-5 lg:gap-7.5">
            <div class="card min-w-full border-0">
             <div class="card-header flex-wrap gap-2">
@@ -106,44 +106,41 @@
               <table class="table table-auto">
                <thead>
                 <tr>
-                 <th class="min-w-[150px]">
-                     Date
-                 </th>
                  <th class="min-w-[200px]">
                     Assessment Type
-                 </th>
-                 <th class="min-w-[100px]">
-                    Max Score
-                 </th>
-                 <th class="min-w-[100px]">
-                    Weightage
                  </th>
                  <th class="min-w-[250px] text-center">
                     Topic
                  </th>
-                </tr>
+                  <th class="min-w-[100px]">
+                    Max Score
+                 </th>
+                 <th class="min-w-[150px]">
+                     Assigned Date
+                 </th>
+                 <th class="min-w-[100px]">
+                    Due Date
+                 </th>
+               </tr>
                </thead>
                <tbody>
                {% if structures %}
                 {% for structure in structures %}
                 <tr>
                  <td>
-                  {{ structure.schedule_date or ""}}
-                 </td>
-                 <td>
                    {{ structure.assessment_type or "" }}
-                 </td>
-                 <td>
-                   {{ structure.max_score or "" }}
-                 </td>
-                 <td>
-                   {{ structure.weightage or ""}}
                  </td>
                  <td class="min-w-[250px] text-center">
                    {{ structure.topics or "" }}
                  </td>
                  <td>
-                   {{ structure.week_num or "" }}
+                   {{ structure.max_score or "" }}
+                 </td>
+                 <td>
+                  {{ structure.schedule_date or ""}}
+                 </td>
+                 <td>
+                   {{ structure.due_date or "" }}
                  </td>
                 </tr>
                 {% endfor %}
