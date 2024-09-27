@@ -1,3 +1,6 @@
+
+import json
+
 import frappe
 from frappe import _
 from frappe.utils import get_url
@@ -26,7 +29,7 @@ def get_student_program(student=None, academic_year=None, academic_term=None):
         'student': student,
         'academic_year': academic_year,
         'academic_term': academic_term,
-        'docstatus': ['<', 2]
+        'docstatus': ['!=', 2]
     }
     return frappe.get_doc('Program Enrollment', filters)
 
@@ -789,3 +792,249 @@ def get_assessment_structure(course):
         order_by="idx",
     )
 
+@frappe.whitelist()
+def get_student_group_students(student_group, include_inactive=0):
+    """Returns List of student, student_name in Student Group.
+
+    :param student_group: Student Group.
+    """
+    if include_inactive:
+        students = frappe.get_all(
+            "Student Group Student",
+            fields=["student", "student_name"],
+            filters={"parent": student_group},
+            order_by="group_roll_number",
+        )
+    else:
+        students = frappe.get_all(
+            "Student Group Student",
+            fields=["student", "student_name"],
+            filters={"parent": student_group, "active": 1},
+            order_by="group_roll_number",
+        )
+    return students
+
+
+@frappe.whitelist()
+def get_assessment_students(assessment_plan, student_group):
+    student_list = get_student_group_students(student_group)
+    for i, student in enumerate(student_list):
+        result = get_result(student.student, assessment_plan)
+        if result:
+            student_result = {}
+            for d in result.custom_structure_detail:
+                student_result.update({d.assessment_type: [cstr(d.score), d.grade]})
+            student_result.update(
+                {"total_score": [cstr(result.total_score), result.grade], "comment": result.comment}
+            )
+            student.update(
+                {
+                    "assessment_details": student_result,
+                    "docstatus": result.docstatus,
+                    "name": result.name,
+                }
+            )
+        else:
+            student.update({"assessment_details": None})
+    return student_list
+
+@frappe.whitelist()
+def get_assessment_details(assessment_plan):
+    """Returns Assessment Criteria  and Maximum Score from Assessment Plan Master.
+
+    :param Assessment Plan: Assessment Plan
+    """
+    return frappe.get_all(
+        "Assessment Plan Criteria",
+        fields=["assessment_criteria", "maximum_score", "docstatus"],
+        filters={"parent": assessment_plan},
+        order_by="idx",
+    )
+
+@frappe.whitelist()
+def get_assessment_structure_details(assessment_plan):
+    """Returns Assessment Criteria  and Maximum Score from Assessment Plan Master.
+
+    :param Assessment Plan: Assessment Plan
+    """
+    return frappe.get_all(
+        "Assessment Plan Structure",
+        fields=["assessment_type", "assessment_criteria", "max_score", "weightage", "topics", "docstatus"],
+        filters={"parent": assessment_plan},
+        order_by="idx",
+    )
+
+@frappe.whitelist()
+def get_result(student, assessment_plan):
+    """Returns Submitted Result of given student for specified Assessment Plan
+
+    :param Student: Student
+    :param Assessment Plan: Assessment Plan
+    """
+    results = frappe.get_all(
+        "Assessment Result",
+        filters={
+            "student": student,
+            "assessment_plan": assessment_plan,
+            "docstatus": ("!=", 2),
+        },
+    )
+    if results:
+        return frappe.get_doc("Assessment Result", results[0])
+    else:
+        return None
+
+@frappe.whitelist()
+def get_grade(grading_scale, percentage):
+    """Returns Grade based on the Grading Scale and Score.
+
+    :param Grading Scale: Grading Scale
+    :param Percentage: Score Percentage Percentage
+    """
+    grading_scale_intervals = {}
+    if not hasattr(frappe.local, "grading_scale"):
+        grading_scale = frappe.get_all(
+            "Grading Scale Interval",
+            fields=["grade_code", "threshold"],
+            filters={"parent": grading_scale},
+        )
+        frappe.local.grading_scale = grading_scale
+    for d in frappe.local.grading_scale:
+        grading_scale_intervals.update({d.threshold: d.grade_code})
+    intervals = sorted(grading_scale_intervals.keys(), key=float, reverse=True)
+    for interval in intervals:
+        if flt(percentage) >= interval:
+            grade = grading_scale_intervals.get(interval)
+            break
+        else:
+            grade = ""
+    return grade
+
+@frappe.whitelist()
+def mark_assessment_result(assessment_plan, scores):
+    student_score = json.loads(scores)
+    assessment_details = []
+    assessment_details_type = []
+    total_weightage_score = 0  # Initialize total weightage score
+
+    plans = frappe.get_doc("Assessment Plan", assessment_plan)
+    grading_scale = plans.grading_scale
+
+    # Get assessment structures only once
+    structures = frappe.get_all(
+        "Assessment Plan Structure",
+        fields=["assessment_type", "assessment_criteria", "max_score", "weightage", "docstatus"],
+        filters={"parent": assessment_plan},
+        order_by="idx",
+    )
+
+    # Initialize a dictionary to hold the sum of weightage_score for each assessment_criteria
+    weightage_score_sum = {}
+
+    for criteria in student_score.get("assessment_details"):
+        # Find the matching structure for the current criteria based on assessment_type
+        matching_structure = next((s for s in structures if s.assessment_type == criteria), None)
+
+        # Get the score for the current criterion
+        score = flt(student_score["assessment_details"][criteria])
+        
+        # Initialize weightage_score as 0 to avoid reference before assignment
+        weightage_score = 0
+
+        if matching_structure:
+            maximum_score = matching_structure.max_score if matching_structure else 0
+            weightage = matching_structure.weightage if matching_structure else 0
+
+            # Calculate weightage score
+            weightage_score = (score / maximum_score) * weightage if maximum_score else 0
+
+            # Calculate percentage score
+            percentage = (score / maximum_score) * 100 if maximum_score else 0
+
+            # Accumulate total weightage score
+            total_weightage_score += weightage_score
+
+            # Sum weightage_score for each assessment_criteria
+            if matching_structure.assessment_criteria in weightage_score_sum:
+                weightage_score_sum[matching_structure.assessment_criteria] += weightage_score
+            else:
+                weightage_score_sum[matching_structure.assessment_criteria] = weightage_score
+
+        grade=get_grade(grading_scale, percentage)    
+
+        assessment_details.append(
+            {
+                "assessment_type": criteria,  # Maintain original mapping
+                "score": score,
+                "assessment_criteria": matching_structure.assessment_criteria if matching_structure else None,
+                "maximum_score": maximum_score,
+                "weightage": weightage,
+                "weightage_score": weightage_score,
+                "grade": grade
+            }
+        )
+
+    details=frappe.get_all(
+        "Assessment Plan Criteria",
+        fields=["assessment_criteria", "maximum_score", "docstatus"],
+        filters={"parent": assessment_plan},
+        order_by="idx",
+    )
+    # Prepare details for updating
+    for matching_detail in details:
+        assessment_criteria = matching_detail.assessment_criteria
+        assessment_details_type.append(
+            {
+                "assessment_criteria": assessment_criteria,
+                "score": weightage_score_sum.get(assessment_criteria, 0)  # Use the weightage sum for this criteria
+            }
+        )
+
+    # Get the Assessment Result document and update with new data
+    assessment_result = get_assessment_result_doc(
+        student_score["student"], assessment_plan
+    )
+    assessment_result.update(
+        {
+            "student": student_score.get("student"),
+            "assessment_plan": assessment_plan,
+            "comment": student_score.get("comment"),
+            "total_score": total_weightage_score,  # Add the total weightage score
+            "custom_structure_detail": assessment_details,
+            "details": assessment_details_type,
+        }
+    )
+    assessment_result.save()
+    
+    custom_structure_detail = {}
+    for d in assessment_result.custom_structure_detail:
+        custom_structure_detail.update({d.assessment_type: d.grade})
+
+    assessment_result_dict = {
+        "name": assessment_result.name,
+        "student": assessment_result.student,
+        "total_score": assessment_result.total_score,
+        "grade": assessment_result.grade,
+        "custom_structure_detail": custom_structure_detail,
+    }
+
+    return assessment_result_dict
+
+def get_assessment_result_doc(student, assessment_plan):
+    assessment_result = frappe.get_all(
+        "Assessment Result",
+        filters={
+            "student": student,
+            "assessment_plan": assessment_plan,
+            "docstatus": ("!=", 2),
+        },
+    )
+    if assessment_result:
+        doc = frappe.get_doc("Assessment Result", assessment_result[0])
+        if doc.docstatus == 0:
+            return doc
+        elif doc.docstatus == 1:
+            frappe.msgprint(_("Result already Submitted"))
+            return None
+    else:
+        return frappe.new_doc("Assessment Result")
