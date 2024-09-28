@@ -145,12 +145,7 @@ frappe.ui.form.on('Assessment Result Structure Tool', {
 						"scores": student_scores
 					},
 					callback: function(r) {
-						console.log(r.message);
 						let assessment_result = r.message;
-						if (!frm.doc.show_submit) {
-							frm.doc.show_submit = true;
-							frm.events.submit_result;
-						}
 						for (var criteria of Object.keys(assessment_result.custom_structure_detail)) {
 							result_table.find(`[data-criteria=${criteria}][data-student=${assessment_result
 								.student}].student-result-grade`).each(function(e1, input) {

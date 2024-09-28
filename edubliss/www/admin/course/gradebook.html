@@ -1,7 +1,7 @@
 {% extends "templates/layout.html" %}
 
 {% block title %}
-{{ _("Course Outline") }}
+{{ _("Course Grade") }}
 {% endblock %}
 
 {% block headnav_link %}
@@ -26,130 +26,119 @@
         </h1>
         <div class="flex items-center flex-wrap gap-1.5 font-medium">
          <span class="text-md text-gray-600">
-          Assessment Default
+          Grades
          </span>
         </div>
        </div>
-       {% if "Academics User" in user_roles %}
+
        <div class="flex items-center gap-2.5">
-        <a class="btn btn-sm btn-secondary text-sm" href="/app/course/{{courses.name}}">
-         Edit Assessment
-        </a>
+        <div class="flex gap-4 mb-5" data-tabs="true">
+         <a class="btn btn-success rounded-full btn-clear active" data-tab-toggle="true" href="#gradebook_cards">
+           Gradebook Grades
+         </a>
+         <a class="btn btn-success rounded-full btn-clear" data-tab-toggle="true" href="#report_cards">
+           Submit Final Grades
+         </a>
+        </div>
        </div>
-       {% endif %}
       </div>
      </div>
      <!-- end: container -->
+
+    {% include "templates/includes/section_nav.html" %}
+
      <!-- begin: container -->
+     <div id="gradebook_cards">
      <div class="container-fixed">
-       <div class="card card-grid min-w-full">
-        <!-- begin: grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
-         <div class="col-span-1">
-          <div class="grid gap-5 lg:gap-7.5">
-           <div class="card h-full border-0">
-            <div class="card-header">
-              <h3 class="card-title">Cirteria</h3>
-              <!-- <a href="/app/course/{{courses.name}}">
-                <i class="ki-solid ki-abstract-10 text-sm" data-tooltip="#program_tooltip" data-tooltip-placement="bottom"></i>
-                <div class="hidden rounded shadow-default p-3 bg-light border border-gray-300 text-gray-800 text-xs font-normal" id="program_tooltip">Edit Assessment Structure</div>
-              </a> -->
-            </div>
-            <div class="card-body scrollable h-[200px] py-0 my-4 pr-4 mr-2">
-             <div class="scrollable-x-auto">
-              <table class="table table-auto">
-               <tbody>
-               {% if criterias %}
-                {% for criteria in criterias %}
-                <tr>
-                 <td>
-                  {{ criteria.assessment_criteria or ""}}
-                 </td>
-                 <td>
-                  {{ criteria.weightage or ""}}%
-                 </td>
-                 <td>
-                   <div class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px">
-                    <!-- <button class="btn btn-secondary btn-xs">
-                     <i class="ki-filled ki-setting text-gray-600 text-2xl">
-                     </i>
-                    </button> -->
-                   </div>
-                 </td>
-                </tr>
-                {% endfor %}
-               {% else %}
-                <tr>
-                 <td colspan="3" class="text-center">No criteria found.</td>
-                </tr>
-               {% endif %}
-               </tbody>
-              </table>
-             </div>
-            </div>
-           </div>
-          </div>
-         </div>
-         <div class="col-span-2">
+      <div class="card card-grid min-w-full">
+       <!-- begin: grid -->
+       <div class="grid grid-cols-1 lg:grid-cols-1 gap-5 lg:gap-7.5">
+        <div class="col-span-2">
           <div class="flex flex-col gap-5 lg:gap-7.5">
            <div class="card min-w-full border-0">
             <div class="card-header flex-wrap gap-2">
              <h3 class="card-title font-medium text-sm">
-              Structure
+              
              </h3>
+             {% if "Academics User" in user_roles %}
+             {% if assessments %}
+             <div class="flex items-center gap-2.5">
+              <a class="btn btn-sm btn-secondary text-sm" href="/app/assessment-result-structure-tool">
+               Input Gradebook
+              </a>
+             </div>
+             {% else %}
+             <div class="flex items-center gap-2.5">
+              <a class="btn btn-sm btn-secondary text-sm" href="app/assessment-plan/new-assessment-plan">
+               Add Assessment Plan
+              </a>
+             </div>
+             {% endif %}
+             {% endif %}
             </div>
             <div class="card-body scrollable h-[200px] py-0 my-4 pr-4 mr-2">
              <div class="scrollable-x-auto">
               <table class="table table-auto">
                <thead>
                 <tr>
+                 <th class="min-w-[250px]" rowspan="2">
+                    Student
+                 </th>
+                 <th class="min-w-[150px]" rowspan="2">
+                    Running Percentage & Grade <br>
+                    Total: 100%
+                 </th>
+                 {% if structures %}
+                 {% for structure in structures %}
                  <th class="min-w-[150px]">
-                     Date
+                    Due: {{ format_date(structure.due_date) or "" }}<br>
+                    <b>{{ structure.topics or "Topic" }}</b>
                  </th>
-                 <th class="min-w-[200px]">
-                    Assessment Type
+                 {% endfor %}
+                 {% endif %}
+                 <th class="min-w-[150px]" rowspan="2">
+                     Comment
                  </th>
-                 <th class="min-w-[100px]">
-                    Max Score
+               </tr>
+               <tr>
+                 {% if structures %}
+                 {% for structure in structures %}
+                 <th class="min-w-[150px]">
+                  <div class="text-sm text-primary hover:text-primary-active mb-px">
+                    <b>{{ structure.assessment_type }}</b><br>
+                  </div>
+                    Weightage: {{ structure.weightage }}%<br>
+                    Max. Score: {{ structure.max_score }}
                  </th>
-                 <th class="min-w-[100px]">
-                    Weightage
-                 </th>
-                 <th class="min-w-[250px] text-center">
-                    Topic
-                 </th>
-                 <th class="min-w-[100px]">
-                     Week
-                 </th>
-                </tr>
+                 {% endfor %}
+                 {% endif %}                 
+               </tr>
                </thead>
                <tbody>
-               {% if structures %}
-                {% for structure in structures %}
+               {% if students %}
+                {% for student in students %}
                 <tr>
+                 <td class="min-w-[250px] text-left">
+                 <a class="text-sm text-primary hover:text-primary-active mb-px" href="/students/profile/{{ student.student }}">
+                  {{ student.student_name }}
+                 </a>
                  <td>
-                  {{ structure.schedule_date or ""}}
+                  {{ get_total(student.student,assessment_name) or ""}}
                  </td>
+                 </td>
+                 {% for structure in get_structure_marks(student.student,assessment_name) %}
                  <td>
-                   {{ structure.assessment_type or "" }}
+                  {{ structure.score }}
                  </td>
+                 {% endfor %}
                  <td>
-                   {{ structure.max_score or "" }}
-                 </td>
-                 <td>
-                   {{ structure.weightage or ""}}
-                 </td>
-                 <td class="min-w-[250px] text-center">
-                   {{ structure.topics or "" }}
-                 </td>
-                 <td>
-                   {{ structure.week_num or "" }}
+                  {{ get_comment(student.student,assessment_name) or ""}}
                  </td>
                 </tr>
                 {% endfor %}
                {% else %}
                 <tr>
-                 <td colspan="6" class="text-center">No outline found.</td>
+                 <td colspan="4" class="text-center">No student found.</td>
                 </tr>
                {% endif %}
                </tbody>
@@ -162,6 +151,102 @@
        </div>
        <!-- end: grid -->
       </div>
+     </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="hidden" id="report_cards">
+     <div class="container-fixed">
+      <div class="card card-grid min-w-full">
+       <!-- begin: grid -->
+       <div class="grid grid-cols-1 lg:grid-cols-1 gap-5 lg:gap-7.5">
+        <div class="col-span-2">
+          <div class="flex flex-col gap-5 lg:gap-7.5">
+           <div class="card min-w-full border-0">
+            <div class="card-header flex-wrap gap-2">
+             <h3 class="card-title font-medium text-sm">              
+             </h3>
+             {% if "Academics User" in user_roles %}
+             {% if assessments %}
+             <div class="flex items-center gap-2.5">
+              <a class="btn btn-sm btn-secondary text-sm" href="/app/assessment-result-tool">
+               Submit Final Grade
+              </a>
+             </div>
+             {% else %}
+             <div class="flex items-center gap-2.5">
+              <a class="btn btn-sm btn-secondary text-sm" href="app/assessment-plan/new-assessment-plan">
+               Add Assessment Plan
+              </a>
+             </div>
+             {% endif %}
+             {% endif %}
+            </div>
+            <div class="card-body scrollable h-[200px] py-0 my-4 pr-4 mr-2">
+             <div class="scrollable-x-auto">
+              <table class="table table-auto">
+               <thead>
+                <tr>
+                 <th class="min-w-[250px]">
+                    Student
+                 </th>
+                 {% if criterias %}
+                 {% for criteria in criterias %}
+                 <th class="min-w-[150px]">
+                  <div class="text-sm text-primary hover:text-primary-active mb-px">
+                    <b>{{ criteria.assessment_criteria }}</b><br>
+                  </div>
+                    ({{ criteria.maximum_score }})%
+                 </th>
+                 {% endfor %}
+                 {% endif %}
+                 <th class="min-w-[150px]">
+                     Total Score<br>
+                     (100%)
+                 </th>
+                 <th class="min-w-[150px]">
+                     Comment
+                 </th>
+               </tr>
+               </thead>
+               <tbody>
+               {% if students %}
+                {% for student in students %}
+                <tr>
+                 <td class="min-w-[250px] text-left">
+                 <a class="text-sm text-primary hover:text-primary-active mb-px" href="/students/profile/{{ student.student }}">
+                  {{ student.student_name }}
+                 </a>
+                 </td>
+                 {% for structure in get_criteria_marks(student.student,assessment_name) %}
+                 <td>
+                  {{ structure.score }}
+                 </td>
+                 {% endfor %}
+                 <td>
+                  {{ get_total(student.student,assessment_name) or ""}}
+                 </td>
+                 <td>
+                  {{ get_comment(student.student,assessment_name) or ""}}
+                 </td>
+                </tr>
+                {% endfor %}
+               {% else %}
+                <tr>
+                 <td colspan="3" class="text-center">No student found.</td>
+                </tr>
+               {% endif %}
+               </tbody>
+              </table>
+             </div>
+            </div>
+          </div>
+         </div>
+        </div>
+       </div>
+       <!-- end: grid -->
+      </div>
+     </div>
      </div>
      <!-- end: container -->
     </main>
