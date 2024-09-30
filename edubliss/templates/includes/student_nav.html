@@ -29,6 +29,13 @@
               </span>
              </a>
             </div>
+            <div class="menu-item {% if active_student_route == 'health' %}active{% endif %}">
+             <div class="menu-link" href="/students/health/{{docname}}" tabindex="0">
+              <span class="menu-title">
+               Medical Info
+              </span>
+             </div>
+            </div>
            </div>
           </div>
           <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'enrollment' or active_student_route == 'lms' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
@@ -72,11 +79,38 @@
             </span>
            </div>
           </div>          
-          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'report_card' %}here{% endif %}">
-           <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" href="/students/report_card/{{docname}}" tabindex="0">
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'gradebook' or active_student_route == 'report_card' or active_student_route == 'report_card' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
+           <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" tabindex="0">
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
-             Report Cards
+             Grades
             </span>
+            <span class="menu-arrow">
+             <i class="ki-filled ki-down text-2xs text-gray-500 menu-item-active:text-primary menu-item-here:text-primary menu-item-show:text-primary menu-link-hover:text-primary">
+             </i>
+            </span>
+           </div>
+           <div class="menu-dropdown menu-default py-2 min-w-[200px]">
+            <div class="menu-item {% if active_student_route == 'gradebook' %}active{% endif %}">
+             <a class="menu-link" href="/students/gradebook/{{docname}}" tabindex="0">
+              <span class="menu-title">
+               Gradebook Grades
+              </span>
+             </a>
+            </div>
+            <div class="menu-item {% if active_student_route == 'report_card' %}active{% endif %}">
+             <a class="menu-link" href="/students/report_card/{{docname}}" tabindex="0">
+              <span class="menu-title">
+               Progress Report
+              </span>
+             </a>
+            </div>
+            <div class="menu-item {% if active_student_route == 'report_card' %}active{% endif %}">
+             <a class="menu-link" href="/students/report_card/{{docname}}" tabindex="0">
+              <span class="menu-title">
+               Report Cards
+              </span>
+             </a>
+            </div>
            </div>
           </div>
           <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'billing' or active_student_route == 'ledger' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
@@ -106,17 +140,10 @@
             </div>
            </div>
           </div>
-          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'health' %}here{% endif %}">
-           <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" href="/students/health/{{docname}}" tabindex="0">
-            <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
-             Medical Info
-            </span>
-           </div>
-          </div>
           <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'communications' or active_student_route == 'activity' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
            <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" tabindex="0">
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
-             More
+             Communications
             </span>
             <span class="menu-arrow">
              <i class="ki-filled ki-down text-2xs text-gray-500 menu-item-active:text-primary menu-item-here:text-primary menu-item-show:text-primary menu-link-hover:text-primary">

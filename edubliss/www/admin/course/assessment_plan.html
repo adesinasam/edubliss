@@ -21,7 +21,7 @@
      <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
-        <h1 class="text-xl font-semibold leading-none text-success">
+        <h1 class="text-xl font-semibold leading-none text-primary">
          {{docname}}
         </h1>
         <div class="flex items-center flex-wrap gap-1.5 font-medium">
@@ -33,13 +33,13 @@
        {% if "Academics User" in user_roles %}
        {% if assessments %}
        <div class="flex items-center gap-2.5">
-        <a class="btn btn-sm btn-secondary text-sm" href="/app/assessment-plan/{{assessments.name}}">
+        <a class="btn btn-sm btn-primary btn-outline text-sm" href="/app/assessment-plan/{{assessments.name}}">
          Edit Assessment Plan
         </a>
        </div>
        {% else %}
        <div class="flex items-center gap-2.5">
-        <a class="btn btn-sm btn-secondary text-sm" href="app/assessment-plan/new-assessment-plan">
+        <a class="btn btn-sm btn-primary btn-outline text-sm" href="app/assessment-plan/new-assessment-plan">
          Add Assessment Plan
         </a>
        </div>

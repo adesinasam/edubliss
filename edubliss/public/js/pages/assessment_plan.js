@@ -17,6 +17,7 @@ frappe.ui.form.on('Assessment Plan', {
 							row.assessment_criteria = d.assessment_criteria;
 							row.topics = d.topics;
 							row.weightage = d.weightage;
+							row.description = d.description;
 						});
 					}
 					refresh_field('custom_assessment_structure');

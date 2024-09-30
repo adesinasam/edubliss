@@ -1,39 +1,35 @@
 {% extends "templates/layout.html" %}
 
 {% block title %}
-{{ _("Course Enrollment") }}
+{{ _("Student Enrollment") }}
 {% endblock %}
 
 {% block headnav_link %}
-    {% include "templates/includes/headnav/edu_headnav2.html" %}
+    {% include "templates/includes/headnav/edu_headnav3.html" %}
 {% endblock %}
 
 {% block content %}
-    <main class="grow content pt-5 bg-gray-100" id="content" role="content">
+    <main class="grow content pt-5" id="content" role="content">
      <!-- begin: container -->
      <div class="container-fixed" id="content_container">
      </div>
      <!-- end: container -->
 
-    {% include "templates/includes/course_nav.html" %}
+    {% include "templates/includes/student_header.html" %}
+
+    {% include "templates/includes/student_nav.html" %}
 
      <!-- begin: container -->
      <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
-        <h1 class="text-xl font-semibold leading-none text-primary">
-         {{docname}}
+        <h1 class="text-xl font-semibold leading-none text-gray-900">
+         Gradebook Grades
         </h1>
-        <div class="flex items-center flex-wrap gap-1.5 font-medium">
-         <span class="text-md text-gray-600">
-          Course Enrollment
-         </span>
+        <div class="flex items-center gap-2 text-sm font-medium text-gray-600">
         </div>
        </div>
        <div class="flex items-center gap-2.5">
-        <div class="btn btn-sm btn-primary btn-outline text-sm" href="/app/course-enrollment/new-course-enrollment-">
-         Enroll Student
-        </div>
        </div>
       </div>
      </div>
@@ -43,9 +39,21 @@
       <div class="grid gap-5 lg:gap-7.5">
        <div class="card card-grid min-w-full">
         <div class="card-header flex-wrap gap-2">
-         <h3 class="card-title font-medium text-sm">
-          Showing {{ student_count }} Students
-         </h3>
+         <div class="flex flex-col justify-center gap-2">
+          <h3 class="text-md font-semibold leading-none text-primary">
+            <a href="/students/gradebook/{{docname}}">
+            <i class="ki-filled ki-arrow-left"></i>
+           {{ results.course }}    
+            </a>
+           <span> </span>
+           <span class="badge badge-dot size-1.5 bg-gray-600">
+           </span>
+           <span> </span>
+           <b class="text-sm font-medium text-gray-600"> {{ students.student_name }}</b>
+          </h3>
+         </div>
+         <div class="flex flex-wrap gap-2 lg:gap-5">
+         </div>
         </div>
         <div class="card-body">
          <div data-datatable="true" data-datatable-page-size="10">
@@ -53,31 +61,10 @@
            <table class="table table-auto table-border" data-datatable-table="true">
             <thead>
              <tr>
-              <th class="w-[60px] text-center">
-               <input class="checkbox checkbox-sm" data-datatable-check="true" type="checkbox"/>
-              </th>
-              <th class="min-w-[300px]">
+              <th class="min-w-[200px]">
                <span class="sort asc">
                 <span class="sort-label">
-                 Student
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
-              </th>
-              <th class="min-w-[300px]">
-               <span class="sort">
-                <span class="sort-label">
-                 School
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
-              </th>
-              <th class="min-w-[200px]">
-               <span class="sort">
-                <span class="sort-label">
-                 Program
+                 Topic
                 </span>
                 <span class="sort-icon">
                 </span>
@@ -86,16 +73,52 @@
               <th class="min-w-[150px]">
                <span class="sort">
                 <span class="sort-label">
-                 Enrollment Date
+                 Assessment Type
                 </span>
                 <span class="sort-icon">
                 </span>
                </span>
               </th>
-              <th class="min-w-[200px] text-center">
+              <th class="min-w-[100px]">
                <span class="sort">
                 <span class="sort-label">
-                 Term
+                 Point/Posiible
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[100px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Percent
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[100px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Grade
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[150px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Schedule Date
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
+              </th>
+              <th class="min-w-[150px]">
+               <span class="sort">
+                <span class="sort-label">
+                 Due Date
                 </span>
                 <span class="sort-icon">
                 </span>
@@ -106,42 +129,40 @@
              </tr>
             </thead>
             <tbody>
-             {% if students %}
-              {% for student in students %}
+             {% if structures %}
+              {% for structure in structures %}
              <tr>
-              <td class="text-center">
-               <input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/>
+              <td>
+                {{ structure.topics or "" }}
               </td>
               <td>
-                 <a class="text-sm text-primary hover:text-primary-active mb-px" href="/students/profile/{{ student.student }}">
-                  {{ student.student_name }}
-                 </a>
+                {{ structure.assessment_type }}
               </td>
               <td>
-               {{ student.custom_school }}
+               {{ structure.score }}/{{ structure.maximum_score }}
               </td>
               <td>
-               {{ student.program }}
+               {{ structure.weightage_score }}
               </td>
               <td>
-               {{ student.enrollment_date }}
+               {{ structure.grade }}
               </td>
               <td>
-               <div class="flex justify-center">
-               {{ student.academic_term }}
-               </div>
+               {{ get_structure_date(results.assessment_plan,structure.assessment_type) or ""}}
               </td>
               <td>
-               <div class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/app/course-enrollment/{{ student.name }}">
-                 <i class="ki-filled ki-pencil">
-                 </i>
-               </div>
+               {{ get_structure_due(results.assessment_plan,structure.assessment_type) or ""}}
+              </td>
+              <td>
+                <a >
+                 <i class="ki-filled ki-eye text-primary text-sm"></i>
+                </a>
               </td>
              </tr>
                {% endfor %}
              {% else %}
              <tr>
-              <td colspan="7" class="text-center">No student found.</td>
+              <td colspan="7" class="text-center">No course found.</td>
              </tr>
              {% endif %}
             </tbody>
@@ -168,4 +189,8 @@
      </div>
      <!-- end: container -->
     </main>
+{% endblock %}
+
+{% block welcome_link %}
+{% include "templates/includes/modal/course_plan.html" %}
 {% endblock %}
