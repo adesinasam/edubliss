@@ -59,8 +59,15 @@
   <div class="container-fixed">
     <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
       <div class="flex flex-col justify-center gap-2">
-        <h1 class="text-xl font-semibold leading-none text-success">Class Schedule</h1>
+        <h1 class="text-xl font-semibold leading-none text-primary">Class Schedule</h1>
       </div>
+       {% if "Academics User" in user_roles %}
+       <div class="flex items-center gap-2.5">
+        <a class="btn btn-sm btn-primary btn-light" href="/app/course-scheduling-tool">
+         Course Schedule Tool
+        </a>
+       </div>
+       {% endif %}
     </div>
   </div>
   <!-- end: container -->

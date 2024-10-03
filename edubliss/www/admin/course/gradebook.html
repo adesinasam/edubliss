@@ -30,7 +30,6 @@
          </span>
         </div>
        </div>
-
        <div class="flex items-center gap-2.5">
         <div class="flex gap-4 mb-5" data-tabs="true">
          <a class="btn btn-primary rounded-full btn-clear active" data-tab-toggle="true" href="#gradebook_cards">
@@ -91,8 +90,11 @@
                  {% if structures %}
                  {% for structure in structures %}
                  <th class="min-w-[150px]">
-                    Due: {{ format_date(structure.due_date) or "" }}<br>
-                    <b>{{ structure.topics or "Topic" }}</b>
+                  <div class="text-sm text-primary hover:text-primary-active">
+                    <b>{{ structure.assessment_type }}</b><br>
+                  </div>
+                    <b>{{ structure.topics or "Topic" }}</b><br>
+                    Due: {{ format_date(structure.due_date) or "" }}
                  </th>
                  {% endfor %}
                  {% endif %}
@@ -104,9 +106,6 @@
                  {% if structures %}
                  {% for structure in structures %}
                  <th class="min-w-[150px]">
-                  <div class="text-sm text-primary hover:text-primary-active mb-px">
-                    <b>{{ structure.assessment_type }}</b><br>
-                  </div>
                     Weightage: {{ structure.weightage }}%<br>
                     Max. Score: {{ structure.max_score }}
                  </th>
