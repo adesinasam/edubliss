@@ -4,17 +4,17 @@
 			<th style="width: 90px" rowspan="2">Student</th>
 			<th style="width: 170px" rowspan="2">Student Name</th>
 			{% for c in criteria %}
-			<th class="score" style="width: 100px">{{ c.assessment_type }}</th>
+			<th class="score" style="width: 150px">{{ c.assessment_type }}</th>
 			{% endfor %}
 			<th class="score" style="width: 170px" rowspan="2">Comments</th>
-			<th class="score" style="width: 100px">Total Percentage</th>
+			<th class="score" style="width: 150px">Total Percentage</th>
 			<!--criteria-->
 		</tr>
 		<tr>
 			{% for c in criteria %}
-			<th class="score" style="width: 100px">Score ({{ c.max_score }})</th>
+			<th class="score" style="width: 150px">Score ({{ c.max_score }})</th>
 			{% endfor %}
-			<th class="score" style="width: 100px">Score 100%</th>
+			<th class="score" style="width: 150px">Score 100%</th>
 		</tr>
 	</thead>
 	<tbody>

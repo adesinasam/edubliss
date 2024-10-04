@@ -32,10 +32,12 @@
           <div class="card bg-info-light">
             <div class="card-header bg-info">
               <h3 class="card-title text-light">Section</h3>
+              {% if "Academics User" in user_roles %}
               <a href="app/student-group/new-student-group">
                 <i class="ki-solid ki-abstract-10 text-sm text-light" data-tooltip="#program_tooltip" data-tooltip-placement="bottom"></i>
                 <div class="hidden rounded shadow-default p-3 bg-light border border-gray-300 text-gray-800 text-xs font-normal" id="program_tooltip">Add Section</div>
               </a>
+              {% endif %}
             </div>
             <div class="card-body pt-3.5 pb-3.5">
               <table class="table-auto">

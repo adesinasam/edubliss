@@ -227,99 +227,37 @@
 {% endblock %}
 
 {% block custom_js %}
-<script type="application/json" id="course-data">
-    {{ courses | json }}
-</script>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('search-input');
-    const tableBody = document.querySelector('tbody');
-    const courseData = JSON.parse(document.getElementById('course-data').textContent);
+    const table = document.querySelector('table[data-datatable-table="true"]');
+    const rows = table.querySelectorAll('tbody tr');
 
-    // Function to render courses
-    function renderCourses(courses) {
-        tableBody.innerHTML = ''; // Clear the table
+    searchInput.addEventListener('input', function () {
+        const query = searchInput.value.toLowerCase();
 
-        courses.forEach(function(course) {
-            const row = `<tr>
-                <td class="text-center">
-                    <input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/>
-                </td>
-                <td>
-                    <div class="flex items-center gap-2.5">
-                        <div class="flex flex-col">
-                            <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/admin/course/overview/${course.name}">
-                                ${course.course_name || ""}
-                            </a>
-                        </div>
-                    </div>
-                </td>
-                <td>${course.custom_course_code || ""}</td>
-                <td>${course.custom_subject || ""}</td>
-                <td>
-                    <div class="flex items-center gap-1.5">
-                        <span class="badge badge-pill badge-outline ${course.custom_disabled == 0 ? 'badge-success' : 'badge-danger'} gap-1 items-center">
-                            <span class="badge badge-dot size-1.5 ${course.custom_disabled == 0 ? 'badge-success' : 'badge-danger'}"></span>
-                            ${course.custom_disabled == 0 ? 'Active' : 'Disabled'}
-                        </span>
-                    </div>
-                </td>
-                <td>${course.custom_course_category || ""}</td>
-                <td>
-                    <div class="flex justify-center">${course.department || ""}</div>
-                </td>
-                <td>
-                    <div class="menu" data-menu="true">
-                        <div class="menu-item" data-menu-item-offset="0, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
-                            <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
-                                <i class="ki-filled ki-dots-vertical"></i>
-                            </button>
-                            <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
-                                <div class="menu-item">
-                                    <a class="menu-link" href="/admin/courses/overview/${course.name}">
-                                        <span class="menu-icon">
-                                            <i class="ki-filled ki-search-list"></i>
-                                        </span>
-                                        <span class="menu-title">View</span>
-                                    </a>
-                                </div>
-                                <div class="menu-separator"></div>
-                                <div class="menu-item">
-                                    <a class="menu-link" href="/app/course/${course.course_name}">
-                                        <span class="menu-icon">
-                                            <i class="ki-filled ki-pencil"></i>
-                                        </span>
-                                        <span class="menu-title">Edit</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>`;
-            tableBody.innerHTML += row;
+        rows.forEach(row => {
+            const courseName = row.querySelector('td:nth-child(2) a').textContent.toLowerCase();
+            const courseId = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+            const subject = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+            const status = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+            const category = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
+            const department = row.querySelector('td:nth-child(7)').textContent.toLowerCase();
+
+            if (
+                courseName.includes(query) ||
+                courseId.includes(query) ||
+                subject.includes(query) ||
+                status.includes(query) ||
+                category.includes(query) ||
+                department.includes(query)
+            ) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
         });
-    }
-
-    // Initial render of all courses
-    renderCourses(courseData);
-
-    // Search logic
-    searchInput.addEventListener('input', function() {
-        const searchTerm = searchInput.value.toLowerCase();
-
-        const filteredCourses = courseData.filter(function(course) {
-            return (course.course_name && course.course_name.toLowerCase().includes(searchTerm)) ||
-                   (course.custom_course_code && course.custom_course_code.toLowerCase().includes(searchTerm)) ||
-                   (course.custom_subject && course.custom_subject.toLowerCase().includes(searchTerm)) ||
-                   (course.custom_course_category && course.custom_course_category.toLowerCase().includes(searchTerm)) ||
-                   (course.department && course.department.toLowerCase().includes(searchTerm));
-        });
-
-        // Render filtered courses
-        renderCourses(filteredCourses);
     });
 });
-
 </script>
 {% endblock %}

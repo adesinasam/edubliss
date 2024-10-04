@@ -39,12 +39,13 @@
          </span>
         </a>
        </div>
-       {% if "Academics User" in user_roles %}
+       {% if "Academics User" in user_roles  or "Instructor" in user_roles %}
        <div class="menu-item pt-2.25 pb-px">
         <span class="menu-heading uppercase pl-[10px] pr-[10px] text-2sm font-semibold text-gray-500">
          Administration
         </span>
        </div>
+       {% endif %}
        <div class="menu-item {% if active_route == 'school' %}here show{% endif %}" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
         <div class="menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0">
          <span class="menu-icon items-start text-gray-500 dark:text-gray-400 w-[20px]">
@@ -82,6 +83,7 @@
          </div>
         </div>
        </div>
+       {% if "Academics User" in user_roles %}
        <div class="menu-item {% if active_route == 'Admission' %}here show{% endif %}" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
         <div class="menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0">
          <span class="menu-icon items-start text-gray-500 dark:text-gray-400 w-[20px]">
@@ -128,6 +130,8 @@
          </div>
         </div>
        </div>
+       {% endif %}
+       {% if "Academics User" in user_roles  or "Instructor" in user_roles %}
        <div class="menu-item pt-2.25 pb-px">
         <span class="menu-heading uppercase pl-[10px] pr-[10px] text-2sm font-semibold text-gray-500">
          Student Information System
@@ -216,6 +220,8 @@
          </div>
         </div>
        </div>
+       {% endif %}
+       {% if "Academics User" in user_roles %}
        <div class="menu-item {% if active_route == 'teachers' %}here show{% endif %}" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
         <div class="menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0">
          <span class="menu-icon items-start text-gray-500 dark:text-gray-400 w-[20px]">
@@ -255,6 +261,8 @@
          </span>
         </a>
        </div>
+       {% endif %}
+       {% if "Academics User" in user_roles  or "Instructor" in user_roles %}
        <div class="menu-item {% if active_route == 'courses' %}here show{% endif %}" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
         <div class="menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0">
          <span class="menu-icon items-start text-gray-500 dark:text-gray-400 w-[20px]">

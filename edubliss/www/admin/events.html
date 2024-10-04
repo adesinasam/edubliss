@@ -84,9 +84,12 @@
                 center: 'title',
                 right: 'today dayGridMonth,timeGridWeek,timeGridDay' // View options
             },
+            height: 800,
+            contentHeight: 780,
+            nowIndicator: true,
             initialView: 'dayGridMonth', // Default view on page load
             slotMinTime: "07:00:00", // Start showing time slots from 6 AM
-            slotMaxTime: "18:00:00", // End showing time slots at 10 PM
+            slotMaxTime: "22:00:00", // End showing time slots at 10 PM
             allDaySlot: false, // Disable the 'all-day' slot
             editable: true,
             events: function(fetchInfo, successCallback, failureCallback) {

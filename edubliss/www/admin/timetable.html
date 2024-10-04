@@ -165,11 +165,14 @@
             headerToolbar: {
                 left: 'prev,next',
                 center: 'title',
-                right: 'today timeGridWeek,timeGridDay' // View options
+                right: 'today timeGridWeek,listWeek' // View options
             },
+            height: 800,
+            contentHeight: 780,
             initialView: 'timeGridWeek', // Week view with time slots
             slotMinTime: "07:00:00", // Start showing time slots from 7 AM
-            slotMaxTime: "17:00:00", // End showing time slots at 5 PM
+            slotMaxTime: "21:00:00", // End showing time slots at 5 PM
+            nowIndicator: true,
             allDaySlot: false, // Disable the 'all-day' slot
             editable: true,
             weekends: showWeekends, // Initially hide weekends
