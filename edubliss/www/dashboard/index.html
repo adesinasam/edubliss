@@ -117,15 +117,15 @@
           </div>
           <div class="card-footer justify-center">
             {% if parents: %}
-           <a class="btn btn-link" href="/parents/profile/{{ parents.name }}">
+           <a class="btn btn-link" href="/parents/profile/{{ parents_name }}">
             View Profile
            </a>
             {% elif teachers: %}
-           <a class="btn btn-link" href="/teachers/profile/{{ teachers.name }}">
+           <a class="btn btn-link" href="/teachers/profile/{{ teachers_name }}">
             View Profile
            </a>
             {% elif studentss: %}
-           <a class="btn btn-link" href="/students/profile/{{ studentss.name }}">
+           <a class="btn btn-link" href="/students/profile/{{ students_name }}">
             View Profile
            </a>
            {% else %}

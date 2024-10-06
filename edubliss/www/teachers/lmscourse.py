@@ -3,9 +3,23 @@ from frappe import _
 
 no_cache = 1
 
-def get_context(context):
+def get_courses():
+    courses = frappe.qb.DocType("LMS Course")
+    instructors = frappe.qb.DocType("Course Instructor")
 
-    docname = frappe.form_dict.docname
+    courses_query = (
+        frappe.qb.from_(courses)
+        .inner_join(instructors)
+        .on(instructors.parent == courses.name)
+        .select('name', 'title', 'image', 'published_on', 'upcoming', 'custom_course',
+        'status', 'published', 'featured', 'short_introduction', 'disable_self_learning')
+        .where(instructors.instructor == frappe.session.user)
+        .orderby(courses.title)
+        .run(as_dict=1)
+    )
+    return courses_query if courses_query else []
+
+def get_context(context):
 
     # login
     if frappe.session.user == "Guest":
@@ -26,12 +40,8 @@ def get_context(context):
     context.abbr = "".join([p[0] for p in parts[:2] if p])
 
     # nav
-    context.active_route = "courses"
-    context.active_subroute = "course_list"
-    context.active_parent_route = "assessment"
-    context.active_teacher_route = "course"
-
-    context.docname = frappe.form_dict.docname
+    context.active_route = "lms"
+    context.active_subroute = "lms_course"
 
     edubliss_session = frappe.call('edubliss.api.get_edubliss_user_session')
     if edubliss_session:
@@ -43,24 +53,16 @@ def get_context(context):
         context.edublisession = _("Welcome")  # Assuming welcome is a placeholder message
         company = None
 
+    context.company = edubliss_session.school
+    context.acadyear = edubliss_session.academic_year
+    context.acadterm = edubliss_session.academic_term
+
     context.companys = frappe.call('edubliss.api.get_company')
     context.acadyears = frappe.call('edubliss.api.get_academic_year')
     context.acadterms = frappe.call('edubliss.api.get_academic_term')
+    context.lmscourses = get_courses()
 
-    academic_term = frappe.get_doc("Academic Term", acadterm)
-    terms = academic_term.term_name
-
-    try:
-        context.courses = frappe.get_doc("Course", docname)
-        course = context.courses
-    except frappe.DoesNotExistError:
-        frappe.throw(_("Course not found"), frappe.DoesNotExistError)
-
-    # Try to fetch the Student document and handle errors if it doesn't exist
-    if course:
-        context.criterias = course.get("assessment_criteria")
-        context.structures = course.get("assessment_structure")
-        context.outlines = course.get("custom_outline")
-    
+    # Count
+    context.lmscourse_count = len(get_courses())
 
     return context

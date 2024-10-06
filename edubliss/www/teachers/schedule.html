@@ -56,11 +56,11 @@
      <div class="container-fixed" id="content_container">
      </div>
      <!-- end: container -->
-
+    {% if "Academics User" in user_roles %}
     {% include "templates/includes/teacher_header.html" %}
 
     {% include "templates/includes/teacher_nav.html" %}
-
+    {% endif %}
      <!-- begin: container -->
      <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
@@ -102,6 +102,11 @@
                 left: 'prev,next',
                 center: 'title',
                 right: 'today timeGridWeek,listWeek' // View options
+            },
+            buttonText: {
+                today: 'Today',
+                week: 'Week',
+                listWeek: 'List'
             },
             height: 800,
             contentHeight: 780,

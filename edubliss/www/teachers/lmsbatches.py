@@ -1,11 +1,32 @@
 import frappe
 from frappe import _
+from datetime import datetime
 
 no_cache = 1
 
-def get_context(context):
+def format_date(value, format="%d %b %Y"):
+    if value:
+        return value.strftime(format)
+    return value
 
-    docname = frappe.form_dict.docname
+def get_batches(acadyear):
+    batches = frappe.qb.DocType("LMS Batch")
+    instructors = frappe.qb.DocType("Course Instructor")
+
+    batches_query = (
+        frappe.qb.from_(batches)
+        .inner_join(instructors)
+        .on(instructors.parent == batches.name)
+        .select('name', 'title', 'seat_count', 'custom_academic_year', 'start_date', 'custom_program',
+        'end_date', 'published', 'start_time', 'description', 'end_time')
+        .where(instructors.instructor == frappe.session.user)
+        .where(batches.custom_academic_year == acadyear)
+        .orderby(batches.title)
+        .run(as_dict=1)
+    )
+    return batches_query if batches_query else []
+
+def get_context(context):
 
     # login
     if frappe.session.user == "Guest":
@@ -26,12 +47,8 @@ def get_context(context):
     context.abbr = "".join([p[0] for p in parts[:2] if p])
 
     # nav
-    context.active_route = "courses"
-    context.active_subroute = "course_list"
-    context.active_parent_route = "assessment"
-    context.active_teacher_route = "course"
-
-    context.docname = frappe.form_dict.docname
+    context.active_route = "lms"
+    context.active_subroute = "lms_batch"
 
     edubliss_session = frappe.call('edubliss.api.get_edubliss_user_session')
     if edubliss_session:
@@ -43,24 +60,19 @@ def get_context(context):
         context.edublisession = _("Welcome")  # Assuming welcome is a placeholder message
         company = None
 
+    context.company = edubliss_session.school
+    context.acadyear = edubliss_session.academic_year
+    context.acadterm = edubliss_session.academic_term
+
     context.companys = frappe.call('edubliss.api.get_company')
     context.acadyears = frappe.call('edubliss.api.get_academic_year')
     context.acadterms = frappe.call('edubliss.api.get_academic_term')
+    context.lmsbatches = get_batches(acadyear=acadyear)
 
-    academic_term = frappe.get_doc("Academic Term", acadterm)
-    terms = academic_term.term_name
+    # Add this filter to Jinja
+    context['format_date'] = format_date
 
-    try:
-        context.courses = frappe.get_doc("Course", docname)
-        course = context.courses
-    except frappe.DoesNotExistError:
-        frappe.throw(_("Course not found"), frappe.DoesNotExistError)
-
-    # Try to fetch the Student document and handle errors if it doesn't exist
-    if course:
-        context.criterias = course.get("assessment_criteria")
-        context.structures = course.get("assessment_structure")
-        context.outlines = course.get("custom_outline")
-    
+    # Count
+    context.lmsbatch_count = len(get_batches(acadyear=acadyear))
 
     return context

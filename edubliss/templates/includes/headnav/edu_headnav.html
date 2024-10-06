@@ -4,6 +4,24 @@
      <a class="dark:hidden" href="/">
       {%- if brand_html -%}
       <span class="default-logo min-h-[22px] max-w-[22px]">
+       <img src='/files/Brand-Logo-New-2-350x46d9b2e0.png'>
+      </span>
+      {%- elif banner_image -%}
+      <img src='{{ banner_image }}' class="default-logo min-h-[22px] max-w-[22px]">
+      {%- endif -%}
+     </a>
+     <a class="hidden dark:block" href="/">
+      {%- if brand_html -%}
+      <span class="default-logo min-h-[22px] max-w-none">
+       <img src='/files/Brand-Logo-New-2-350x46d9b2e0.png'>
+      </span>
+      {%- elif banner_image -%}
+      <img src='{{ banner_image }}' class="default-logo min-h-[22px] max-w-[22px]">
+      {%- endif -%}
+     </a>
+     <!-- <a class="dark:hidden" href="/">
+      {%- if brand_html -%}
+      <span class="default-logo min-h-[22px] max-w-[22px]">
       {{ brand_html }}
       </span>
       {%- elif banner_image -%}
@@ -18,7 +36,7 @@
       {%- elif banner_image -%}
       <img src='{{ banner_image }}' class="default-logo min-h-[22px] max-w-[22px]">
       {%- endif -%}
-     </a>
+     </a> -->
     </div>
      <div class="container-fixed flex justify-between items-stretch lg:gap-4" id="header_container">
       <div class="flex gap-1 lg:hidden items-center -ml-1">

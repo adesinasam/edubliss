@@ -1,0 +1,241 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("LMS Courses") }}
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav2.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+     <!-- Container -->
+     <div class="container-fixed">
+      <!-- begin: works -->
+      <div class="flex flex-col items-stretch gap-5 lg:gap-7.5">
+       <!-- begin: toolbar -->
+       <div class="flex flex-wrap items-center gap-5 justify-between">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-gray-900">
+         LMS Course
+        </h1>
+        <div class="flex items-center flex-wrap gap-1.5 font-medium">
+         <span class="text-md text-ray-800 font-semibold me-2">
+          {{ lmscourse_count }} Courses
+         </span>
+        </div>
+       </div>
+       <div class="flex items-center gap-2.5">
+          <div class="flex toolbar">
+           <label class="input input-sm">
+            <i class="ki-filled ki-magnifier">
+            </i>
+              <input type="text" id="searchInput" class="border p-2 rounded w-full" placeholder="Search courses..." />
+            </input>
+           </label>
+          </div>
+        {% if "Academics User" in user_roles %}
+        <a class="btn btn-md btn-secondary" href="/app/lms-course/new-lms-course-">
+         <i class="ki-filled ki-add-folder">
+         </i>
+         Add
+        </a>
+        {% endif %}
+        <div class="btn-tabs" data-tabs="true">
+         <a class="btn btn-icon active" data-tab-toggle="#works_cards" href="#">
+          <i class="ki-filled ki-category">
+          </i>
+         </a>
+         <a class="btn btn-icon" data-tab-toggle="#works_list" href="#">
+          <i class="ki-filled ki-row-horizontal">
+          </i>
+         </a>
+        </div>
+       </div>
+       </div>
+       <!-- end: toolbar -->
+       <!-- begin: cards -->
+       <div id="works_cards">
+        <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-5 lg:gap-7.5">
+         {% for course in lmscourses %}
+         <div class="card border-0">
+          <img alt="" class="w-full h-[170px] rounded-t-xl" src="{% if course.image  %}{{course.image}}{% else %}assets/edubliss/dist/media/images/600x400/25.jpg{% endif %}"/>
+          <div class="card-border card-rounded-b flex flex-col gap-2 px-5 py-4.5">
+           <a class="text-md font-semibold text-gray-900 hover:text-primary" {% if course.published %}href="/lms/courses/{{ course.name }}"{% endif %}>
+            {{course.title}}
+           </a>
+           <div class="flex items-center justify-between grow">
+            <div class="flex gap-3 items-center">
+             <div class="flex gap-1 items-center">
+               {% if course.status == "Approved" %}
+              <span class="badge badge-pill badge-xs badge-outline badge-success gap-1 items-center">
+                <span class="badge badge-dot size-1.5 badge-success">
+               {% elif course.status == "In Progress" %}
+              <span class="badge badge-pill badge-xs badge-outline badge-warning gap-1 items-center">
+                <span class="badge badge-dot size-1.5 badge-warning">
+               {% elif course.status == "Under Review" %}
+              <span class="badge badge-pill badge-xs badge-outline badge-primary gap-1 items-center">
+                <span class="badge badge-dot size-1.5 badge-primary">
+               {% endif %}
+                </span>
+                  {{ course.status }}
+              </span>
+             </div>
+             <div class="flex gap-1 items-center">
+               {% if course.published %}
+              <span class="badge badge-pill badge-xs badge-outline badge-info gap-1 items-center">
+                <span class="badge badge-dot size-1.5 badge-info">
+                </span>
+                  Published
+              </span>
+               {% else %}
+              <span class="badge badge-pill badge-xs badge-outline gap-1 items-center">
+                <span class="badge badge-dot size-1.5 ">
+                </span>
+                  Not Published
+              </span>
+               {% endif %}
+              </div>
+            </div>
+            <div class="flex gap-3 items-center">
+             <div class="flex gap-1 items-center">
+               {% if course.published %}
+               <a class="text-md font-semibold text-gray-900 hover:text-primary" href="/lms/courses/{{ course.name }}" data-tooltip="#lms_tooltip">
+                <i class="ki-filled ki-eye text-base text-gray-500">
+                </i>
+                <div id="lms_tooltip" class="rounded-xl tooltip">
+                 View
+                </div>
+               </a>
+               {% endif %}
+             </div>
+             <div class="flex gap-1 items-center">
+              {% if "Academics User" in user_roles %}
+              <a class="text-md font-semibold text-gray-900 hover:text-primary" href="/app/lms-course/{{ course.name }}" data-tooltip="#sects_tooltip"  data-tooltip-placement="top">
+                <i class="ki-filled ki-pencil text-base text-gray-500">
+                </i>
+                <div id="sects_tooltip" class="hidden rounded-xs shadow-default tooltip border border-gray-200 text-light text-xs font-normal">
+                 Edit
+                </div>
+              </a>  
+              {% endif %}
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+         {% endfor %}
+        </div>
+       </div>
+       <!-- end: cards -->
+       <!-- begin: list -->
+       <div class="hidden" id="works_list">
+        <div class="flex flex-col gap-5 lg:gap-7.5">
+         {% for course in lmscourses %}
+         <div class="card p-5">
+          <div class="flex flex-wrap justify-between items-center gap-7">
+           <div class="flex flex-wrap items-center gap-5">
+            <img alt="" class="rounded-md max-h-20 max-w-full shrink-0" src="{% if course.image  %}{{course.image}}{% else %}assets/edubliss/dist/media/images/600x400/25.jpg{% endif %}"/>
+            <div class="grid grid-col gap-1">
+             <a class="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" {% if course.published %}href="/lms/courses/{{ course.name }}"{% endif %}>
+              {{course.title}}
+             </a>
+             <span class="text-2sm font-medium text-gray-600">
+              {{course.short_introduction}}
+             </span>
+            </div>
+           </div>
+           <div class="flex flex-wrap items-center gap-5 lg:gap-7.5">
+            <div class="flex gap-1 items-center w-28 justify-end">
+               {% if course.status == "Approved" %}
+              <span class="badge badge-pill badge-sm badge-outline badge-success gap-1 items-center">
+                <span class="badge badge-dot size-1.5 badge-success">
+               {% elif course.status == "In Progress" %}
+              <span class="badge badge-pill badge-sm badge-outline badge-warning gap-1 items-center">
+                <span class="badge badge-dot size-1.5 badge-warning">
+               {% elif course.status == "Under Review" %}
+              <span class="badge badge-pill badge-sm badge-outline badge-primary gap-1 items-center">
+                <span class="badge badge-dot size-1.5 badge-primary">
+               {% endif %}
+                </span>
+                  {{ course.status }}
+              </span>
+            </div>
+            <div class="flex gap-1 items-center w-28 justify-end">
+               {% if course.published %}
+              <span class="badge badge-pill badge-sm badge-outline badge-info gap-1 items-center">
+                <span class="badge badge-dot size-1.5 badge-info">
+                </span>
+                  Published
+              </span>
+               {% else %}
+              <span class="badge badge-pill badge-sm badge-outline gap-1 items-center">
+                <span class="badge badge-dot size-1.5 ">
+                </span>
+                  Not Published
+              </span>
+               {% endif %}
+            </div>
+               {% if course.published %}
+            <a class="btn btn-icon btn-light btn-clear btn-sm" href="/lms/courses/{{ course.name }}" data-tooltip="#lms2_tooltip">
+                <i class="ki-filled ki-eye text-base text-gray-500">
+                </i>
+                <div id="lms2_tooltip" class="rounded-xl tooltip">
+                 View
+                </div>
+            </a>
+               {% endif %}
+              {% if "Academics User" in user_roles %}
+            <a class="btn btn-icon btn-light btn-clear btn-sm" href="/app/lms-course/{{ course.name }}" data-tooltip="#sects2_tooltip"  data-tooltip-placement="top">
+                <i class="ki-filled ki-pencil text-base text-gray-500">
+                </i>
+                <div id="sects2_tooltip" class="hidden rounded-xs shadow-default tooltip border border-gray-200 text-light text-xs font-normal">
+                 Edit
+                </div>
+            </a>  
+              {% endif %}
+           </div>
+          </div>
+         </div>
+         {% endfor %}
+        </div>
+       </div>
+       <!-- end: list -->
+      </div>
+      <!-- end: works -->
+     </div>
+     <!-- End of Container -->
+    </main>
+<script>
+document.getElementById("searchInput").addEventListener("keyup", function() {
+  var searchString = this.value.toLowerCase();
+
+  // For card view
+  var cardCourses = document.querySelectorAll("#works_cards .card");
+  cardCourses.forEach(function(card) {
+    var title = card.querySelector("a").textContent.toLowerCase();
+    if (title.includes(searchString)) {
+      card.style.display = "";
+    } else {
+      card.style.display = "none";
+    }
+  });
+
+  // For list view
+  var listCourses = document.querySelectorAll("#works_list .card");
+  listCourses.forEach(function(card) {
+    var title = card.querySelector("a").textContent.toLowerCase();
+    if (title.includes(searchString)) {
+      card.style.display = "";
+    } else {
+      card.style.display = "none";
+    }
+  });
+});
+</script>
+{% endblock %}

@@ -30,7 +30,7 @@
          </span>
         </div>
        </div>
-       {% if "Academics User" in user_roles %}
+       {% if "Academics User" in user_roles or "Instructor" in user_roles %}
        {% if assessments %}
        <div class="flex items-center gap-2.5">
         <a class="btn btn-sm btn-primary btn-outline text-sm" href="/app/assessment-plan/{{assessments.name}}">

@@ -14,16 +14,16 @@
      <div class="container-fixed" id="content_container">
      </div>
      <!-- end: container -->
-
+    {% if "Academics User" in user_roles %}
     {% include "templates/includes/teacher_header.html" %}
 
     {% include "templates/includes/teacher_nav.html" %}
-
+    {% endif %}
      <!-- begin: container -->
      <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
-        <h1 class="text-xl font-semibold leading-none text-gray-900">
+        <h1 class="text-xl font-semibold leading-none text-primary">
          Subjects
         </h1>
        </div>
@@ -41,13 +41,11 @@
          </h3>
         </div>
         <div class="card-body">
-         <div data-datatable="true" data-datatable-page-size="10">
           <div class="scrollable-x-auto">
            <table class="table table-auto table-border" data-datatable-table="true">
             <thead>
              <tr>
-              <th class="w-[60px] text-center">
-               <input class="checkbox checkbox-sm" data-datatable-check="true" type="checkbox"/>
+              <th class="min-w-[60px]">
               </th>
               <th class="min-w-[250px]">
                <span class="sort asc">
@@ -94,9 +92,6 @@
                 </span>
                </span>
               </th>
-              <th class="min-w-[200px]">
-                Others
-              </th>
              </tr>
             </thead>
             <tbody>
@@ -104,7 +99,8 @@
               {% for course in courses %}
              <tr>
               <td class="text-center">
-               <input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/>
+                <span class="badge badge-dot size-1.5 badge-primary">
+                </span>              
               </td>
               <td>
                  <a class="text-sm font-semibold text-primary hover:text-primary-active mb-px" href="admin/course/overview/{{ course.course }}">
@@ -123,36 +119,18 @@
                </div>
               </td>
               <td>
-               {{ course.student_group }}
-              </td>
-              <td>
-               {{ course.other_details }}
+               {{ course.student_group or "" }}
               </td>
              </tr>
                {% endfor %}
              {% else %}
              <tr>
-              <td colspan="7" class="text-center">No subjects found.</td>
+              <td colspan="6" class="text-center">No subjects found.</td>
              </tr>
              {% endif %}
             </tbody>
            </table>
           </div>
-          <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
-           <div class="flex items-center gap-2 order-2 md:order-1">
-            Show
-            <select class="select select-sm w-16" data-datatable-size="true" name="perpage">
-            </select>
-            per page
-           </div>
-           <div class="flex items-center gap-4 order-1 md:order-2">
-            <span data-datatable-info="true">
-            </span>
-            <div class="pagination" data-datatable-pagination="true">
-            </div>
-           </div>
-          </div>
-         </div>
         </div>
        </div>
       </div>

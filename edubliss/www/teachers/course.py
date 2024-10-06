@@ -3,9 +3,32 @@ from frappe import _
 
 no_cache = 1
 
+def get_teachers():
+    instructors = frappe.qb.DocType("Instructor")
+    employees = frappe.qb.DocType("Employee")
+
+    instructors_query = (
+        frappe.qb.from_(employees)
+        .inner_join(instructors)
+        .on(instructors.employee == employees.name)
+        .select('*')
+        .where(employees.user_id == frappe.session.user)
+        .run(as_dict=1)
+    )
+    return instructors_query if instructors_query else []
+
 def get_context(context):
 
-    docname = frappe.form_dict.docname
+    docnames = frappe.form_dict.docname
+
+    if docnames:
+        docname = docnames
+    else:
+        teacher = get_teachers()
+        if teacher:
+            docname = teacher[0].name
+        else:
+            docname = None
 
     # login
     if frappe.session.user == "Guest":
@@ -30,7 +53,7 @@ def get_context(context):
     context.active_subroute = "teacher_list"
     context.active_teacher_route = "course"
 
-    context.docname = frappe.form_dict.docname
+    context.docname = docname
 
     edubliss_session = frappe.call('edubliss.api.get_edubliss_user_session')
     if edubliss_session:

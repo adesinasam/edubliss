@@ -1,0 +1,274 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("LMS Courses") }}
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav2.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+     <!-- Container -->
+     <div class="container-fixed">
+      <!-- begin: works -->
+      <div class="flex flex-col items-stretch gap-5 lg:gap-7.5">
+       <!-- begin: toolbar -->
+       <div class="flex flex-wrap items-center gap-5 justify-between">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-gray-900">
+         LMS Batch
+        </h1>
+        <div class="flex items-center flex-wrap gap-1.5 font-medium">
+         <span class="text-md text-ray-800 font-semibold me-2">
+          {{ lmsbatch_count }} Batches
+         </span>
+        </div>
+       </div>
+       <div class="flex items-center gap-2.5">
+          <div class="flex toolbar">
+           <label class="input input-sm">
+            <i class="ki-filled ki-magnifier">
+            </i>
+              <input type="text" id="searchInput" class="border p-2 rounded w-full" placeholder="Search batches..." />
+            </input>
+           </label>
+          </div>
+        {% if "Academics User" in user_roles %}
+        <a class="btn btn-md btn-secondary" href="/app/lms-batch/new-lms-batch-">
+         <i class="ki-filled ki-add-folder">
+         </i>
+         Add
+        </a>
+        {% endif %}
+        <div class="btn-tabs" data-tabs="true">
+         <a class="btn btn-icon active" data-tab-toggle="#works_cards" href="#">
+          <i class="ki-filled ki-category">
+          </i>
+         </a>
+         <a class="btn btn-icon" data-tab-toggle="#works_list" href="#">
+          <i class="ki-filled ki-row-horizontal">
+          </i>
+         </a>
+        </div>
+       </div>
+       </div>
+       <!-- end: toolbar -->
+       <!-- begin: cards -->
+       <div id="works_cards">
+        <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 gap-5 lg:gap-7.5">
+         {% for lmsbatch in lmsbatches %}
+         <div class="card p-7.5">
+          <div class="flex items-center justify-between mb-3 lg:mb-6">
+           {% if lmsbatch.published %}
+           <span class="badge badge-outline badge-success gap-1 items-center">
+             <span class="badge badge-dot size-1.5 badge-success">
+             </span>
+               Published
+           </span>
+           {% else %}
+           <span class="badge badge-outline badge-danger gap-1 items-center">
+             <span class="badge badge-dot badge-danger size-1.5 ">
+             </span>
+               Not Published
+           </span>
+           {% endif %}
+           {% if "Academics User" in user_roles %}
+           <div class="menu" data-menu="true">
+              <div class="menu-item" data-menu-item-offset="0, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
+               <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
+                <i class="ki-filled ki-dots-vertical">
+                </i>
+               </button>
+               <div class="menu-dropdown menu-default w-full max-w-[200px]" data-menu-dismiss="true">
+                <div class="menu-item">
+                 <a class="menu-link" {% if lmsbatch.published %}href="/lms/batches/details/{{ lmsbatch.name }}"{% endif %}>
+                  <span class="menu-icon">
+                   <i class="ki-filled ki-some-files">
+                   </i>
+                  </span>
+                  <span class="menu-title">
+                   View
+                  </span>
+                 </a>
+                </div>
+                <div class="menu-item">
+                 <a class="menu-link" {% if 'Academics User' in user_roles %}href="/app/lms-batch/{{ lmsbatch.name }}"{% endif %}>
+                  <span class="menu-icon">
+                   <i class="ki-filled ki-setting-3">
+                   </i>
+                  </span>
+                  <span class="menu-title">
+                   Settings
+                  </span>
+                 </a>
+                </div>
+               </div>
+              </div>
+           </div>
+           {% endif %}
+          </div>
+          <div class="flex flex-col mb-3 lg:mb-6">
+           <a class="text-lg font-media/brand text-gray-900 hover:text-primary-active mb-px" {% if lmsbatch.published %}href="/lms/batches/details/{{ lmsbatch.name }}"{% endif %}>
+            {{lmsbatch.title}}
+           </a>
+           <span class="text-sm text-gray-700">
+            {{lmsbatch.description}}
+           </span>
+          </div>
+          <div class="flex items-center gap-5 mb-1.5 lg:mb-3">
+           <a class="text-md text-gray-600 hover:text-primary-active mb-px" {% if 'Academics User' in user_roles %}href="/app/program/{{ lmsbatch.custom_program }}"{% endif %}>
+            <i class="ki-filled ki-questionnaire-tablet text-md"></i>
+            {{lmsbatch.custom_program}} - {{lmsbatch.custom_academic_year}}
+           </a>
+          </div>
+          <div class="flex items-center gap-5 mb-3.5 lg:mb-7">
+           <span class="text-sm font-medium text-gray-600">
+            <i class="ki-filled ki-calendar-2 text-md"></i>
+             {{ format_date(lmsbatch.start_date) }} - {{ format_date(lmsbatch.end_date) }}
+           </span>
+          </div>
+          <div class="flex -space-x-2">
+           <div class="flex">
+            <img class="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="assets/media/avatars/300-4.png"/>
+           </div>
+           <div class="flex">
+            <span class="hover:z-5 relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-primary-inverse ring-primary-light bg-primary">
+             S
+            </span>
+           </div>
+          </div>
+         </div>
+         {% endfor %}
+        </div>
+       </div>
+       <!-- end: cards -->
+       <!-- begin: list -->
+       <div class="hidden" id="works_list">
+        <div class="flex flex-col gap-5 lg:gap-7.5">
+         {% for lmsbatch in lmsbatches %}
+         <div class="card p-7">
+          <div class="flex items-center flex-wrap justify-between gap-5">
+           <div class="flex items-center gap-3.5">
+            <div class="flex flex-col">
+             <a class="text-lg font-media/brand text-gray-900 hover:text-primary-active mb-px" {% if lmsbatch.published %}href="/lms/batches/details/{{ lmsbatch.name }}"{% endif %}>
+              {{lmsbatch.title}}
+             </a>
+             <span class="text-sm text-gray-700">
+              {{lmsbatch.description}}
+             </span>
+            </div>
+           </div>
+           <div class="flex items-center flex-wrap gap-5 lg:gap-20">
+            <div class="flex items-center flex-wrap gap-5 lg:gap-14">
+             {% if lmsbatch.published %}
+             <span class="badge badge-outline badge-success gap-1 items-center">
+               <span class="badge badge-dot size-1.5 badge-success">
+               </span>
+                 Published
+             </span>
+             {% else %}
+             <span class="badge badge-outline badge-danger gap-1 items-center">
+               <span class="badge badge-dot badge-danger size-1.5 ">
+               </span>
+                 Not Published
+             </span>
+             {% endif %}
+             <div class="progress h-1.5 w-36 progress-primary">
+              <div class="progress-bar" style="width: 0%">
+              </div>
+             </div>
+            </div>
+            <div class="flex items-center gap-5 lg:gap-14">
+             <div class="flex justify-end w-24">
+              <div class="flex -space-x-2">
+               <div class="flex">
+                <img class="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="assets/media/avatars/300-4.png"/>
+               </div>
+               <div class="flex">
+                <span class="hover:z-5 relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-primary-inverse ring-primary-light bg-primary">
+                 S
+                </span>
+               </div>
+              </div>
+             </div>
+             {% if "Academics User" in user_roles %}
+             <div class="menu" data-menu="true">
+                <div class="menu-item" data-menu-item-offset="0, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
+                 <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
+                  <i class="ki-filled ki-dots-vertical">
+                  </i>
+                 </button>
+                 <div class="menu-dropdown menu-default w-full max-w-[200px]" data-menu-dismiss="true">
+                  <div class="menu-item">
+                   <a class="menu-link" {% if lmsbatch.published %}href="/lms/batches/details/{{ lmsbatch.name }}"{% endif %}>
+                    <span class="menu-icon">
+                     <i class="ki-filled ki-some-files">
+                     </i>
+                    </span>
+                    <span class="menu-title">
+                     View
+                    </span>
+                   </a>
+                  </div>
+                  <div class="menu-item">
+                   <a class="menu-link" {% if 'Academics User' in user_roles %}href="/app/lms-batch/{{ lmsbatch.name }}"{% endif %}>
+                    <span class="menu-icon">
+                     <i class="ki-filled ki-setting-3">
+                     </i>
+                    </span>
+                    <span class="menu-title">
+                     Settings
+                    </span>
+                   </a>
+                  </div>
+                 </div>
+                </div>
+             </div>
+             {% endif %}
+            </div>
+           </div>
+          </div>
+         </div>
+         {% endfor %}
+        </div>
+       </div>
+       <!-- end: list -->
+      </div>
+      <!-- end: works -->
+     </div>
+     <!-- End of Container -->
+    </main>
+<script>
+document.getElementById("searchInput").addEventListener("keyup", function() {
+  var searchString = this.value.toLowerCase();
+
+  // For card view
+  var cardCourses = document.querySelectorAll("#works_cards .card");
+  cardCourses.forEach(function(card) {
+    var title = card.querySelector("a").textContent.toLowerCase();
+    if (title.includes(searchString)) {
+      card.style.display = "";
+    } else {
+      card.style.display = "none";
+    }
+  });
+
+  // For list view
+  var listCourses = document.querySelectorAll("#works_list .card");
+  listCourses.forEach(function(card) {
+    var title = card.querySelector("a").textContent.toLowerCase();
+    if (title.includes(searchString)) {
+      card.style.display = "";
+    } else {
+      card.style.display = "none";
+    }
+  });
+});
+</script>
+{% endblock %}

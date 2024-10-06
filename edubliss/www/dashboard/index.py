@@ -34,22 +34,28 @@ def get_context(context):
         guardian = frappe.get_list("Guardian", filters={"user": frappe.session.user}, limit_page_length=1)
         if guardian:
             context.parents = frappe.get_doc("Guardian", guardian[0].name)
+            context.parents_name = guardian[0].name
         else:
             context.parents = ''
+            context.parents_name = None
 
     if "Student" in user_roles:
         student = frappe.get_list("Student", filters={"student_email_id": frappe.session.user}, limit_page_length=1)
         if student:
             context.studentss = frappe.get_doc("Student", student[0].name)
+            context.students_name = student[0].name
         else:
             context.studentss = ''
+            context.students_name = None
 
     if "Instructor" in user_roles:
         teacher = get_teachers()
         if teacher:
             context.teachers = frappe.get_doc("Instructor", teacher[0].name)
+            context.teachers_name = teacher[0].name
         else:
             context.teachers = ''
+            context.teacher_name = None
 
     # Split the company name into parts
     parts = current_user.full_name.split(" ")

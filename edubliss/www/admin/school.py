@@ -5,7 +5,7 @@ no_cache = 1
 
 def get_company_students(company):
     try:
-        student_doc = frappe.db.count('Student', filters={'custom_school': company})
+        student_doc = frappe.db.count('Student', filters={'custom_school': company, 'enabled': 1})
         return student_doc
     except frappe.DoesNotExistError:
         return ""

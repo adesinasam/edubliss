@@ -27,6 +27,7 @@
          {{teachers.instructor_name}}
         </h1>
        </div>
+       {% if "Academics User" in user_roles %}
        <div class="flex items-center gap-2.5">
         <a class="btn btn-sm btn-light" href="/app/instructor/{{teachers.name}}">
          Edit Profile
@@ -35,6 +36,7 @@
          Account Settings
         </div>
        </div>
+       {% endif %}
       </div>
      </div>
      <!-- end: container -->
@@ -111,68 +113,16 @@
             </table>
           </div>
          </div>
-         <div class="card min-w-full">
-          <div class="card-header">
-           <h3 class="card-title">
-            Personal Info
-           </h3>
-          </div>
-          <div class="card-table scrollable-x-auto pb-3">
-           <table class="table align-middle text-sm text-gray-500">
-            <tr>
-             <td class="py-3">
-              Teacher's Email
-             </td>
-             <td class="py-3 text-gray-700 text-sm">
-              {{employees.user_id}}
-             </td>
-            </tr>
-            <tr>
-             <td class="py-3">
-              Birthday
-             </td>
-             <td class="py-3 text-gray-700 text-sm">
-              {{employees.date_of_birth}}
-             </td>
-            </tr>
-            <tr>
-             <td class="py-3">
-              Teacher Contact
-             </td>
-             <td class="py-3 text-gray-700 text-sm">
-              {{employees.cell_number}}
-             </td>
-            </tr>
-            <tr>
-             <td class="py-3">
-              Gender
-             </td>
-             <td class="py-3 text-gray-700 text-sm">
-              {{employees.gender}}
-             </td>
-            </tr>
-            <tr>
-             <td class="py-3">
-              Address
-             </td>
-             <td class="py-3 text-gray-600 text-2sm">
-              {{employees.address_line_1 or 'You have no an address yet'}} 
-             </td>
-            </tr>
-           </table>
-          </div>
-         </div>
         </div>
        </div>
        <div class="col-span-1">
         <div class="grid gap-5 lg:gap-7.5">
-         <style>
-          .start-now-bg {
-		background-image: url('/assets/edubliss/dist/media/images/2600x1200/bg-5.png');
-	}
-	.dark .start-now-bg {
-		background-image: url('/assets/edubliss/dist/media/images/2600x1200/bg-5-dark.png');
-	}
+         <style>.start-now-bg {
+            background-image: url('/assets/edubliss/dist/media/images/2600x1200/bg-5.png');
+            }
+            .dark .start-now-bg {
+                background-image: url('/assets/edubliss/dist/media/images/2600x1200/bg-5-dark.png');
+            }
          </style>
          <div class="card flex-col gap-5 justify-between bg-[center_top_1.3rem] bg-no-repeat pt-5 lg:pt-10 px-5 start-now-bg bg-[length:700px]">
           <div class="text-center">
@@ -424,7 +374,7 @@
            </div>
           </div>
           <div class="card-footer justify-center">
-<!--            <a class="btn btn-link" href="html/demo1/account/integrations.html">
+           <!-- <a class="btn btn-link" href="html/demo1/account/integrations.html">
             All Files
            </a> -->
           </div>

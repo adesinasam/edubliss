@@ -18,7 +18,7 @@
      <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
-        <h1 class="text-xl font-semibold leading-none text-gray-900">
+        <h1 class="text-xl font-semibold leading-none text-primary">
          Schools
         </h1>
         <div class="flex items-center flex-wrap gap-1.5 font-medium">
@@ -59,6 +59,7 @@
                 </span>
                </span>
               </th>
+              {% if "Academics User" in user_roles %}
               <th class="min-w-[80px] text-center">
                <span class="sort">
                 <span class="sort-label">
@@ -68,6 +69,7 @@
                 </span>
                </span>
               </th>
+              {% endif %}
               <th class="min-w-[100px] text-center">
                <span class="sort">
                 <span class="sort-label">
@@ -103,7 +105,7 @@
                <div class="flex items-center gap-2.5">
                 <img alt="" class="rounded-full size-7 shrink-0" src="{% if company.company_logo  %}{{company.company_logo}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/>
                 <div class="flex flex-col">
-                 <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" {% if "Academics User" in user_roles %}href="/app/company/{{ company.name }}"{% endif %}>
+                 <a class="text-sm font-semibold text-primary hover:text-primary-active mb-px" {% if "Academics User" in user_roles %}href="/app/company/{{ company.name }}"{% endif %}>
                   {{ company.company_name }}
                   <br>
                  <span class="text-2sm font-medium text-gray-600 hover:text-primary-active">
@@ -113,9 +115,11 @@
                 </div>
                </div>
               </td>
+              {% if "Academics User" in user_roles %}
               <td class="text-center">
                {{ get_company_students(company.name) }}
               </td>
+              {% endif %}
               <td>
                <div class="flex items-center gap-1.5">
                   {% if not company.is_group %}

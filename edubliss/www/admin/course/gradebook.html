@@ -59,7 +59,7 @@
              <h3 class="card-title font-medium text-sm">
               
              </h3>
-             {% if "Academics User" in user_roles %}
+             {% if "Academics User" in user_roles or "Instructor" in user_roles %}
              {% if assessments %}
              <div class="flex items-center gap-2.5">
               <a class="btn btn-sm btn-secondary text-sm" href="/app/assessment-result-structure-tool">

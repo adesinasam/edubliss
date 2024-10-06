@@ -111,9 +111,9 @@ def get_section_students(section):
 def get_teacher_subjects(instructor, academic_term):
     return frappe.get_all(
         "Instructor Log",
-        filters={"parent": instructor, "academic_term": academic_term},
+        filters={"parent": instructor, "academic_term": academic_term, "course": ["!=", ""]},
         fields=["course", "academic_year", "academic_term", "program", "student_group", "department", "other_details"],
-        order_by="academic_term asc"
+        order_by="course asc"
     )
 
 @frappe.whitelist(allow_guest=True)

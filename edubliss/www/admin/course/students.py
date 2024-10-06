@@ -29,6 +29,7 @@ def get_context(context):
     context.active_route = "courses"
     context.active_subroute = "course_list"
     context.active_parent_route = "students"
+    context.active_teacher_route = "course"
 
     context.docname = frappe.form_dict.docname
 
