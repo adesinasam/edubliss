@@ -5,7 +5,16 @@ no_cache = 1
 
 def get_context(context):
 
-    docname = frappe.form_dict.docname
+    docnames = frappe.form_dict.docname
+
+    if docnames:
+        docname = docnames
+    else:
+        student = frappe.get_list("Student", filters={"student_email_id": frappe.session.user}, limit_page_length=1)
+        if student:
+            docname = student[0].name
+        else:
+            docname = None
 
     # login
     if frappe.session.user == "Guest":
@@ -30,7 +39,7 @@ def get_context(context):
     context.active_subroute = "student_list"
     context.active_student_route = "billing"
 
-    context.docname = frappe.form_dict.docname
+    context.docname = docname
 
     edubliss_session = frappe.call('edubliss.api.get_edubliss_user_session')
     if edubliss_session:

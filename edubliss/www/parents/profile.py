@@ -12,7 +12,16 @@ def get_student_student(student):
 
 def get_context(context):
 
-    docname = frappe.form_dict.docname
+    docnames = frappe.form_dict.docname
+
+    if docnames:
+        docname = docnames
+    else:
+        guardian = frappe.get_list("Guardian", filters={"user": frappe.session.user}, limit_page_length=1)
+        if guardian:
+            docname = guardian[0].name
+        else:
+            docname = None
 
     # login
     if frappe.session.user == "Guest":
@@ -37,7 +46,7 @@ def get_context(context):
     context.active_subroute = "parent_list"
     context.active_parent_route = "profile"
 
-    context.docname = frappe.form_dict.docname
+    context.docname = docname
 
     edubliss_session = frappe.call('edubliss.api.get_edubliss_user_session')
     if edubliss_session:

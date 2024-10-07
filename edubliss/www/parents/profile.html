@@ -21,10 +21,11 @@
      <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
-        <h1 class="text-xl font-semibold leading-none text-gray-900">
+        <h1 class="text-xl font-semibold leading-none text-primary">
          Profile
         </h1>
        </div>
+       {% if "Academics User" in user_roles %}
        <div class="flex items-center gap-2.5">
         <a class="btn btn-sm btn-light" href="/app/guardian/{{parents.name}}">
          Edit Profile
@@ -33,6 +34,7 @@
          Account Settings
         </div>
        </div>
+       {% endif %}
       </div>
      </div>
      <!-- end: container -->
@@ -42,7 +44,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7.5">
       <div class="col-span-1">
         <div class="grid gap-5 lg:gap-7.5">
-         <div class="card min-w-full">
+         <div class="card min-w-full bg-primary-light">
           <div class="card-header">
            <h3 class="card-title">
             Parent Info
@@ -99,7 +101,7 @@
        </div>
        <div class="col-span-1">
         <div class="flex flex-col gap-5 lg:gap-7.5">
-         <div class="card">
+         <div class="card bg-info-light">
           <div class="card-header">
            <h3 class="card-title">
             Students
@@ -107,7 +109,7 @@
            <div class="menu" data-menu="true">
            </div>
           </div>
-          <div class="card-table scrollable-x-auto">
+          <div class="card-table scrollable-x-auto bg-light">
            <div class="scrollable-auto">
             <table class="table align-middle text-2sm text-gray-600">
              <tr class="bg-gray-100">

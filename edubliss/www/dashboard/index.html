@@ -39,7 +39,7 @@
 {% endblock %}
 
 {% block content %}
-    <main class="grow content pt-5" id="content" role="content">
+    <main class="grow content pt-5 bg-gray-100" id="content" role="content">
      <!-- begin: container -->
      <div class="container-fixed" id="content_container">
      </div>
@@ -48,7 +48,7 @@
      <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
-        <h1 class="text-xl font-semibold leading-none text-gray-900">
+        <h1 class="text-xl font-semibold leading-none text-primary">
          Dashboard
         </h1>
         <div class="flex items-center gap-2 text-sm font-medium text-gray-600">
@@ -96,24 +96,6 @@
              {{current_user.name}}
             </a>
            </div>
-            <!--<div class="flex items-center justify-center flex-wrap gap-2 lg:gap-5 mb-3">
-            <div class="grid grid-cols-1 gap-1.5 border-[0.5px] border-dashed border-gray-400 rounded-md px-2.5 py-2 shrink-0 max-w-auto">
-             <span class="text-gray-900 text-sm leading-none font-medium">
-              N120,000.00
-             </span>
-             <span class="text-gray-700 text-xs">
-              Unpaid
-             </span>
-            </div>
-            <div class="grid grid-cols-1 gap-1.5 border-[0.5px] border-dashed border-gray-400 rounded-md px-2.5 py-2 shrink-0 max-w-auto">
-             <span class="text-gray-900 text-sm leading-none font-medium">
-              2
-             </span>
-             <span class="text-gray-700 text-xs">
-              Students
-             </span>
-            </div>
-           </div> -->
           </div>
           <div class="card-footer justify-center">
             {% if parents: %}
@@ -246,6 +228,12 @@
                 left: 'prev,next',
                 center: 'title',
                 right: 'today,dayGridMonth,timeGridWeek,timeGridDay' // View options
+            },
+            buttonText: {
+                today: 'Today',
+                month: 'Month',
+                week: 'Week',
+                day: 'Day'
             },
             initialView: 'dayGridMonth', // Default view on page load
             slotMinTime: "07:00:00", // Start showing time slots from 6 AM

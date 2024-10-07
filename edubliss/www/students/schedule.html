@@ -65,9 +65,11 @@
      <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
+         {% if sections %}   
         <h1 class="text-xl font-semibold leading-none text-gray-900">
-         {{ sections }}
+         {{ sections}}
         </h1>
+         {% endif %}
         <div class="flex items-center flex-wrap gap-1.5 font-medium">
          <span class="text-md text-gray-600">
            Class Timetable
