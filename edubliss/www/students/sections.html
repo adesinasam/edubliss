@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-<main class="grow content pt-5" id="content" role="content">
+<main class="grow content pt-5 bg-gray-100" id="content" role="content">
   <!-- begin: container -->
   <div class="container-fixed" id="content_container"></div>
   <!-- end: container -->
@@ -17,7 +17,7 @@
   <div class="container-fixed">
     <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
       <div class="flex flex-col justify-center gap-2">
-        <h1 class="text-xl font-semibold leading-none text-gray-900">Student Section</h1>
+        <h1 class="text-xl font-semibold leading-none text-primary">Student Section</h1>
         <div class="flex items-center gap-2 text-sm font-medium text-gray-600"></div>
       </div>
     </div>
@@ -29,7 +29,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
       <div class="col-span-1">
         <div class="grid gap-5 lg:gap-7.5">
-          <div class="card bg-info-light">
+          <div class="card">
             <div class="card-header bg-info">
               <h3 class="card-title text-light">Section</h3>
               {% if "Academics User" in user_roles %}
@@ -39,7 +39,7 @@
               </a>
               {% endif %}
             </div>
-            <div class="card-body pt-3.5 pb-3.5">
+            <div class="card-body pt-3.5 pb-3.5 bg-light">
               <table class="table-auto">
                 <tbody>
                   {% for section in sections %}
@@ -96,14 +96,14 @@
         <div class="flex flex-col gap-5 lg:gap-7.5">
           <div class="flex flex-col gap-5 lg:gap-7.5">
             {% if selected_section %}
-            <div class="card bg-secondary">
+            <div class="card bg-info-light">
               <div class="card-header">
                 <h3 class="card-title">Students</h3>
                 {% if selected_section %}
                 <h4 class="card-title text-gray-700">{{ selected_section }}</h4>
                 {% endif %}
               </div>
-              <div class="card-table scrollable-x-auto">
+              <div class="card-table scrollable-x-auto bg-light">
                 <table class="table text-center">
                   <thead>
                     <tr>
@@ -119,7 +119,7 @@
                     {% for student in students %}
                     <tr>
                       <td class="text-left">
-                        <a href="/students/profile/{{ student.student}}" class="text-sm font-semibold text-gray-900 hover:text-primary">
+                        <a href="/students/profile/{{ student.student}}" class="text-sm text-primary hover:text-primary">
                             {{ student.student_name}}
                         </span>
                       </td>

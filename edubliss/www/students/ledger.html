@@ -14,16 +14,16 @@
      <div class="container-fixed" id="content_container">
      </div>
      <!-- end: container -->
-
+    {% if "Academics User" in user_roles or "Parent" in user_roles %}
     {% include "templates/includes/student_header.html" %}
 
     {% include "templates/includes/student_nav.html" %}
-
+    {% endif %}
      <!-- begin: container -->
      <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
-        <h1 class="text-xl font-semibold leading-none text-gray-900">
+        <h1 class="text-xl font-semibold leading-none text-primary">
          Student Ledger
         </h1>
         <div class="flex items-center gap-2 text-sm font-medium text-gray-600">

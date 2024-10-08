@@ -31,7 +31,7 @@ def get_context(context):
     # nav
     context.active_route = "students"
     context.active_subroute = "student_list"
-    context.active_student_route = "billing"
+    context.active_student_route = "ledger"
 
     context.docname = docname
 

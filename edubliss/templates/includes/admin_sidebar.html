@@ -38,6 +38,24 @@
            </span>
           </div>
          </div>
+         <div class="menu-item {% if active_subroute == 'events' %}active{% endif %}">
+          <a class="menu-link gap-[14px] pl-[10px] pr-[10px] py-[8px] border border-transparent items-center grow menu-item-active:bg-secondary-active dark:menu-item-active:bg-coal-300 dark:menu-item-active:border-gray-100 menu-item-active:rounded-lg hover:bg-secondary-active dark:hover:bg-coal-300 dark:hover:border-gray-100 hover:rounded-lg" href="/admin/events" tabindex="0">
+           <span class="menu-bullet flex w-[6px] relative before:absolute before:top-0 before:size-[6px] before:rounded-full before:-translate-x-1/2 before:-translate-y-1/2 menu-item-active:before:bg-primary menu-item-hover:before:bg-primary">
+           </span>
+           <span class="menu-title text-2sm font-medium text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
+            Calendar
+           </span>
+          </a>
+         </div>
+         <div class="menu-item {% if active_subroute == 'notices' %}active{% endif %}">
+          <div class="menu-link gap-[14px] pl-[10px] pr-[10px] py-[8px] border border-transparent items-center grow menu-item-active:bg-secondary-active dark:menu-item-active:bg-coal-300 dark:menu-item-active:border-gray-100 menu-item-active:rounded-lg hover:bg-secondary-active dark:hover:bg-coal-300 dark:hover:border-gray-100 hover:rounded-lg" href="/admin/events" tabindex="0">
+           <span class="menu-bullet flex w-[6px] relative before:absolute before:top-0 before:size-[6px] before:rounded-full before:-translate-x-1/2 before:-translate-y-1/2 menu-item-active:before:bg-primary menu-item-hover:before:bg-primary">
+           </span>
+           <span class="menu-title text-2sm font-medium text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
+            Notices
+           </span>
+          </div>
+         </div>
         </div>
        </div>
        <div class="menu-item {% if active_route == 'Admission' %}here show{% endif %}" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
@@ -350,7 +368,7 @@
        <div class="menu-item">
         <div class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="" tabindex="0">
          <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
-          <i class="ki-filled ki-user-tick text-lg">
+          <i class="ki-filled ki-financial-schedule text-lg">
           </i>
          </span>
          <span class="menu-title text-sm font-semibold text-gray-700">

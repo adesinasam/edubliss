@@ -14,20 +14,23 @@
      <div class="container-fixed" id="content_container">
      </div>
      <!-- end: container -->
-
+    {% if "Academics User" in user_roles or "Parent" in user_roles %}
     {% include "templates/includes/student_header.html" %}
 
     {% include "templates/includes/student_nav.html" %}
-
+    {% endif %}
      <!-- begin: container -->
      <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
-        <h1 class="text-xl font-semibold leading-none text-gray-900">
+        <h1 class="text-xl font-semibold leading-none text-primary">
          Enrollment
         </h1>
+        {% if "Student" in user_roles %}
         <div class="flex items-center gap-2 text-sm font-medium text-gray-600">
+         {{students.student_name}}
         </div>
+        {% endif %}
        </div>
        <div class="flex items-center gap-2.5">
         <a class="btn btn-sm btn-light" href="/students/lms/{{ students.name }}">
@@ -139,7 +142,7 @@
        <div class="col-span-2">
         <div class="flex flex-col gap-5 lg:gap-7.5">
          <div class="flex flex-col gap-5 lg:gap-7.5">
-          <div class="card bg-secondary">
+          <div class="card bg-primary-light">
            <div class="card-header">
             <h3 class="card-title">
              Subjects
@@ -157,7 +160,7 @@
            {% endif %}
            {% endif %}
            </div>
-           <div class="card-table scrollable-x-auto">
+           <div class="card-table scrollable-x-auto bg-light">
             <table class="table text-center">
              <thead>
               <tr>
@@ -184,9 +187,9 @@
                 {{ loop.index }}
                </td>
                <td class="text-left">
-                <div href="/students/enrollment/{{ students.name }}?course_name={{ course.course }}" class="text-sm font-semibold text-gray-900 hover:text-primary">
+                <a href="/admin/course/overview/{{ course.course }}" class="text-sm text-primary hover:text-primary">
                  {{ course.course }}
-                </div>
+                </a>
                </td>
                <td class="text-sm text-gray-700 font-medium">
                     {{ get_program_course_code(course.course) }}

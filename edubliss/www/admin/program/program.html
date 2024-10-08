@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-<main class="grow content pt-5" id="content" role="content">
+<main class="grow content pt-5 bg-gray-100" id="content" role="content">
   <!-- begin: container -->
   <div class="container-fixed" id="content_container"></div>
   <!-- end: container -->
@@ -17,7 +17,7 @@
   <div class="container-fixed">
     <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
       <div class="flex flex-col justify-center gap-2">
-        <h1 class="text-xl font-semibold leading-none text-gray-900">Class & Subjects</h1>
+        <h1 class="text-xl font-semibold leading-none text-primary">Class & Subjects</h1>
         <div class="flex items-center gap-2 text-sm font-medium text-gray-600"></div>
       </div>
     </div>
@@ -29,7 +29,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
       <div class="col-span-1">
         <div class="grid gap-5 lg:gap-7.5">
-          <div class="card">
+          <div class="card bg-light">
             <div class="card-header bg-primary">
               <h3 class="card-title text-light">Class</h3>
               <a href="app/program/new-program">
@@ -37,13 +37,13 @@
                 <div class="hidden rounded shadow-default p-3 bg-light border border-gray-300 text-gray-800 text-xs font-normal" id="program_tooltip">Add Class</div>
               </a>
             </div>
-            <div class="card-body bg-info-light pt-3.5 pb-3.5">
+            <div class="card-body bg-light pt-3.5 pb-3.5">
               <table class="table-auto">
                 <tbody>
                   {% for program in programs %}
                   <tr>
                     <td>
-                      <a href="/admin/program/program?program_name={{ program.name }}" class="btn btn-info btn-clear {% if program.name == selected_program %}active{% endif %}">
+                      <a href="/admin/program/program?program_name={{ program.name }}" class="btn btn-primary btn-clear {% if program.name == selected_program %}active{% endif %}">
                         {{ program.name }}
                       </a>
                     </td>
@@ -58,12 +58,12 @@
       <div class="col-span-2">
         <div class="flex flex-col gap-5 lg:gap-7.5">
           {% if selected_program %}
-            <div class="card bg-secondary">
+            <div class="card bg-primary-light">
               <div class="card-header">
                 <h3 class="card-title">LMS Batch</h3>
                 <div class="text-gray-900">{{ selected_program }}</div>
               </div>
-              <div class="card-body scrollable-x-auto bg-primary-light">
+              <div class="card-body scrollable-x-auto bg-light">
                {% if lmsbatches %}
                 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-5 lg:gap-7.5">
                   {% for lmsbatch in lmsbatches %} 
@@ -118,7 +118,7 @@
   {% if selected_program %}
   <div class="container-fixed">
     <div class="grid gap-5 lg:gap-7.5">
-      <div class="card card-grid min-w-full bg-secondary">
+      <div class="card card-grid min-w-full bg-primary-light">
         <div class="card-header flex-wrap gap-2">
           <h3 class="card-title">{{ selected_program }} Subjects</h3>
           {% if selected_program %}
@@ -129,7 +129,7 @@
           <div class="hidden rounded-xl shadow-default p-3 bg-light border border-gray-200 text-gray-700 text-xs font-normal" id="custom_tooltip">Edit {{ selected_program }}</div>
           {% endif %}
         </div>
-        <div class="card-table scrollable-x-auto">
+        <div class="card-table scrollable-x-auto bg-light">
           <table class="table text-center">
             <thead>
               <tr>
@@ -148,7 +148,7 @@
               <tr>
                 <td>{{ loop.index }}</td>
                 <td class="text-left">
-                  <a href="/admin/course/overview/{{ course.course }}" class="text-sm font-semibold text-gray-900 hover:text-primary">
+                  <a href="/admin/course/overview/{{ course.course }}" class="text-sm text-primary hover:text-primary">
                     {{ course.course }}
                   </a>
                 </td>

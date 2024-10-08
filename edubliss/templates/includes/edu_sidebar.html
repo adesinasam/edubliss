@@ -49,7 +49,8 @@
         {% include "templates/includes/student_sidebar.html" %}
        {% else %}
        {% endif %}
-       <div class="menu-item {% if active_route == 'events' %}active{% endif %}">
+       {% if "Academics User" in user_roles %}
+       <!-- <div class="menu-item {% if active_route == 'events' %}active{% endif %}">
         <a class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="/admin/events" tabindex="0">
          <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
           <i class="ki-filled ki-calendar-2 text-lg">
@@ -59,7 +60,7 @@
           Events
          </span>
         </a>
-       </div>
+       </div> -->
        <div class="menu-item">
         <div class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="" tabindex="0">
          <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
@@ -76,7 +77,6 @@
          </span>
         </div>
        </div>
-       {% if "Academics User" in user_roles %}
        <div class="menu-item pt-2.25 pb-px">
         <span class="menu-heading uppercase pl-[10px] pr-[10px] text-2sm font-semibold text-gray-500">
          Finance & Accounting
@@ -101,7 +101,7 @@
        <div class="menu-item">
         <div class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="" tabindex="0">
          <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
-          <i class="ki-filled ki-financial-schedule text-lg">
+          <i class="ki-filled ki-graph-up text-lg">
           </i>
          </span>
          <span class="menu-title text-sm font-semibold text-gray-700">

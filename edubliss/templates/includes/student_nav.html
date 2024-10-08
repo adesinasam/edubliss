@@ -29,6 +29,7 @@
               </span>
              </a>
             </div>
+            {% if "Academics User" in user_roles or "Parent" in user_roles or "Student" in user_roles %}
             <div class="menu-item {% if active_student_route == 'health' %}active{% endif %}">
              <div class="menu-link" href="/students/health/{{docname}}" tabindex="0">
               <span class="menu-title">
@@ -36,9 +37,10 @@
               </span>
              </div>
             </div>
+            {% endif %}
            </div>
           </div>
-          {% if "Academics User" in user_roles or "Parent" in user_roles or "Student" in user_roles %}
+          {% if "Academics User" in user_roles or "Parent" in user_roles %}
           <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'enrollment' or active_student_route == 'lms' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
            <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" tabindex="0">
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
@@ -67,6 +69,7 @@
            </div>
           </div>
           {% endif %}
+          {% if "Academics User" in user_roles or "Parent" in user_roles or "Instructor" in user_roles %}          
           <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'schedule' %}here{% endif %}">
            <a class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" href="/students/schedule/{{docname}}" tabindex="0">
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
@@ -81,7 +84,8 @@
             </span>
            </div>
           </div>
-          {% if "Academics User" in user_roles or "Parent" in user_roles or "Student" in user_roles %}          
+          {% endif %}
+          {% if "Academics User" in user_roles or "Parent" in user_roles %}          
           <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'gradebook' or active_student_route == 'report_card' or active_student_route == 'report_card' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
            <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" tabindex="0">
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
