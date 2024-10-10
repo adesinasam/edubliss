@@ -449,6 +449,7 @@ def get_students(company=None):
     filters = {}
     if company:
         filters['custom_school'] = company
+        filters['enabled'] = 1
     return frappe.get_all('Student', filters=filters, fields=['student_name', 'name', 'enabled', 'custom_school', 'joining_date', 'student_email_id', 'image'])
 
 @frappe.whitelist()

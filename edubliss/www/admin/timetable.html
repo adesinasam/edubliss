@@ -11,23 +11,107 @@
       body {
         background: #edf2f7;
       }
-      /* Calendar headers (e.g., "Sunday", "Monday") */
+
+      #calendar { 
+        max-width: 1100px;
+        margin: 5px auto;
+      }
+      .fc-button {
+        background-color: #a4a5a6 !important;
+        color: white;
+        border: none !important;
+        padding: 8px 16px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+
+      .fc-button:hover {
+        background-color: #575757 !important;
+      }
+
+      /* Customize Previous and Next Buttons */
+      .fc-prev-button {
+        background-color: #a4a5a6 !important;
+        color: white;
+        border-radius: 50%;
+        padding: 5px 10px;
+      }
+
+      .fc-prev-button:hover {
+        background-color: #575757 !important;
+      }
+
+      .fc-next-button {
+        background-color: #a4a5a6 !important;
+        color: white;
+        border-radius: 50%;
+        padding: 5px 10px;
+      }
+
+      .fc-next-button:hover {
+        background-color: #575757 !important;
+      }
+
+      /* Customize Today Button */
+      .fc-today-button {
+        background-color: #a4a5a6 !important;
+        color: white;
+        border-radius: 10px;
+      }
+
+      .fc-today-button:hover {
+        background-color: #575757 !important;
+      }
+
+      /* Customize View Buttons (Month, Week, Day) */
+      .fc-dayGridMonth-button {
+        background-color: #8e44ad !important;
+        color: white;
+      }
+
+      .fc-dayGridMonth-button:hover {
+        background-color: #9b59b6 !important;
+      }
+
+      .fc-timeGridWeek-button {
+        background-color: #a4a5a6 !important;
+        color: white;
+      }
+
+      .fc-timeGridDay-button {
+        background-color: #27ae60 !important;
+        color: white;
+      }
+
+      .fc-timeGridWeek-button:hover,
+      .fc-timeGridDay-button:hover {
+        filter: brightness(85%) !important;
+      }
+
+      .fc .fc-col-header-cell {
+        padding: 20px !important;
+      }
+
+      .fc td, .fc th {
+        border: 0 none;
+      }
       .fc {
         font-family: 'Arial', sans-serif; /* Custom font family */
         color: #929496 !important; /* Darker color for day headers */
+        border: 0 none;
       }
       .fc-event {
         cursor: pointer;
+        border-radius: 10px !important;
         font-size: 0.65rem !important; /* Reduce font size for mobile */
         font-weight: 600;
         line-height: 1.2; /* Adjust line height for event titles */
         padding: 0.3rem; /* Add some padding inside the event */
-        border-radius: 4px; /* Round the corners of the event */
       }
       .fc-toolbar-title {
         font-weight: 300;
         font-size: 1.3rem !important; /* Reduce font size for mobile */
-        color: black !important;
+        color: #575757 !important;
       }
       .fc-button {
         font-size: 0.8rem !important; /* Optionally reduce button font size */
@@ -80,70 +164,14 @@
     <div class="grid grid-cols-1 gap-5 lg:gap-7.5">
       <div class="col-span-1">
         <div class="grid gap-5 lg:gap-7.5">
-          <!-- <div class="card bg-primary-light">
-            <div class="card-header">
-              <h3 class="card-title text-gray-900">Section</h3>
-              {% if "Academics User" in user_roles %}
-              <a href="app/course-scheduling-tool">
-                <i class="ki-solid ki-abstract-10 text-sm text-gray-900" data-tooltip="#program_tooltip" data-tooltip-placement="bottom"></i>
-                <div class="hidden rounded shadow-default p-3 bg-light border border-gray-300 text-gray-800 text-xs font-normal" id="program_tooltip">Course Schedule Tool</div>
-              </a>
-              {% endif %}
-            </div>
-            <div class="card-body pt-3.5 pb-3.5">
-              <table class="table-auto">
-                <tbody>
-                  {% for section in sections %}
-                  <tr>
-                    <td>
-                      <a class="btn btn-primary btn-clear {% if section.student_group_name == selected_section %}active{% endif %}" href="/admin/timetable?section_name={{ section.student_group_name }}" data-tooltip="true" data-tooltip-placement="right">
-                        {{ section.student_group_name }}
-                       <div class="popover shadow-lg max-w-72 bg-secondary" style="z-index: 100; position: fixed; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(142px, 50.6667px, 0px);" data-popper-placement="right">
-                        <div class="popover-header font-semibold text-gray-900">
-                        <div class="p-4 text-sm text-gray-900 font-medium">
-                         {{ section.student_group_name }} Details
-                         <span>
-                          <i class="ki-filled ki-black-right text-md"></i>
-                         </span>
-                        </div>
-                        </div>
-                       <div class="popover-body">
-                        <div class="scrollable-y m-2 p-4 h-[150px] text-sm text-gray-700">
-                          Program: {{ section.program }}
-                          <br>
-                          Status:
-                          <span class="badge  badge-xs badge-pill badge-outline {{ 'badge-success' if section.disabled == 0 else 'badge-danger' }} gap-1 items-center">
-                            {{ 'Active' if section.disabled == 0 else 'Disabled' }}
-                          </span>
-                          <br>
-                          Batch: {{ section.batch }}
-                          <br>
-                          Teachers: {{ get_section_teachers(section.student_group_name) }}
-                          <br>
-                          Year: {{ section.academic_year }}
-                        </div>
-                       </div>
-                       </div>
-                      </a>
-                    </td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-span-2">
-        <div class="flex flex-col gap-5 lg:gap-7.5"> -->
-          <div class="card flex flex-col gap-5 lg:gap-7.5">
+          <div class="card flex flex-col gap-5 lg:gap-7.5 bg-info-light">
            {% if selected_section %} 
               <div class="card-header">
                 <h3 class="card-title text-info">{{ selected_section }}</h3>
                 <!-- Add the button for toggling weekends -->
                 <div align="right"><button class="btn btn-secondary btn-xs text-sm" id="toggleWeekends">Show Weekends</button></div>
               </div>
-                <div id="calendar"  class="bg-secondary text-gray-900 text-sm rounded-lg shadow-md" style="width: 100%; height: 600px; border: 0px solid #000;"></div>
+                <div id="calendar"  class="card-body bg-light text-gray-900 text-sm rounded-lg shadow-md" style="width: 100%; height: 600px; border: 0px solid #000;"></div>
            {% endif %} 
           </div>
         </div>
@@ -163,7 +191,7 @@
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
             headerToolbar: {
-                left: 'prev,next',
+                left: 'prev next',
                 center: 'title',
                 right: 'today timeGridWeek,listWeek' // View options
             },
@@ -197,6 +225,7 @@
                     failureCallback(error);
                 });
             },
+
             eventClick: function(info) {
                 // Open a modal or navigate to a detail page using the event ID
                 var eventId = info.event.id;
