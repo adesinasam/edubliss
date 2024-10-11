@@ -96,6 +96,7 @@ website_route_rules = [
     {"from_route": "/students/lms/<docname>", "to_route": "students/lms"},
     {"from_route": "/students/schedule/<docname>", "to_route": "students/schedule"},
     {"from_route": "/students/ledger/<docname>", "to_route": "students/ledger"},
+    {"from_route": "/students/attendance/<docname>", "to_route": "students/attendance"},
     {"from_route": "/teachers/profile/<docname>", "to_route": "teachers/profile"},
     {"from_route": "/teachers/course/<docname>", "to_route": "teachers/course"},
     {"from_route": "/teachers/schedule/<docname>", "to_route": "teachers/schedule"},

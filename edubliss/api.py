@@ -746,6 +746,55 @@ def get_schedule_details(event_id):
         "student_group": event.student_group
     }
 
+@frappe.whitelist(allow_guest=True)
+def get_student_attendance(student_group, student):
+    events = frappe.get_all(
+        "Student Attendance",
+        fields=[
+            "date",
+            "student",
+            "student_name",
+            "status",
+            "leave_application",
+            "name",
+            "student_group"
+        ],
+        filters={"student_group": student_group, "student": student}
+    )
+
+    # Transforming the data to match FullCalendar's event format
+    event_list = []
+    for event in events:
+        if event.status == 'Present':
+            status_name = 'P'
+        elif event.status == 'Absent':
+            status_name = 'A'
+        elif event.status == 'Leave':
+            status_name = 'L'
+        else:
+            status_name = ''
+
+        from_time = '08:00:00'
+        to_time = '14:00:00'
+        start_datetime = f"{event.date}"
+        end_datetime = f"{event.date}"
+
+        # Convert to datetime object
+        startdatetime_obj = datetime.strptime(start_datetime, "%Y-%m-%d")
+        enddatetime_obj = datetime.strptime(end_datetime, "%Y-%m-%d")
+
+        event_list.append({
+            'id': event.name,
+            'title': status_name,
+            'start': startdatetime_obj,
+            'end': enddatetime_obj,
+            'color': '#fffff',
+            'allDay': 'true'
+
+        })
+
+    return {'message': event_list}
+
 @frappe.whitelist()
 def get_order_details(order_name):
     order = frappe.get_doc('Sales Order', order_name)

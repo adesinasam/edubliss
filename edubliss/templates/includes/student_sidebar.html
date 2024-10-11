@@ -152,7 +152,7 @@
         </div>
        </div>
        <div class="menu-item {% if active_student_route == 'attendance' %}active{% endif %}">
-        <div class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="/students/schedule" tabindex="0">
+        <a class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="/students/attendance" tabindex="0">
          <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
           <i class="ki-filled ki-tablet-text-up text-lg">
           </i>
@@ -160,7 +160,7 @@
          <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
           Attendance
          </span>
-        </div>
+        </a>
        </div>
        <div class="menu-item {% if active_student_route == 'billing' or active_student_route == 'ledger' %}here show{% endif %}" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
         <div class="menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0">

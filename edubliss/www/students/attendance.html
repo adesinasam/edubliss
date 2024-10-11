@@ -93,7 +93,7 @@
       }
 
       .fc td, .fc th {
-        border: 0 none;
+        border: 1 none;
       }
       .fc {
         font-family: 'Arial', sans-serif; /* Custom font family */
@@ -102,14 +102,15 @@
       }
       .fc-event {
         cursor: pointer;
-        border-radius: 10px !important;
-        font-size: 0.65rem !important; /* Reduce font size for mobile */
+        background-color: #0d0d0d;
+        border-radius: 30px !important;
+        font-size: 1.3rem !important; /* Reduce font size for mobile */
         font-weight: 600;
         line-height: 1.2; /* Adjust line height for event titles */
         padding: 0.3rem; /* Add some padding inside the event */
       }
       .fc-toolbar-title {
-        font-weight: 300;
+        font-weight: 600;
         font-size: 1.3rem !important; /* Reduce font size for mobile */
         color: #575757 !important;
       }
@@ -120,7 +121,7 @@
       /* Responsive styling for the month header */
       @media (max-width: 600px) {
         .fc-toolbar-title {
-          font-weight: 500;
+          font-weight: 600;
           font-size: 0.9rem !important; /* Reduce font size for mobile */
         }
         .fc-button {
@@ -151,12 +152,12 @@
        <div class="flex flex-col justify-center gap-2">
          {% if sections %}   
         <h1 class="text-xl font-semibold leading-none text-primary">
-         Class Timetable
+         Attendance
         </h1>
          {% endif %}
         <div class="flex items-center flex-wrap gap-1.5 font-medium">
-         <span class="text-md text-gray-600">
-           {{ sections or ""}} 
+         <span class="text-md text-gray-600">         
+           {{ sections or ""}}
          </span>
         </div>
        </div>
@@ -185,26 +186,20 @@
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
             headerToolbar: {
-                left: 'prev next',
-                center: 'title',
-                right: 'today timeGridWeek,listWeek' // View options
+                left: 'title',
+                center: '',
+                right: 'prev next' // View options
             },
-            buttonText: {
-                today: 'Today',
-                week: 'Week',
-                listWeek: 'List'
-            },
-            height: 800,
-            contentHeight: 780,
-            initialView: 'timeGridWeek', // Week view with time slots
+            height: 700,
+            contentHeight: 680,
+            initialView: 'dayGridMonth', // Week view with time slots
             slotMinTime: "07:00:00", // Start showing time slots from 7 AM
             slotMaxTime: "21:00:00", // End showing time slots at 5 PM
-            nowIndicator: true,
-            allDaySlot: false, // Disable the 'all-day' slot
+            allDaySlot: true, // Disable the 'all-day' slot
             editable: true,
             weekends: showWeekends, // Initially hide weekends
             events: function(fetchInfo, successCallback, failureCallback) {
-                fetch('/api/method/edubliss.api.get_section_schedule?student_group={{ sections }}&academic_year={{ acadyear }}', {
+                fetch('/api/method/edubliss.api.get_student_attendance?student_group={{ sections }}&student={{ student_name }}', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

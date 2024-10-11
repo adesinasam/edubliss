@@ -110,10 +110,21 @@ frappe.ui.form.on('Assessment Result Structure Tool', {
 			let student = $input.data().student;
 			let max_score = $input.data().maxScore;
 			let value = $input.val();
+
+		    // Set value to 0 if input is blank
+		    if (value === '') {
+        		value = 0;
+		        $input.val(value); // Update the input to show 0
+		    } else {
+        		value = parseFloat(value); // Parse the value to a float
+		    }
+
 			if(value < 0) {
 				$input.val(0);
+		        value = 0; // Update value to 0
 			} else if(value > max_score) {
 				$input.val(max_score);
+		        value = max_score; // Update value to max_score
 			}
 			let total_score = 0;
 			let student_scores = {};
@@ -123,9 +134,15 @@ frappe.ui.form.on('Assessment Result Structure Tool', {
 					let $input = $(input);
 					let criteria = $input.data().criteria;
 					let value = parseFloat($input.val());
-					if (!Number.isNaN(value)) {
-						student_scores["assessment_details"][criteria] = value;
-					}
+
+		            // Handle NaN values by setting them to 0
+        		    if (isNaN(value)) {
+                		value = 0;
+		            }
+
+					// if (!Number.isNaN(value)) {
+					student_scores["assessment_details"][criteria] = value;
+					// }
 					total_score += value;
 			});
 			if(!Number.isNaN(total_score)) {

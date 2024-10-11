@@ -19,7 +19,7 @@
 
      <!-- begin: container -->
      <div class="container-fixed">
-      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-3.5">
        <div class="flex flex-col justify-center gap-2">
         <h1 class="text-xl font-semibold leading-none text-primary">
          {{docname}}
@@ -31,7 +31,7 @@
         </div>
        </div>
        <div class="flex items-center gap-2.5">
-        <div class="flex gap-4 mb-5" data-tabs="true">
+        <div class="flex gap-4" data-tabs="true">
          <a class="btn btn-primary rounded-full btn-clear active" data-tab-toggle="true" href="#gradebook_cards">
            Gradebook Grades
          </a>
@@ -75,12 +75,12 @@
              {% endif %}
              {% endif %}
             </div>
-            <div class="card-body scrollable h-[200px] py-0 my-4 pr-4 mr-2">
+            <div class="card-body scrollable h-[200px] py-0 my-4 pr-4 mr-2 bg-light">
              <div class="scrollable-x-auto">
               <table class="table table-auto">
                <thead>
                 <tr>
-                 <th class="min-w-[250px]" rowspan="2">
+                 <th class="min-w-[250px]" rowspan="2" style="position: sticky; left: 0; background-color: #fff; z-index: 1;">
                     Student
                  </th>
                  <th class="min-w-[150px]" rowspan="2">
@@ -89,35 +89,35 @@
                  </th>
                  {% if structures %}
                  {% for structure in structures %}
-                 <th class="min-w-[150px]">
-                  <div class="text-sm text-primary hover:text-primary-active">
-                    <b>{{ structure.assessment_type }}</b><br>
+                 <th class="min-w-[200px]">
+                  <div>
+                    <span class="text-sm font-semibold text-primary hover:text-primary-active">{{ structure.assessment_type }}</span><br>
+                    <b class="text-sm font-semibold">{{ structure.topics or "Topic" }}</b><br>
+                    <span class="text-xs">Due: {{ format_date(structure.due_date) or "" }}</span>
                   </div>
-                    <b>{{ structure.topics or "Topic" }}</b><br>
-                    Due: {{ format_date(structure.due_date) or "" }}
                  </th>
                  {% endfor %}
                  {% endif %}
                  <th class="min-w-[150px]" rowspan="2">
                      Comment
                  </th>
-               </tr>
-               <tr>
+                </tr>
+                <tr>
                  {% if structures %}
                  {% for structure in structures %}
-                 <th class="min-w-[150px]">
-                    Weightage: {{ structure.weightage }}%<br>
+                 <th class="min-w-[200px] text-2sm">
+                    <span class="text-xs"> Weightage: {{ structure.weightage }}%</span><br>
                     Max. Score: {{ structure.max_score }}
                  </th>
                  {% endfor %}
                  {% endif %}                 
-               </tr>
+                </tr>
                </thead>
                <tbody>
                {% if students %}
                 {% for student in students %}
                 <tr>
-                 <td class="min-w-[250px] text-left">
+                 <td class="min-w-[250px] text-left" style="position: sticky; left: 0; background-color: #fff; z-index: 1;">
                  <a class="text-sm text-primary hover:text-primary-active mb-px" href="/students/profile/{{ student.student }}">
                   {{ student.student_name }}
                  </a>
@@ -191,7 +191,7 @@
                  </th>
                  {% if criterias %}
                  {% for criteria in criterias %}
-                 <th class="min-w-[150px]">
+                 <th class="min-w-[150px]" style="position: sticky; left: 0; background-color: #fff; z-index: 1;">
                   <div class="text-sm text-primary hover:text-primary-active mb-px">
                     <b>{{ criteria.assessment_criteria }}</b><br>
                   </div>
@@ -212,7 +212,7 @@
                {% if students %}
                 {% for student in students %}
                 <tr>
-                 <td class="min-w-[250px] text-left">
+                 <td class="min-w-[250px] text-left" style="position: sticky; left: 0; background-color: #fff; z-index: 1;">
                  <a class="text-sm text-primary hover:text-primary-active mb-px" href="/students/profile/{{ student.student }}">
                   {{ student.student_name }}
                  </a>

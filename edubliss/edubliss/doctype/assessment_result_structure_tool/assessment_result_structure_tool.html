@@ -4,7 +4,7 @@
 			<th style="width: 90px" rowspan="2">Student</th>
 			<th style="width: 170px" rowspan="2">Student Name</th>
 			{% for c in criteria %}
-			<th class="score" style="width: 150px">{{ c.assessment_type }}</th>
+			<th class="score" style="width: 150px">{{ c.topics }}<br>{{ c.assessment_type }}</th>
 			{% endfor %}
 			<th class="score" style="width: 170px" rowspan="2">Comments</th>
 			<th class="score" style="width: 150px">Total Percentage</th>
@@ -49,7 +49,7 @@
 				{% if(s.assessment_details && s.docstatus && s.docstatus == 1) { %} disabled {% } %}
 				{% if(s.assessment_details) { %}
 					value="{{s.assessment_details.comment}}"
-				{% } %}
+				{% } %} />
 			</td>
 			<td>
 				<span data-student="{{s.student}}" class="total-score-grade badge" style="width:30%; float:left;">
