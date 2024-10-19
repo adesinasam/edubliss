@@ -24,6 +24,11 @@ frappe.ui.form.on('Assessment Result Structure Tool', {
 		}
 		frm.disable_save();
 		frm.page.clear_indicator();
+
+	    // Add "Back" button
+    	frm.page.set_primary_action(`${frappe.utils.icon('arrow-left', 'sm')} ${__('Back')}`, function() {
+        	window.location.href = `/admin/course/gradebook/${frm.doc.course}?section_name=${frm.doc.student_group}`;
+	    });
 	},
 
 	assessment_plan: function(frm) {

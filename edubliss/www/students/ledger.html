@@ -47,44 +47,44 @@
            <div class="flex flex-col gap-5 lg:gap-7.5 grow">
             <div class="flex items-center flex-wrap gap-3 lg:gap-5">
              {% if "Academics User" in user_roles %}
-             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
-              <span class="text-gray-900 text-md leading-none font-semibold">
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-info-light">
+              <span class="text-info text-md leading-none font-semibold">
                {{ frappe.format(total_debit, {'fieldtype': 'Currency'}) }}
               </span>
-              <span class="text-gray-600 text-2sm font-medium">
+              <span class="text-gray-700 text-2sm font-medium">
                Total Fees
               </span>
              </div>
-             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
-              <span class="text-gray-900 text-md leading-none font-semibold">
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-success-light">
+              <span class="text-success text-md leading-none font-semibold">
                {{ frappe.format(total_credit, {'fieldtype': 'Currency'}) }}
               </span>
-              <span class="text-gray-600 text-2sm font-medium">
+              <span class="text-gray-700 text-2sm font-medium">
                Total Payment
               </span>
              </div>
              {% endif %}
-             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
-              <span class="text-gray-900 text-md leading-none font-semibold">
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-warning-light">
+              <span class="text-warning text-md leading-none font-semibold">
                {% if balance > 0 %}
                {{ frappe.format(balance, {'fieldtype': 'Currency'}) }}
                {% else %}
                {{ frappe.format(0.00, {'fieldtype': 'Currency'}) }}
                {% endif %}               
               </span>
-              <span class="text-gray-600 text-2sm font-medium">
+              <span class="text-gray-700 text-2sm font-medium">
                Balance Due
               </span>
              </div>
-             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
-              <span class="text-gray-900 text-md leading-none font-semibold">
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-primary-light">
+              <span class="text-primary text-md leading-none font-semibold">
                {% if balance < 0 %}
                {{ frappe.format(abs(balance), {'fieldtype': 'Currency'}) }}
                {% else %}
                {{ frappe.format(0.00, {'fieldtype': 'Currency'}) }}
                {% endif %}               
               </span>
-              <span class="text-gray-600 text-2sm font-medium">
+              <span class="text-gray-700 text-2sm font-medium">
                Deposit
               </span>
              </div>

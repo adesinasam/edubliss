@@ -19,7 +19,7 @@
 
      <!-- begin: container -->
      <div class="container-fixed">
-      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-3">
        <div class="flex flex-col justify-center gap-2">
         <h1 class="text-xl font-semibold leading-none text-primary">
          {{docname}}
@@ -31,19 +31,21 @@
         </div>
        </div>
        {% if "Academics User" in user_roles or "Instructor" in user_roles %}
-       {% if assessments %}
-       <div class="flex items-center gap-2.5">
-        <a class="btn btn-sm btn-primary btn-outline text-sm" href="/app/assessment-plan/{{assessments.name}}">
-         Edit Assessment Plan
-        </a>
-       </div>
-       {% else %}
-       <div class="flex items-center gap-2.5">
-        <a class="btn btn-sm btn-primary btn-outline text-sm" href="app/assessment-plan/new-assessment-plan">
-         Add Assessment Plan
-        </a>
-       </div>
-       {% endif %}
+        {% if selected_section %}
+         {% if assessments %}
+          <div class="flex items-center gap-2.5">
+           <a class="btn btn-sm btn-primary btn-outline text-sm" href="/app/assessment-plan/{{assessments.name}}">
+            Edit Assessment Plan
+           </a>
+          </div>
+         {% else %}
+          <div class="flex items-center gap-2.5">
+           <a class="btn btn-sm btn-primary btn-outline text-sm" href="app/assessment-plan/new-assessment-plan">
+            Add Assessment Plan
+           </a>
+          </div>
+         {% endif %}
+        {% endif %}
        {% endif %}
       </div>
      </div>
@@ -101,7 +103,7 @@
               Structure
              </h3>
             </div>
-            <div class="card-body scrollable h-[200px] py-0 my-4 pr-4 mr-2">
+            <div class="card-body scrollable h-[350px] py-0 my-4 pr-4 mr-2">
              <div class="scrollable-x-auto">
               <table class="table table-auto">
                <thead>

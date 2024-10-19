@@ -60,19 +60,21 @@
               
              </h3>
              {% if "Academics User" in user_roles or "Instructor" in user_roles %}
-             {% if assessments %}
-             <div class="flex items-center gap-2.5">
-              <a class="btn btn-sm btn-secondary text-sm" href="/app/assessment-result-structure-tool">
-               Input Gradebook
-              </a>
-             </div>
-             {% else %}
-             <div class="flex items-center gap-2.5">
-              <a class="btn btn-sm btn-secondary text-sm" href="app/assessment-plan/new-assessment-plan">
-               Add Assessment Plan
-              </a>
-             </div>
-             {% endif %}
+              {% if selected_section %}
+               {% if assessments %}
+                <div class="flex items-center gap-2.5">
+                 <a class="btn btn-sm btn-secondary text-sm" href="/app/assessment-result-structure-tool?assessment_plan={{assessment_name}}&student_group={{selected_section}}">
+                  Input Gradebook
+                 </a>
+                </div>
+               {% else %}
+                <div class="flex items-center gap-2.5">
+                 <a class="btn btn-sm btn-secondary text-sm" href="app/assessment-plan/new-assessment-plan">
+                  Add Assessment Plan
+                 </a>
+                </div>
+               {% endif %}
+              {% endif %}
              {% endif %}
             </div>
             <div class="card-body scrollable h-[200px] py-0 my-4 pr-4 mr-2 bg-light">
@@ -166,19 +168,21 @@
              <h3 class="card-title font-medium text-sm">              
              </h3>
              {% if "Academics User" in user_roles %}
-             {% if assessments %}
-             <div class="flex items-center gap-2.5">
-              <a class="btn btn-sm btn-secondary text-sm" href="/app/assessment-result-tool">
-               Submit Final Grade
-              </a>
-             </div>
-             {% else %}
-             <div class="flex items-center gap-2.5">
-              <a class="btn btn-sm btn-secondary text-sm" href="app/assessment-plan/new-assessment-plan">
-               Add Assessment Plan
-              </a>
-             </div>
-             {% endif %}
+              {% if selected_section %}
+               {% if assessments %}
+                <div class="flex items-center gap-2.5">
+                 <a class="btn btn-sm btn-secondary text-sm" href="/app/assessment-result-tool?assessment_plan={{assessment_name}}&student_group={{selected_section}}">
+                  Submit Final Grade
+                 </a>
+                </div>
+               {% else %}
+                <div class="flex items-center gap-2.5">
+                 <a class="btn btn-sm btn-secondary text-sm" href="app/assessment-plan/new-assessment-plan">
+                  Add Assessment Plan
+                 </a>
+                </div>
+               {% endif %}
+              {% endif %} 
              {% endif %}
             </div>
             <div class="card-body scrollable h-[200px] py-0 my-4 pr-4 mr-2">

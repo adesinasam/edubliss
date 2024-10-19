@@ -1,5 +1,14 @@
 
 frappe.ui.form.on('Assessment Plan', {
+	refresh: function(frm) {
+		if (frm.doc.docstatus == 1) {
+	    	// Add "Back" button
+    		frm.page.set_primary_action(`${frappe.utils.icon('arrow-left', 'sm')} ${__('Back to dashboard')}`, function() {
+        		window.location.href = `/admin/course/assessment_plan/${frm.doc.course}?section_name=${frm.doc.student_group}`;
+	   	 });
+    	}
+	},
+
 	course: function(frm) {
 		if (frm.doc.course && frm.doc.maximum_assessment_score) {
 			frappe.call({
