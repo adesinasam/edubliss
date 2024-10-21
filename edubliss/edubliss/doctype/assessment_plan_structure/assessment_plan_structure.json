@@ -26,6 +26,7 @@
    "label": "Assessment Structure"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "week",
    "fieldtype": "Select",
    "label": "Week",
@@ -48,6 +49,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "description": "Based on Curriculum",
    "fieldname": "topics",
    "fieldtype": "Data",
@@ -55,6 +57,7 @@
    "label": "Topics"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "schedule_date",
    "fieldtype": "Date",
    "in_list_view": 1,
@@ -63,6 +66,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "due_date",
    "fieldtype": "Date",
    "in_list_view": 1,
@@ -102,7 +106,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-09-29 17:38:59.725784",
+ "modified": "2024-10-21 13:57:57.435503",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Assessment Plan Structure",

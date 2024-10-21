@@ -63,6 +63,7 @@ def get_context(context):
         context.students = frappe.call('edubliss.api.get_section_students', section=section_name)
     else:
         context.selected_section = None
+        context.section_name = None
         context.students = []
 
     # Initialize 'assessments' with a default value (None) to avoid UnboundLocalError

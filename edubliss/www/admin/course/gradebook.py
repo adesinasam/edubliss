@@ -122,8 +122,10 @@ def get_context(context):
     section_name = frappe.form_dict.get('section_name')
     if section_name:
         context.selected_section = section_name
+        context.section_name = frappe.get_doc("Student Group", section_name)
     else:
         context.selected_section = None
+        context.section_name = None
 
     # Initialize 'assessments' with a default value (None) to avoid UnboundLocalError
     assessments = None
