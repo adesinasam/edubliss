@@ -96,8 +96,9 @@
       <div class="grid gap-5 lg:gap-7.5">
        <div class="card card-grid min-w-full">
         <div class="card-header">
-         <h3 class="card-title">
-         </h3>
+         <span class="card-title text-2sm text-gray-700">
+            Student: <b class="text-2sm text-primary">{{ students.student_name }}</b>
+         </span>
         </div>
         <div class="card-body">
           <div class="card-table scrollable-x-auto">
@@ -106,13 +107,12 @@
              <thead>
               <tr>
                 <th></th>
-                <th class="min-w-[150px]">Posting Date</th>
-                <th class="min-w-[200px]">Student</th>
-                <th class="min-w-[150px]">Debit</th>
-                <th class="min-w-[150px]">Credit</th>
-                <th class="min-w-[150px]">Balance</th>
-                <th class="min-w-[170px]">Voucher Type</th>
-                <th class="min-w-[200px]">Voucher No</th>
+                <th class="min-w-[120px]">Posting Date</th>
+                <th class="min-w-[180px]">Voucher No</th>
+                <th class="min-w-[150px]">Transaction</th>
+                <th class="min-w-[120px]">Debit</th>
+                <th class="min-w-[120px]">Credit</th>
+                <th class="min-w-[120px]">Balance</th>
                 <th class="min-w-[300px]">Remarks</th>
               </tr>
              </thead>
@@ -121,11 +121,11 @@
              </tbody>
              <tfoot>
               <tr>
-               <td colspan="3"><b>Total</b></td>
+               <td colspan="4"><b>Total</b></td>
                <td><b>{{ frappe.format(total_debit, {'fieldtype': 'Currency'}) }}</b></td>
                <td><b>{{ frappe.format(total_credit, {'fieldtype': 'Currency'}) }}</b></td>
                <td><b>{{ frappe.format(balance, {'fieldtype': 'Currency'}) }}</b></td>
-               <td colspan="3"></td>
+               <td colspan="1"></td>
               </tr>
              </tfoot>
             </table>

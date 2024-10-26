@@ -183,6 +183,9 @@ website_route_rules = [
 # ---------------
 # Hook on document methods and events
 doc_events = {
+  "Assessment Plan": {
+    "on_cancel": "edubliss.edubliss.assessment_plan.setup"
+  },
   "Program Enrollment": {
     "on_submit": "edubliss.edubliss.program_enrollment.setup"
   },

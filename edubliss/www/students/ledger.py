@@ -100,15 +100,14 @@ def get_context(context):
         
         tbody_content += f'''
         <tr>
-            <td>{index}</td>
-            <td>{ledger.posting_date}</td>
-            <td><span class="leading-none font-semibold text-sm text-gray-900 hover:text-primary">{ledger.party}</span></td>
-            <td>{frappe.format_value(debit, {"fieldtype": "Currency"})}</td>
-            <td>{frappe.format_value(credit, {"fieldtype": "Currency"})}</td>
-            <td>{frappe.format_value(balance, {"fieldtype": "Currency"})}</td>
-            <td>{ledger.voucher_type}</td>
-            <td class="text-center"><a class="btn btn-link" href="/printview?doctype={ledger.voucher_type}&name={ledger.voucher_no}" target="_blank">{ledger.voucher_no}</a></td>
-            <td>{ledger.remarks}</td>
+            <td class="text-xs">{index}</td>
+            <td class="text-xs">{ledger.posting_date}</td>
+            <td class="text-center"><a class="btn btn-link text-xs" href="/printview?doctype={ledger.voucher_type}&name={ledger.voucher_no}" target="_blank">{ledger.voucher_no}</a></td>
+            <td class="text-xs">{ledger.voucher_type}</td>
+            <td class="text-xs">{frappe.format_value(debit, {"fieldtype": "Currency"})}</td>
+            <td class="text-xs">{frappe.format_value(credit, {"fieldtype": "Currency"})}</td>
+            <td class="text-xs">{frappe.format_value(balance, {"fieldtype": "Currency"})}</td>
+            <td class="text-xs">{ledger.remarks}</td>
         </tr>
         '''
 

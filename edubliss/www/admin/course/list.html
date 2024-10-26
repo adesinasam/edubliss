@@ -58,77 +58,40 @@
          </div>
         </div>
         <div class="card-body">
-         <div data-datatable="true" data-datatable-page-size="10">
           <div class="scrollable-x-auto">
-           <table class="table table-auto table-border" data-datatable-table="true">
+           <table class="table table-auto .table-xs table-border" data-datatable-table="true">
             <thead>
              <tr>
               <th class="w-[60px] text-center">
-               <input class="checkbox checkbox-sm" data-datatable-check="true" type="checkbox"/>
               </th>
               <th class="min-w-[300px]">
-               <span class="sort asc">
-                <span class="sort-label">
                  Course
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
               </th>
               <th class="min-w-[100px]">
-               <span class="sort">
-                <span class="sort-label">
                  Course ID
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
               </th>
               <th class="min-w-[150px]">
-               <span class="sort">
-                <span class="sort-label">
                  Subject
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
               </th>
               <th class="min-w-[80px]">
-               <span class="sort">
-                <span class="sort-label">
                  Status
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
               </th>
               <th class="min-w-[200px]">
-               <span class="sort">
-                <span class="sort-label">
                  Course Category
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
               </th>
               <th class="w-[100px] text-center">
-               <span class="sort">
-                <span class="sort-label">
                  Department
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
               </th>
               <th class="w-[60px]">
               </th>
              </tr>
             </thead>
             <tbody>
-            {% for course in courses %}
+             {% if courses %}
+              {% for course in courses %}
              <tr>
               <td class="text-center">
-               <input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/>
+                <span class="badge badge-dot size-1.5 badge-primary"></span>
               </td>
               <td>
                <div class="flex items-center gap-2.5">
@@ -171,7 +134,7 @@
                  </button>
                  <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
                   <div class="menu-item">
-                   <a class="menu-link" href="/admin/courses/overview/{{ course.name }}">
+                   <a class="menu-link" href="/admin/course/overview/{{ course.name }}">
                     <span class="menu-icon">
                      <i class="ki-filled ki-search-list">
                      </i>
@@ -199,25 +162,15 @@
                </div>
               </td>
              </tr>
-            {% endfor %}
+              {% endfor %}
+             {% else %}
+             <tr>
+              <td colspan="8" class="text-center">No course found.</td>
+             </tr>
+             {% endif %}
             </tbody>
            </table>
           </div>
-          <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
-           <div class="flex items-center gap-2 order-2 md:order-1">
-            Show
-            <select class="select select-sm w-16" data-datatable-size="true" name="perpage">
-            </select>
-            per page
-           </div>
-           <div class="flex items-center gap-4 order-1 md:order-2">
-            <span data-datatable-info="true">
-            </span>
-            <div class="pagination" data-datatable-pagination="true">
-            </div>
-           </div>
-          </div>
-         </div>
         </div>
        </div>
       </div>
@@ -228,36 +181,25 @@
 
 {% block custom_js %}
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get references to the search input and table rows
     const searchInput = document.getElementById('search-input');
-    const table = document.querySelector('table[data-datatable-table="true"]');
+    const table = document.querySelector('[data-datatable-table="true"]');
     const rows = table.querySelectorAll('tbody tr');
 
-    searchInput.addEventListener('input', function () {
-        const query = searchInput.value.toLowerCase();
+    // Event listener for input on the search field
+    searchInput.addEventListener('input', function() {
+      const searchTerm = searchInput.value.toLowerCase();
 
-        rows.forEach(row => {
-            const courseName = row.querySelector('td:nth-child(2) a').textContent.toLowerCase();
-            const courseId = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-            const subject = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
-            const status = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
-            const category = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
-            const department = row.querySelector('td:nth-child(7)').textContent.toLowerCase();
+      rows.forEach(row => {
+        // Check if any cell in the row contains the search term
+        const cells = Array.from(row.querySelectorAll('td'));
+        const match = cells.some(cell => cell.textContent.toLowerCase().includes(searchTerm));
 
-            if (
-                courseName.includes(query) ||
-                courseId.includes(query) ||
-                subject.includes(query) ||
-                status.includes(query) ||
-                category.includes(query) ||
-                department.includes(query)
-            ) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
+        // Show or hide the row based on the match
+        row.style.display = match ? '' : 'none';
+      });
     });
-});
+  });
 </script>
 {% endblock %}

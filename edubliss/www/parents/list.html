@@ -58,13 +58,11 @@
          </div>
         </div>
         <div class="card-body">
-         <div data-datatable="true" data-datatable-page-size="10">
           <div class="scrollable-x-auto">
            <table class="table table-auto table-border" data-datatable-table="true">
             <thead>
              <tr>
               <th class="w-[60px] text-center">
-               <input class="checkbox checkbox-sm" data-datatable-check="true" type="checkbox"/>
               </th>
               <th class="min-w-[300px]">
                <span class="sort asc">
@@ -119,7 +117,7 @@
             {% for parent in parents %}
              <tr>
               <td class="text-center">
-               <input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/>
+                <span class="badge badge-dot size-1.5 badge-primary"></span>
               </td>
               <td>
                <div class="flex items-center gap-2.5">
@@ -187,21 +185,6 @@
             </tbody>
            </table>
           </div>
-          <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
-           <div class="flex items-center gap-2 order-2 md:order-1">
-            Show
-            <select class="select select-sm w-16" data-datatable-size="true" name="perpage">
-            </select>
-            per page
-           </div>
-           <div class="flex items-center gap-4 order-1 md:order-2">
-            <span data-datatable-info="true">
-            </span>
-            <div class="pagination" data-datatable-pagination="true">
-            </div>
-           </div>
-          </div>
-         </div>
         </div>
        </div>
       </div>
@@ -211,88 +194,26 @@
 {% endblock %}
 
 {% block custom_js %}
-<script type="application/json" id="parent-data">
-    {{ parents | json }}
-</script>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get references to the search input and table rows
     const searchInput = document.getElementById('search-input');
-    const tableBody = document.querySelector('tbody');
-    const parentData = JSON.parse(document.getElementById('parent-data').textContent);
+    const table = document.querySelector('[data-datatable-table="true"]');
+    const rows = table.querySelectorAll('tbody tr');
 
-    // Function to render parents
-    function renderParents(parents) {
-        tableBody.innerHTML = ''; // Clear the table
-
-        if (parents.length > 0) {
-            parents.forEach(function(parent) {
-                const row = `<tr>
-                    <td class="text-center">
-                        <input class="checkbox checkbox-sm" type="checkbox" value="1"/>
-                    </td>
-                    <td>
-                        <div class="flex items-center gap-2.5">
-                            <img alt="" class="rounded-full size-7 shrink-0" src="${parent.image || 'assets/edubliss/dist/media/avatars/blank.png'}"/>
-                            <div class="flex flex-col">
-                                <a class="text-sm text-primary hover:text-primary-active mb-px" href="/parents/profile/${parent.name}">
-                                    ${parent.guardian_name}
-                                    <span class="text-2sm font-medium text-gray-600 hover:text-primary-active">
-                                        ${parent.email_id || ''}
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </td>
-                    <td>${parent.name}</td>
-                    <td>${parent.students || ''}</td>
-                    <td>${parent.mobile_number || ''}</td>
-                    <td>${parent.custom_contact_address || ''}</td>
-                    <td>
-                        <div class="menu">
-                            <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
-                                <i class="ki-filled ki-dots-vertical"></i>
-                            </button>
-                            <div class="menu-dropdown w-full max-w-[175px]">
-                                <a class="menu-link" href="/parents/profile/${parent.name}">
-                                    <span class="menu-icon">
-                                        <i class="ki-filled ki-search-list"></i>
-                                    </span> View
-                                </a>
-                                <div class="menu-separator"></div>
-                                <a class="menu-link" href="/app/guardian/${parent.name}">
-                                    <span class="menu-icon">
-                                        <i class="ki-filled ki-pencil"></i>
-                                    </span> Edit
-                                </a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>`;
-                tableBody.innerHTML += row;
-            });
-        } else {
-            tableBody.innerHTML = `<tr><td colspan="7" class="text-center">No parents found.</td></tr>`;
-        }
-    }
-
-    // Initial render of all parents
-    renderParents(parentData);
-
-    // Search logic
+    // Event listener for input on the search field
     searchInput.addEventListener('input', function() {
-        const searchTerm = searchInput.value.toLowerCase();
+      const searchTerm = searchInput.value.toLowerCase();
 
-        const filteredParents = parentData.filter(function(parent) {
-            return (parent.guardian_name && parent.guardian_name.toLowerCase().includes(searchTerm)) ||
-                   (parent.name && parent.name.toLowerCase().includes(searchTerm)) ||
-                   (parent.mobile_number && parent.mobile_number.toLowerCase().includes(searchTerm)) ||
-                   (parent.email_id && parent.email_id.toLowerCase().includes(searchTerm));
-        });
+      rows.forEach(row => {
+        // Check if any cell in the row contains the search term
+        const cells = Array.from(row.querySelectorAll('td'));
+        const match = cells.some(cell => cell.textContent.toLowerCase().includes(searchTerm));
 
-        // Render filtered parents
-        renderParents(filteredParents);
+        // Show or hide the row based on the match
+        row.style.display = match ? '' : 'none';
+      });
     });
-});
-   
+  });
 </script>
 {% endblock %}

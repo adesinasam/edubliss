@@ -1,7 +1,13 @@
 import frappe
 from frappe import _
+from datetime import datetime
 
 no_cache = 1
+
+def format_date(value, format="%d %b, %Y"):
+    if value:
+        return value.strftime(format)
+    return value
 
 def get_context(context):
 
@@ -94,6 +100,9 @@ def get_context(context):
     total_credit = 0
     balance = 0
     
+    # Start generating the tbody content
+    tbody_content = ''
+    
     for index, ledger in enumerate(ledgers, start=1):
         debit = ledger.debit or 0
         credit = ledger.credit or 0
@@ -101,6 +110,20 @@ def get_context(context):
         total_credit += credit
         balance += debit - credit
         
+        tbody_content += f'''
+        <tr>
+            <td class="text-xs">{index}</td>
+            <td class="text-xs">{format_date(ledger.posting_date)}</td>
+            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype={ledger.voucher_type}&name={ledger.voucher_no}" target="_blank">{ledger.voucher_no}</a></td>
+            <td class="text-xs">{ledger.voucher_type}</td>
+            <td class="text-xs">{frappe.format_value(debit, {"fieldtype": "Currency"})}</td>
+            <td class="text-xs">{frappe.format_value(credit, {"fieldtype": "Currency"})}</td>
+            <td class="text-xs {'text-success' if balance < 0 else 'text-gray-800'}">{frappe.format_value(balance, {"fieldtype": "Currency"})}</td>
+            <td class="text-xs">{ledger.remarks}</td>
+        </tr>
+        '''
+
+    context.tbody_content = tbody_content
     context.total_debit = total_debit
     context.total_credit = total_credit
     context.balance = balance
@@ -113,6 +136,9 @@ def get_context(context):
         sales_invoices = frappe.call('edubliss.api.get_student_invoices', customer=customer)
         context.sales_invoices_html = generate_sales_invoices_html(sales_invoices)
 
+        unpaid_sales_invoices = frappe.call('edubliss.api.get_student_unpaid_invoices', customer=customer)
+        context.unpaid_invoices_html = generate_unpaid_invoices_html(unpaid_sales_invoices, sales_orders)
+
     return context
 
 def generate_sales_orders_html(sales_orders):
@@ -124,12 +150,11 @@ def generate_sales_orders_html(sales_orders):
         status_badge = get_status_badge(order.status)
         row = f"""
         <tr>
-            <td>{idx}</td>
-            <td><a class="leading-none font-semibold text-sm text-gray-900 hover:text-primary" href="/printview?doctype=Sales%20Order&name={order['name']}" target="_blank">{order['customer']}</a></td>
+            <td class="text-2sm">{format_date(order['transaction_date'])}</td>
+            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Order&name={order['name']}" target="_blank">{order['name']}</a></td>
+            <td class="text-2sm">Order</td>
+            <td class="text-2sm">{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
             <td>{status_badge}</td>
-            <td>{order['transaction_date']}</td>
-            <td>{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
-            <td class="text-center"><a class="btn btn-link" href="/printview?doctype=Sales%20Order&name={order['name']}" target="_blank">{order['name']}</a></td>
             <td><button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch('{order['name']}','Sales%20Order')">Pay</button></td>
         </tr>
         """
@@ -144,16 +169,55 @@ def generate_sales_invoices_html(sales_invoices):
     rows = []
     for invoice in sales_invoices:
         status_badge = get_status_badge(invoice.status)
-        payment_button = f'<button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch(\'{invoice["name"]}\',\'Sales%20Invoice\')">Pay</button>' if invoice['outstanding_amount'] > 0 else ''
+        payment_button = f'<button class="btn btn-xs btn-danger text-2sm text-light" onclick="openModalWithFetch(\'{invoice["name"]}\',\'Sales%20Invoice\')">Pay</button>' if invoice['outstanding_amount'] > 0 else ''
         row = f"""
         <tr>
-            <td><input class="checkbox checkbox-sm" data-datatable-row-check="true" type="checkbox" value="1"/></td>
-            <td><a class="leading-none font-semibold text-sm text-gray-900 hover:text-primary" href="/printview?doctype=Sales%20Invoice&name={invoice['name']}" target="_blank">{invoice['title']}</a></td>
+            <td class="text-2sm">{format_date(invoice['posting_date'])}</td>
+            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Invoice&name={invoice['name']}" target="_blank">{invoice['name']}</a></td>
+            <td class="text-2sm">{frappe.format(invoice['grand_total'], {'fieldtype': 'Currency'})}</td>
+            <td class="text-2sm">{frappe.format(invoice['outstanding_amount'], {'fieldtype': 'Currency'})}</td>
+            <td class="text-2sm">{format_date(invoice['due_date'])}</td>
             <td>{status_badge}</td>
-            <td>{invoice['posting_date']}</td>
-            <td>{frappe.format(invoice['grand_total'], {'fieldtype': 'Currency'})}</td>
-            <td>{frappe.format(invoice['outstanding_amount'], {'fieldtype': 'Currency'})}</td>
-            <td class="text-center"><a class="btn btn-link" href="/printview?doctype=Sales%20Invoice&name={invoice['name']}" target="_blank">{invoice['name']}</a></td>
+            <td>{payment_button}</td>
+        </tr>
+        """
+        rows.append(row)
+    
+    return ''.join(rows)
+
+def generate_unpaid_invoices_html(unpaid_sales_invoices, sales_orders):
+    if not unpaid_sales_invoices and not sales_orders:
+        return '<tr><td colspan="7" class="text-center">No Invoice found.</td></tr>'
+    
+    rows = []
+    for idx, order in enumerate(sales_orders, start=1):
+        status_badge = get_status_badge(order.status)
+        row = f"""
+        <tr>
+            <td class="text-2sm">{format_date(order['transaction_date'])}</td>
+            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Order&name={order['name']}" target="_blank">{order['name']}</a></td>
+            <td class="text-2sm">Order</td>
+            <td class="text-2sm">{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
+            <td class="text-2sm">{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
+            <td class="text-2sm">{format_date(order['delivery_date']) or ""}</td>
+            <td>{status_badge}</td>
+            <td><button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch('{order['name']}','Sales%20Order')">Pay</button></td>
+        </tr>
+        """
+        rows.append(row)
+
+    for invoice in unpaid_sales_invoices:
+        status_badge = get_status_badge(invoice.status)
+        payment_button = f'<button class="btn btn-xs btn-danger text-2sm text-light" onclick="openModalWithFetch(\'{invoice["name"]}\',\'Sales%20Invoice\')">Pay</button>' if invoice['outstanding_amount'] > 0 else ''
+        row = f"""
+        <tr>
+            <td class="text-2sm">{format_date(invoice['posting_date'])}</td>
+            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Invoice&name={invoice['name']}" target="_blank">{invoice['name']}</a></td>
+            <td class="text-2sm">Invoice</td>
+            <td class="text-2sm">{frappe.format(invoice['grand_total'], {'fieldtype': 'Currency'})}</td>
+            <td class="text-2sm">{frappe.format(invoice['outstanding_amount'], {'fieldtype': 'Currency'})}</td>
+            <td class="text-2sm">{format_date(invoice['due_date'])}</td>
+            <td>{status_badge}</td>
             <td>{payment_button}</td>
         </tr>
         """
@@ -170,6 +234,7 @@ def get_status_badge(status):
         'Partly Paid': 'badge-warning',
         'Completed': 'badge-success',
         'Return': 'badge-dark',
+        'Paid': 'badge-success',
     }
     badge_class = badge_classes.get(status, 'badge-primary')
     return f'<div class="badge badge-sm {badge_class} badge-outline">{status}</div>'

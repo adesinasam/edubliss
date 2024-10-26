@@ -49,16 +49,16 @@
            <div class="flex flex-col gap-5 lg:gap-7.5 grow">
             <div class="flex items-center flex-wrap gap-3 lg:gap-5">
              {% if "Academics User" in user_roles %}
-             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-info-light">
-              <span class="text-info text-md leading-none font-semibold">
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-primary-light">
+              <span class="text-primary text-md leading-none font-semibold">
                {{ frappe.format(total_debit, {'fieldtype': 'Currency'}) }}
               </span>
               <span class="text-gray-700 text-2sm font-medium">
                Total Fees
               </span>
              </div>
-             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-success-light">
-              <span class="text-success text-md leading-none font-semibold">
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-info-light">
+              <span class="text-info text-md leading-none font-semibold">
                {{ frappe.format(total_credit, {'fieldtype': 'Currency'}) }}
               </span>
               <span class="text-gray-700 text-2sm font-medium">
@@ -66,8 +66,8 @@
               </span>
              </div>
              {% endif %}
-             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-warning-light">
-              <span class="text-warning text-md leading-none font-semibold">
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-danger-light">
+              <span class="text-danger text-md leading-none font-semibold">
                {% if balance > 0 %}
                {{ frappe.format(balance, {'fieldtype': 'Currency'}) }}
                {% else %}
@@ -78,8 +78,8 @@
                Balance Due
               </span>
              </div>
-             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-primary-light">
-              <span class="text-primary text-md leading-none font-semibold">
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-success-light">
+              <span class="text-success text-md leading-none font-semibold">
                {% if balance < 0 %}
                {{ frappe.format(abs(balance), {'fieldtype': 'Currency'}) }}
                {% else %}
@@ -94,45 +94,12 @@
            </div>
           </div>
          </div>
-        </div>
-       <div class="card card-grid min-w-full">
-        <div class="card-header">
-         <h3 class="card-title">
-          Incoming Billing
-         </h3>
-        </div>
-        <div class="card-body">
-          <div class="scrollable-x-auto">
-           <table class="table table-border">
-            <thead>
-             <tr>
-              <th class="w-14">
-              </th>
-              <th class="min-w-[200px]">
-                 Title
-              </th>
-              <th class="min-w-[200px]">
-                 Status
-              </th>
-              <th class="min-w-[150px]">
-                 Date
-              </th>
-              <th class="min-w-[200px]">
-                 Grand Total
-              </th>
-              <th class="min-w-[200px]">
-              </th>
-              <th class="min-w-[100px]">
-              </th>
-             </tr>
-            </thead>
-            <tbody>
-               {{ sales_orders_html | safe }}
-            </tbody>
-           </table>
-          </div>
-        </div>
-       </div>
+         <!-- <div class="card-footer justify-center">
+          <a class="btn btn-link" href="#">
+           Example link
+          </a>
+         </div>
+        </div> -->
       </div>
      </div>
      <!-- end: container -->
@@ -147,39 +114,29 @@
       <div class="grid gap-5 lg:gap-7.5">
        <div class="card card-grid min-w-full">
         <div class="card-header">
-         <h3 class="card-title">
-          Invoice and Payments
-         </h3>
+         <div class="tabs mb-5" data-tabs="true">
+          <button class="tab active" data-tab-toggle="#tab_4_1">
+           Unpaid
+          </button>
+          <button class="tab" data-tab-toggle="#tab_4_2">
+           Incoming
+          </button>
+          <button class="tab" data-tab-toggle="#tab_4_3">
+           Invoices
+          </button>
+          <button class="tab" data-tab-toggle="#tab_4_4">
+           Ledger
+          </button>
+         </div>        
         </div>
         <div class="card-body">
-         <div data-datatable="true" data-datatable-page-size="20">
+         <div data-datatable="true" data-datatable-page-size="20" class="transition-opacity duration-700" id="tab_4_1">
           <div class="scrollable-x-auto">
            <table class="table table-border" data-datatable-table="true">
             <thead>
              <tr>
-              <th class="w-14">
-               <input class="checkbox checkbox-sm" data-datatable-check="true" type="checkbox"/>
-              </th>
-              <th class="min-w-[200px]">
-               <span class="sort">
-                <span class="sort-label">
-                 Title
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
-              </th>
               <th class="min-w-[150px]">
-               <span class="sort">
-                <span class="sort-label">
-                 Status
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
-              </th>
-              <th class="min-w-[150px]">
-               <span class="sort">
+               <span class="sort desc">
                 <span class="sort-label">
                  Date
                 </span>
@@ -187,27 +144,100 @@
                 </span>
                </span>
               </th>
-              <th class="min-w-[200px]">
-               <span class="sort">
-                <span class="sort-label">
-                 Grand Total
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
+              <th class="min-w-[180px]">
+                Type
               </th>
-              <th class="min-w-[200px]">
-               <span class="sort">
-                <span class="sort-label">
+              <th class="min-w-[150px]">
+                Transaction
+              </th>
+              <th class="min-w-[150px]">
+                 Amount
+              </th>
+              <th class="min-w-[150px]">
                  Outstanding
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
               </th>
-              <th class="min-w-[200px]">
+              <th class="min-w-[120px]">
+                 Due Date
               </th>
-              <th class="min-w-[100px]">
+              <th class="min-w-[120px]">
+                 Status
+              </th>
+              <th class="min-w-[60px]">
+              </th>
+             </tr>
+            </thead>
+            <tbody>
+               {{ unpaid_invoices_html | safe }}
+           </tbody>
+           </table>
+          </div>
+          <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
+           <div class="flex items-center gap-2 order-2 md:order-1">
+            Show
+            <select class="select select-sm w-16" data-datatable-size="true" name="perpage">
+            </select>
+            per page
+           </div>
+           <div class="flex items-center gap-4 order-1 md:order-2">
+            <span data-datatable-info="true">
+            </span>
+            <div class="pagination" data-datatable-pagination="true">
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="scrollable-x-auto hidden transition-opacity duration-700" id="tab_4_2">
+           <table class="table table-border">
+            <thead>
+             <tr>
+              <th class="min-w-[120px]">
+                 Date
+              </th>
+              <th class="min-w-[180px]">
+                Type
+              </th>
+              <th class="min-w-[120px]">
+                Transaction
+              </th>
+              <th class="min-w-[120px]">
+                 Amount
+              </th>
+              <th class="min-w-[120px]">
+                 Status
+              </th>
+              <th class="min-w-[60px]">
+              </th>
+             </tr>
+            </thead>
+            <tbody>
+               {{ sales_orders_html | safe }}
+            </tbody>
+           </table>
+         </div>
+         <div data-datatable="true" data-datatable-page-size="20" class="hidden transition-opacity duration-700" id="tab_4_3">
+          <div class="scrollable-x-auto">
+           <table class="table table-border" data-datatable-table="true">
+            <thead>
+             <tr>
+              <th class="min-w-[120px]">
+                 Date
+              </th>
+              <th class="min-w-[180px]">
+                Type
+              </th>
+              <th class="min-w-[150px]">
+                 Amount
+              </th>
+              <th class="min-w-[150px]">
+                 Outstanding
+              </th>
+              <th class="min-w-[120px]">
+                 Due Date
+              </th>
+              <th class="min-w-[120px]">
+                 Status
+              </th>
+              <th class="min-w-[60px]">
               </th>
              </tr>
             </thead>
@@ -231,9 +261,109 @@
            </div>
           </div>
          </div>
+         <div data-datatable="true" data-datatable-page-size="20" class="hidden transition-opacity duration-700" id="tab_4_4">
+          <div class="scrollable-x-auto">
+            <table class="table table-border" data-datatable-table="true">
+             <thead>
+              <tr>
+                <th></th>
+                <th class="min-w-[120px]">Posting Date</th>
+                <th class="min-w-[180px]">Type</th>
+                <th class="min-w-[150px]">Transaction</th>
+                <th class="min-w-[120px]">Debit</th>
+                <th class="min-w-[120px]">Credit</th>
+                <th class="min-w-[120px]">Balance</th>
+                <th class="min-w-[300px]">Remarks</th>
+              </tr>
+             </thead>
+             <tbody>
+              {{ tbody_content | safe }}
+             </tbody>
+             <tfoot>
+              <tr>
+               <td colspan="6"><b>Total</b></td>
+               <!-- <td><b>{{ frappe.format(total_debit, {'fieldtype': 'Currency'}) }}</b></td>
+               <td><b>{{ frappe.format(total_credit, {'fieldtype': 'Currency'}) }}</b></td> -->
+               <td><b>{{ frappe.format(balance, {'fieldtype': 'Currency'}) }}</b></td>
+               <td></td>
+              </tr>
+             </tfoot>
+            </table>
+          </div>
+          <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
+           <div class="flex items-center gap-2 order-2 md:order-1">
+            Show
+            <select class="select select-sm w-16" data-datatable-size="true" name="perpage">
+            </select>
+            per page
+           </div>
+           <div class="flex items-center gap-4 order-1 md:order-2">
+            <span data-datatable-info="true">
+            </span>
+            <div class="pagination" data-datatable-pagination="true">
+            </div>
+           </div>
+          </div>
+         </div>
         </div>
        </div>
       </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+       <div class="grid lg:grid-cols-2 gap-5 lg:gap-7.5">
+        <div class="card">
+         <div class="card-body px-10 py-7.5 lg:pr-12.5">
+          <div class="flex flex-wrap md:flex-nowrap items-center gap-6 md:gap-10">
+           <div class="flex flex-col items-start gap-3">
+            <h2 class="text-1.5xl font-semibold text-gray-900">
+             Questions ?
+            </h2>
+            <p class="text-sm font-medium text-gray-700 leading-5.5 mb-2.5">
+             Visit our Help Center for detailed assistance on billing, payments, subscriptions and more.
+            </p>
+           </div>
+           <img alt="image" class="dark:hidden max-h-[150px]" src="assets/edubliss/dist/media/illustrations/29.svg"/>
+           <img alt="image" class="light:hidden max-h-[150px]" src="assets/edubliss/dist/media/illustrations/29-dark.svg"/>
+          </div>
+         </div>
+         <div class="card-footer justify-center">
+          <a class="btn btn-link" href="https://wa.me/+2347043257997">
+          <i class="ki-filled ki-whatsapp">
+          </i>
+           Chat us on Whatsapp
+          </a>
+         </div>
+        </div>
+        <div class="card">
+         <div class="card-body px-10 py-7.5 lg:pr-12.5">
+          <div class="flex flex-wrap md:flex-nowrap items-center gap-6 md:gap-10">
+           <div class="flex flex-col items-start gap-3">
+            <h2 class="text-1.5xl font-semibold text-gray-900">
+             Contact Support
+            </h2>
+            <p class="text-sm font-medium text-gray-700 leading-5.5 mb-2.5">
+             Need assistance? Contact our support team for prompt, personalized help your queries &amp; concerns.
+            </p>
+           </div>
+           <img alt="image" class="dark:hidden max-h-[150px]" src="assets/edubliss/dist/media/illustrations/31.svg"/>
+           <img alt="image" class="light:hidden max-h-[150px]" src="assets/edubliss/dist/media/illustrations/31-dark.svg"/>
+          </div>
+         </div>
+         <div class="card-footer justify-center">
+          <a class="btn btn-link" href="https://mpischool.com/contact/" target="_blank">
+           Contact Support
+          </a>
+         </div>
+        </div>
+       </div>
      </div>
      <!-- end: container -->
     </main>

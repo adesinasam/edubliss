@@ -58,9 +58,8 @@
          </div>
         </div>
         <div class="card-body">
-         <div data-datatable="true" data-datatable-page-size="10">
           <div class="scrollable-x-auto">
-           <table class="table table-auto table-border" data-datatable-table="true">
+           <table class="table table-auto" data-datatable-table="true">
             <thead>
              <tr>
               <th class="w-[60px] text-center">
@@ -142,21 +141,6 @@
             </tbody>
            </table>
           </div>
-          <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
-           <div class="flex items-center gap-2 order-2 md:order-1">
-            Show
-            <select class="select select-sm w-16" data-datatable-size="true" name="perpage">
-            </select>
-            per page
-           </div>
-           <div class="flex items-center gap-4 order-1 md:order-2">
-            <span data-datatable-info="true">
-            </span>
-            <div class="pagination" data-datatable-pagination="true">
-            </div>
-           </div>
-          </div>
-         </div>
         </div>
        </div>
       </div>
@@ -166,57 +150,26 @@
 {% endblock %}
 
 {% block custom_js %}
-<script type="application/json" id="program-data">
-    {{ programs | json }}
-</script>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get references to the search input and table rows
     const searchInput = document.getElementById('search-input');
-    const tableBody = document.querySelector('tbody');
-    const programData = JSON.parse(document.getElementById('program-data').textContent);
+    const table = document.querySelector('[data-datatable-table="true"]');
+    const rows = table.querySelectorAll('tbody tr');
 
-    // Function to render programs
-    function renderPrograms(programs) {
-        tableBody.innerHTML = ''; // Clear the table
-
-        programs.forEach(function(program, index) {
-            const row = `<tr>
-                <td>${index + 1}</td>
-                <td>
-                    <a class="text-sm text-primary hover:text-primary-active mb-px" href="/admin/program/program?program_name=${program.name}">
-                        ${program.program_name || ""}
-                    </a>
-                </td>
-                <td>${program.program_abbreviation || ""}</td>
-                <td>${program.custom_school || ""}</td>
-                <td>${program.department || ""}</td>
-                <td>
-                    <a class="btn btn-secondary btn-xs" href="/admin/program/program?program_name=${program.name}">
-                        <i class="ki-filled ki-eye text-primary text-2xl"></i>
-                    </a>
-                </td>
-            </tr>`;
-            tableBody.innerHTML += row;
-        });
-    }
-
-    // Initial render of all programs
-    renderPrograms(programData);
-
-    // Search logic
+    // Event listener for input on the search field
     searchInput.addEventListener('input', function() {
-        const searchTerm = searchInput.value.toLowerCase();
+      const searchTerm = searchInput.value.toLowerCase();
 
-        const filteredPrograms = programData.filter(function(program) {
-            return (program.program_name && program.program_name.toLowerCase().includes(searchTerm)) ||
-                   (program.program_abbreviation && program.program_abbreviation.toLowerCase().includes(searchTerm)) ||
-                   (program.custom_school && program.custom_school.toLowerCase().includes(searchTerm)) ||
-                   (program.department && program.department.toLowerCase().includes(searchTerm));
-        });
+      rows.forEach(row => {
+        // Check if any cell in the row contains the search term
+        const cells = Array.from(row.querySelectorAll('td'));
+        const match = cells.some(cell => cell.textContent.toLowerCase().includes(searchTerm));
 
-        // Render filtered programs
-        renderPrograms(filteredPrograms);
+        // Show or hide the row based on the match
+        row.style.display = match ? '' : 'none';
+      });
     });
-});  
+  });
 </script>
 {% endblock %}

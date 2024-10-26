@@ -138,6 +138,25 @@ def get_course_plan_terms(course, terms):
     )
 
 @frappe.whitelist()
+def get_student_unpaid_invoices(customer=None):
+    filters = {}
+    if customer:
+        filters = {
+            'docstatus': 1,
+            'customer': customer,
+            'outstanding_amount': ['>',0]
+        }
+    return frappe.get_all(
+        'Sales Invoice', 
+        filters=filters, 
+        fields=[
+        'name', 'title', 'status', 'posting_date', 'grand_total', 
+        'outstanding_amount', 'customer', 'company', 'due_date'
+        ], 
+        order_by="posting_date desc"
+        )
+
+@frappe.whitelist()
 def get_student_invoices(customer=None):
     filters = {}
     if customer:
@@ -150,7 +169,7 @@ def get_student_invoices(customer=None):
         filters=filters, 
         fields=[
         'name', 'title', 'status', 'posting_date', 'grand_total', 
-        'outstanding_amount', 'customer', 'company'
+        'outstanding_amount', 'customer', 'company', 'due_date'
         ], 
         order_by="posting_date desc"
         )
@@ -169,7 +188,7 @@ def get_student_orders(customer=None):
         filters=filters, 
         fields=[
         'name', 'title', 'status', 'transaction_date', 'grand_total', 
-        'student', 'customer', 'company'
+        'student', 'customer', 'company', 'delivery_date'
         ], 
         order_by="transaction_date desc"
         )

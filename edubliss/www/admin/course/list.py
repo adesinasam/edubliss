@@ -3,6 +3,25 @@ from frappe import _
 
 no_cache = 1
 
+def get_courses(company):
+    program_courses = frappe.qb.DocType("Program Course")
+    courses = frappe.qb.DocType("Course")
+    programs = frappe.qb.DocType("Program")
+
+    program_courses_query = (
+        frappe.qb.from_(program_courses)
+        .inner_join(courses).on(program_courses.course == courses.course_name)
+        .inner_join(programs).on(program_courses.parent == programs.name)
+        .select(courses.name, courses.course_name, courses.custom_course_code, courses.custom_subject, 
+        courses.custom_disabled, courses.custom_course_category, courses.department)
+        .where(programs.custom_school == company)
+        .where(courses.custom_disabled == 0)
+        .orderby(courses.course_name)
+        .run(as_dict=1)
+    )
+    return program_courses_query if program_courses_query else []
+
+
 def get_context(context):
 
     # login
@@ -38,15 +57,16 @@ def get_context(context):
     context.companys = frappe.call('edubliss.api.get_company')
     context.acadyears = frappe.call('edubliss.api.get_academic_year')
     context.acadterms = frappe.call('edubliss.api.get_academic_term')
-    context.courses = frappe.get_all('Course', 
-        filters={'custom_disabled': 0}, 
-        fields=[
-        'name', 'course_name', 'custom_course_code','custom_subject', 
-        'custom_disabled', 'custom_course_category', 'department'], 
-        order_by="course_name asc")
+    context.courses = get_courses(company)
+    # context.courses = get_courses('Course', 
+    #     filters={'custom_disabled': 0}, 
+    #     fields=[
+    #     'name', 'course_name', 'custom_course_code','custom_subject', 
+    #     'custom_disabled', 'custom_course_category', 'department'], 
+    #     order_by="course_name asc")
 
     # Count
-    context.course_count = frappe.db.count('Course', filters={'custom_disabled': 0})
+    context.course_count = len(get_courses(company))
     context.lmscourse_count = frappe.db.count('LMS Course')
 
     return context

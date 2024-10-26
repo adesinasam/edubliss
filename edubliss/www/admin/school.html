@@ -45,48 +45,24 @@
        <div class="card card-grid min-w-full">
         <div class="card-body">
           <div class="scrollable-x-auto">
-           <table class="table table-auto table-border">
+           <table class="table table-auto">
             <thead>
              <tr>
               <th class="w-[60px] text-center">
               </th>
               <th class="min-w-[300px]">
-               <span class="sort asc">
-                <span class="sort-label">
                  School
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
               </th>
               {% if "Academics User" in user_roles %}
               <th class="min-w-[80px] text-center">
-               <span class="sort">
-                <span class="sort-label">
                  Students
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
               </th>
               {% endif %}
               <th class="min-w-[100px] text-center">
-               <span class="sort">
-                <span class="sort-label">
                  Status
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
               </th>
               <th class="w-[150px] text-center">
-               <span class="sort">
-                <span class="sort-label">
                  Parent
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
               </th>
               {% if "Academics User" in user_roles %}
               <th class="w-[60px]">
