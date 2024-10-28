@@ -14,17 +14,15 @@
      <div class="container-fixed" id="content_container">
      </div>
      <!-- end: container -->
-    {% if "Academics User" in user_roles %}
     {% include "templates/includes/teacher_header.html" %}
 
     {% include "templates/includes/teacher_nav.html" %}
-    {% endif %}
      <!-- begin: container -->
      <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
         <h1 class="text-xl font-semibold leading-none text-primary">
-         Subjects
+         Task
         </h1>
         <div class="flex items-center flex-wrap gap-1.5 font-medium">
          <span class="text-md text-gray-600">
@@ -42,7 +40,8 @@
       <div class="grid gap-5 lg:gap-7.5">
        <div class="card card-grid min-w-full">
         <div class="card-header flex-wrap gap-2">
-         <h3 class="card-title font-medium text-sm">
+         <h3 class="card-title font-medium text-2sm text-info">
+            Assigned Class Section
          </h3>
         </div>
         <div class="card-body">
@@ -53,48 +52,53 @@
               <th class="min-w-[60px]">
               </th>
               <th class="min-w-[250px]">
-                 Course
+                 Class Section
               </th>
               <th class="min-w-[200px]">
                  Program
               </th>
               <th class="min-w-[200px]">
-                 Academic Term
+                 Academic Year
               </th>
               <th class="min-w-[150px] text-center">
-                 Academic Year
+                 Attendance
               </th>
              </tr>
             </thead>
             <tbody>
-             {% if courses %}
-              {% for course in courses %}
+             {% if sections %}
+              {% for section in sections %}
              <tr>
               <td class="text-center">
                 <span class="badge badge-dot size-1.5 badge-primary">
                 </span>              
               </td>
               <td>
-                 <a class="text-sm font-semibold text-primary hover:text-primary-active mb-px" href="admin/course/overview/{{ course.course }}">
-                  {{ course.course }}
+                 <a class="text-sm font-semibold text-primary hover:text-primary-active mb-px" href="teachers/sections?section_name={{ section.student_group_name }}">
+                  {{ section.student_group_name }}
                  </a>
               </td>
               <td>
-               {{ course.program }}
-              </td>
-              <td>
-               {{ course.academic_term }}
+               {{ section.program }}
               </td>
               <td>
                <div class="flex justify-center">
-               {{ course.academic_year }}
+               {{ section.academic_year }}
                </div>
+              </td>
+              <td>
+                 <a class="btn btn-link" href="/app/student-attendance-tool?based_on={{'Student Group'}}&student_group={{ section.student_group_name }}">
+                  Add Attendance
+                 </a>
+                 <a class="btn btn-link" href="/app/query-report/Student Monthly Attendance Sheet?student_group={{ section.student_group_name }}">
+                  View Attendance
+                 </a>               
               </td>
              </tr>
                {% endfor %}
              {% else %}
              <tr>
-              <td colspan="6" class="text-center">No subjects found.</td>
+              <td colspan="5" class="text-center">No Class Section found.</td>
              </tr>
              {% endif %}
             </tbody>

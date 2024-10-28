@@ -45,8 +45,8 @@
          <div class="flex flex-col justify-center gap-2">
           <h3 class="text-md font-semibold leading-none text-primary">
             <a href="/students/gradebook/{{docname}}">
-            <i class="ki-filled ki-arrow-left"></i>
-           {{ results.course }}    
+             <span><i class="ki-filled ki-arrow-left"></i></span>
+             <span>{{ results.course }}</span>                  
             </a>
            <!-- <span> </span>
            <span class="badge badge-dot size-1.5 bg-gray-600">
@@ -63,68 +63,26 @@
            <table class="table table-auto table-border" data-datatable-table="true">
             <thead>
              <tr>
-              <th class="min-w-[200px]">
-               <span class="sort asc">
-                <span class="sort-label">
-                 Topic
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
-              </th>
               <th class="min-w-[150px]">
-               <span class="sort">
-                <span class="sort-label">
                  Assessment Type
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
+              </th>
+              <th class="min-w-[200px]">
+                 Topic
               </th>
               <th class="min-w-[100px]">
-               <span class="sort">
-                <span class="sort-label">
                  Mark Scored/Obtainable
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
               </th>
               <th class="min-w-[100px]">
-               <span class="sort">
-                <span class="sort-label">
                  Percent
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
               </th>
               <th class="min-w-[100px]">
-               <span class="sort">
-                <span class="sort-label">
                  Grade
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
               </th>
               <th class="min-w-[150px]">
-               <span class="sort">
-                <span class="sort-label">
                  Schedule Date
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
               </th>
               <th class="min-w-[150px]">
-               <span class="sort">
-                <span class="sort-label">
                  Due Date
-                </span>
-                <span class="sort-icon">
-                </span>
-               </span>
               </th>
               <th class="w-[60px]">
               </th>
@@ -135,10 +93,10 @@
               {% for structure in structures %}
              <tr>
               <td>
-                {{ structure.topics or "" }}
+                {{ structure.assessment_type }}
               </td>
               <td>
-                {{ structure.assessment_type }}
+                {{ structure.topics or "" }}
               </td>
               <td>
                {{ structure.score }}/{{ structure.maximum_score }}

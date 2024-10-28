@@ -1,0 +1,48 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"PDIJ-kH7QK\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Get Started</span>\",\"col\":12}},{\"id\":\"Bt-EN0fi_7\",\"type\":\"paragraph\",\"data\":{\"text\":\"Welcome onboard. Click on Switch to School Portal to proceed.\",\"col\":12}},{\"id\":\"DggqRCm8UU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Switch to School Portal\",\"col\":4}},{\"id\":\"_cY3qCVwUX\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"My Profile\",\"col\":4}}]",
+ "creation": "2024-10-27 18:49:25.434768",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "onboarding",
+ "idx": 0,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "Teacher",
+ "links": [],
+ "modified": "2024-10-28 04:44:15.847581",
+ "modified_by": "Administrator",
+ "module": "Edubliss",
+ "name": "Teacher",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "Instructor"
+  }
+ ],
+ "sequence_id": 1.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Switch to School Portal",
+   "type": "URL",
+   "url": "/dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "My Profile",
+   "type": "URL",
+   "url": "/teachers/profile"
+  }
+ ],
+ "title": "Teacher"
+}

@@ -117,6 +117,23 @@ def get_teacher_subjects(instructor, academic_term):
     )
 
 @frappe.whitelist(allow_guest=True)
+def get_teacher_sections(instructor, academic_year):
+    student_group = frappe.qb.DocType("Student Group")
+    student_group_instructors = frappe.qb.DocType("Student Group Instructor")
+
+    student_group_query = (
+        frappe.qb.from_(student_group)
+        .inner_join(student_group_instructors)
+        .on(student_group.name == student_group_instructors.parent)
+        .select('*')
+        .where(student_group_instructors.instructor == instructor)
+        .where(student_group.academic_year == academic_year)
+        .orderby(student_group.student_group_name)
+        .run(as_dict=1)
+    )
+    return student_group_query if student_group_query else []
+
+@frappe.whitelist(allow_guest=True)
 def get_course_plan(course):
     return frappe.get_all(
         "Course Scheme of Work",

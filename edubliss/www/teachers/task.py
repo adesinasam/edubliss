@@ -49,9 +49,9 @@ def get_context(context):
     context.abbr = "".join([p[0] for p in parts[:2] if p])
 
     # nav
-    context.active_route = "course"
-    context.active_subroute = "course"
-    context.active_teacher_route = "course"
+    context.active_route = "teachers"
+    context.active_subroute = "teacher_list"
+    context.active_teacher_route = "task"
 
     context.docname = docname
 
@@ -89,6 +89,7 @@ def get_context(context):
     context.acadyears = frappe.call('edubliss.api.get_academic_year')
     context.acadterms = frappe.call('edubliss.api.get_academic_term')
     context.courses = frappe.call('edubliss.api.get_teacher_subjects', instructor=docname, academic_term=acadterm)
+    context.sections = frappe.call('edubliss.api.get_teacher_sections', instructor=docname, academic_year=acadyear)
 
     # Try to fetch the Student document and handle errors if it doesn't exist
     try:
