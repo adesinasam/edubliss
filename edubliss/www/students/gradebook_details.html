@@ -63,7 +63,7 @@
            <table class="table table-auto table-border" data-datatable-table="true">
             <thead>
              <tr>
-              <th class="min-w-[150px]">
+              <th class="min-w-[150px]" style="position: sticky; left: 0; background-color: #fff; z-index: 1;">
                  Assessment Type
               </th>
               <th class="min-w-[200px]">
@@ -87,53 +87,35 @@
              </tr>
             </thead>
             <tbody>
-             {% if structures %}
-              {% for structure in structures %}
+            {% if structures %}
+             {% set grouped_structures = structures|groupby('assessment_criteria') %}
+             {% for criteria, items in grouped_structures %}
+              <!-- Group header row -->
              <tr>
-              <td>
-                {{ structure.assessment_type }}
-              </td>
-              <td>
-                {{ structure.topics or "" }}
-              </td>
-              <td>
-               {{ structure.score }}/{{ structure.maximum_score }}
-              </td>
-              <td>
-               {{ structure.weightage_score }}
-              </td>
-              <td>
-               {{ structure.grade }}
-              </td>
-              <td>
-               {{ get_structure_date(results.assessment_plan,structure.assessment_type) or ""}}
-              </td>
-              <td>
-               {{ get_structure_due(results.assessment_plan,structure.assessment_type) or ""}}
+              <td colspan="7" class="font-bold text-left text-primary">
+                {{ criteria }}
               </td>
              </tr>
-               {% endfor %}
-             {% else %}
+              <!-- Data rows for each assessment_criteria group -->
+              {% for structure in items %}
+             <tr>
+              <td style="position: sticky; left: 0; background-color: #fff; z-index: 1;">{{ structure.assessment_type }}</td>
+              <td>{{ structure.topics or "" }}</td>
+              <td>{{ structure.score }}/{{ structure.maximum_score }}</td>
+              <td>{{ structure.weightage_score }}</td>
+              <td>{{ structure.grade }}</td>
+              <td>{{ get_structure_date(results.assessment_plan, structure.assessment_type) or "" }}</td>
+              <td>{{ get_structure_due(results.assessment_plan, structure.assessment_type) or "" }}</td>
+             </tr>
+              {% endfor %}
+             {% endfor %}
+            {% else %}
              <tr>
               <td colspan="7" class="text-center">No course found.</td>
              </tr>
-             {% endif %}
+            {% endif %}
             </tbody>
            </table>
-          </div>
-          <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
-           <div class="flex items-center gap-2 order-2 md:order-1">
-            Show
-            <select class="select select-sm w-16" data-datatable-size="true" name="perpage">
-            </select>
-            per page
-           </div>
-           <div class="flex items-center gap-4 order-1 md:order-2">
-            <span data-datatable-info="true">
-            </span>
-            <div class="pagination" data-datatable-pagination="true">
-            </div>
-           </div>
           </div>
         </div>
        </div>

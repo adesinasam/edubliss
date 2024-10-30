@@ -23,7 +23,14 @@
         </h1>
         <div class="flex items-center flex-wrap gap-1.5 font-medium">
          <span class="text-md text-gray-600">
+          <a class="hover:text-primary-active mb-px" href="admin/program/sections_details?section_name={{ selected_section }}">
+            <i class="ki-solid ki-arrow-left"></i>
+          </a>
+         </span>
+         <span class="text-md text-gray-600">
+          <a class="hover:text-primary-active mb-px" href="admin/program/sections_details?section_name={{ selected_section }}">
           Assessment Plan
+          </a>
          </span>
         </div>
        </div>
@@ -44,6 +51,12 @@
          {% endif %}
         {% endif %}
        {% endif %}
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-3">
       </div>
      </div>
      <!-- end: container -->

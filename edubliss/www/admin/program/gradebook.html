@@ -23,7 +23,14 @@
         </h1>
         <div class="flex items-center flex-wrap gap-1.5 font-medium">
          <span class="text-md text-gray-600">
+          <a class="hover:text-primary-active mb-px" href="admin/program/sections_details?section_name={{ selected_section }}">
+            <i class="ki-solid ki-arrow-left"></i>
+          </a>
+         </span>
+         <span class="text-md text-gray-600">
+          <a class="hover:text-primary-active mb-px" href="admin/program/sections_details?section_name={{ selected_section }}">
           Grades
+          </a>
          </span>
         </div>
        </div>
@@ -32,11 +39,17 @@
          <a class="btn btn-primary rounded-full btn-clear active" data-tab-toggle="true" href="#gradebook_cards">
            Gradebook Grades
          </a>
-         <a class="btn btn-primary rounded-full btn-clear" data-tab-toggle="true" href="#report_cards">
+         <!-- <a class="btn btn-primary rounded-full btn-clear" data-tab-toggle="true" href="#report_cards">
            Submit Final Grades
-         </a>
+         </a> -->
         </div>
        </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-3">
       </div>
      </div>
      <!-- end: container -->
@@ -51,19 +64,29 @@
            <div class="card min-w-full border-0">
             <div class="card-header flex-wrap gap-2 bg-success-light">
              <h3 class="card-title font-medium text-sm">
-              
+             {% if "Academics User" in user_roles %}
+              {% if selected_section %}
+               {% if assessments %}
+                <div class="flex items-center gap-2.5">
+                 <a class="btn btn-sm btn-secondary text-sm" href="/app/assessment-result-tool?assessment_plan={{assessment_name}}&student_group={{selected_section}}">
+                  Submit Final Grade
+                 </a>
+                </div>
+               {% endif %}
+              {% endif %} 
+             {% endif %}          
              </h3>
              {% if "Academics User" in user_roles or "Instructor" in user_roles %}
               {% if selected_section %}
                {% if assessments %}
                 <div class="flex items-center gap-2.5">
-                 <a class="btn btn-sm btn-secondary text-sm" href="/app/assessment-result-structure-tool?assessment_plan={{assessment_name}}&student_group={{selected_section}}">
+                 <a class="btn btn-sm btn-dark text-sm" href="/app/assessment-result-structure-tool?assessment_plan={{assessment_name}}&student_group={{selected_section}}">
                   Input Gradebook
                  </a>
                 </div>
                {% else %}
                 <div class="flex items-center gap-2.5">
-                 <a class="btn btn-sm btn-secondary text-sm" href="app/assessment-plan/new-assessment-plan?student_group={{selected_section}}&program={{section_name.program}}&course={{docname}}">
+                 <a class="btn btn-sm btn-dark text-sm" href="app/assessment-plan/new-assessment-plan?student_group={{selected_section}}&program={{section_name.program}}&course={{docname}}">
                   Add Assessment Plan
                  </a>
                 </div>
