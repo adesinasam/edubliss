@@ -76,6 +76,15 @@
                       </a>
                     </td>
                     <td>
+                      <a class="btn btn-clear" href="admin/program/sections_details?section_name={{ section.student_group_name }}" data-tooltip="#sects_tooltip_eye"  data-tooltip-placement="top">
+                        <i class="ki-filled ki-eye text-sm text-info">
+                        </i>                        
+                        <div id="sects_tooltip_eye" class="hidden rounded-xl shadow-default tooltip bg-info border border-gray-200 text-light text-xs font-normal">
+                           View
+                        </div>
+                      </a>
+                    </td>
+                    <td>
                       <a href="/app/student-group/{{ section.student_group_name }}" data-tooltip="#sects_tooltip"  data-tooltip-placement="top">
                         <i class="ki-filled ki-pencil text-sm text-info">
                         </i>                        

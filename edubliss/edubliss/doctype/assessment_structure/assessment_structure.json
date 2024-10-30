@@ -13,6 +13,7 @@
   "column_break_lnsr",
   "weightage",
   "week",
+  "max_score",
   "section_break_upfs",
   "description"
  ],
@@ -73,12 +74,17 @@
   {
    "fieldname": "section_break_upfs",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "max_score",
+   "fieldtype": "Data",
+   "label": "Max Score"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-09-25 19:27:14.836210",
+ "modified": "2024-10-29 16:59:46.856746",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Assessment Structure",

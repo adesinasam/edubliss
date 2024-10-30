@@ -1,0 +1,571 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Teacher Subjects") }}
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav3.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="grow content pt-5 bg-gray-100" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-primary">
+         {{section_name}} 
+        </h1>
+        <div class="flex items-center flex-wrap gap-1.5 font-medium">
+         <span class="text-md text-gray-600">
+            Section
+         </span>
+        </div>
+       </div>
+       <div class="flex items-center gap-2.5">
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- Container -->
+     <div class="container-fixed">
+      <!-- begin: grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-7.5">
+       <div class="col-span-1">
+        <div class="grid gap-5 lg:gap-7.5">
+         <div class="card">
+          <div class="card-body">
+           <div class="flex flex-wrap justify-center gap-2 py-1">
+            <div class="flex flex-col items-center gap-1.5">
+             <span class="text-gray-900 text-2xl lg:text-2.5xl font-semibold">
+              {{students_count}}
+             </span>
+             <span class="text-gray-700 text-sm font-normal">
+              Students
+             </span>
+            </div>
+            <span class="sm:ml-8 sm:pl-8 border-l border-l-gray-200">
+            </span>
+            <div class="flex flex-col items-center gap-1.5">
+             <span class="text-gray-900 text-md font-semibold">
+               Attendance
+             </span>
+             <span class="text-primary text-sm font-normal">
+              <a class="btn btn-link" href="/app/student-attendance-tool?based_on={{'Student Group'}}&student_group={{ section_name }}">
+               <i class="ki-filled ki-plus text-sm"></i>
+               Add
+              </a>
+             </span>
+             <span class="text-primary text-sm font-normal">
+              <a class="btn btn-link" href="/app/query-report/Student Monthly Attendance Sheet?student_group={{ section_name }}">
+               <i class="ki-filled ki-eye text-sm"></i>
+               View
+              </a>
+             </span>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="card">
+          <div class="card-header">
+           <h3 class="card-title">
+            Section Info
+           </h3>
+          </div>
+          <div class="card-body pt-3.5 pb-3.5">
+           <table class="table-auto">
+            <tbody>
+             <tr>
+              <td class="text-sm text-gray-600 pb-3 pe-4 lg:pe-8">
+               Program:
+              </td>
+              <td class="text-sm text-gray-900 pb-3">
+               {{ selected_section.program }}
+              </td>
+             </tr>
+             <tr>
+              <td class="text-sm text-gray-600 pb-3 pe-4 lg:pe-8">
+               Year:
+              </td>
+              <td class="text-sm text-gray-900 pb-3">
+               {{selected_section.academic_year}}
+              </td>
+             </tr>
+             <tr>
+              <td class="text-sm text-gray-600 pb-3 pe-4 lg:pe-8">
+               Status:
+              </td>
+              <td class="text-sm text-gray-900 pb-3">
+               <span class="badge  badge-xs badge-pill badge-outline {{ 'badge-success' if selected_section.disabled == 0 else 'badge-danger' }}">
+                {{ 'Active' if selected_section.disabled == 0 else 'Disabled' }}
+               </span>
+              </td>
+             </tr>
+             <tr>
+              <td class="text-sm text-gray-600 pb-3 pe-4 lg:pe-8">
+               Teachers:
+              </td>
+              <td class="text-sm text-gray-900 pb-3">
+               {{ get_section_teachers(selected_section.student_group_name) }}
+              </td>
+             </tr>
+             <tr>
+              <td class="text-sm text-gray-600 pb-3 pe-4 lg:pe-8">
+               Batch:
+              </td>
+              <td class="text-sm text-gray-900 pb-3">
+               {{selected_section.batch}}
+              </td>
+             </tr>
+            </tbody>
+           </table>
+          </div>
+          <div class="card-footer justify-center">
+           <a class="btn btn-link" href="/admin/timetable?section_name={{ section_name }}">
+            View Timetable
+           </a>
+          </div>
+         </div>
+         <div class="card">
+            <div class="card-header gap-2">
+             <h3 class="card-title">
+              Assessment
+             </h3>
+            </div>
+            <div class="card-body">
+             <div class="flex flex-col gap-2 lg:gap-5">
+             {% if courses %}
+              {% for course in courses %}
+              <div class="flex items-center gap-2">
+               <div class="flex items-center grow gap-2.5">
+                <div class="flex items-center justify-center size-7.5 shrink-0 bg-gray-100 rounded-lg border border-gray-300">
+                 <i class="ki-filled ki-cheque text-base text-gray-600">
+                 </i>
+                </div>
+                <div class="flex flex-col">
+                 <a class="text-sm font-semibold text-gray-900 hover:text-primary-active mb-px" href="/admin/program/assessment_plan/{{ course.name }}?section_name={{section_name}}">
+                  {{ course.course_name or ""}}
+                 </a>
+                 <span class="text-xs font-semibold text-gray-600">
+                  {{ course.custom_course_code or ""}}
+                 </span>
+                </div>
+               </div>
+                <div class="menu" data-menu="true">
+                 <div class="menu-item" data-menu-item-offset="0, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
+                  <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
+                   <i class="ki-filled ki-dots-vertical">
+                   </i>
+                  </button>
+                  <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
+                   <div class="menu-item">
+                    <a class="menu-link" href="/admin/program/assessment_plan/{{ course.name }}?section_name={{section_name}}">
+                     <span class="menu-icon">
+                      <i class="ki-filled ki-copy">
+                      </i>
+                     </span>
+                     <span class="menu-title">
+                      Assessment Plan
+                     </span>
+                    </a>
+                   </div>
+                   <div class="menu-separator">
+                   </div>
+                   <div class="menu-item">
+                    <a class="menu-link" href="/admin/program/gradebook/{{ course.name }}?section_name={{section_name}}">
+                     <span class="menu-icon">
+                      <i class="ki-filled ki-pencil">
+                      </i>
+                     </span>
+                     <span class="menu-title">
+                      Gradebook
+                     </span>
+                    </a>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+              </div>
+              {% endfor %}
+             {% else %}
+              <div class="flex items-center gap-2">
+               <div class="flex items-center grow gap-2.5">
+                <div class="flex flex-col">
+                 <div class="text-xs font-semibold text-gray-600 hover:text-primary-active mb-px" href="#">
+                  No Affective/Psychomotor Found
+                 </div>
+                </div>
+               </div>
+              </div>
+             {% endif %}
+             </div>
+            </div>
+            <div class="card-footer justify-center">
+             <!-- <a class="btn btn-link" href="html/demo1/public-profile/network.html">
+              More
+             </a> -->
+            </div>
+         </div>
+        </div>
+       </div>
+       <div class="col-span-2">
+        <div class="flex flex-col gap-5 lg:gap-7.5">
+         <div class="flex flex-col gap-5 lg:gap-7.5">
+          <div class="card">
+           <div class="card-header">
+            <h3 class="card-title">
+             Students
+            </h3>
+           </div>
+           <div class="card-table scrollable-x-auto">
+            <table class="table text-right">
+             <thead>
+              <tr>
+               <th class="text-left min-w-[200px] !text-gray-700">
+                Student
+               </th>
+               <th class="min-w-[60px] !text-gray-700">
+                Row Number
+               </th>
+               <th class="min-w-[100px]">
+                Status
+               </th>
+               <th class="min-w-[150px] !text-gray-700">
+                Student ID
+               </th>
+               <th class="w-[30px]">
+               </th>
+              </tr>
+             </thead>
+             <tbody>
+             {% if students %}
+              {% for student in students %}
+              <tr>
+               <td class="text-left">
+                <a class="text-sm font-medium text-primary hover:text-primary" href="/students/profile/{{ student.student}}">
+                 {{ student.student_name}}
+                </a>
+               </td>
+               <td class="text-sm text-gray-800">
+                {{ student.group_roll_number or "" }}
+               </td>
+               <td>
+                <span class="badge {{ 'badge-success' if student.active else 'badge-warning' }} badge-outline rounded-[30px]">
+                 <span class="size-1.5 rounded-full {{ 'bg-success' if student.active else 'bg-warning' }} me-1.5"></span>
+                  {{ 'Active' if student.active else 'Disabled' }}
+                </span>
+               </td>
+               <td class="text-sm text-gray-800">
+                {{ student.student}}
+               </td>
+               <td class="text-left">
+                <div class="menu" data-menu="true">
+                 <div class="menu-item" data-menu-item-offset="0, 10px" data-menu-item-placement="bottom-end" data-menu-item-toggle="dropdown" data-menu-item-trigger="click|lg:click">
+                  <button class="menu-toggle btn btn-sm btn-icon btn-light btn-clear">
+                   <i class="ki-filled ki-dots-vertical">
+                   </i>
+                  </button>
+                  <div class="menu-dropdown menu-default w-full max-w-[175px]" data-menu-dismiss="true">
+                   <div class="menu-item">
+                    <a class="menu-link" href="/students/profile/{{ student.student}}">
+                     <span class="menu-icon">
+                      <i class="ki-filled ki-search-list">
+                      </i>
+                     </span>
+                     <span class="menu-title">
+                      View
+                     </span>
+                    </a>
+                   </div>
+                   <!-- <div class="menu-item">
+                    <a class="menu-link" href="#">
+                     <span class="menu-icon">
+                      <i class="ki-filled ki-file-up">
+                      </i>
+                     </span>
+                     <span class="menu-title">
+                      Export
+                     </span>
+                    </a>
+                   </div>
+                   <div class="menu-separator">
+                   </div>
+                   <div class="menu-item">
+                    <a class="menu-link" href="#">
+                     <span class="menu-icon">
+                      <i class="ki-filled ki-pencil">
+                      </i>
+                     </span>
+                     <span class="menu-title">
+                      Edit
+                     </span>
+                    </a>
+                   </div>
+                   <div class="menu-item">
+                    <a class="menu-link" href="#">
+                     <span class="menu-icon">
+                      <i class="ki-filled ki-copy">
+                      </i>
+                     </span>
+                     <span class="menu-title">
+                      Make a copy
+                     </span>
+                    </a>
+                   </div>
+                   <div class="menu-separator">
+                   </div>
+                   <div class="menu-item">
+                    <a class="menu-link" href="#">
+                     <span class="menu-icon">
+                      <i class="ki-filled ki-trash">
+                      </i>
+                     </span>
+                     <span class="menu-title">
+                      Remove
+                     </span>
+                    </a>
+                   </div> -->
+                  </div>
+                 </div>
+                </div>
+               </td>
+              </tr>
+              {% endfor %}
+             {% else %}
+              <tr>
+               <td colspan="5" class="text-center">No students found.</td>
+              </tr>
+             {% endif %}
+             </tbody>
+            </table>
+           </div>
+           <div class="card-footer justify-center">
+           </div>
+          </div>
+          <!-- <div class="card">
+           <div class="card-header">
+            <h3 class="card-title">
+             Recent Activity
+            </h3>
+            <div class="flex items-center gap-2">
+             <label class="switch">
+              <span class="switch-label">
+               Auto refresh:
+               <span class="switch-on:hidden">
+                Off
+               </span>
+               <span class="hidden switch-on:inline">
+                On
+               </span>
+              </span>
+              <input checked="" name="check" type="checkbox" value="1"/>
+             </label>
+            </div>
+           </div>
+           <div class="card-body">
+            <div class="flex flex-col">
+             <div class="flex items-start relative">
+              <div class="w-9 left-0 top-9 absolute bottom-0 translate-x-1/2 border-l border-l-gray-300">
+              </div>
+              <div class="flex items-center justify-center shrink-0 rounded-full bg-gray-100 border border-gray-300 size-9 text-gray-600">
+               <i class="ki-filled ki-people text-base">
+               </i>
+              </div>
+              <div class="pl-2.5 mb-7 text-md grow">
+               <div class="flex flex-col">
+                <div class="text-sm text-gray-800">
+                 Jenny sent an
+                 <a class="text-sm link" href="#">
+                  inquiry
+                 </a>
+                 about a
+                 <a class="text-sm link" href="#">
+                  new product
+                 </a>
+                 .
+                </div>
+                <span class="text-xs text-gray-600">
+                 Today, 9:00 AM
+                </span>
+               </div>
+              </div>
+             </div>
+             <div class="flex items-start relative">
+              <div class="w-9 left-0 top-9 absolute bottom-0 translate-x-1/2 border-l border-l-gray-300">
+              </div>
+              <div class="flex items-center justify-center shrink-0 rounded-full bg-gray-100 border border-gray-300 size-9 text-gray-600">
+               <i class="ki-filled ki-calendar-tick text-base">
+               </i>
+              </div>
+              <div class="pl-2.5 mb-7 text-md grow">
+               <div class="flex flex-col pb-2.5">
+                <span class="text-sm text-gray-800">
+                 Jenny attended a webinar on new product features.
+                </span>
+                <span class="text-xs text-gray-600">
+                 3 days ago, 11:45 AM
+                </span>
+               </div>
+               <div class="card shadow-none p-4">
+                <div class="flex flex-wrap gap-2.5">
+                 <i class="ki-filled ki-code text-lg text-info">
+                 </i>
+                 <div class="flex flex-col gap-5 grow">
+                  <div class="flex flex-wrap items-center justify-between">
+                   <div class="flex flex-col gap-0.5">
+                    <span class="text-md font-medium text-gray-900 cursor-pointer hover:text-primary mb-px">
+                     Leadership Development Series: Part 1
+                    </span>
+                    <span class="text-xs text-gray-600">
+                     The first installment of a leadership development series.
+                    </span>
+                   </div>
+                   <a class="btn btn-link" href="html/demo1/account/members/teams.html">
+                    View
+                   </a>
+                  </div>
+                  <div class="flex flex-wrap gap-7.5">
+                   <div class="flex items-center gap-1.5">
+                    <span class="text-2sm font-medium text-gray-600">
+                     Code:
+                    </span>
+                    <a class="text-2sm text-primary" href="#">
+                     #leaderdev-1
+                    </a>
+                   </div>
+                   <div class="flex items-center gap-1.5">
+                    <span class="text-2sm text-gray-600">
+                     Progress:
+                    </span>
+                    <div class="progress progress-success min-w-[120px]">
+                     <div class="progress-bar" style="width: 80%">
+                     </div>
+                    </div>
+                   </div>
+                   <div class="flex items-center gap-1.5 lg:min-w-24 shrink-0 max-w-auto">
+                    <span class="text-2sm text-gray-600">
+                     Guests:
+                    </span>
+                    <div class="flex -space-x-2">
+                     <div class="flex">
+                      <img class="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-7" src="assets/media/avatars/300-4.png"/>
+                     </div>
+                     <div class="flex">
+                      <img class="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-7" src="assets/media/avatars/300-1.png"/>
+                     </div>
+                     <div class="flex">
+                      <img class="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-7" src="assets/media/avatars/300-2.png"/>
+                     </div>
+                     <div class="flex">
+                      <span class="hover:z-5 relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-7 text-primary-inverse ring-primary-light bg-primary">
+                       +24
+                      </span>
+                     </div>
+                    </div>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+               </div>
+              </div>
+             </div>
+             <div class="flex items-start relative">
+              <div class="w-9 left-0 top-9 absolute bottom-0 translate-x-1/2 border-l border-l-gray-300">
+              </div>
+              <div class="flex items-center justify-center shrink-0 rounded-full bg-gray-100 border border-gray-300 size-9 text-gray-600">
+               <i class="ki-filled ki-entrance-left text-base">
+               </i>
+              </div>
+              <div class="pl-2.5 mb-7 text-md grow">
+               <div class="flex flex-col">
+                <div class="text-sm text-gray-800">
+                 Jenny's last login to the
+                 <a class="text-sm link" href="#">
+                  Customer Portal
+                 </a>
+                 .
+                </div>
+                <span class="text-xs text-gray-600">
+                 5 days ago, 4:07 PM
+                </span>
+               </div>
+              </div>
+             </div>
+             <div class="flex items-start relative">
+              <div class="w-9 left-0 top-9 absolute bottom-0 translate-x-1/2 border-l border-l-gray-300">
+              </div>
+              <div class="flex items-center justify-center shrink-0 rounded-full bg-gray-100 border border-gray-300 size-9 text-gray-600">
+               <i class="ki-filled ki-directbox-default text-base">
+               </i>
+              </div>
+              <div class="pl-2.5 mb-7 text-md grow">
+               <div class="flex flex-col pb-2.5">
+                <span class="text-sm text-gray-800">
+                 Email campaign sent to Jenny for a special promotion.
+                </span>
+                <span class="text-xs text-gray-600">
+                 1 week ago, 11:45 AM
+                </span>
+               </div>
+               <div class="card shadow-none">
+                <div class="card-body lg:py-4">
+                 <div class="flex justify-center">
+                 </div>
+                 <div class="flex flex-col gap-1">
+                  <div class="text-md font-medium text-gray-900 text-center">
+                   First Campaign Created
+                  </div>
+                  <div class="flex items-center justify-center gap-1">
+                   <a class="text-2sm font-semibold link" href="html/demo1/public-profile/profiles/company.html">
+                    Axio new release
+                   </a>
+                   <span class="text-2sm text-gray-700 mr-2">
+                    email campaign
+                   </span>
+                   <span class="badge badge-sm badge-success badge-outline">
+                    Public
+                   </span>
+                  </div>
+                 </div>
+                </div>
+               </div>
+              </div>
+             </div>
+             <div class="flex items-start relative">
+              <div class="flex items-center justify-center shrink-0 rounded-full bg-gray-100 border border-gray-300 size-9 text-gray-600">
+               <i class="ki-filled ki-rocket text-base">
+               </i>
+              </div>
+              <div class="pl-2.5 text-md grow">
+               <div class="flex flex-col">
+                <div class="text-sm text-gray-800">
+                 Explored niche demo ideas for product-specific solutions.
+                </div>
+                <span class="text-xs text-gray-600">
+                 3 weeks ago, 4:07 PM
+                </span>
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+           <div class="card-footer justify-center">
+            <a class="btn btn-link" href="html/demo1/public-profile/activity.html">
+             All-time Activities
+            </a>
+           </div>
+          </div> -->
+         </div>
+        </div>
+       </div>
+      </div>
+      <!-- end: grid -->
+     </div>
+     <!-- End of Container -->
+    </main>
+{% endblock %}

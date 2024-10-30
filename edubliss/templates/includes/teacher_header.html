@@ -13,7 +13,7 @@
         <img class=" rounded-full size-[100px] shrink-0" src="{% if teachers.image  %}{{teachers.image}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/>
         <!-- <img class="rounded-full w-[170px] shrink-0" src="{% if teachers.image  %}{{teachers.image}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/> -->
         <div class="flex items-center gap-1.5">
-         <div class="text-md leading-5 font-semibold text-gray-900">
+         <div class="text-md leading-5 font-semibold text-primary">
           {{teachers.instructor_name}}
          </div>
          <svg class="text-primary" fill="none" height="16" viewbox="0 0 15 16" width="15" xmlns="http://www.w3.org/2000/svg">
@@ -23,21 +23,21 @@
         </div>
         <div class="flex flex-wrap justify-center gap-1 lg:gap-4.5 text-sm">
          <div class="flex gap-1.25 items-center">
-          <i class="ki-filled ki-abstract-41 text-gray-500 text-sm">
+          <i class="ki-duotone ki-bank text-info text-sm">
           </i>
           <span class="text-gray-600">
            {{ employees.company or "" }}
           </span>
          </div>
          <div class="flex gap-1.25 items-center">
-          <i class="ki-filled ki-geolocation text-gray-500 text-sm">
+          <i class="ki-duotone ki-geolocation text-success text-sm">
           </i>
           <span class="text-gray-600">
            {{ employees.department or "" }}
           </span>
          </div>
          <div class="flex gap-1.25 items-center">
-          <i class="ki-filled ki-sms text-gray-500 text-sm">
+          <i class="ki-duotone ki-sms text-primary text-sm">
           </i>
           <a class="text-gray-600 hover:text-primary" href="mailto: {{employees.user_id}}">
            {{employees.user_id or ""}}

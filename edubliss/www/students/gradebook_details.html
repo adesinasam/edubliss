@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-    <main class="grow content pt-5" id="content" role="content">
+    <main class="grow content pt-5 {% if 'Student' in user_roles and not 'Academics User' in user_roles %}bg-gray-100{% endif %}" id="content" role="content">
      <!-- begin: container -->
      <div class="container-fixed" id="content_container">
      </div>
@@ -84,8 +84,6 @@
               <th class="min-w-[150px]">
                  Due Date
               </th>
-              <th class="w-[60px]">
-              </th>
              </tr>
             </thead>
             <tbody>
@@ -112,11 +110,6 @@
               </td>
               <td>
                {{ get_structure_due(results.assessment_plan,structure.assessment_type) or ""}}
-              </td>
-              <td>
-                <a >
-                 <i class="ki-filled ki-eye text-primary text-sm"></i>
-                </a>
               </td>
              </tr>
                {% endfor %}

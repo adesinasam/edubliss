@@ -100,7 +100,7 @@ website_route_rules = [
     {"from_route": "/teachers/profile/<docname>", "to_route": "teachers/profile"},
     {"from_route": "/teachers/course/<docname>", "to_route": "teachers/course"},
     {"from_route": "/teachers/schedule/<docname>", "to_route": "teachers/schedule"},
-    {"from_route": "/teachers/task/<docname>", "to_route": "teachers/task"},
+    {"from_route": "/teachers/sections/<docname>", "to_route": "teachers/sections"},
     {"from_route": "/parents/profile/<docname>", "to_route": "parents/profile"},
     {"from_route": "/admin/course/overview/<docname>", "to_route": "admin/course/overview"},
     {"from_route": "/admin/course/students/<docname>", "to_route": "admin/course/students"},
@@ -109,6 +109,8 @@ website_route_rules = [
     {"from_route": "/admin/course/assessment_plan/<docname>", "to_route": "admin/course/assessment_plan"},
     {"from_route": "/admin/course/gradebook/<docname>", "to_route": "admin/course/gradebook"},
     {"from_route": "/admin/course/schedule/<docname>", "to_route": "admin/course/schedule"},
+    {"from_route": "/admin/program/gradebook/<docname>", "to_route": "admin/program/gradebook"},
+    {"from_route": "/admin/program/assessment_plan/<docname>", "to_route": "admin/program/assessment_plan"},
 ]
 
 # Generators

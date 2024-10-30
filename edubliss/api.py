@@ -873,7 +873,7 @@ def get_assessment_structure(course):
     """
     return frappe.get_all(
         "Assessment Structure",
-        fields=["week", "assessment_type", "assessment_criteria", "topics", "weightage", "description"],
+        fields=["week", "assessment_type", "assessment_criteria", "topics", "weightage", "description", "max_score"],
         filters={"parent": course},
         order_by="idx",
     )

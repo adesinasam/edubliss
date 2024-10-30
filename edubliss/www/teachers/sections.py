@@ -3,22 +3,34 @@ from frappe import _
 
 no_cache = 1
 
-def get_section_teachers(section):
-    student_group = frappe.qb.DocType("Student Group")
-    student_group_instructors = frappe.qb.DocType("Student Group Instructor")
+def get_teachers():
+    instructors = frappe.qb.DocType("Instructor")
+    employees = frappe.qb.DocType("Employee")
 
-    student_group_query = (
-        frappe.qb.from_(student_group)
-        .inner_join(student_group_instructors)
-        .on(student_group.name == student_group_instructors.parent)
-        .select(student_group_instructors.instructor)
-        .where(student_group.name == section)
+    instructors_query = (
+        frappe.qb.from_(employees)
+        .inner_join(instructors)
+        .on(instructors.employee == employees.name)
+        .select('*')
+        .where(employees.user_id == frappe.session.user)
         .run(as_dict=1)
     )
-    return ", ".join(instructor['instructor'] for instructor in student_group_query) if student_group_query else ""
+    return instructors_query if instructors_query else []
 
 def get_context(context):
-    # Check if the user is logged in
+
+    docnames = frappe.form_dict.docname
+
+    if docnames:
+        docname = docnames
+    else:
+        teacher = get_teachers()
+        if teacher:
+            docname = teacher[0].name
+        else:
+            docname = None
+
+    # login
     if frappe.session.user == "Guest":
         frappe.throw(_("You need to be logged in to access this page"), frappe.PermissionError)
 
@@ -36,45 +48,61 @@ def get_context(context):
     # Create the abbreviation by taking the first letter of each part
     context.abbr = "".join([p[0] for p in parts[:2] if p])
 
-    # Set active route for navigation
-    context.active_route = "students"
-    context.active_subroute = "student_section"
+    # nav
+    context.active_route = "teachers"
+    context.active_subroute = "teacher_list"
+    context.active_teacher_route = "sections"
 
-    # Fetch edubliss session details
+    context.docname = docname
+
     edubliss_session = frappe.call('edubliss.api.get_edubliss_user_session')
     if edubliss_session:
         context.edublisession = edubliss_session
         company = edubliss_session.school
         acadyear = edubliss_session.academic_year
+        acadterm = edubliss_session.academic_term
     else:
-        context.edublisession = _("Welcome")  # Placeholder message
+        context.edublisession = _("Welcome")  # Assuming welcome is a placeholder message
         company = None
-        acadyear = None
 
-    # Fetch necessary data
+    context.company = edubliss_session.school
+    context.acadyear = edubliss_session.academic_year
+    context.acadterm = edubliss_session.academic_term
+
+    # Try to fetch the Student Program document and handle errors if it doesn't exist
+    try:
+        program = frappe.call(
+            'edubliss.api.get_student_program',
+            student=docname, 
+            academic_year=acadyear, 
+            academic_term=acadterm
+        )
+    except Exception as e:
+        program = ''  # or set a default value if required        
+
+    if program:
+        context.program = program    
+    else:
+        context.program = _("Welcome")  # or set a default value if required
+
     context.companys = frappe.call('edubliss.api.get_company')
     context.acadyears = frappe.call('edubliss.api.get_academic_year')
     context.acadterms = frappe.call('edubliss.api.get_academic_term')
-    context.programs = frappe.call('edubliss.api.get_programs', company=company)
-    context.sections = frappe.call('edubliss.api.get_sections', company=company, academic_year=acadyear)
-    context['get_section_teachers'] = get_section_teachers
-    context.courses = frappe.get_all('Course', 
-        filters={'custom_disabled': 0, 'custom_subject': 'Others'}, 
-        fields=[
-        'name', 'course_name', 'custom_course_code','custom_subject', 
-        'custom_disabled', 'custom_course_category', 'department'], 
-        order_by="course_name asc")
+    context.courses = frappe.call('edubliss.api.get_teacher_subjects', instructor=docname, academic_term=acadterm)
+    context.sections = frappe.call('edubliss.api.get_teacher_sections', instructor=docname, academic_year=acadyear)
 
-    # Fetch courses based on the selected section, if any
-    section_name = frappe.form_dict.get('section_name')
-    if section_name:
-        context.section_name = section_name
-        context.selected_section = frappe.get_doc('Student Group', section_name)
-        context.students = frappe.call('edubliss.api.get_section_students', section=section_name)
-        context.students_count = len(frappe.call('edubliss.api.get_section_students', section=section_name))
-    else:
-        context.selected_section = None
-        context.students = []
+    # Try to fetch the Student document and handle errors if it doesn't exist
+    try:
+        context.teachers = frappe.get_doc("Instructor", docname)
+        staff = context.teachers
+    except frappe.DoesNotExistError:
+        frappe.throw(_("Teacher not found"), frappe.DoesNotExistError)
+
+    if staff:
+        try:
+            context.employees = frappe.get_doc("Employee", staff.employee)
+        except frappe.DoesNotExistError:
+            frappe.throw(_("Employee Record not found"), frappe.DoesNotExistError)
 
 
     return context

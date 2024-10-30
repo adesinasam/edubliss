@@ -44,7 +44,7 @@
          </div>
         </div>
        </div>
-       <div class="menu-item {% if active_route == 'teachers' %}active{% endif %}">
+       <div class="menu-item {% if active_teacher_route == 'profile' %}active{% endif %}">
         <a class="menu-link flex items-center border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0" href="/teachers/profile">
          <span class="menu-icon items-start text-gray-500 dark:text-gray-400 w-[20px]">
           <i class="ki-filled ki-user-square text-lg">
@@ -55,14 +55,14 @@
          </span>
         </a>
        </div>
-       <div class="menu-item {% if active_teacher_route == 'course' %}here show{% endif %}" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
+       <div class="menu-item {% if active_teacher_route == 'course' or active_teacher_route == 'sections' %}here show{% endif %}" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
         <div class="menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0">
          <span class="menu-icon items-start text-gray-500 dark:text-gray-400 w-[20px]">
-          <i class="ki-filled ki-tablet-text-up text-lg">
+          <i class="ki-filled ki-questionnaire-tablet text-lg">
           </i>
          </span>
          <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-link-hover:!text-primary">
-          Courses
+          Task
          </span>
          <span class="menu-arrow text-gray-400 w-[20px] shrink-0 justify-end ml-1 mr-[-10px]">
           <i class="ki-filled ki-plus text-2xs menu-item-show:hidden">
@@ -78,6 +78,17 @@
            </span>
            <span class="menu-title text-2sm font-medium text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
             Assigned Subjects
+           </span>
+          </a>
+         </div>
+        </div>
+        <div class="menu-accordion gap-0.5 pl-[10px] relative before:absolute before:left-[20px] before:top-0 before:bottom-0 before:border-l before:border-gray-200">
+         <div class="menu-item {% if active_teacher_route == 'sections' %}active{% endif %}">
+          <a class="menu-link gap-[14px] pl-[10px] pr-[10px] py-[8px] border border-transparent items-center grow menu-item-active:bg-secondary-active dark:menu-item-active:bg-coal-300 dark:menu-item-active:border-gray-100 menu-item-active:rounded-lg hover:bg-secondary-active dark:hover:bg-coal-300 dark:hover:border-gray-100 hover:rounded-lg" href="/teachers/sections/" tabindex="0">
+           <span class="menu-bullet flex w-[6px] relative before:absolute before:top-0 before:size-[6px] before:rounded-full before:-translate-x-1/2 before:-translate-y-1/2 menu-item-active:before:bg-primary menu-item-hover:before:bg-primary">
+           </span>
+           <span class="menu-title text-2sm font-medium text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
+            Assigned Section
            </span>
           </a>
          </div>
@@ -120,59 +131,6 @@
          </div>
         </div>
        </div>
-       <!-- <div class="menu-item {% if active_route == 'attendance' %}here show{% endif %}" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
-        <div class="menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0">
-         <span class="menu-icon items-start text-gray-500 dark:text-gray-400 w-[20px]">
-          <i class="ki-filled ki-tablet-text-up text-lg">
-          </i>
-         </span>
-         <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-link-hover:!text-primary">
-          Attendance
-         </span>
-         <span class="menu-arrow text-gray-400 w-[20px] shrink-0 justify-end ml-1 mr-[-10px]">
-          <i class="ki-filled ki-plus text-2xs menu-item-show:hidden">
-          </i>
-          <i class="ki-filled ki-minus text-2xs hidden menu-item-show:inline-flex">
-          </i>
-         </span>
-        </div>
-        <div class="menu-accordion gap-0.5 pl-[10px] relative before:absolute before:left-[20px] before:top-0 before:bottom-0 before:border-l before:border-gray-200">
-         <div class="menu-item {% if active_subroute == 'attendance' %}active{% endif %}">
-          <a class="menu-link gap-[14px] pl-[10px] pr-[10px] py-[8px] border border-transparent items-center grow menu-item-active:bg-secondary-active dark:menu-item-active:bg-coal-300 dark:menu-item-active:border-gray-100 menu-item-active:rounded-lg hover:bg-secondary-active dark:hover:bg-coal-300 dark:hover:border-gray-100 hover:rounded-lg" href="/app/student-attendance-tool" tabindex="0">
-           <span class="menu-bullet flex w-[6px] relative before:absolute before:top-0 before:size-[6px] before:rounded-full before:-translate-x-1/2 before:-translate-y-1/2 menu-item-active:before:bg-primary menu-item-hover:before:bg-primary">
-           </span>
-           <span class="menu-title text-2sm font-medium text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
-            Add Attendance
-           </span>
-          </a>
-         </div>
-         <div class="menu-item {% if active_subroute == 'attendance' %}active{% endif %}">
-          <a class="menu-link gap-[14px] pl-[10px] pr-[10px] py-[8px] border border-transparent items-center grow menu-item-active:bg-secondary-active dark:menu-item-active:bg-coal-300 dark:menu-item-active:border-gray-100 menu-item-active:rounded-lg hover:bg-secondary-active dark:hover:bg-coal-300 dark:hover:border-gray-100 hover:rounded-lg" href="/app/query-report/Student%20Monthly%20Attendance%20Sheet" tabindex="0">
-           <span class="menu-bullet flex w-[6px] relative before:absolute before:top-0 before:size-[6px] before:rounded-full before:-translate-x-1/2 before:-translate-y-1/2 menu-item-active:before:bg-primary menu-item-hover:before:bg-primary">
-           </span>
-           <span class="menu-title text-2sm font-medium text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
-            View Attendance
-           </span>
-          </a>
-         </div>
-        </div>
-       </div> -->
-       <!-- <div class="menu-item">
-        <div class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="" tabindex="0">
-         <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
-          <i class="ki-filled ki-user-tick text-lg">
-          </i>
-         </span>
-         <span class="menu-title text-sm font-semibold text-gray-700">
-          Assessment & Grading
-         </span>
-         <span class="menu-badge mr-[-10px]">
-          <span class="badge badge-xs">
-           Soon
-          </span>
-         </span>
-        </div>
-       </div> -->
        <div class="menu-item {% if active_teacher_route == 'schedule' %}active{% endif %}">
         <a class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="/teachers/schedule" tabindex="0">
          <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
@@ -180,7 +138,7 @@
           </i>
          </span>
          <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
-          Class Schedule
+          Schedule
          </span>
         </a>
        </div>

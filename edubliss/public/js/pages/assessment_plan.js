@@ -27,6 +27,7 @@ frappe.ui.form.on('Assessment Plan', {
 							row.topics = d.topics;
 							row.weightage = d.weightage;
 							row.description = d.description;
+							row.max_score = d.max_score;
 						});
 					}
 					refresh_field('custom_assessment_structure');
