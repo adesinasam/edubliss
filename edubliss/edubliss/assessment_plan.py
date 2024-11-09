@@ -25,3 +25,26 @@ def setup(assessment_plan, method):
     # Return the initial program enrollment object
     return assessment_plan
 
+def get_instructors(assessment_plan, method):
+
+    instrutor = frappe.qb.DocType("Instructor")
+    instrutor_course = frappe.qb.DocType("Instructor Log")
+
+    instrutor_course_query = (
+        frappe.qb.from_(instrutor)
+        .inner_join(instrutor_course)
+        .on(instrutor.name == instrutor_course.parent)
+        .select(instrutor_course.parent)
+        .where(instrutor_course.course == assessment_plan.course)
+        .where(instrutor_course.academic_year == assessment_plan.academic_year)
+        .run(as_dict=1)
+    )
+    result = ", ".join(instructor['parent'] for instructor in instrutor_course_query) if instrutor_course_query else ""
+
+    if result:
+        btl = frappe.get_doc('Assessment Plan', assessment_plan.name)
+        btl.db_set("custom_instructor", result)
+
+
+    # Return the initial program enrollment object
+    return assessment_plan

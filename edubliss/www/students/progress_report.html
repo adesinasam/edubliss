@@ -134,8 +134,13 @@
                  Topic
               </th>
               <th class="min-w-[100px]">
-                 Mark Scored/Obtainable
+                 Mark Obtained/Max Score
               </th>
+              {% if program.custom_school=='Maryland Prestigious PreSchool' %}
+              <th class="min-w-[100px]">
+                 Observation
+              </th>
+              {% else %}
               <th class="min-w-[100px]">
                  Percent
               </th>
@@ -145,6 +150,7 @@
               <th class="min-w-[150px]">
                  Due Date
               </th>
+              {% endif %}
              </tr>
             </thead>
             <tbody>
@@ -160,6 +166,9 @@
               <td>
                {{ structure.score }}/{{ structure.maximum_score }}
               </td>
+              {% if program.custom_school=='Maryland Prestigious PreSchool' %}
+              <td>{% if structure.weightage_score>0 %}{{ get_grade_remark(results.assessment_plan, structure.score, structure.maximum_score) }}{% endif %}</td>
+              {% else %}
               <td>
                {{ structure.weightage_score }}
               </td>
@@ -169,13 +178,16 @@
               <td>
                {{ get_structure_due(result.assessment_plan,structure.assessment_type) or ""}}
               </td>
+              {% endif %}
              </tr>
                {% endfor %}
+              {% if not program.custom_school=='Maryland Prestigious PreSchool' %}
              <tr>
               <td colspan="3" class="text-center"></td>
               <td>{{ result.total_score }}</td>
               <td colspan="2" class="text-center"></td>
              </tr>
+              {% endif %}
              {% else %}
              <tr>
               <td colspan="6" class="text-center">No result found.</td>
@@ -196,6 +208,72 @@
       </div>
      </div>
      <!-- end: container -->
+     <!-- Container -->
+     <!-- <div class="container-fixed">
+      <div class="flex flex-col items-stretch gap-5 lg:gap-7.5">
+        <div class="grid grid-cols-1 gap-5 lg:gap-7.5">
+         <div class="card">
+         <div class="card-body">
+          <div class="flex gap-2">
+           <div class="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
+            <span class="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
+             624
+            </span>
+            <span class="text-gray-700 text-sm">
+             Employees
+            </span>
+           </div>
+           <span class="[&amp;:not(:last-child)]:border-r border-r-gray-300 my-1">
+           </span>
+           <div class="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
+            <span class="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
+             624
+            </span>
+            <span class="text-gray-700 text-sm">
+             Employees
+            </span>
+           </div>
+           <span class="[&amp;:not(:last-child)]:border-r border-r-gray-300 my-1">
+           </span>
+           <div class="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
+            <span class="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
+             60.7M
+            </span>
+            <span class="text-gray-700 text-sm">
+             Users
+            </span>
+           </div>
+           <span class="[&amp;:not(:last-child)]:border-r border-r-gray-300 my-1">
+           </span>
+           <div class="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
+            <span class="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
+             369M
+            </span>
+            <span class="text-gray-700 text-sm">
+             Revenue
+            </span>
+           </div>
+           <span class="[&amp;:not(:last-child)]:border-r border-r-gray-300 my-1">
+           </span>
+           <div class="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
+            <span class="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
+             27
+            </span>
+            <span class="text-gray-700 text-sm">
+             Company Rank
+            </span>
+           </div>
+           <span class="[&amp;:not(:last-child)]:border-r border-r-gray-300 my-1">
+           </span>
+          </div>
+         </div>
+         </div>
+        </div>
+        <div class="flex grow justify-center">
+        </div>
+      </div>
+     </div> -->
+     <!-- End of Container -->
     </main>
 {% endblock %}
 

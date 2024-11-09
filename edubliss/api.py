@@ -997,6 +997,32 @@ def get_grade(grading_scale, percentage):
     return grade
 
 @frappe.whitelist()
+def get_grade_remark(grading_scale, percentage):
+    """Returns Grade based on the Grading Scale and Score.
+
+    :param Grading Scale: Grading Scale
+    :param Percentage: Score Percentage Percentage
+    """
+    grading_scale_intervals = {}
+    if not hasattr(frappe.local, "grading_scale"):
+        grading_scale = frappe.get_all(
+            "Grading Scale Interval",
+            fields=["grade_code", "threshold", "grade_description"],
+            filters={"parent": grading_scale},
+        )
+        frappe.local.grading_scale = grading_scale
+    for d in frappe.local.grading_scale:
+        grading_scale_intervals.update({d.threshold: d.grade_description})
+    intervals = sorted(grading_scale_intervals.keys(), key=float, reverse=True)
+    for interval in intervals:
+        if flt(percentage) >= interval:
+            grade = grading_scale_intervals.get(interval)
+            break
+        else:
+            grade = ""
+    return grade
+
+@frappe.whitelist()
 def mark_assessment_result(assessment_plan, scores):
     student_score = json.loads(scores)
     assessment_details = []

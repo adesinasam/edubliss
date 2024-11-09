@@ -9,6 +9,12 @@ def format_date(value, format="%d %b, %Y"):
         return value.strftime(format)
     return value
 
+def get_grade_remark(assessment_plan,score,maximum_score):
+    assessment_plan_doc = frappe.get_doc('Assessment Plan', assessment_plan)
+    grading_scale = assessment_plan_doc.grading_scale
+    percentages = ((score / maximum_score) * 100)
+    return frappe.call('edubliss.api.get_grade_remark', grading_scale=grading_scale, percentage=percentages)
+
 def get_structure_date(assessment_plan,assessment_type, format="%d %b, %Y"):
     plan_structure = frappe.qb.DocType("Assessment Plan Structure")
 
@@ -199,6 +205,7 @@ def get_context(context):
         context['get_structure_results'] = get_structure_results
         context['get_structure_date'] = get_structure_date
         context['get_structure_due'] = get_structure_due
+        context['get_grade_remark'] = get_grade_remark
 
 
     return context

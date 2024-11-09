@@ -65,6 +65,7 @@
                 </span>
                </span>
               </th>
+              {% if not program.custom_school=='Maryland Prestigious PreSchool' %}
               <th class="min-w-[100px]">
                <span class="sort">
                 <span class="sort-label">
@@ -83,8 +84,9 @@
                 </span>
                </span>
               </th>
-              <!-- <th class="w-[60px]">
-              </th> -->
+              {% endif %}
+              <th class="w-[60px]">
+              </th>
              </tr>
             </thead>
             <tbody>
@@ -97,21 +99,23 @@
                  </a>
               </td>
               <td>
-               
+               {{ get_plan_instructors(result.assessment_plan) or get_course_instructors(result.course, result.academic_year) }}
               </td>
+              {% if not program.custom_school=='Maryland Prestigious PreSchool' %}
               <td>
                {{ result.total_score }}
               </td>
               <td>
                
               </td>
-              <!-- <td>
+              {% endif %}
+              <td>
                <div class="flex justify-center">
-                <a class="btn btn-icon" href="/students/gradebook_details/{{ docname }}?name={{ result.name }}">
+                <a href="/students/gradebook_details/{{ docname }}?name={{ result.name }}">
                  <i class="ki-filled ki-eye text-primary"></i>
                 </a>
                </div>
-              </td> -->
+              </td>
              </tr>
                {% endfor %}
              {% else %}
