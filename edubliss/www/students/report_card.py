@@ -9,6 +9,12 @@ def format_date(value, format="%d %b, %Y"):
         return value.strftime(format)
     return value
 
+def get_grade_remark(assessment_plan,score,maximum_score):
+    assessment_plan_doc = frappe.get_doc('Assessment Plan', assessment_plan)
+    grading_scale = assessment_plan_doc.grading_scale
+    percentages = ((score / maximum_score) * 100)
+    return frappe.call('edubliss.api.get_grade_remark', grading_scale=grading_scale, percentage=percentages)
+
 def get_structure_date(assessment_plan,assessment_type, format="%d %b, %Y"):
     plan_structure = frappe.qb.DocType("Assessment Plan Structure")
 
@@ -39,26 +45,33 @@ def get_structure_due(assessment_plan,assessment_type, format="%d %b, %Y"):
         return value.strftime(format)
     return value
 
-def get_grade_remark(assessment_plan,score,maximum_score):
-    assessment_plan_doc = frappe.get_doc('Assessment Plan', assessment_plan)
-    grading_scale = assessment_plan_doc.grading_scale
-    percentages = ((score / maximum_score) * 100)
-    return frappe.call('edubliss.api.get_grade_remark', grading_scale=grading_scale, percentage=percentages)
+def get_structure_results(student,assessment_plan):
+    results = None
 
-def get_structure_topics(assessment_type,assessment_result,assessment_plan):
-    structure_result = frappe.qb.DocType("Assessment Result Structure")
-    structure_plan = frappe.qb.DocType("Assessment Plan Structure")
+    assessment_result = frappe.get_value("Assessment Result", {
+    	"student": student,
+        "assessment_plan": assessment_plan
+    })
+    results = frappe.get_doc("Assessment Result", assessment_result)
+    if results:
+    	structures = results.get("custom_structure_detail")
 
-    structure_query = (
-        frappe.qb.from_(structure_result)
-        .inner_join(structure_plan).on(structure_result.assessment_type == structure_plan.assessment_type)
-        .select(structure_plan.topics)
-        .where(structure_result.assessment_type == assessment_type)
-        .where(structure_result.parent == assessment_result)
-        .where(structure_plan.parent == assessment_plan)
-        .run(as_dict=1)
-    )
-    return structure_query[0]['topics'] if structure_query else None
+    return structures if structures else []
+
+    # assessment_result = frappe.qb.DocType("Assessment Result")
+    # assessment_result_structure = frappe.qb.DocType("Assessment Result Structure")
+
+    # assessment_result_structure_query = (
+    #     frappe.qb.from_(assessment_result)
+    #     .inner_join(assessment_result_structure)
+    #     .on(assessment_result.name == assessment_result_structure.parent)
+    #     .select('*')
+    #     .where(assessment_result.student == student)
+    #     .where(assessment_result.assessment_plan == assessment_plan)
+    #     .orderby(assessment_result_structure.idx)
+    #     .run(as_dict=1)
+    # )
+    # return assessment_result_structure_query if assessment_result_structure_query else []
 
 def get_context(context):
 
@@ -94,7 +107,7 @@ def get_context(context):
     # nav
     context.active_route = "students"
     context.active_subroute = "student_list"
-    context.active_student_route = "gradebook"
+    context.active_student_route = "progress_report"
 
     context.docname = docname
 
@@ -172,18 +185,27 @@ def get_context(context):
     except frappe.DoesNotExistError:
         frappe.throw(_("Student not found"), frappe.DoesNotExistError)
 
-    assessment_result = frappe.form_dict.get('name')
+    try:
+        results = frappe.get_all(
+            "Assessment Result",
+            fields=["name", "assessment_plan", "student", "course", "program", "student_group", "total_score",
+             "academic_year", "academic_term", "assessment_group", "grading_scale", "grade"],
+            filters={
+            "student": docname, 
+            "academic_term": acadterm,
+            "docstatus": ("!=", 2)
+            },
+            order_by="course",
+        )
+    except Exception as e:
+        results = None  # or set a default value if required        
 
-    if assessment_result:
-        context.assessment_result = assessment_result
-        results = frappe.get_doc("Assessment Result", assessment_result)
+    if results:
         context.results = results
-        context.criterias = results.get("details")
-        context.structures = results.get("custom_structure_detail")
-
-        context['get_grade_remark'] = get_grade_remark
+        context['get_structure_results'] = get_structure_results
         context['get_structure_date'] = get_structure_date
         context['get_structure_due'] = get_structure_due
-        context['get_structure_topics'] = get_structure_topics
+        context['get_grade_remark'] = get_grade_remark
+
 
     return context

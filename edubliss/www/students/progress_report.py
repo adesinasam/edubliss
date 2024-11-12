@@ -55,23 +55,22 @@ def get_structure_results(student,assessment_plan):
     results = frappe.get_doc("Assessment Result", assessment_result)
     if results:
     	structures = results.get("custom_structure_detail")
-
     return structures if structures else []
 
-    # assessment_result = frappe.qb.DocType("Assessment Result")
-    # assessment_result_structure = frappe.qb.DocType("Assessment Result Structure")
+def get_structure_topics(assessment_type,assessment_result,assessment_plan):
+    structure_result = frappe.qb.DocType("Assessment Result Structure")
+    structure_plan = frappe.qb.DocType("Assessment Plan Structure")
 
-    # assessment_result_structure_query = (
-    #     frappe.qb.from_(assessment_result)
-    #     .inner_join(assessment_result_structure)
-    #     .on(assessment_result.name == assessment_result_structure.parent)
-    #     .select('*')
-    #     .where(assessment_result.student == student)
-    #     .where(assessment_result.assessment_plan == assessment_plan)
-    #     .orderby(assessment_result_structure.idx)
-    #     .run(as_dict=1)
-    # )
-    # return assessment_result_structure_query if assessment_result_structure_query else []
+    structure_query = (
+        frappe.qb.from_(structure_result)
+        .inner_join(structure_plan).on(structure_result.assessment_type == structure_plan.assessment_type)
+        .select(structure_plan.topics)
+        .where(structure_result.assessment_type == assessment_type)
+        .where(structure_result.parent == assessment_result)
+        .where(structure_plan.parent == assessment_plan)
+        .run(as_dict=1)
+    )
+    return structure_query[0]['topics'] if structure_query else None
 
 def get_context(context):
 
@@ -206,6 +205,7 @@ def get_context(context):
         context['get_structure_date'] = get_structure_date
         context['get_structure_due'] = get_structure_due
         context['get_grade_remark'] = get_grade_remark
+        context['get_structure_topics'] = get_structure_topics
 
 
     return context

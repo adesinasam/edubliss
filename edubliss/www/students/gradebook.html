@@ -65,7 +65,7 @@
                 </span>
                </span>
               </th>
-              {% if not program.custom_school=='Maryland Prestigious PreSchool' %}
+              {% if program.custom_school != 'Maryland Prestigious PreSchool' %}
               <th class="min-w-[100px]">
                <span class="sort">
                 <span class="sort-label">
@@ -101,7 +101,7 @@
               <td>
                {{ get_plan_instructors(result.assessment_plan) or get_course_instructors(result.course, result.academic_year) }}
               </td>
-              {% if not program.custom_school=='Maryland Prestigious PreSchool' %}
+              {% if program.custom_school != 'Maryland Prestigious PreSchool' %}
               <td>
                {{ result.total_score }}
               </td>

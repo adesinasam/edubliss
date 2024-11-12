@@ -106,7 +106,7 @@
               {% for structure in items %}
              <tr>
               <td style="position: sticky; left: 0; background-color: #fff; z-index: 1;">{{ structure.assessment_type }}</td>
-              <td>{{ structure.topics or "" }}</td>
+              <td>{{ get_structure_topics(structure.assessment_type,results.name,results.assessment_plan) or "" }}</td>
               <td>{{ structure.score }}/{{ structure.maximum_score }}</td>
               {% if program.custom_school=='Maryland Prestigious PreSchool' %}
               <td>{% if structure.weightage_score>0 %}{{ get_grade_remark(results.assessment_plan, structure.score, structure.maximum_score) }}{% endif %}</td>
