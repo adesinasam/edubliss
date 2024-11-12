@@ -1132,21 +1132,39 @@ def mark_assessment_result(assessment_plan, scores):
 
     return assessment_result_dict
 
+# def get_assessment_result_doc(student, assessment_plan):
+#     assessment_result = frappe.get_all(
+#         "Assessment Result",
+#         filters={
+#             "student": student,
+#             "assessment_plan": assessment_plan,
+#             "docstatus": ("!=", 2),
+#         },
+#     )
+#     if assessment_result:
+#         doc = frappe.get_doc("Assessment Result", assessment_result[0])
+#         if doc.docstatus == 0:
+#             return doc
+#         elif doc.docstatus == 1:
+#             frappe.msgprint(_("Result already Submitted"))
+#             return None
+#     else:
+#         return frappe.new_doc("Assessment Result")
+
 def get_assessment_result_doc(student, assessment_plan):
     assessment_result = frappe.get_all(
         "Assessment Result",
         filters={
             "student": student,
             "assessment_plan": assessment_plan,
-            "docstatus": ("!=", 2),
+            "docstatus": ("!=", 2),  # Exclude cancelled
         },
     )
     if assessment_result:
-        doc = frappe.get_doc("Assessment Result", assessment_result[0])
+        doc = frappe.get_doc("Assessment Result", assessment_result[0].name)
         if doc.docstatus == 0:
-            return doc
+            return doc  # Update existing draft
         elif doc.docstatus == 1:
-            frappe.msgprint(_("Result already Submitted"))
-            return None
+            frappe.throw(_("Result already submitted for this student and assessment plan."), title="Duplicate Entry")
     else:
         return frappe.new_doc("Assessment Result")
