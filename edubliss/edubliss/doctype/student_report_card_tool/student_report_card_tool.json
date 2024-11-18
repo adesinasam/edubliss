@@ -8,20 +8,10 @@
   "student",
   "student_name",
   "program",
-  "student_batch",
   "column_break_3",
-  "assessment_group",
   "academic_year",
   "academic_term",
-  "section_break_5",
-  "add_letterhead",
-  "letter_head",
-  "parents_meeting",
-  "parents_attendance",
-  "column_break_15",
-  "show_marks",
-  "terms",
-  "assessment_terms"
+  "assessment_group"
  ],
  "fields": [
   {
@@ -46,20 +36,16 @@
    "reqd": 1
   },
   {
-   "fieldname": "student_batch",
-   "fieldtype": "Link",
-   "label": "Batch",
-   "options": "Student Batch Name"
-  },
-  {
    "fieldname": "column_break_3",
    "fieldtype": "Column Break"
   },
   {
+   "fetch_from": "academic_term.custom_assessment_group",
    "fieldname": "assessment_group",
    "fieldtype": "Link",
    "label": "Assessment Group",
    "options": "Assessment Group",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -74,64 +60,14 @@
    "fieldname": "academic_term",
    "fieldtype": "Link",
    "label": "Academic Term",
-   "options": "Academic Term"
-  },
-  {
-   "fieldname": "section_break_5",
-   "fieldtype": "Section Break",
-   "label": "Report Settings"
-  },
-  {
-   "default": "1",
-   "fieldname": "add_letterhead",
-   "fieldtype": "Check",
-   "label": "Add letterhead"
-  },
-  {
-   "depends_on": "add_letterhead",
-   "fieldname": "letter_head",
-   "fieldtype": "Link",
-   "label": "Letter Head",
-   "options": "Letter Head"
-  },
-  {
-   "fieldname": "parents_meeting",
-   "fieldtype": "Data",
-   "label": "Total Parents Teacher Meeting"
-  },
-  {
-   "fieldname": "parents_attendance",
-   "fieldtype": "Data",
-   "label": "No. of Meetings Attended by Parents"
-  },
-  {
-   "fieldname": "column_break_15",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "show_marks",
-   "fieldtype": "Check",
-   "label": "Show Marks"
-  },
-  {
-   "fieldname": "terms",
-   "fieldtype": "Link",
-   "label": "Terms",
-   "options": "Terms and Conditions"
-  },
-  {
-   "fetch_from": "terms.terms",
-   "fieldname": "assessment_terms",
-   "fieldtype": "Small Text",
-   "label": "Assessment Terms",
-   "read_only": 1
+   "options": "Academic Term",
+   "reqd": 1
   }
  ],
  "hide_toolbar": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-11-12 04:39:38.141384",
+ "modified": "2024-11-13 04:29:52.503160",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Student Report Card Tool",

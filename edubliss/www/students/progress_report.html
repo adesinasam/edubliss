@@ -181,7 +181,7 @@
               {% endif %}
              </tr>
                {% endfor %}
-              {% if not program.custom_school=='Maryland Prestigious PreSchool' %}
+              {% if program.custom_school != 'Maryland Prestigious PreSchool' %}
              <tr>
               <td colspan="3" class="text-center"></td>
               <td>{{ result.total_score }}</td>

@@ -46,43 +46,11 @@
         </h3>
         <div class="flex items-center gap-5">
          <div class="flex items-center gap-2.5">
-          <form method="POST" action="/api/method/education.education.doctype.student_report_generation_tool.student_report_generation_tool.preview_report_card" target="_blank">
+          <form id="myForm" method="POST" action="/api/method/edubliss.edubliss.doctype.student_report_card_tool.student_report_card_tool.preview_report_card" target="_blank">
             <input type="hidden" name="csrf_token" value="{{frappe.session.csrf_token}}">
             <input type="hidden" name="doc" value=""> <!-- Will be dynamically populated -->
-            <!-- <input type="hidden" name="student" value="{{ students.name }}">
-            <input type="hidden" name="assessment_group" value="First Term">
-            <input type="hidden" name="program" value="{{ program.program }}">
-            <input type="hidden" name="academic_year" value="{{ acadyear }}">
-            <input type="hidden" name="academic_term" value="{{ acadterm }}"> -->
-            <!-- <input type="submit"  id="print-report-card" class="btn btn-sm btn-dark justify-center" value="Print Report Card"> -->
+            <input type="submit"  id="print-report-card" class="btn btn-sm btn-dark justify-center" value="Print Report Card">
           </form>
-          <!-- <select class="select w-28">
-           <option value="1">
-            Active
-           </option>
-           <option value="2">
-            Disabled
-           </option>
-           <option value="2">
-            Pending
-           </option>
-          </select>
-          <select class="select select-sm w-28">
-           <option value="1">
-            Latest
-           </option>
-           <option value="2">
-            Older
-           </option>
-           <option value="3">
-            Oldest
-           </option>
-          </select>
-          <button class="btn btn-sm btn-dark">
-           <i class="ki-filled ki-setting-4">
-           </i>
-           Print Report Card
-          </button> -->
          </div>
         </div>
        </div>
@@ -90,7 +58,7 @@
          <div class="card">
           <div class="card-body flex flex-wrap gap-5 items-center justify-between">
            <div class="flex items-center flex-wrap gap-3.5">
-            <img class=" rounded size-[100px] shrink-0" src="{% if students.image  %}{{students.image}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/>
+            <!-- <img class=" rounded size-[100px] shrink-0" src="{% if students.image  %}{{students.image}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/> -->
             <div class="flex flex-col gap-1.5">
              <div class="flex items-center gap-1.5">
               <div class="hover:text-primary-active text-base leading-5 font-medium text-gray-900">
@@ -104,7 +72,7 @@
              <span class="flex items-center text-gray-700 text-sm">
               <i class="ki-filled ki-geolocation me-1.5 text-mdtext-gray-500">
               </i>
-              {{ program.program}}
+              {{ program.program or ''}}
              </span>
             </div>
              <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
@@ -115,6 +83,7 @@
                {{students.name}}
               </span>
              </div>
+             {% if sections %}
              <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
               <span class="text-gray-900 text-xs leading-none font-semibold">
                Section
@@ -123,14 +92,7 @@
                {{sections}}
               </span>
              </div>
-             <!-- <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
-              <span class="text-gray-900 text-xs leading-none font-semibold">
-               Date of Birth
-              </span>
-              <span class="text-gray-700 text-2sm font-medium">
-               {{students.name}}
-              </span>
-             </div> -->
+             {% endif %}
              <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto">
               <span class="text-gray-900 text-xs leading-none font-semibold">
                Academic Term
@@ -148,118 +110,42 @@
       </div>
      </div>
      <!-- End of Container -->
-     <!-- Container -->
-     <!-- <div class="container-fixed">
-      <div class="flex flex-col items-stretch gap-5 lg:gap-7.5">
-        <div class="grid grid-cols-1 gap-5 lg:gap-7.5">
-         <div class="card">
-         <div class="card-body">
-          <div class="flex gap-2">
-           <div class="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
-            <span class="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
-             624
-            </span>
-            <span class="text-gray-700 text-sm">
-             Employees
-            </span>
-           </div>
-           <span class="[&amp;:not(:last-child)]:border-r border-r-gray-300 my-1">
-           </span>
-           <div class="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
-            <span class="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
-             624
-            </span>
-            <span class="text-gray-700 text-sm">
-             Employees
-            </span>
-           </div>
-           <span class="[&amp;:not(:last-child)]:border-r border-r-gray-300 my-1">
-           </span>
-           <div class="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
-            <span class="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
-             60.7M
-            </span>
-            <span class="text-gray-700 text-sm">
-             Users
-            </span>
-           </div>
-           <span class="[&amp;:not(:last-child)]:border-r border-r-gray-300 my-1">
-           </span>
-           <div class="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
-            <span class="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
-             369M
-            </span>
-            <span class="text-gray-700 text-sm">
-             Revenue
-            </span>
-           </div>
-           <span class="[&amp;:not(:last-child)]:border-r border-r-gray-300 my-1">
-           </span>
-           <div class="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
-            <span class="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
-             27
-            </span>
-            <span class="text-gray-700 text-sm">
-             Company Rank
-            </span>
-           </div>
-           <span class="[&amp;:not(:last-child)]:border-r border-r-gray-300 my-1">
-           </span>
-          </div>
-         </div>
-         </div>
-        </div>
-        <div class="flex grow justify-center">
-        </div>
-      </div>
-     </div> -->
-     <!-- End of Container -->
     </main>
 {% endblock %}
 
 {% block custom_js %}
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const form = document.querySelector('form');
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('#myForm');
 
-      form.addEventListener('submit', function(event) {
-        const student = "{{ students.name }}";
-        const assessmentGroup = "First Term";
-        const program = "{{ program.program }}";
-        const academicYear = "{{ acadyear }}";
-        const academicTerm = "{{ acadterm }}";
-        const addLetterhead = 1;
-        const studentBatch = "";
-        const showMarks = 1;
-        const letterHead = "Maryland Logo with name";
-        const parentsMeeting = "";
-        const parentsAttendance = "";
-        const terms = "";
+    form.addEventListener('submit', function(event) {
 
-        if (!student || !assessmentGroup || !program || !academicYear || !academicTerm) {
-          event.preventDefault();
-          alert("Please fill in all the mandatory fields.");
-          return;
-        }
+      const student = "{{ students.name }}";
+      const studentName = "{{ students.student_name }}";
+      const assessmentGroup = "{{ acad_terms.custom_assessment_group }}";
+      const program = "{{ program.program or '' }}";
+      const academicYear = "{{ acadyear }}";
+      const academicTerm = "{{ acadterm }}";
 
-        const docData = {
-          student: student,
-          assessment_group: assessmentGroup,
-          program: program,
-          academic_year: academicYear,
-          academic_term: academicTerm,
-          add_letterhead: addLetterhead,
-          student_batch: studentBatch,
-          show_marks: showMarks,
-          letter_head: letterHead,
-          parents_meeting: parentsMeeting,
-          parents_attendance: parentsAttendance,
-          terms: terms
-        };
+      if (!student || !assessmentGroup || !program || !academicYear || !academicTerm) {
+        event.preventDefault();
+        alert("{{ students.student_name }} not enrolled for {{ acadterm }}.");
+        return;
+      }
 
-        // Populate the hidden doc field with the JSON string
-        form.querySelector('input[name="doc"]').value = JSON.stringify(docData);
-      });
+      const docData = {
+        student: student || "",
+        student_name: studentName || "",
+        assessment_group: assessmentGroup || "",
+        program: program || "",
+        academic_year: academicYear || "",
+        academic_term: academicTerm || "",
+      };
+
+      // Populate the hidden doc field with the JSON string
+      const docField = form.querySelector('input[name="doc"]');
+      docField.value = JSON.stringify(docData);
     });
-  </script>
+  });
+</script>
 {% endblock %}

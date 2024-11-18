@@ -4,75 +4,6 @@ from datetime import datetime
 
 no_cache = 1
 
-def format_date(value, format="%d %b, %Y"):
-    if value:
-        return value.strftime(format)
-    return value
-
-def get_grade_remark(assessment_plan,score,maximum_score):
-    assessment_plan_doc = frappe.get_doc('Assessment Plan', assessment_plan)
-    grading_scale = assessment_plan_doc.grading_scale
-    percentages = ((score / maximum_score) * 100)
-    return frappe.call('edubliss.api.get_grade_remark', grading_scale=grading_scale, percentage=percentages)
-
-def get_structure_date(assessment_plan,assessment_type, format="%d %b, %Y"):
-    plan_structure = frappe.qb.DocType("Assessment Plan Structure")
-
-    assessment_plan_structure_query = (
-        frappe.qb.from_(plan_structure)
-        .select(plan_structure.schedule_date)
-        .where(plan_structure.parent == assessment_plan)
-        .where(plan_structure.assessment_type == assessment_type)
-        .run(as_dict=1)
-    )
-    value=assessment_plan_structure_query[0]['schedule_date'] if assessment_plan_structure_query else None
-    if value:
-        return value.strftime(format)
-    return value
-
-def get_structure_due(assessment_plan,assessment_type, format="%d %b, %Y"):
-    plan_structure = frappe.qb.DocType("Assessment Plan Structure")
-
-    assessment_plan_structure_query = (
-        frappe.qb.from_(plan_structure)
-        .select(plan_structure.due_date)
-        .where(plan_structure.parent == assessment_plan)
-        .where(plan_structure.assessment_type == assessment_type)
-        .run(as_dict=1)
-    )
-    value=assessment_plan_structure_query[0]['due_date'] if assessment_plan_structure_query else None
-    if value:
-        return value.strftime(format)
-    return value
-
-def get_structure_results(student,assessment_plan):
-    results = None
-
-    assessment_result = frappe.get_value("Assessment Result", {
-    	"student": student,
-        "assessment_plan": assessment_plan
-    })
-    results = frappe.get_doc("Assessment Result", assessment_result)
-    if results:
-    	structures = results.get("custom_structure_detail")
-
-    return structures if structures else []
-
-    # assessment_result = frappe.qb.DocType("Assessment Result")
-    # assessment_result_structure = frappe.qb.DocType("Assessment Result Structure")
-
-    # assessment_result_structure_query = (
-    #     frappe.qb.from_(assessment_result)
-    #     .inner_join(assessment_result_structure)
-    #     .on(assessment_result.name == assessment_result_structure.parent)
-    #     .select('*')
-    #     .where(assessment_result.student == student)
-    #     .where(assessment_result.assessment_plan == assessment_plan)
-    #     .orderby(assessment_result_structure.idx)
-    #     .run(as_dict=1)
-    # )
-    # return assessment_result_structure_query if assessment_result_structure_query else []
-
 def get_context(context):
 
     docnames = frappe.form_dict.docname
@@ -176,7 +107,6 @@ def get_context(context):
     context.companys = frappe.call('edubliss.api.get_company')
     context.acadyears = frappe.call('edubliss.api.get_academic_year')
     context.acadterms = frappe.call('edubliss.api.get_academic_term')
-    context['format_date'] = format_date
 
     # Try to fetch the Student document and handle errors if it doesn't exist
     try:
@@ -186,26 +116,9 @@ def get_context(context):
         frappe.throw(_("Student not found"), frappe.DoesNotExistError)
 
     try:
-        results = frappe.get_all(
-            "Assessment Result",
-            fields=["name", "assessment_plan", "student", "course", "program", "student_group", "total_score",
-             "academic_year", "academic_term", "assessment_group", "grading_scale", "grade"],
-            filters={
-            "student": docname, 
-            "academic_term": acadterm,
-            "docstatus": ("!=", 2)
-            },
-            order_by="course",
-        )
-    except Exception as e:
-        results = None  # or set a default value if required        
-
-    if results:
-        context.results = results
-        context['get_structure_results'] = get_structure_results
-        context['get_structure_date'] = get_structure_date
-        context['get_structure_due'] = get_structure_due
-        context['get_grade_remark'] = get_grade_remark
+        context.acad_terms = frappe.get_doc("Academic Term", acadterm)
+    except frappe.DoesNotExistError:
+        frappe.throw(_("Academic Term not found"), frappe.DoesNotExistError)
 
 
     return context

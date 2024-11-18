@@ -95,7 +95,7 @@
 	}
 
 	.print-format {
-		font-size: 9pt;
+		font-size: 8pt;
 		font-family: "Helvetica Neue", Helvetica, Arial, "Open Sans", sans-serif;
 		-webkit-print-color-adjust:exact;
 	}
@@ -123,7 +123,7 @@
 
 	.print-format td, .print-format th {
 		vertical-align: top !important;
-		padding: 6px !important;
+		padding: 3px !important;
 	}
 
 	.print-format p {
@@ -184,271 +184,206 @@
 	.pdf-header {
 		display: inline-block;
 	}
+
+	.text-warning {
+    	color: #ffcc00; /* or any warning color you prefer */
+	}
+
+  	.performance-title {
+    	color: #1d4ed8 !important;
+    	text-align: center;
+  	}
+
 </style>
 
 
-
-<div class="page-break">
-
-	<div id="header-html" class="pdf-header">
-		{% if letterhead and add_letterhead %}
-			<div class="">{{ letterhead }}</div>
-		{% endif %}
-		<div class="print-heading">
-			<h2>{{ _("Student Report Card") }}<br>
-				<small>{{ doc.student_name }}</small>
-			</h2>
-		</div>
-	</div>
-
-	<div class="row section-break">
-		<div class="col-xs-6 column-break">
-			<div class="row data-field">
-				<div class="col-xs-5">
-					<label>{{ _("Student ID: ") }}</label>
+<table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 0;">
+    <tbody>
+        <tr>
+            <td style="width: 11%; border: 0">
+                <div align="left"><img src="/files/Super Logo New.png"></div>
+            </td>
+            <td style="width: 76%; border: 0">
+				<div class="text-center">
+				    <h3><b class="text-yellow-500">{{ program.custom_school | upper }}</b><small>
+				    {% set u = frappe.get_doc("Company", program.custom_school) %}
+				    <p>{{ frappe.db.get_value("Address", u.custom_default_address, "address_line1") or "" }}, {{ frappe.db.get_value("Address", u.custom_default_address, "city") or "" }}, {{ frappe.db.get_value("Address", u.custom_default_address, "state") or "" }}</p>
+				    <p>Tel: {{ frappe.db.get_value("Address", u.custom_default_address, "phone") or "" }} | Email: enquiries@mpischool.com | Web: www.mpischool.com</p></small></h3>
+				    <h4><b>CONTINUOUS ASSESSMENT REPORT SHEET</b></h4>
 				</div>
-				<div class="col-xs-7">
-					{{ doc.students[0] }}
-				</div>
-			</div>
-
-			<div class="row data-field">
-				<div class="col-xs-5">
-					<label>{{ _("Student Name: ") }}</label>
-				</div>
-				<div class="col-xs-7">
-					{{ doc.student_name }}
-				</div>
-			</div>
-
-			<div class="row data-field">
-				<div class="col-xs-5">
-					<label>{{ _("Program: ") }}</label>
-				</div>
-				<div class="col-xs-7">
-					{{ doc.program }}
-				</div>
-			</div>
-
-			{% if doc.student_batch %}
-			<div class="row data-field">
-				<div class="col-xs-5">
-					<label>{{ _("Batch: ") }}</label>
-				</div>
-				<div class="col-xs-7">
-					{{ doc.student_batch }}
-				</div>
-			</div>
-			{% endif %}
-		</div>
-
-		<div class="col-xs-6 column-break">
-			<div class="row data-field">
-				<div class="col-xs-5">
-					<label>{{ _("Academic Year: ") }}</label>
-				</div>
-				<div class="col-xs-7">
-					{{ doc.academic_year }}
-				</div>
-			</div>
-
-			{% if doc.academic_term %}
-			<div class="row data-field">
-				<div class="col-xs-5">
-					<label>{{ _("Academic Term: ") }}</label>
-				</div>
-				<div class="col-xs-7">
-					{{ doc.academic_term }}
-				</div>
-			</div>
-			{% endif %}
-
-			<div class="row data-field">
-				<div class="col-xs-5">
-					<label>{{ _("Assessment Group: ") }}</label>
-				</div>
-				<div class="col-xs-7">
-					{{ doc.assessment_group }}
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-	{% for course in courses %}
-
-	<div class="row section-break pbi_avoid">
-		<div class="col-xs-12 column-break">
-
-			<div>
-			<table class="table table-bordered table-condensed">
-				<caption>
-					<div class="row">
-						<div class="col-xs-1">
-							<label>{{ _("Course: ") }}</label>
-						</div>
-						<div class="col-xs-11">
-							{{ frappe.db.get_value("Course", course, "course_name") }}
-						</div>
-					</div>
-				</caption>
-				<thead>
-					<tr>
-						<th> {{ _("Term") }} </th>
-						<th>{{ _("Assessment Criteria") }}</th>
-						{% if doc.show_marks %}
-						<th> {{ _("Score") }} </th>
-						{% endif %}
-						<th> {{ _("Grade") }} </th>
-					</tr>
-				</thead>
-
-				<tbody>
-					{% for result in assessment_result %}
-					{% for criteria in result.details %}
-					{% if result.course == course %}
-					<tr>
-						<td> {{ result.assessment_group }} </td>
-						<td>{{ criteria.assessment_criteria }}</td>
-						{% if doc.show_marks %}
-						<td> {{ criteria.score }} </td>
-						{% endif %}
-						<td> {{ criteria.grade }} </td>
-					</tr>
-					{% endif %}
-					{% endfor %}
-					{% endfor %}
-				</tbody>
-
-			</table>
-			</div>
-		</div>
-	</div>
-
-	{% endfor %}
-
-	<br>
-
-	<div class="row section-break pbi_avoid">
-		<div class="col-xs-6 column-break">
-			<h4>{{ _("Student Attendance")}}</h4>
-			<div>
-				{{ _("Present ") }} {{ doc.attendance.present if doc.attendance.present else 0 }} {{ _(" out of ") }} {{ doc.attendance.total }}  {{ _(" days") }}
-			</div>
-		</div>
-
-		<div class="col-xs-6 column-break">
-			<h4>{{ _("Parents Teacher Meeting Attendance")}}</h4>
-			<div>
-				{{ _("Present ") }} {{ doc.parents_attendance if doc.parents_attendance != None else 0 }}
-				{{ _(" out of ") }} {{ doc.parents_meeting if doc.parents_meeting != None else 0 }} {{ _(" meetings") }}
-			</div>
-		</div>
-	</div>
-
-	<br>
-
-	{% if doc.assessment_terms %}
-	<div class="row section-break">
-		<div class="col-xs-12">
-			<h4> {{ _("Terms") }} </h4>
-			<p> {{ doc.assessment_terms }} </p>
-		</div>
-	</div>
-	{% endif %}
-</div>
-
-<div class="text-center">
-    <h2><b>MARYLAND PRESTIGIOUS INTERNATIONAL SCHOOLS</b></h2>
-    <p>Nung Ukot Itam, Off Idoro Road by Maryland Bus Stop</p>
-    <p>Tel: 08125584529 | Email: enquiries@mpischool.com | Web: www.mpischool.com</p>
-    <h3><b>CONTINUOUS ASSESSMENT REPORT SHEET</b></h3>
-</div>
-
-<table class="table table-bordered" style="width: 100%;">
+            </td>
+            <td style="width: 13%; border: 0">
+                <div align="right"><img src="{{ students.image }}"></div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<table class="table table-bordered" width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0;">
     <tr>
-        <td><b>Name:</b> FORTUNE DIANABASI</td>
-        <td><b>Admission No.:</b> P000259</td>
-        <td><b>Class:</b> GRADE 3 T</td>
+        <td><b>Name:<span class="text-primary"> {{ doc.student_name | upper }}</span></b></td>
+        <td><b>ID:<span class="text-primary"> {{ doc.students[0] }}</span></b></td>
+        <td><b>Class:<span class="text-primary"> {{ doc.program }}</span></b></td>
     </tr>
     <tr>
-        <td><b>Class Teacher:</b> UDUAK EKPEOWO</td>
-        <td><b>Academic Session:</b> 2022/2023</td>
-        <td><b>Term:</b> First Term</td>
+        <td><b>Session:<span class="text-primary"> {{ doc.academic_year }}</span></b></td>
+        <td><b>Term:<span class="text-primary"> {{ term.term_name }}</span></b></td>
+        <td><b>Arm:<span class="text-primary"> {{ sections}}</span></b></td>
     </tr>
     <tr>
-        <td><b>Attendance:</b> 114</td>
-        <td><b>Out of:</b> 114</td>
-        <td><b>Date of Birth:</b> 13/11/2014</td>
+        <td><b>Class Teacher:<span class="text-primary"> {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %}</span></b></td>
+        <td><b>Attendance:<span class="text-primary"> {{ doc.attendance.present if doc.attendance.present else 0 }} out of {{ doc.attendance.total }}  {{ _(" days") }}</span></b></td>
+        <td><b>Date of Birth:<span class="text-primary"> {{ format_date(students.date_of_birth) or "" }}</span></b></td>
     </tr>
 </table>
 
-<h4><b>Performance in Subjects</b></h4>
-<table class="table table-bordered">
+<h6 class="performance-title"><b>PERFORMANCE IN SUBJECTS</b></h6>
+<table class="table table-bordered" width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0;">
     <thead>
         <tr>
-            <th>SN</th>
-            <th>Subject</th>
-            <th>CA1</th>
-            <th>CA2</th>
-            <th>CA3</th>
-            <th>CA4</th>
-            <th>CA5</th>
-            <th>CA6</th>
-            <th>Exam</th>
-            <th>Total</th>
-            <th>Grade</th>
-            <th>Remark</th>
-            <th>Subject Teacher</th>
+        	<th width="3%"><span>SN</span></th>
+	        <th width="20%"><span>Subject</span></th>
+    	    <th width="5%"><span>CA1</span></th>
+        	<th width="5%"><span>CA2</span></th>
+	        <th width="5%"><span>CA3</span></th>
+    	    <!-- <th width="5%"><span>CA4</span></th>
+        	<th width="5%"><span>CA5</span></th>
+	        <th width="5%"><span>CA6</span></th> -->
+    	    <th width="5%"><span>Exam</span></th>
+        	<th width="5%"><span>Total</span></th>
+        	<th width="5%"><span>Class Avg.</span></th>
+	        <th width="5%"><span>Grade</span></th>
+    	    <th width="10%"><span>Remark</span></th>
+        	<th width="10%"><span>Subject Teacher</span></th>
         </tr>
     </thead>
     <tbody>
+     {% if assessment_result %}	
+      {% for result in assessment_result %}
+       {% if get_course_subject(result.course) != 'Others' %}
         <tr>
-            <td>1</td><td>PHONICS</td><td>10</td><td>10</td><td>9</td><td>9</td><td>10</td><td>9</td><td>40</td><td>97</td><td>A+</td><td>Outstanding</td><td>ISONG, V.</td>
+            <td>{{ loop.index}}</td>
+            <td>{{ get_course_subject(result.course) | upper }}</td>
+			{% for criteria in get_criteria_marks(result.name) %}
+            <td>{{ criteria.score | round(1) }}</td>
+			{% endfor %}
+            <td>{{ result.total_score | round(2) }}</td>
+            <td>97</td>
+            <td>{{ result.grade }}</td>
+            <td>{{ get_grade_remark(result.grading_scale, result.total_score) }}</td>
+            <td>{{ get_course_teacher(result.course, result.student_group, result.academic_term) }}</td>
         </tr>
+       {% endif %}
+      {% endfor %}
+     {% else %}  
         <tr>
-            <td>2</td><td>CALLIGRAPHY</td><td>9.5</td><td>9.5</td><td>9</td><td>8</td><td>9.5</td><td>9</td><td>38</td><td>92.5</td><td>A</td><td>Excellent</td><td>EKPEOWO, U.</td>
+            <td colspan="10" class="text-center">No student found.</td>
         </tr>
-        <!-- Add other subjects similarly -->
+     {% endif %}  
     </tbody>
 </table>
 
-<h4><b>Affective Assessment</b></h4>
-<table class="table table-bordered">
-    <thead>
+<table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 2; border: 0;">
+    <tr>
+        <td width="30%"><p><b>Number of Subjects Offered: {{ course_count }}</b></p></td>
+        <td width="45%" class="text-center" colspan="2"><p><b>Total Score: {{ total_score | round(1) }}</b></p></td>
+        <td width="25%"><p><b>Final Average: {{ average | round(2) }}</b></p></td>
+    </tr>
+    <!-- <tr>
+        <td width="30%"><p><b>Position in Arm: 10</b></p></td>
+        <td width="20%"><p><b>No. in Arm: {{ section_count }}</b></p></td>
+        <td width="25%"><p><b>Position in Class: 11</b></p></td>
+        <td width="25%"><p><b>No. in Class: {{ program_count }}</b></p></td>
+    </tr> -->
+</table>
+
+<div style="margin-top: 0px;">
+<p><b class="text-primary left">INTERPRETATION: 95-100= Outstanding, 90-94= Excellent, 85-89= Proficient, 80-84= V.Good, 75-79= Good, 70-74= Satisfactory, 0-69= Fair<hr></b></p>
+</div>
+
+<table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 0;">
+    <tbody>
         <tr>
-            <th>Attribute</th>
+            <td style="width: 48%; border: 0">
+
+<table class="table table-bordered" width="100%" style="margin-top: 0; margin-bottom: 0; padding: 0;">
+    <thead style="background-color: #007bff; color: white;">
+        <tr>
+            <th><b>AFFECTIVE ASSESSMENT</b></th>
             <th>Score</th>
             <th>Grade</th>
         </tr>
     </thead>
     <tbody>
-        <tr><td>Attentiveness</td><td>4</td><td>B</td></tr>
-        <tr><td>Attitude to School work</td><td>4</td><td>B</td></tr>
-        <!-- Add other attributes similarly -->
+     {% if assessment_result %}	
+      {% for result in assessment_result %}
+       {% if result.course == 'AFFECTIVE ASSESSMENT' %}
+        <tr>
+			{% for criteria in result.custom_structure_detail %}
+            <td>{{ criteria.assessment_type }}</td>
+            <td>{{ criteria.score }}</td>
+            <td>{{ criteria.grade }}</td>
+			{% endfor %}
+        </tr>
+       {% endif %}
+      {% endfor %}
+     {% endif %}  
     </tbody>
 </table>
 
-<h4><b>Psychomotor Assessment</b></h4>
-<table class="table table-bordered">
+            </td>
+            <td style="width: 4%; border: 0">
+            </td>
+            <td style="width: 48%; border: 0">
+
+<table class="table table-bordered" width="100%" style="margin-top: 0; margin-bottom: 0; padding: 0;">
     <thead>
         <tr>
-            <th>Attribute</th>
+            <th><b>PSYCHOMOTOR ASSESSMENT</b></th>
             <th>Score</th>
             <th>Grade</th>
         </tr>
     </thead>
     <tbody>
-        <tr><td>Games</td><td>4</td><td>B</td></tr>
-        <tr><td>Handling Tools</td><td>3</td><td>C</td></tr>
+     {% if assessment_result %}	
+      {% for result in assessment_result %}
+       {% if result.course == 'PSYCHOMOTOR ASSESSMENT' %}
+        <tr>
+			{% for criteria in result.custom_structure_detail %}
+            <td>{{ criteria.assessment_type }}</td>
+            <td>{{ criteria.score }}</td>
+            <td>{{ criteria.grade }}</td>
+			{% endfor %}
+        </tr>
+       {% endif %}
+      {% endfor %}
+     {% endif %}  
     </tbody>
 </table>
-
-<h4><b>Comments</b></h4>
-<p><b>Class Teacher's Comment:</b> An excellent result.</p>
-<p><b>Head Teacher's Comment:</b> Highly Commendable, keep up.</p>
-
-<div style="margin-top: 30px;">
-    <p><b>Class Teacher's Name & Signature:</b> UDUAK EKPEOWO</p>
-    <p><b>Head Teacher's Name & Signature:</b> MR EKEMINI PETER</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div style="margin-top: 0px;">
+<p><b class="text-primary left">INTERPRETATION: 4.5-5= EXCELLENT , 3.5-4= VERY GOOD , 2.5-3= GOOD , 1.5-2= FAIR , 0-1= POOR<hr></b></p>
 </div>
+
+<h6 class="performance-title"><b>COMMENTS</b></h6>
+<table class="table table-bordered" width="100%" style="margin-top: 0; margin-bottom: 0; padding: 2;">
+    <tr>
+        <td width="25%" style="margin-top: 30px;"><p><b>CLASS TEACHER'S COMMENT</b></p></td>
+        <td width="75%" style="margin-top: 30px;"><p> </p></td>
+    </tr>
+    <tr>
+        <td width="25%" style="margin-top: 30px;"><p><b>CLASS TEACHER'S NAME AND SIGNATURE</b></p></td>
+        <td width="75%" style="margin-top: 30px;"><p> </p></td>
+    </tr>
+    <tr>
+        <td width="25%" style="margin-top: 30px;"><p><b>HEAD TEACHER'S COMMENT</b></p></td>
+        <td width="75%" style="margin-top: 30px;"><p> </p></td>
+    </tr>
+    <tr>
+        <td width="25%" style="margin-top: 30px;"><p><b>HEAD TEACHER'S NAME AND SIGNATURE</b></p></td>
+        <td width="75%" style="margin-top: 30px;"><p> </p></td>
+    </tr>
+</table>
+
