@@ -81,6 +81,10 @@ def preview_report_card(doc):
 	students = frappe.get_doc("Student", doc.students[0])
 	program = frappe.get_doc("Program", doc.program)
 	term = frappe.get_doc("Academic Term", doc.academic_term)
+	assessment_criteria = frappe.get_all('Assessment Criteria',
+		filters={'assessment_criteria_group': "PERFORMANCE IN SUBJECTS"}, 
+		fields=['custom_abbr', 'assessment_criteria_group', 'assessment_criteria'], 
+		order_by="custom_abbr asc")
 	assessment_results = frappe.get_all('Assessment Result',
 		filters={
 		'student': doc.students[0],
@@ -133,6 +137,7 @@ def preview_report_card(doc):
 		{
 			"doc": doc,
 			"assessment_result": assessment_results,
+			"assessment_criteria": assessment_criteria,
 			"students": students,
 			"program": program,
 			"term": term,
