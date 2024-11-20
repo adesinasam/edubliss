@@ -67,6 +67,24 @@ def get_criteria_marks(assessment_result):
     )
     return assessment_result_criteria_query if assessment_result_criteria_query else []
 
+def get_marks_avg(course,program,academic_term):
+    assessment_results = frappe.get_all('Assessment Result',
+		filters={'course': course, 'program': program, 'academic_term': academic_term, 'docstatus': ("!=", 2)}, 
+		fields=[
+			'name', 'academic_term', 'student_group', 'course', 'grading_scale',
+			'maximum_score', 'total_score', 'grade'
+		], 
+		order_by="")
+
+    total_score = 0
+    course_count = 0
+    for result in assessment_results:
+    	score = result.total_score
+    	total_score += score
+    	course_count += 1  # Increment by 1 for each course
+    average = total_score / course_count if course_count else 0  # Avoid division by zero
+    return average
+
 def get_grade_remark(grading_scale,score):
     percentages = ((score / 100) * 100)
     return frappe.call('edubliss.api.get_grade_remark', grading_scale=grading_scale, percentage=percentages)
@@ -127,6 +145,71 @@ def preview_report_card(doc):
 		course_count += 1  # Increment by 1 for each course
 	average = total_score / course_count if course_count else 0  # Avoid division by zero
 
+	all_results = frappe.get_all(
+		'Assessment Result',
+		filters={
+		'program': doc.program,
+		'academic_year': doc.academic_year,
+		'academic_term': doc.academic_term,
+		'docstatus': ("!=", 2)
+		},
+		fields=['student', 'total_score', 'course']
+		)
+
+	# Calculate total and average scores for each student
+	student_scores = {}
+	for result in all_results:
+		student = result.student
+		scores = result.total_score
+		if student not in student_scores:
+			student_scores[student] = {'total_score': 0, 'course_count': 0}
+		student_scores[student]['total_score'] += scores
+		student_scores[student]['course_count'] += 1
+
+	# Calculate average score for each student
+	for student, data in student_scores.items():
+		data['average'] = data['total_score'] / data['course_count']
+
+	# Sort students by their average scores in descending order
+	sorted_students = sorted(student_scores.items(), key=lambda x: x[1]['average'], reverse=True)
+
+	# Find the target student's position
+	target_student = doc.students[0]
+	class_position = next((i + 1 for i, (student, _) in enumerate(sorted_students) if student == target_student), None)
+
+	section_results = frappe.get_all(
+		'Assessment Result',
+		filters={
+		'program': doc.program,
+		'student_group': sections,
+		'academic_year': doc.academic_year,
+		'academic_term': doc.academic_term,
+		'docstatus': ("!=", 2)
+		},
+		fields=['student', 'total_score', 'course']
+		)
+
+	# Calculate total and average scores for each student
+	student_scores = {}
+	for result in section_results:
+		student = result.student
+		scores = result.total_score
+		if student not in student_scores:
+			student_scores[student] = {'total_score': 0, 'course_count': 0}
+		student_scores[student]['total_score'] += scores
+		student_scores[student]['course_count'] += 1
+
+	# Calculate average score for each student
+	for student, data in student_scores.items():
+		data['average'] = data['total_score'] / data['course_count']
+
+	# Sort students by their average scores in descending order
+	sorted_studentss = sorted(student_scores.items(), key=lambda x: x[1]['average'], reverse=True)
+
+	# Find the target student's position
+	target_students = doc.students[0]
+	sections_position = next((i + 1 for i, (student, _) in enumerate(sorted_studentss) if student == target_students), None)
+
 	# get the attendance of the student for that peroid of time.
 	doc.attendance = get_attendance_count(
 		doc.students[0], doc.academic_term
@@ -148,11 +231,14 @@ def preview_report_card(doc):
 			"program_count": program_count,
 			"total_score": total_score,
 			"average": average,
+			"class_position": class_position,
+			"sections_position": sections_position,
 			"format_date": format_date,
 			"get_course_subject": get_course_subject,
 			"get_criteria_marks": get_criteria_marks,
 			"get_grade_remark": get_grade_remark,
 			"get_course_teacher": get_course_teacher,
+			"get_marks_avg": get_marks_avg,
 		},
 	)
 
@@ -160,8 +246,16 @@ def preview_report_card(doc):
 		"frappe/www/printview.html", {"body": html, "title": "Report Card"}
 	)
 
+	pdf_options = {
+	'margin-top': '0mm',
+	'margin-bottom': '6mm',
+	'margin-left': '6mm',
+	'margin-right': '6mm',
+	'header-spacing': '0',           # Space between header and content
+	}
+
 	frappe.response.filename = "Report Card " + doc.students[0] + ".pdf"
-	frappe.response.filecontent = get_pdf(final_template)
+	frappe.response.filecontent = get_pdf(final_template, options=pdf_options)
 	frappe.response.type = "pdf"
 
 

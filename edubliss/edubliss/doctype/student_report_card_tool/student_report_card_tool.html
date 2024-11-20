@@ -1,4 +1,5 @@
 <style>
+
 		@media screen {
 		.print-format-gutter {
 			background-color: #ddd;
@@ -70,7 +71,7 @@
 	}
 
 	.table {
-		margin: 20px 0px;
+		margin: 10px 0px;
 	}
 
 	.square-image {
@@ -153,6 +154,13 @@
 		max-height: 150px;
 	}
 
+	.stuphoto-img {
+		max-width: 100%;
+		height: 80px;
+		border: 2px solid #0c2c42;
+		border-radius: 3px;
+	}
+
 	.print-heading {
 		text-align: right;
 		text-transform: uppercase;
@@ -214,7 +222,7 @@
             <td style="width: 11%; border: 0; valign='top'">
                 <div align="left"><img src="/files/Super Logo New.png"></div>
             </td>
-            <td style="width: 76%; border: 0">
+            <td style="width: 75%; border: 0">
 				<div class="text-center">
 				    <h3><b class="text-primary-header">{{ program.custom_school | upper }}</b><small><i>
 				    {% set u = frappe.get_doc("Company", program.custom_school) %}
@@ -224,8 +232,8 @@
 				    <h5><b class="text-secondary">CONTINUOUS ASSESSMENT REPORT SHEET</b></h5>
 				</div>
             </td>
-            <td style="width: 13%; border: 0; valign='top'">
-                <div align="right"><img src="{{ students.image }}"></div>
+            <td style="width: 14%; border: 0; valign='top'">
+                <div align="right"><img class="stuphoto-img" src="{{ students.image }}"></div>
             </td>
         </tr>
     </tbody>
@@ -253,7 +261,7 @@
     <thead>
         <tr>
         	<th class="text-center" width="3%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">SN</span></th>
-	        <th class="text-center" width="20%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">Subject</span></th>
+	        <th class="text-center" width="20%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">SUBJECTS</span></th>
 			{% for criterias in assessment_criteria %}
     	    <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">{{ criterias.custom_abbr }}</span></th>
 			{% endfor %}
@@ -275,7 +283,7 @@
             <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score | round(1) }}</td>
 			{% endfor %}
             <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ result.total_score | round(2) }}</td>
-            <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>97</td>
+            <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_marks_avg(result.course, result.program, result.academic_term) | round(2) }}</td>
             <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ result.grade }}</td>
             <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_grade_remark(result.grading_scale, result.total_score) }}</td>
             <td style='border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_course_teacher(result.course, result.student_group, result.academic_term) }}</td>
@@ -296,16 +304,16 @@
         <td width="45%" class="text-center" colspan="2"><p><b class="text-primary-header">Total Score: {{ total_score | round(1) }}</b></p></td>
         <td width="25%"><p><b class="text-primary-header">Final Average: {{ average | round(2) }}</b></p></td>
     </tr>
-    <!-- <tr>
-        <td width="30%"><p><b> class="text-primary-header"Position in Arm: 10</b></p></td>
+    <tr>
+        <td width="30%"><p><b class="text-primary-header">Position in Arm: {{sections_position}}</b></p></td>
         <td width="20%"><p><b class="text-primary-header">No. in Arm: {{ section_count }}</b></p></td>
-        <td width="25%"><p><b class="text-primary-header">Position in Class: 11</b></p></td>
+        <td width="25%"><p><b class="text-primary-header">Position in Class: {{class_position}}</b></p></td>
         <td width="25%"><p><b class="text-primary-header">No. in Class: {{ program_count }}</b></p></td>
-    </tr> -->
+    </tr>
 </table>
 
 <div style="margin-top: 0px;">
-<p><i><b class="text-primary left" style="font-size: 6pt">INTERPRETATION: 95-100= Outstanding, 90-94= Excellent, 85-89= Proficient, 80-84= V.Good, 75-79= Good, 70-74= Satisfactory, 0-69= Fair<hr></b></i></p>
+<p><i><b class="text-primary left" style="font-size: 7pt">INTERPRETATION: 95-100= Outstanding, 90-94= Excellent, 85-89= Proficient, 80-84= V.Good, 75-79= Good, 70-74= Satisfactory, 0-69= Fair<hr></b></i></p>
 </div>
 
 <table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 0;">

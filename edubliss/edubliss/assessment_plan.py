@@ -37,6 +37,7 @@ def get_instructors(assessment_plan, method):
         .select(instrutor_course.parent)
         .where(instrutor_course.course == assessment_plan.course)
         .where(instrutor_course.academic_year == assessment_plan.academic_year)
+        .where(instrutor_course.student_group == assessment_plan.student_group)
         .run(as_dict=1)
     )
     result = ", ".join(instructor['parent'] for instructor in instrutor_course_query) if instrutor_course_query else ""
