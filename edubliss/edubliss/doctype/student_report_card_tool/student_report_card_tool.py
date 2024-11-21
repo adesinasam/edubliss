@@ -67,6 +67,25 @@ def get_criteria_marks(assessment_result):
     )
     return assessment_result_criteria_query if assessment_result_criteria_query else []
 
+def get_structure_marks(assessment_result_name,assessment_plan):
+    assessment_result_structure = frappe.qb.DocType("Assessment Result Structure")
+    assessment_result = frappe.qb.DocType("Assessment Result")
+    assessment_plan_structure = frappe.qb.DocType("Assessment Plan Structure")
+
+    assessment_result_structure_query = (
+        frappe.qb.from_(assessment_result_structure)
+        .inner_join(assessment_result).on(assessment_result_structure.parent == assessment_result.name)
+        .inner_join(assessment_plan_structure).on(assessment_result_structure.assessment_type == assessment_plan_structure.assessment_type)
+        .select(assessment_result.name,assessment_result.assessment_plan,assessment_result_structure.assessment_type, 
+        	assessment_result_structure.score, assessment_result_structure.grade, assessment_plan_structure.topics)
+        .where(assessment_result_structure.parent == assessment_result_name)
+        .where(assessment_result.name == assessment_result_name)
+        .where(assessment_plan_structure.parent == assessment_plan)
+        .orderby(assessment_plan_structure.topics)
+        .run(as_dict=1)
+    )
+    return assessment_result_structure_query if assessment_result_structure_query else []
+
 def get_marks_avg(course,program,academic_term):
     assessment_results = frappe.get_all('Assessment Result',
 		filters={'course': course, 'program': program, 'academic_term': academic_term, 'docstatus': ("!=", 2)}, 
@@ -88,6 +107,22 @@ def get_marks_avg(course,program,academic_term):
 def get_grade_remark(grading_scale,score):
     percentages = ((score / 100) * 100)
     return frappe.call('edubliss.api.get_grade_remark', grading_scale=grading_scale, percentage=percentages)
+
+def get_grade_comment(grading_scale,grade):
+    grades = frappe.qb.DocType("Grading Scale")
+    grades_interval = frappe.qb.DocType("Grading Scale Interval")
+
+    grades_interval_query = (
+        frappe.qb.from_(grades)
+        .inner_join(grades_interval)
+        .on(grades.name == grades_interval.parent)
+        .select(grades_interval.grade_description)
+        .where(grades.name == grading_scale)
+        .where(grades_interval.parent == grading_scale)
+        .where(grades_interval.grade_code == grade)
+        .run(as_dict=1)
+    )
+    return grades_interval_query[0]['grade_description'] if grades_interval_query else None
 
 @frappe.whitelist()
 def preview_report_card(doc):
@@ -237,8 +272,10 @@ def preview_report_card(doc):
 			"get_course_subject": get_course_subject,
 			"get_criteria_marks": get_criteria_marks,
 			"get_grade_remark": get_grade_remark,
+			"get_grade_comment": get_grade_comment,
 			"get_course_teacher": get_course_teacher,
 			"get_marks_avg": get_marks_avg,
+			"get_structure_marks": get_structure_marks,
 		},
 	)
 
@@ -248,9 +285,9 @@ def preview_report_card(doc):
 
 	pdf_options = {
 	'margin-top': '0mm',
-	'margin-bottom': '6mm',
-	'margin-left': '6mm',
-	'margin-right': '6mm',
+	'margin-bottom': '8mm',
+	'margin-left': '8mm',
+	'margin-right': '8mm',
 	'header-spacing': '0',           # Space between header and content
 	}
 

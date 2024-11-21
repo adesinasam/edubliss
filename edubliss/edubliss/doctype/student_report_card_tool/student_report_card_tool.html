@@ -157,8 +157,8 @@
 	.stuphoto-img {
 		max-width: 100%;
 		height: 80px;
-		border: 2px solid #0c2c42;
-		border-radius: 3px;
+/*		border: 2px solid #0c2c42;*/
+		border-radius: 6px;
 	}
 
 	.print-heading {
@@ -219,20 +219,26 @@
 <table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 0;">
     <tbody>
         <tr>
-            <td style="width: 11%; border: 0; valign='top'">
+            <td style="width: 11%; border: 0; vertical-align: top;">
                 <div align="left"><img src="/files/Super Logo New.png"></div>
             </td>
-            <td style="width: 75%; border: 0">
+            <td style="width: 4%; border: 0;">
+            </td>
+            <td style="width: 70%; border: 0">
 				<div class="text-center">
 				    <h3><b class="text-primary-header">{{ program.custom_school | upper }}</b><small><i>
 				    {% set u = frappe.get_doc("Company", program.custom_school) %}
 				    <p>{{ frappe.db.get_value("Address", u.custom_default_address, "address_line1") or "" }}, {{ frappe.db.get_value("Address", u.custom_default_address, "city") or "" }}, {{ frappe.db.get_value("Address", u.custom_default_address, "state") or "" }}</p>
 				    <p>Tel: {{ frappe.db.get_value("Address", u.custom_default_address, "phone") or "" }}</p>
 				    <p>Email: enquiries@mpischool.com | Web: www.mpischool.com</p></i></small></h3>
+				    {% if program.custom_school=='Maryland Prestigious PreSchool' %}
+				    <h5><b class="text-secondary">TERMLY OBSERVATION AND EVALUATION REPORT</b></h5>
+				    {% else %}
 				    <h5><b class="text-secondary">CONTINUOUS ASSESSMENT REPORT SHEET</b></h5>
+				    {% endif %}
 				</div>
             </td>
-            <td style="width: 14%; border: 0; valign='top'">
+            <td style="width: 15%; border: 0; vertical-align: top;">
                 <div align="right"><img class="stuphoto-img" src="{{ students.image }}"></div>
             </td>
         </tr>
@@ -256,6 +262,43 @@
     </tr>
 </table>
 
+{% if program.custom_school=='Maryland Prestigious PreSchool' %}
+<hr>
+ {% if assessment_result %}	
+  {% for result in assessment_result %}
+   {% if get_course_subject(result.course) != 'Others' %}
+    <table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 0;">
+     <tbody>
+      <tr>
+       <td style="width: 4%; border: 0; vertical-align: top !important;">{{ loop.index}}</td>
+       <td style="width: 90%; border: 0">
+		<table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 2px solid #043f80;">
+    	 <tbody>
+          <tr>
+            <td class="left" style='width: 70%; border-right:#043f80 solid 2px;;'><b class="text-primary-head">{{ get_course_subject(result.course) | upper }}</b></th>
+            <td class="left" style='width: 30%; border-right:#043f80 solid 2px;;'><b class="text-primary-head">Observation</b></th>
+          </tr>
+		  {% for criteria in get_structure_marks(result.name, result.assessment_plan) %}
+          <tr>
+            <td class="left text-primary-head" style='width: 70%; border-right:#043f80 solid 2px;;border-top:#043f80 solid 2px;;border-bottom:#043f80 solid 2px;;'>{{ criteria.topics }}</td>
+            <td class="left text-primary-head" style='width: 30%; border-right:#043f80 solid 2px;;border-top:#043f80 solid 2px;;border-bottom:#043f80 solid 2px;;'>{{ get_grade_comment(result.grading_scale, criteria.grade) }}</td>
+	      </tr>
+		  {% endfor %}
+    	 </tbody>
+		</table>
+       </td>
+       <td style="width: 6%; border: 0"></td>
+      </tr>
+     </tbody>
+	</table>
+	<div style="margin-bottom: 20px;">
+		<p class="text-primary-head left"><b class="text-primary-head left">Note: </b>{{result.comment}}</p>
+	</div>
+   {% endif %}
+  {% endfor %}
+ {% endif %}  
+<hr>
+{% else %}
 <p class="performance-title"><b class="text-secondary" style="font-size: 9pt">PERFORMANCE IN SUBJECTS</b></p>
 <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
     <thead>
@@ -277,14 +320,14 @@
       {% for result in assessment_result %}
        {% if get_course_subject(result.course) != 'Others' %}
         <tr>
-            <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ loop.index}}</td>
-            <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_course_subject(result.course) | upper }}</td>
+            <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ loop.index}}</td>
+            <td class="left" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_course_subject(result.course) | upper }}</td>
 			{% for criteria in get_criteria_marks(result.name) %}
-            <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score | round(1) }}</td>
+            <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score | round(1) }}</td>
 			{% endfor %}
-            <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ result.total_score | round(2) }}</td>
-            <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_marks_avg(result.course, result.program, result.academic_term) | round(2) }}</td>
-            <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ result.grade }}</td>
+            <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ result.total_score | round(2) }}</td>
+            <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_marks_avg(result.course, result.program, result.academic_term) | round(2) }}</td>
+            <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ result.grade }}</td>
             <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_grade_remark(result.grading_scale, result.total_score) }}</td>
             <td style='border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_course_teacher(result.course, result.student_group, result.academic_term) }}</td>
         </tr>
@@ -334,7 +377,7 @@
       {% for result in assessment_result %}
        {% if result.course == 'AFFECTIVE ASSESSMENT' %}
         <tr>
-			{% for criteria in result.custom_structure_detail %}
+			{% for criteria in get_structure_marks(result.name) %}
             <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.assessment_type }}</td>
             <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score }}</td>
             <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.grade }}</td>
@@ -364,7 +407,7 @@
       {% for result in assessment_result %}
        {% if result.course == 'PSYCHOMOTOR ASSESSMENT' %}
         <tr>
-			{% for criteria in result.custom_structure_detail %}
+			{% for criteria in get_structure_marks(result.name) %}
             <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.assessment_type }}</td>
             <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score }}</td>
             <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.grade }}</td>
@@ -402,4 +445,4 @@
         <td width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p> </p></td>
     </tr>
 </table>
-
+{% endif %}

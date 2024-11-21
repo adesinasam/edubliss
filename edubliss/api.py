@@ -1035,7 +1035,7 @@ def mark_assessment_result(assessment_plan, scores):
     # Get assessment structures only once
     structures = frappe.get_all(
         "Assessment Plan Structure",
-        fields=["assessment_type", "assessment_criteria", "max_score", "weightage", "docstatus"],
+        fields=["assessment_type", "assessment_criteria", "max_score", "weightage", "topics", "docstatus"],
         filters={"parent": assessment_plan},
         order_by="idx",
     )
@@ -1079,6 +1079,7 @@ def mark_assessment_result(assessment_plan, scores):
                 "assessment_type": criteria,  # Maintain original mapping
                 "score": score,
                 "assessment_criteria": matching_structure.assessment_criteria if matching_structure else None,
+                "topics": matching_structure.topics if matching_structure else None,
                 "maximum_score": maximum_score,
                 "weightage": weightage,
                 "weightage_score": weightage_score,
