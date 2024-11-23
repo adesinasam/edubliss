@@ -134,7 +134,9 @@
                  Topic
               </th>
               <th class="min-w-[100px]">
-                 Mark Obtained/Max Score
+                 Mark Obtained
+              <th class="min-w-[100px]">
+                 Max Score
               </th>
               {% if program.custom_school=='Maryland Prestigious PreSchool' %}
               <th class="min-w-[100px]">
@@ -164,7 +166,10 @@
                 {{ get_structure_topics(structure.assessment_type,result.name,result.assessment_plan) or "" }}
               </td>
               <td>
-               {{ structure.score }}/{{ structure.maximum_score }}
+               {{ structure.score }}
+              </td>
+              <td>
+               {{ structure.maximum_score }}
               </td>
               {% if program.custom_school=='Maryland Prestigious PreSchool' %}
               <td>{% if structure.weightage_score>0 %}{{ get_grade_remark(results.assessment_plan, structure.score, structure.maximum_score) }}{% endif %}</td>

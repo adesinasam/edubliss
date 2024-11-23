@@ -298,6 +298,49 @@
   {% endfor %}
  {% endif %}  
 <hr>
+<table width="100%" style="margin-top: 0; margin-bottom: 5px; padding: 2; border: 0;">
+    <tr>
+        <td width="3%"></td>
+        <td width="7%" class="text-primary-head left" style="font-size: 7pt"><b>GRADE:</b></td>
+        {% for grading_scale in grading_scale_intervals %}
+        <td width="15%" class="text-primary-head left" style="font-size: 7pt">{{grading_scale.grade_code}}={{grading_scale.grade_description}}</td>
+        {% endfor %}
+        <!-- <td width="15%" class="text-primary-head left" style="font-size: 7pt">B=Very Good</td>
+        <td width="15%" class="text-primary-head left" style="font-size: 7pt">C=Good</td>
+        <td width="15%" class="text-primary-head left" style="font-size: 7pt">D=Average</td>
+        <td width="15%" class="text-primary-head left" style="font-size: 7pt">E=Below Average</td>
+        <td width="15%" class="text-primary-head left" style="font-size: 7pt">F=Fair</td> -->
+    </tr>
+</table>
+<table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
+    <tr>
+        <td colspan="4"><b class="text-primary-head">Overall Grade:</b> {{ get_grade(grading_scale, average | round(2)) }}
+        	<hr style="margin-top: 5px; margin-bottom: 5px;">
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"><b class="text-primary-head">Class Teacher's Remark:</b></td>
+        <td colspan="2" class="text-primary-head left"> </td>
+    </tr>
+    <tr>
+        <td colspan="4"></td>
+    </tr>
+    <tr>
+        <td width="15%"><b class="text-primary-head">Class Teacher:</b></td>
+        <td width="40%" class="text-primary-head left">  {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %} ({{ sections}})</td>
+        <td width="15%"><b class="text-primary-head">Signature:</b></td>
+        <td width="30%" class="text-primary-head"> </td>
+    </tr>
+    <tr>
+        <td colspan="4"></td>
+    </tr>
+    <tr>
+        <td width="15%"><b class="text-primary-head">Head Teacher:</b></td>
+        <td width="40%" class="text-primary-head left"> </td>
+        <td width="15%"><b class="text-primary-head">Signature:</b></td>
+        <td width="30%" class="text-primary-head"> </td>
+    </tr>
+</table>
 {% else %}
 <p class="performance-title"><b class="text-secondary" style="font-size: 9pt">PERFORMANCE IN SUBJECTS</b></p>
 <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
@@ -377,10 +420,10 @@
       {% for result in assessment_result %}
        {% if result.course == 'AFFECTIVE ASSESSMENT' %}
         <tr>
-			{% for criteria in get_structure_marks(result.name) %}
-            <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.assessment_type }}</td>
-            <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score }}</td>
-            <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.grade }}</td>
+			{% for criteria in get_structure_marks(result.name, result.assessment_plan) %}
+            <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.topics }}</td>
+            <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score }}</td>
+            <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.grade }}</td>
 			{% endfor %}
         </tr>
        {% endif %}
@@ -407,10 +450,10 @@
       {% for result in assessment_result %}
        {% if result.course == 'PSYCHOMOTOR ASSESSMENT' %}
         <tr>
-			{% for criteria in get_structure_marks(result.name) %}
-            <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.assessment_type }}</td>
-            <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score }}</td>
-            <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.grade }}</td>
+			{% for criteria in get_structure_marks(result.name, result.assessment_plan) %}
+            <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.topics }}</td>
+            <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score }}</td>
+            <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.grade }}</td>
 			{% endfor %}
         </tr>
        {% endif %}

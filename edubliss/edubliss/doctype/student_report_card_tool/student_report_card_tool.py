@@ -104,6 +104,9 @@ def get_marks_avg(course,program,academic_term):
     average = total_score / course_count if course_count else 0  # Avoid division by zero
     return average
 
+def get_grade(grading_scale,score):
+    return frappe.call('edubliss.api.get_grade', grading_scale=grading_scale, percentage=score)
+
 def get_grade_remark(grading_scale,score):
     percentages = ((score / 100) * 100)
     return frappe.call('edubliss.api.get_grade_remark', grading_scale=grading_scale, percentage=percentages)
@@ -175,10 +178,15 @@ def preview_report_card(doc):
 	total_score = 0
 	course_count = 0
 	for result in assessment_results:
+		scale = result.grading_scale
 		score = result.total_score
 		total_score += score
 		course_count += 1  # Increment by 1 for each course
 	average = total_score / course_count if course_count else 0  # Avoid division by zero
+	grading_scale = scale
+
+	grading_scales = frappe.get_doc("Grading Scale", grading_scale)
+	grading_scale_intervals = grading_scales.get("intervals")
 
 	all_results = frappe.get_all(
 		'Assessment Result',
@@ -266,11 +274,14 @@ def preview_report_card(doc):
 			"program_count": program_count,
 			"total_score": total_score,
 			"average": average,
+			"grading_scale": grading_scale,
+			"grading_scale_intervals": grading_scale_intervals,
 			"class_position": class_position,
 			"sections_position": sections_position,
 			"format_date": format_date,
 			"get_course_subject": get_course_subject,
 			"get_criteria_marks": get_criteria_marks,
+			"get_grade": get_grade,
 			"get_grade_remark": get_grade_remark,
 			"get_grade_comment": get_grade_comment,
 			"get_course_teacher": get_course_teacher,
