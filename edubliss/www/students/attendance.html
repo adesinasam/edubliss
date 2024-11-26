@@ -199,7 +199,7 @@
             editable: true,
             weekends: showWeekends, // Initially hide weekends
             events: function(fetchInfo, successCallback, failureCallback) {
-                fetch('/api/method/edubliss.api.get_student_attendance?student_group={{ sections }}&student={{ student_name }}', {
+                fetch('/api/method/edubliss.api.get_student_attendance?student_group={{ sections_name }}&student={{ student_name }}', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

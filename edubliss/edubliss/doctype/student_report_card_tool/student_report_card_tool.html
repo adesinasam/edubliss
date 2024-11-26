@@ -253,7 +253,7 @@
     <tr>
         <td><b class="text-primary-head">Session:<span class="text-primary"> {{ doc.academic_year }}</span></b></td>
         <td><b class="text-primary-head">Term:<span class="text-primary"> {{ term.term_name }}</span></b></td>
-        <td><b class="text-primary-head">Arm:<span class="text-primary"> {{ sections}}</span></b></td>
+        <td><b class="text-primary-head">Arm:<span class="text-primary"> {{ section.program_section or "" }}</span></b></td>
     </tr>
     <tr>
         <td><b class="text-primary-head">Class Teacher:<span class="text-primary"> {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %}</span></b></td>
@@ -305,11 +305,6 @@
         {% for grading_scale in grading_scale_intervals %}
         <td width="15%" class="text-primary-head left" style="font-size: 7pt">{{grading_scale.grade_code}}={{grading_scale.grade_description}}</td>
         {% endfor %}
-        <!-- <td width="15%" class="text-primary-head left" style="font-size: 7pt">B=Very Good</td>
-        <td width="15%" class="text-primary-head left" style="font-size: 7pt">C=Good</td>
-        <td width="15%" class="text-primary-head left" style="font-size: 7pt">D=Average</td>
-        <td width="15%" class="text-primary-head left" style="font-size: 7pt">E=Below Average</td>
-        <td width="15%" class="text-primary-head left" style="font-size: 7pt">F=Fair</td> -->
     </tr>
 </table>
 <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
@@ -327,7 +322,7 @@
     </tr>
     <tr>
         <td width="15%"><b class="text-primary-head">Class Teacher:</b></td>
-        <td width="40%" class="text-primary-head left">  {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %} ({{ sections}})</td>
+        <td width="40%" class="text-primary-head left">  {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %} ({{ section.program_section or "" }})</td>
         <td width="15%"><b class="text-primary-head">Signature:</b></td>
         <td width="30%" class="text-primary-head"> </td>
     </tr>

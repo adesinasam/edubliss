@@ -88,7 +88,7 @@ def get_structure_marks(assessment_result_name,assessment_plan):
 
 def get_marks_avg(course,program,academic_term):
     assessment_results = frappe.get_all('Assessment Result',
-		filters={'course': course, 'program': program, 'academic_term': academic_term, 'docstatus': ("!=", 2)}, 
+		filters={'course': course, 'program': program, 'academic_term': academic_term, 'docstatus': 1}, 
 		fields=[
 			'name', 'academic_term', 'student_group', 'course', 'grading_scale',
 			'maximum_score', 'total_score', 'grade'
@@ -147,7 +147,7 @@ def preview_report_card(doc):
 		'program': doc.program, 
 		'academic_year': doc.academic_year, 
 		'academic_term': doc.academic_term,
-		'docstatus': ("!=", 2)
+		'docstatus': 1
 		}, 
 		fields=[
 			'name', 'student', 'program', 'academic_year', 'academic_term', 'student_group', 
@@ -160,7 +160,7 @@ def preview_report_card(doc):
 		'edubliss.api.get_student_groups', 
 		student=doc.students[0], 
 		program=doc.program, 
-		academic_year=doc.academic_year
+		academic_term=doc.academic_term
 		)
 	section = frappe.get_doc("Student Group", sections)
 	section_count = len(section.get("students"))
@@ -194,7 +194,7 @@ def preview_report_card(doc):
 		'program': doc.program,
 		'academic_year': doc.academic_year,
 		'academic_term': doc.academic_term,
-		'docstatus': ("!=", 2)
+		'docstatus': 1
 		},
 		fields=['student', 'total_score', 'course']
 		)
@@ -227,7 +227,7 @@ def preview_report_card(doc):
 		'student_group': sections,
 		'academic_year': doc.academic_year,
 		'academic_term': doc.academic_term,
-		'docstatus': ("!=", 2)
+		'docstatus': 1
 		},
 		fields=['student', 'total_score', 'course']
 		)
@@ -267,7 +267,7 @@ def preview_report_card(doc):
 			"students": students,
 			"program": program,
 			"term": term,
-			"sections": sections,
+			"section": section,
 			"instructor": instructor,
 			"course_count": course_count,
 			"section_count": section_count,

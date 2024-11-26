@@ -204,9 +204,9 @@
                 const academic_year = "{{ acadyear }}"; // Ensure this is rendering correctly
 
                 console.log("Course:", course);
-                console.log("Academic year:", academic_year);
+                console.log("Academic term:", academic_term);
 
-                fetch('/api/method/edubliss.api.get_course_schedule?course={{ docname }}&academic_year={{ acadyear }}', {
+                fetch('/api/method/edubliss.api.get_course_schedule?course={{ docname }}&academic_term={{ acadterm }}', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

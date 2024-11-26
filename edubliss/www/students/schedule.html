@@ -156,7 +156,7 @@
          {% endif %}
         <div class="flex items-center flex-wrap gap-1.5 font-medium">
          <span class="text-md text-gray-600">
-           {{ sections or ""}} 
+           {{ sections.program_section or ""}} 
          </span>
         </div>
        </div>
@@ -204,7 +204,7 @@
             editable: true,
             weekends: showWeekends, // Initially hide weekends
             events: function(fetchInfo, successCallback, failureCallback) {
-                fetch('/api/method/edubliss.api.get_section_schedule?student_group={{ sections }}&academic_year={{ acadyear }}', {
+                fetch('/api/method/edubliss.api.get_section_schedule?student_group={{ sections_name }}&academic_term={{ acadterm }}', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

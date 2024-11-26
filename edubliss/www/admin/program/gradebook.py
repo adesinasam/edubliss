@@ -110,7 +110,7 @@ def get_context(context):
     context.acadyears = frappe.call('edubliss.api.get_academic_year')
     context.acadterms = frappe.call('edubliss.api.get_academic_term')
     context.programs = frappe.call('edubliss.api.get_programs', company=company)
-    context.sections = frappe.call('edubliss.api.get_program_sections', company=company, academic_year=acadyear, course=docname)
+    context.sections = frappe.call('edubliss.api.get_program_sections', company=company, academic_term=acadterm, course=docname)
     context['format_date'] = format_date
 
     try:

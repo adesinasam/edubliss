@@ -1,0 +1,58 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:students_discount_type",
+ "creation": "2024-11-26 13:44:53.829126",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "students_discount_type"
+ ],
+ "fields": [
+  {
+   "fieldname": "students_discount_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Students Discount Type",
+   "reqd": 1,
+   "unique": 1
+  }
+ ],
+ "links": [
+  {
+   "group": "Fee",
+   "link_doctype": "Fee Structure",
+   "link_fieldname": "student_category"
+  },
+  {
+   "group": "Fee",
+   "link_doctype": "Fee Schedule",
+   "link_fieldname": "student_category"
+  }
+ ],
+ "modified": "2024-11-26 13:45:37.653874",
+ "modified_by": "Administrator",
+ "module": "Edubliss",
+ "name": "Students Discount Type",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Academics User",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

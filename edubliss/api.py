@@ -34,7 +34,7 @@ def get_student_program(student=None, academic_year=None, academic_term=None):
     return frappe.get_doc('Program Enrollment', filters)
 
 @frappe.whitelist()
-def get_student_groups(student, program=None, academic_year=None):
+def get_student_groups(student, program=None, academic_term=None):
     student_group = frappe.qb.DocType("Student Group")
     student_group_students = frappe.qb.DocType("Student Group Student")
 
@@ -45,7 +45,7 @@ def get_student_groups(student, program=None, academic_year=None):
         .select(student_group_students.parent)
         .where(student_group_students.student == student)
         .where(student_group.program == program)
-        .where(student_group.academic_year == academic_year)
+        .where(student_group.academic_term == academic_term)
         .where(student_group.disabled == 0)
         .run(as_dict=1)
     )
@@ -339,7 +339,7 @@ def get_programs(company=None):
         )
 
 @frappe.whitelist()
-def get_sections(company=None, academic_year=None):
+def get_sections(company=None, academic_term=None):
     student_groups = frappe.qb.DocType("Student Group")
     programs = frappe.qb.DocType("Program")
 
@@ -349,14 +349,14 @@ def get_sections(company=None, academic_year=None):
         .on(student_groups.program == programs.name)
         .select('*')
         .where(programs.custom_school == company)
-        .where(student_groups.academic_year == academic_year)
+        .where(student_groups.academic_term == academic_term)
         .where(student_groups.group_based_on == 'Batch')
         .run(as_dict=1)
     )
     return sections_query if sections_query else []
 
 @frappe.whitelist()
-def get_program_sections(company=None, academic_year=None, course=None):
+def get_program_sections(company=None, academic_term=None, course=None):
     student_groups = frappe.qb.DocType("Student Group")
     programs = frappe.qb.DocType("Program")
     program_courses = frappe.qb.DocType("Program Course")
@@ -368,7 +368,7 @@ def get_program_sections(company=None, academic_year=None, course=None):
         .select('*')
         .where(programs.custom_school == company)
         .where(program_courses.course == course)
-        .where(student_groups.academic_year == academic_year)
+        .where(student_groups.academic_term == academic_term)
         .where(student_groups.group_based_on == 'Batch')
         .run(as_dict=1)
     )
@@ -615,7 +615,7 @@ def get_course_schedule_for_student(program_name, student_groups):
     return schedule
 
 @frappe.whitelist(allow_guest=True)
-def get_course_schedule(course, academic_year):
+def get_course_schedule(course, academic_term):
     events = frappe.get_all(
         "Course Schedule",
         fields=[
@@ -632,7 +632,7 @@ def get_course_schedule(course, academic_year):
             "name",
             "color"
         ],
-        filters={"course": course, "custom_academic_year": academic_year}
+        filters={"course": course, "custom_academic_term": academic_term}
     )
     
     # Transforming the data to match FullCalendar's event format
@@ -661,7 +661,7 @@ def get_course_schedule(course, academic_year):
 
 
 @frappe.whitelist(allow_guest=True)
-def get_section_schedule(student_group, academic_year):
+def get_section_schedule(student_group, academic_term):
     events = frappe.get_all(
         "Course Schedule",
         fields=[
@@ -678,7 +678,7 @@ def get_section_schedule(student_group, academic_year):
             "name",
             "student_group"
         ],
-        filters={"student_group": student_group, "custom_academic_year": academic_year}
+        filters={"student_group": student_group, "custom_academic_term": academic_term}
     )
 
     # Transforming the data to match FullCalendar's event format
@@ -702,7 +702,7 @@ def get_section_schedule(student_group, academic_year):
     return {'message': event_list}
 
 @frappe.whitelist(allow_guest=True)
-def get_teacher_schedule(instructor, academic_year):
+def get_teacher_schedule(instructor, academic_term):
     events = frappe.get_all(
         "Course Schedule",
         fields=[
@@ -719,7 +719,7 @@ def get_teacher_schedule(instructor, academic_year):
             "name",
             "student_group"
         ],
-        filters={"instructor": instructor, "custom_academic_year": academic_year}
+        filters={"instructor": instructor, "custom_academic_term": academic_term}
     )
     
     # Transforming the data to match FullCalendar's event format
