@@ -1,0 +1,185 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Class") }}
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav2.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="grow content pt-5 bg-gray-100" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-primary">
+         Student Applicant
+        </h1>
+        <div class="flex items-center flex-wrap gap-1.5 font-medium">
+         <span class="text-md text-gray-600">
+          All Applicant:
+         </span>
+         <span class="text-md text-ray-800 font-semibold me-2">
+          {{ applicants_count }}
+         </span>
+        </div>
+       </div>
+       <!-- <div class="flex items-center gap-2.5">
+        <a class="btn btn-sm btn-primary" href="/app/lead/view/kanban/Admission Progress">
+         View Kanban
+        </a>
+       </div> -->
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="card card-grid min-w-full">
+        <div class="card-header flex-wrap gap-2">
+         <h3 class="card-title font-medium text-sm">
+          <!-- Showing Students -->
+         </h3>
+         <div class="flex flex-wrap gap-2 lg:gap-5">
+          <div class="flex">
+           <label class="input input-sm">
+            <i class="ki-filled ki-magnifier">
+            </i>
+            <input id="search-input" placeholder="Search class" type="text" value="">
+            </input>
+           </label>
+          </div>
+         </div>
+        </div>
+        <div class="card-body">
+          <div class="scrollable-x-auto">
+           <table class="table table-auto">
+            <thead>
+             <tr>
+              <th class="w-[60px] text-center">
+              </th>
+              <th class="min-w-[300px]">
+                 Name
+              </th>
+              <th class="min-w-[150px]">
+                 Status
+              </th>
+              <th class="min-w-[200px]">
+                 Desired Class
+              </th>
+              <th class="w-[100px]">
+                 Gender
+              </th>
+              <th class="min-w-[150px]">
+                 Application Date
+              </th>
+              <th class="min-w-[150px]">
+                 Student Category
+              </th>
+              <th class="w-[60px]">
+              </th>
+             </tr>
+            </thead>
+            <tbody>
+             {% if applicants %}
+              {% for applicant in applicants %}
+             <tr>
+              <td>
+               {{ loop.index }}
+              </td>
+              <td>
+               <div class="flex items-center gap-2.5">
+                <img alt="" class="rounded-full size-7 shrink-0" src="{% if applicant.image  %}{{applicant.image}}{% else %}assets/edubliss/dist/media/avatars/blank.png{% endif %}"/>
+                <div class="flex flex-col">
+                 <a class="text-sm text-primary hover:text-primary-active mb-px" href="/app/student-applicant/{{ applicant.name }}">
+                  {{ applicant.first_name or '' }} {{ applicant.middle_name or '' }} {{ applicant.last_name or '' }}
+                 </a>
+                </div>
+               </div>
+              </td>
+              <td>
+               <div class="flex items-center gap-1.5">
+                  {% if applicant.application_status in ["Admitted", "Approved"] %}
+                 <span class="badge badge-pill badge-outline badge-success gap-1 items-center">
+                  <span class="badge badge-dot size-1.5 badge-success">
+                  {% elif applicant.application_status == "Rejected" %}
+                 <span class="badge badge-pill badge-outline badge-danger gap-1 items-center">
+                  <span class="badge badge-dot size-1.5 badge-danger">
+                  {% elif applicant.application_status == "Applied" %}
+                 <span class="badge badge-pill badge-outline badge-primary gap-1 items-center">
+                  <span class="badge badge-dot size-1.5 badge-primary">
+                  {% else %}
+                 <span class="badge badge-pill badge-outline badge-secondary gap-1 items-center">
+                  <span class="badge badge-dot size-1.5 badge-secondary">
+                  {% endif %}
+                  </span>
+                    {{ applicant.application_status or "" }}
+                 </span>
+               </div>
+              </td>
+              <td>
+               {{ applicant.program or ""}}
+              </td>
+              <td>
+               {{ applicant.gender or ""}}
+              </td>
+              <td>
+               {{ applicant.application_date or ""}}
+              </td>
+              <td>
+               {{ applicant.student_category or ""}}
+              </td>
+              <td>
+                <a class="btn btn-secondary btn-xs" href="/app/lead/{{ applicant.name}}">
+                 <i class="ki-filled ki-eye text-primary text-2xl">
+                 </i>
+                </a>
+              </td>
+             </tr>
+              {% endfor %}
+             {% else %}
+             <tr>
+              <td colspan="7" class="text-center">No outline found.</td>
+             </tr>
+             {% endif %}
+            </tbody>
+           </table>
+          </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+    </main>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get references to the search input and table rows
+    const searchInput = document.getElementById('search-input');
+    const table = document.querySelector('[data-datatable-table="true"]');
+    const rows = table.querySelectorAll('tbody tr');
+
+    // Event listener for input on the search field
+    searchInput.addEventListener('input', function() {
+      const searchTerm = searchInput.value.toLowerCase();
+
+      rows.forEach(row => {
+        // Check if any cell in the row contains the search term
+        const cells = Array.from(row.querySelectorAll('td'));
+        const match = cells.some(cell => cell.textContent.toLowerCase().includes(searchTerm));
+
+        // Show or hide the row based on the match
+        row.style.display = match ? '' : 'none';
+      });
+    });
+  });
+</script>
+{% endblock %}

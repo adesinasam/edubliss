@@ -27,7 +27,7 @@
           </i>
            {% if program != 'Welcome' %}
           <span class="text-gray-600">
-           {{ program.custom_school}}
+           {{ program.custom_school or programs.custom_school}}
           </span>
            {% else %}
            <span class="badge badge-circle badge-outline badge-danger">Not Enrolled</span>           

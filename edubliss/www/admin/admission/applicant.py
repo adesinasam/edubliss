@@ -5,17 +5,6 @@ no_cache = 1
 
 def get_context(context):
 
-    docnames = frappe.form_dict.docname
-
-    if docnames:
-        docname = docnames
-    else:
-        student = frappe.get_list("Student", filters={"student_email_id": frappe.session.user}, limit_page_length=1)
-        if student:
-            docname = student[0].name
-        else:
-            docname = None
-
     # login
     if frappe.session.user == "Guest":
         frappe.throw(_("You need to be logged in to access this page"), frappe.PermissionError)
@@ -35,11 +24,8 @@ def get_context(context):
     context.abbr = "".join([p[0] for p in parts[:2] if p])
 
     # nav
-    context.active_route = "students"
-    context.active_subroute = "student_list"
-    context.active_student_route = "profile"
-
-    context.docname = docname
+    context.active_route = "admission"
+    context.active_subroute = "applicant"
 
     edubliss_session = frappe.call('edubliss.api.get_edubliss_user_session')
     if edubliss_session:
@@ -55,33 +41,24 @@ def get_context(context):
     context.acadyear = edubliss_session.academic_year
     context.acadterm = edubliss_session.academic_term
 
-    # Try to fetch the Student Program document and handle errors if it doesn't exist
-    try:
-        program = frappe.call(
-            'edubliss.api.get_student_program',
-            student=docname, 
-            academic_year=acadyear, 
-            academic_term=acadterm
-        )
-    except Exception as e:
-        program = ''  # or set a default value if required        
-
-    if program:
-        context.program = program    
-        program_name = program.program
-        context.programs = frappe.get_doc("Program", program_name)
-    else:
-        context.program = _("Welcome")  # or set a default value if required
-
     context.companys = frappe.call('edubliss.api.get_company')
     context.acadyears = frappe.call('edubliss.api.get_academic_year')
     context.acadterms = frappe.call('edubliss.api.get_academic_term')
+    context.applicants = frappe.get_all('Student Applicant', 
+        filters={
+        'custom_school': company,
+        'academic_year': acadyear,
+        'academic_term': acadterm
+        }, 
+        fields=["*"]
+        )
 
-    # Try to fetch the Student document and handle errors if it doesn't exist
-    try:
-        context.students = frappe.get_doc("Student", docname)
-    except frappe.DoesNotExistError:
-        frappe.throw(_("Student not found"), frappe.DoesNotExistError)
-
+    # Count
+    context.applicants_count = frappe.db.count('Student Applicant', 
+        filters={'custom_school': company,
+        'academic_year': acadyear,
+        'academic_term': acadterm}
+        )
+    context.lmsbatch_count = frappe.db.count('LMS Batch')
 
     return context

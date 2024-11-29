@@ -91,7 +91,8 @@ def get_context(context):
     if program:
         context.program = program
         program_enrollment = context.program.name   
-        program_name = context.program.program
+        program_name = program.program
+        context.programs = frappe.get_doc("Program", program_name)
         context.program_courses = frappe.call('edubliss.api.get_program_courses', program=program_name)
 
         # Try to fetch the Student Group document and handle errors if it doesn't exist

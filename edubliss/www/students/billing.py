@@ -74,6 +74,8 @@ def get_context(context):
 
     if program:
         context.program = program    
+        program_name = program.program
+        context.programs = frappe.get_doc("Program", program_name)
     else:
         context.program = _("Welcome")  # or set a default value if required
 
