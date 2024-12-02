@@ -104,6 +104,7 @@ website_route_rules = [
     {"from_route": "/teachers/schedule/<docname>", "to_route": "teachers/schedule"},
     {"from_route": "/teachers/sections/<docname>", "to_route": "teachers/sections"},
     {"from_route": "/parents/profile/<docname>", "to_route": "parents/profile"},
+    {"from_route": "/parents/billing/<docname>", "to_route": "parents/billing"},
     {"from_route": "/admin/course/overview/<docname>", "to_route": "admin/course/overview"},
     {"from_route": "/admin/course/students/<docname>", "to_route": "admin/course/students"},
     {"from_route": "/admin/course/outline/<docname>", "to_route": "admin/course/outline"},

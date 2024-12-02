@@ -166,10 +166,7 @@ def get_student_unpaid_invoices(customer=None):
     return frappe.get_all(
         'Sales Invoice', 
         filters=filters, 
-        fields=[
-        'name', 'title', 'status', 'posting_date', 'grand_total', 
-        'outstanding_amount', 'customer', 'company', 'due_date'
-        ], 
+        fields=['*'], 
         order_by="posting_date desc"
         )
 
@@ -184,10 +181,7 @@ def get_student_invoices(customer=None):
     return frappe.get_all(
         'Sales Invoice', 
         filters=filters, 
-        fields=[
-        'name', 'title', 'status', 'posting_date', 'grand_total', 
-        'outstanding_amount', 'customer', 'company', 'due_date'
-        ], 
+        fields=['*'], 
         order_by="posting_date desc"
         )
 
@@ -203,10 +197,7 @@ def get_student_orders(customer=None):
     return frappe.get_all(
         'Sales Order', 
         filters=filters, 
-        fields=[
-        'name', 'title', 'status', 'transaction_date', 'grand_total', 
-        'student', 'customer', 'company', 'delivery_date'
-        ], 
+        fields=['*'], 
         order_by="transaction_date desc"
         )
 
