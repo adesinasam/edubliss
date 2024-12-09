@@ -76,8 +76,13 @@
           </div>
           <div class="card-body pt-0">
            <div class="flex justify-center transform -translate-y-1/2">
+            {% if current_user.user_image  %}
+            <div class="size-20 shrink-0 relative">
+             <img class="rounded-full" src="{{ current_user.user_image }}"/>
+            {% else %}
             <div class="flex items-center justify-center relative text-2.5xl text-primary size-20 ring-1 ring-primary-clarity bg-primary-light rounded-full">
              {{ abbr }}
+            {% endif %}
              <div class="flex size-2.5 bg-gray-400 rounded-full ring-2 ring-light absolute bottom-0.5 left-16 transform -translate-y-1/2">
              </div>
             </div>
