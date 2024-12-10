@@ -16,10 +16,12 @@
   "section_break_1azx",
   "comment_type",
   "comment",
+  "amended_from",
+  "column_break_iwyb",
+  "teacher",
   "upload_signature",
   "signature",
-  "signature_image",
-  "amended_from"
+  "signature_image"
  ],
  "fields": [
   {
@@ -35,6 +37,7 @@
    "reqd": 1
   },
   {
+   "fetch_from": "student.student_name",
    "fieldname": "student_name",
    "fieldtype": "Data",
    "label": "Student Name",
@@ -53,6 +56,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "fetch_from": "student_group.program",
    "fieldname": "program",
    "fieldtype": "Link",
    "label": "Program",
@@ -60,6 +64,7 @@
    "read_only": 1
   },
   {
+   "fetch_from": "student_group.academic_year",
    "fieldname": "academic_year",
    "fieldtype": "Link",
    "label": "Academic Year",
@@ -67,6 +72,7 @@
    "read_only": 1
   },
   {
+   "fetch_from": "student_group.academic_term",
    "fieldname": "academic_term",
    "fieldtype": "Link",
    "label": "Academic Term",
@@ -81,28 +87,36 @@
    "fieldname": "comment_type",
    "fieldtype": "Select",
    "label": "Comment Type",
-   "options": "\nCLASS TEACHER\nHEAD TEACHER"
+   "options": "CLASS TEACHER\nHEAD TEACHER",
+   "read_only": 1
   },
   {
    "fieldname": "comment",
    "fieldtype": "Text",
-   "label": "Comment"
+   "label": "Comment",
+   "reqd": 1
   },
   {
    "default": "0",
    "fieldname": "upload_signature",
    "fieldtype": "Check",
-   "label": "Upload Signature"
+   "label": "Upload Signature",
+   "options": "1",
+   "read_only": 1
   },
   {
+   "depends_on": "eval:doc.upload_signature==0",
    "fieldname": "signature",
    "fieldtype": "Signature",
-   "label": "Signature"
+   "label": "Signature",
+   "mandatory_depends_on": "eval:doc.upload_signature==0"
   },
   {
+   "depends_on": "eval:doc.upload_signature==1",
    "fieldname": "signature_image",
    "fieldtype": "Attach Image",
-   "label": "SIgnature Image"
+   "label": "SIgnature Image",
+   "mandatory_depends_on": "eval:doc.upload_signature==1"
   },
   {
    "fieldname": "amended_from",
@@ -113,12 +127,23 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "column_break_iwyb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "teacher",
+   "fieldtype": "Link",
+   "label": "Teacher",
+   "options": "Instructor",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-12-06 04:41:59.982280",
+ "modified": "2024-12-10 06:37:33.630037",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Student Result Comment",

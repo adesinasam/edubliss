@@ -73,7 +73,7 @@ def get_context(context):
         "course": docname,
         "student_group": section_name,
         "academic_term": acadterm,
-        "docstatus": 1
+        "docstatus": ("!=", 2)
     })
 
     if assessment_name:

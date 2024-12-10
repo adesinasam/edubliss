@@ -385,7 +385,7 @@
     </tr>
     <tr>
         <td colspan="2"><b class="text-primary-head text-sm">Class Teacher's Remark:</b></td>
-        <td colspan="2" class="text-primary-head left text-sm"> </td>
+        <td colspan="2" class="text-primary-head left text-sm">{% if comment_result_comment %}{{ comment_result_comment }}{% endif %} </td>
     </tr>
     <tr>
         <td colspan="4"></td>
@@ -394,16 +394,16 @@
         <td width="15%"><b class="text-primary-head text-sm">Class Teacher:</b></td>
         <td width="40%" class="text-primary-head left text-sm">  {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %} ({{ section.program_section or "" }})</td>
         <td width="15%"><b class="text-primary-head text-sm">Signature:</b></td>
-        <td width="30%" class="text-primary-head text-sm"> </td>
+        <td width="30%" class="text-primary-head text-sm">{% if comment_result_comment %}<div align="left"><img src="{{ comment_result_img }}"></div>{% endif %} </td>
     </tr>
     <tr>
         <td colspan="4"></td>
     </tr>
     <tr>
         <td width="15%"><b class="text-primary-head text-sm">Head Teacher:</b></td>
-        <td width="40%" class="text-primary-head left text-sm"> </td>
+        <td width="40%" class="text-primary-head left text-sm">{% if comment_result_head_comment %}{{ comment_result_head_comment }}{% endif %} </td>
         <td width="15%"><b class="text-primary-head text-sm">Signature:</b></td>
-        <td width="30%" class="text-primary-head text-sm"> </td>
+        <td width="30%" class="text-primary-head text-sm">{% if comment_result_comment %}<div align="left"><img src="{{ comment_result_head_img }}"></div>{% endif %} </td>
     </tr>
 </table>
 {% else %}
@@ -538,7 +538,7 @@
 <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
     <tr>
         <td width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-header text-2sm">CLASS TEACHER'S COMMENT</b></p></td>
-        <td class=" text-2sm" width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p> </p></td>
+        <td class=" text-2sm" width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_comment %}{{ comment_result_comment }}{% endif %} </p></td>
     </tr>
     <tr>
         <td class=" text-2sm" width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-head">CLASS TEACHER'S NAME AND SIGNATURE</b></p></td>
@@ -546,7 +546,7 @@
     </tr>
     <tr>
         <td class=" text-2sm" width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-header">HEAD TEACHER'S COMMENT</b></p></td>
-        <td width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p> </p></td>
+        <td width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_head_comment %}{{ comment_result_head_comment }}{% endif %} </p></td>
     </tr>
     <tr>
         <td class=" text-2sm" width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-head">HEAD TEACHER'S NAME AND SIGNATURE</b></p></td>
@@ -557,6 +557,38 @@
 
          </div>
         </div>
+       {% if "Academics User" in user_roles or "Instructor" in user_roles %}
+       <div class="flex flex-wrap items-center gap-5 justify-between">
+         {% if comment_result_head %}
+          <div class="flex items-center gap-2.5">
+           <a class="btn btn-sm btn-dark btn-outline text-2sm" href="/app/student-result-comment/{{comment_result_head}}">
+            Edit Head Teacher Comment
+           </a>
+          </div>
+         {% else %}
+          <div class="flex items-center gap-2.5">
+           <a class="btn btn-sm btn-dark text-2sm" href="app/student-result-comment/new-student-result-comment?student={{students.name}}&student_group={{section.name}}&comment_type=HEAD TEACHER">
+            Add Head Teacher Comment
+           </a>
+          </div>
+         {% endif %}
+        <div class="flex items-center gap-5">
+         {% if comment_result %}
+          <div class="flex items-center gap-2.5">
+           <a class="btn btn-sm btn-dark btn-outline text-2sm" href="/app/student-result-comment/{{comment_result}}">
+            Edit Class Teacher Comment
+           </a>
+          </div>
+         {% else %}
+          <div class="flex items-center gap-2.5">
+           <a class="btn btn-sm btn-dark text-2sm" href="app/student-result-comment/new-student-result-comment?student={{students.name}}&student_group={{section.name}}&comment_type=CLASS TEACHER">
+            Add Class Teacher Comment
+           </a>
+          </div>
+         {% endif %}
+        </div>
+       </div>
+       {% endif %}
      </div>
      </div>
      <!-- end: container -->

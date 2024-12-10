@@ -386,6 +386,36 @@ def get_context(context):
             context['get_marks_avg'] = get_marks_avg
             context['get_structure_marks'] = get_structure_marks
 
+            try:
+                comment_results = frappe.get_all(
+                    'Student Result Comment',
+                    filters={
+                    'student': docname,
+                    'student_group': sections,
+                    'academic_year': acadyear,
+                    'academic_term': acadterm,
+                    'docstatus': ("!=", 2)
+                    },
+                    fields=['*']
+                    )
+            except Exception as e:
+                comment_results=None
+
+            if comment_results:
+                for comment in comment_results:
+                    if comment.comment_type=='HEAD TEACHER':
+                        context.comment_result_head = comment.name
+                        context.comment_result_head_comment = comment.comment
+                        context.comment_result_head_sign = comment.signature
+                        context.comment_result_head_img = comment.signature_image
+                        context.comment_result_head_upload = comment.upload_signature
+                    else:
+                        context.comment_result = comment.name
+                        context.comment_result_comment = comment.comment
+                        context.comment_result_sign = comment.signature
+                        context.comment_result_img = comment.signature_image
+                        context.comment_result_upload = comment.upload_signature
+
     else:
         context.program = _("Welcome")  # or set a default value if required
 
