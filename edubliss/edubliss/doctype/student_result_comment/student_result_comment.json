@@ -34,6 +34,7 @@
    "in_list_view": 1,
    "label": "Student",
    "options": "Student",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -49,6 +50,7 @@
    "in_list_view": 1,
    "label": "Student Group",
    "options": "Student Group",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -142,7 +144,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-12-11 06:06:45.370802",
+ "modified": "2024-12-11 06:09:37.826414",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Student Result Comment",
