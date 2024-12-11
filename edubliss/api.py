@@ -117,7 +117,7 @@ def get_teacher_subjects(instructor, academic_term):
     )
 
 @frappe.whitelist(allow_guest=True)
-def get_teacher_sections(instructor, academic_year):
+def get_teacher_sections(instructor, academic_term):
     student_group = frappe.qb.DocType("Student Group")
     student_group_instructors = frappe.qb.DocType("Student Group Instructor")
 
@@ -127,7 +127,7 @@ def get_teacher_sections(instructor, academic_year):
         .on(student_group.name == student_group_instructors.parent)
         .select('*')
         .where(student_group_instructors.instructor == instructor)
-        .where(student_group.academic_year == academic_year)
+        .where(student_group.academic_term == academic_term)
         .orderby(student_group.student_group_name)
         .run(as_dict=1)
     )
