@@ -324,7 +324,7 @@
         <td width="15%"><b class="text-primary-head text-sm">Class Teacher:</b></td>
         <td width="40%" class="text-primary-head left text-sm">  {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %} ({{ section.program_section or "" }})</td>
         <td width="15%"><b class="text-primary-head text-sm">Signature:</b></td>
-        <td width="30%" class="text-primary-head text-sm">{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:30%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:30%;"></div>{% endif %} </td>
+        <td width="30%" class="text-primary-head text-sm">{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:10%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:10%;"></div>{% endif %} </td>
     </tr>
     <tr>
         <td colspan="4"></td>
@@ -333,7 +333,7 @@
         <td width="15%"><b class="text-primary-head text-sm">Head Teacher:</b></td>
         <td width="40%" class="text-primary-head left text-sm">{% if comment_result_head_comment %}{{ comment_result_head_comment }}{% endif %} </td>
         <td width="15%"><b class="text-primary-head text-sm">Signature:</b></td>
-        <td width="30%" class="text-primary-head text-sm">{% if comment_result_head_upload == 0 %}<div align="left"><img src="{{ comment_result_head_sign }}" style="width:30%;"></div>{% elif comment_result_head_upload == 1 %}<div align="left"><img src="{{ comment_result_head_img }}" style="width:30%;"></div>{% endif %} </td>
+        <td width="30%" class="text-primary-head text-sm">{% if comment_result_head_upload == 0 %}<div align="left"><img src="{{ comment_result_head_sign }}" style="width:10%;"></div>{% elif comment_result_head_upload == 1 %}<div align="left"><img src="{{ comment_result_head_img }}" style="width:10%;"></div>{% endif %} </td>
     </tr>
 </table>
 {% else %}
@@ -472,7 +472,7 @@
     </tr>
     <tr>
         <td class=" text-2sm" width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-head">CLASS TEACHER'S NAME AND SIGNATURE</b></p></td>
-        <td class=" text-2sm" width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:30%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:30%;"></div>{% endif %}</p></td>
+        <td class=" text-2sm" width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:10%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:10%;"></div>{% endif %}</p></td>
     </tr>
     <tr>
         <td class=" text-2sm" width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-header">HEAD TEACHER'S COMMENT</b></p></td>
@@ -480,7 +480,7 @@
     </tr>
     <tr>
         <td class=" text-2sm" width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-head">HEAD TEACHER'S NAME AND SIGNATURE</b></p></td>
-        <td width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_head_upload == 0 %}<div align="left"><img src="{{ comment_result_head_sign }}" style="width:30%;"></div>{% elif comment_result_head_upload == 1 %}<div align="left"><img src="{{ comment_result_head_img }}" style="width:30%;"></div>{% endif %}</p></td>
+        <td width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_head_upload == 0 %}<div align="left"><img src="{{ comment_result_head_sign }}" style="width:10%;"></div>{% elif comment_result_head_upload == 1 %}<div align="left"><img src="{{ comment_result_head_img }}" style="width:10%;"></div>{% endif %}</p></td>
     </tr>
 </table>
 {% endif %}
