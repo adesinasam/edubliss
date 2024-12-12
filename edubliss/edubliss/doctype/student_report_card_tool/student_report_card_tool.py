@@ -62,7 +62,7 @@ def get_criteria_marks(assessment_result):
         .select('*')
         .where(assessment_result_criteria.parent == assessment_result)
         .where(assessment_criteria.assessment_criteria_group == "PERFORMANCE IN SUBJECTS")
-        .orderby(assessment_criteria.custom_abbr)
+        .orderby(assessment_criteria.custom_order_name)
         .run(as_dict=1)
     )
     return assessment_result_criteria_query if assessment_result_criteria_query else []
@@ -98,9 +98,10 @@ def get_marks_avg(course,program,academic_term):
     total_score = 0
     course_count = 0
     for result in assessment_results:
-    	score = result.total_score
-    	total_score += score
-    	course_count += 1  # Increment by 1 for each course
+    	if get_course_subject(result.course) != 'Others':
+	    	score = result.total_score
+    		total_score += score
+    		course_count += 1  # Increment by 1 for each course
     average = total_score / course_count if course_count else 0  # Avoid division by zero
     return average
 
@@ -140,7 +141,7 @@ def preview_report_card(doc):
 	assessment_criteria = frappe.get_all('Assessment Criteria',
 		filters={'assessment_criteria_group': "PERFORMANCE IN SUBJECTS"}, 
 		fields=['custom_abbr', 'assessment_criteria_group', 'assessment_criteria'], 
-		order_by="custom_abbr asc")
+		order_by="custom_order_name asc")
 	assessment_results = frappe.get_all('Assessment Result',
 		filters={
 		'student': doc.students[0],
@@ -178,10 +179,11 @@ def preview_report_card(doc):
 	total_score = 0
 	course_count = 0
 	for result in assessment_results:
-		scale = result.grading_scale
-		score = result.total_score
-		total_score += score
-		course_count += 1  # Increment by 1 for each course
+		if get_course_subject(result.course) != 'Others':
+			scale = result.grading_scale
+			score = result.total_score
+			total_score += score
+			course_count += 1  # Increment by 1 for each course
 	average = total_score / course_count if course_count else 0  # Avoid division by zero
 	grading_scale = scale
 
@@ -202,12 +204,13 @@ def preview_report_card(doc):
 	# Calculate total and average scores for each student
 	student_scores = {}
 	for result in all_results:
-		student = result.student
-		scores = result.total_score
-		if student not in student_scores:
-			student_scores[student] = {'total_score': 0, 'course_count': 0}
-		student_scores[student]['total_score'] += scores
-		student_scores[student]['course_count'] += 1
+		if get_course_subject(result.course) != 'Others':
+			student = result.student
+			scores = result.total_score
+			if student not in student_scores:
+				student_scores[student] = {'total_score': 0, 'course_count': 0}
+			student_scores[student]['total_score'] += scores
+			student_scores[student]['course_count'] += 1
 
 	# Calculate average score for each student
 	for student, data in student_scores.items():
@@ -235,12 +238,13 @@ def preview_report_card(doc):
 	# Calculate total and average scores for each student
 	student_scores = {}
 	for result in section_results:
-		student = result.student
-		scores = result.total_score
-		if student not in student_scores:
-			student_scores[student] = {'total_score': 0, 'course_count': 0}
-		student_scores[student]['total_score'] += scores
-		student_scores[student]['course_count'] += 1
+		if get_course_subject(result.course) != 'Others':
+			student = result.student
+			scores = result.total_score
+			if student not in student_scores:
+				student_scores[student] = {'total_score': 0, 'course_count': 0}
+			student_scores[student]['total_score'] += scores
+			student_scores[student]['course_count'] += 1
 
 	# Calculate average score for each student
 	for student, data in student_scores.items():

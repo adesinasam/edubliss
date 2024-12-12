@@ -48,7 +48,7 @@ def get_criteria_marks(assessment_result):
         .select('*')
         .where(assessment_result_criteria.parent == assessment_result)
         .where(assessment_criteria.assessment_criteria_group == "PERFORMANCE IN SUBJECTS")
-        .orderby(assessment_criteria.custom_abbr)
+        .orderby(assessment_criteria.custom_order_name)
         .run(as_dict=1)
     )
     return assessment_result_criteria_query if assessment_result_criteria_query else []
