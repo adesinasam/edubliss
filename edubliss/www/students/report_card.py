@@ -74,7 +74,7 @@ def get_structure_marks(assessment_result_name,assessment_plan):
 
 def get_marks_avg(course,program,academic_term):
     assessment_results = frappe.get_all('Assessment Result',
-        filters={'course': course, 'program': program, 'academic_term': academic_term, 'docstatus': ("!=", 2)}, 
+        filters={'course': course, 'program': program, 'academic_term': academic_term, 'grading_scale': 'MPIS Grade Scale', 'docstatus': ("!=", 2)}, 
         fields=[
             'name', 'academic_term', 'student_group', 'course', 'grading_scale',
             'maximum_score', 'total_score', 'grade'
@@ -293,10 +293,11 @@ def get_context(context):
             total_score = 0
             course_count = 0
             for result in assessment_results:
-                scale = result.grading_scale
-                score = result.total_score
-                total_score += score
-                course_count += 1  # Increment by 1 for each course
+                if get_course_subject(result.course) != 'Others':
+                    scale = result.grading_scale
+                    score = result.total_score
+                    total_score += score
+                    course_count += 1  # Increment by 1 for each course
             context.total_score = total_score
             context.course_count = course_count
             context.average = total_score / course_count if course_count else 0  # Avoid division by zero
@@ -312,6 +313,7 @@ def get_context(context):
                 'program': program_name,
                 'academic_year': acadyear,
                 'academic_term': acadterm,
+                'grading_scale': 'MPIS Grade Scale',
                 'docstatus': ("!=", 2)
                 },
                 fields=['student', 'total_score', 'course']
@@ -345,6 +347,7 @@ def get_context(context):
                 'student_group': sections,
                 'academic_year': acadyear,
                 'academic_term': acadterm,
+                'grading_scale': 'MPIS Grade Scale',
                 'docstatus': ("!=", 2)
                 },
                 fields=['student', 'total_score', 'course']

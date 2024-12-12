@@ -414,13 +414,13 @@
      {% if assessment_result %}	
       {% for result in assessment_result %}
        {% if result.course == 'AFFECTIVE ASSESSMENT' %}
+		{% for criteria in get_structure_marks(result.name, result.assessment_plan) %}
         <tr>
-			{% for criteria in get_structure_marks(result.name, result.assessment_plan) %}
             <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.topics }}</td>
             <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score }}</td>
             <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.grade }}</td>
-			{% endfor %}
         </tr>
+		{% endfor %}
        {% endif %}
       {% endfor %}
      {% endif %}  
@@ -444,13 +444,13 @@
      {% if assessment_result %}	
       {% for result in assessment_result %}
        {% if result.course == 'PSYCHOMOTOR ASSESSMENT' %}
+		{% for criteria in get_structure_marks(result.name, result.assessment_plan) %}
         <tr>
-			{% for criteria in get_structure_marks(result.name, result.assessment_plan) %}
             <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.topics }}</td>
             <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score }}</td>
             <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.grade }}</td>
-			{% endfor %}
         </tr>
+		{% endfor %}
        {% endif %}
       {% endfor %}
      {% endif %}  
