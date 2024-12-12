@@ -98,11 +98,10 @@
    "reqd": 1
   },
   {
-   "default": "1",
+   "default": "0",
    "fieldname": "upload_signature",
    "fieldtype": "Check",
-   "label": "Upload Signature",
-   "read_only": 1
+   "label": "Upload Signature"
   },
   {
    "depends_on": "eval:doc.upload_signature==0",
@@ -143,7 +142,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-12-11 07:53:32.040497",
+ "modified": "2024-12-12 07:42:45.733669",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Student Result Comment",

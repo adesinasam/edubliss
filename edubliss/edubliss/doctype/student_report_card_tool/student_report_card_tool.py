@@ -258,6 +258,32 @@ def preview_report_card(doc):
 		doc.students[0], doc.academic_term
 	)
 
+	comment_results = frappe.get_all(
+		'Student Result Comment',
+		filters={
+		'student': doc.students[0],
+		'student_group': sections,
+		'academic_year': doc.academic_year,
+		'academic_term': doc.academic_term,
+		'docstatus': ("!=", 2)
+		},
+		fields=['*']
+		)
+
+	for comment in comment_results:
+		if comment.comment_type=='HEAD TEACHER':
+			comment_result_head = comment.name
+			comment_result_head_comment = comment.comment
+			comment_result_head_sign = comment.signature
+			comment_result_head_img = comment.signature_image
+			comment_result_head_upload = comment.upload_signature
+		else:
+			comment_result = comment.name
+			comment_result_comment = comment.comment
+			comment_result_sign = comment.signature
+			comment_result_img = comment.signature_image
+			comment_result_upload = comment.upload_signature
+
 	html = frappe.render_template(
 		"edubliss/edubliss/doctype/student_report_card_tool/student_report_card_tool.html",
 		{
@@ -278,6 +304,16 @@ def preview_report_card(doc):
 			"grading_scale_intervals": grading_scale_intervals,
 			"class_position": class_position,
 			"sections_position": sections_position,
+			"comment_result_head": comment_result_head,
+			"comment_result_head_comment": comment_result_head_comment,
+			"comment_result_head_sign": comment_result_head_sign,
+			"comment_result_head_img": comment_result_head_img,
+			"comment_result_head_upload": comment_result_head_upload,
+			"comment_result": comment_result,
+			"comment_result_comment": comment_result_comment,
+			"comment_result_sign": comment_result_sign,
+			"comment_result_img": comment_result_img,
+			"comment_result_upload": comment_result_upload,
 			"format_date": format_date,
 			"get_course_subject": get_course_subject,
 			"get_criteria_marks": get_criteria_marks,

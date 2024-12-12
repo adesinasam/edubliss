@@ -314,26 +314,26 @@
         </td>
     </tr>
     <tr>
-        <td colspan="2"><b class="text-primary-head">Class Teacher's Remark:</b></td>
-        <td colspan="2" class="text-primary-head left"> </td>
+        <td colspan="2"><b class="text-primary-head text-sm">Class Teacher's Remark:</b></td>
+        <td colspan="2" class="text-primary-head left text-sm">{% if comment_result_comment %}{{ comment_result_comment }}{% endif %} </td>
     </tr>
     <tr>
         <td colspan="4"></td>
     </tr>
     <tr>
-        <td width="15%"><b class="text-primary-head">Class Teacher:</b></td>
-        <td width="40%" class="text-primary-head left">  {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %} ({{ section.program_section or "" }})</td>
-        <td width="15%"><b class="text-primary-head">Signature:</b></td>
-        <td width="30%" class="text-primary-head"> </td>
+        <td width="15%"><b class="text-primary-head text-sm">Class Teacher:</b></td>
+        <td width="40%" class="text-primary-head left text-sm">  {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %} ({{ section.program_section or "" }})</td>
+        <td width="15%"><b class="text-primary-head text-sm">Signature:</b></td>
+        <td width="30%" class="text-primary-head text-sm">{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:30%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:30%;"></div>{% endif %} </td>
     </tr>
     <tr>
         <td colspan="4"></td>
     </tr>
     <tr>
-        <td width="15%"><b class="text-primary-head">Head Teacher:</b></td>
-        <td width="40%" class="text-primary-head left"> </td>
-        <td width="15%"><b class="text-primary-head">Signature:</b></td>
-        <td width="30%" class="text-primary-head"> </td>
+        <td width="15%"><b class="text-primary-head text-sm">Head Teacher:</b></td>
+        <td width="40%" class="text-primary-head left text-sm">{% if comment_result_head_comment %}{{ comment_result_head_comment }}{% endif %} </td>
+        <td width="15%"><b class="text-primary-head text-sm">Signature:</b></td>
+        <td width="30%" class="text-primary-head text-sm">{% if comment_result_head_upload == 0 %}<div align="left"><img src="{{ comment_result_head_sign }}" style="width:30%;"></div>{% elif comment_result_head_upload == 1 %}<div align="left"><img src="{{ comment_result_head_img }}" style="width:30%;"></div>{% endif %} </td>
     </tr>
 </table>
 {% else %}
@@ -341,16 +341,16 @@
 <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
     <thead>
         <tr>
-        	<th class="text-center" width="3%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">SN</span></th>
-	        <th class="text-center" width="20%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">SUBJECTS</span></th>
-			{% for criterias in assessment_criteria %}
-    	    <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">{{ criterias.custom_abbr }}</span></th>
-			{% endfor %}
-        	<th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">Total</span></th>
-        	<th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">Class Avg.</span></th>
-	        <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">Grade</span></th>
-    	    <th class="text-center" width="10%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">Remark</span></th>
-        	<th width="10%"><span class="text-primary-head">Subject Teacher</span></th>
+          <th class="text-center" width="3%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head text-2sm">SN</span></th>
+          <th class="text-center" width="20%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head text-2sm">SUBJECTS</span></th>
+      {% for criterias in assessment_criteria %}
+          <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">{{ criterias.custom_abbr }}</span></th>
+      {% endfor %}
+          <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head text-2sm">Total</span></th>
+          <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Class Avg.</span></th>
+          <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head text-2sm">Grade</span></th>
+          <th class="text-center" width="10%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head text-2sm">Remark</span></th>
+          <th width="10%"><span class="text-primary-head text-2sm">Subject Teacher</span></th>
         </tr>
     </thead>
     <tbody>
@@ -467,20 +467,20 @@
 <p class="performance-title"><b class="text-secondary" style="font-size: 9pt">COMMENTS</b></p>
 <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
     <tr>
-        <td width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-header">CLASS TEACHER'S COMMENT</b></p></td>
-        <td width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p> </p></td>
+        <td width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-header text-2sm">CLASS TEACHER'S COMMENT</b></p></td>
+        <td class=" text-2sm" width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_comment %}{{ comment_result_comment }}{% endif %} </p></td>
     </tr>
     <tr>
-        <td width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-head">CLASS TEACHER'S NAME AND SIGNATURE</b></p></td>
-        <td width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p> </p></td>
+        <td class=" text-2sm" width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-head">CLASS TEACHER'S NAME AND SIGNATURE</b></p></td>
+        <td class=" text-2sm" width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:30%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:30%;"></div>{% endif %}</p></td>
     </tr>
     <tr>
-        <td width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-header">HEAD TEACHER'S COMMENT</b></p></td>
-        <td width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p> </p></td>
+        <td class=" text-2sm" width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-header">HEAD TEACHER'S COMMENT</b></p></td>
+        <td class=" text-2sm" width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_head_comment %}{{ comment_result_head_comment }}{% endif %} </p></td>
     </tr>
     <tr>
-        <td width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-head">HEAD TEACHER'S NAME AND SIGNATURE</b></p></td>
-        <td width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p> </p></td>
+        <td class=" text-2sm" width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-head">HEAD TEACHER'S NAME AND SIGNATURE</b></p></td>
+        <td width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_head_upload == 0 %}<div align="left"><img src="{{ comment_result_head_sign }}" style="width:30%;"></div>{% elif comment_result_head_upload == 1 %}<div align="left"><img src="{{ comment_result_head_img }}" style="width:30%;"></div>{% endif %}</p></td>
     </tr>
 </table>
 {% endif %}
