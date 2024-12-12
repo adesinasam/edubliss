@@ -39,8 +39,10 @@
          </span>
         </a>
        </div>
-       {% if "Academics User" in user_roles or "School Administrator" in user_roles %}
+       {% if "Academics User" in user_roles %}
         {% include "templates/includes/admin_sidebar.html" %}
+       {% elif "School Administrator" in user_roles %}
+        {% include "templates/includes/schadmin_sidebar.html" %}
        {% elif current_user.role_profile_name == 'MPIS Teacher' or "Instructor" in user_roles %}
         {% include "templates/includes/teacher_sidebar.html" %}
        {% elif current_user.role_profile_name == 'MPIS Parent' or "Parent" in user_roles %}
