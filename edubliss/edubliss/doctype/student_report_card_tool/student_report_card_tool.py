@@ -277,12 +277,14 @@ def preview_report_card(doc):
 	for comment in comment_results:
 		if comment.comment_type=='HEAD TEACHER':
 			comment_result_head = comment.name
+			comment_result_head_instructor = comment.teacher
 			comment_result_head_comment = comment.comment
 			comment_result_head_sign = comment.signature
 			comment_result_head_img = comment.signature_image
 			comment_result_head_upload = comment.upload_signature
 		else:
 			comment_result = comment.name
+			comment_result_instructor = comment.teacher
 			comment_result_comment = comment.comment
 			comment_result_sign = comment.signature
 			comment_result_img = comment.signature_image
@@ -309,11 +311,13 @@ def preview_report_card(doc):
 			"class_position": class_position,
 			"sections_position": sections_position,
 			"comment_result_head": comment_result_head,
+			"comment_result_head_instructor": comment_result_head_instructor,
 			"comment_result_head_comment": comment_result_head_comment,
 			"comment_result_head_sign": comment_result_head_sign,
 			"comment_result_head_img": comment_result_head_img,
 			"comment_result_head_upload": comment_result_head_upload,
 			"comment_result": comment_result,
+			"comment_result_instructor": comment_result_instructor,
 			"comment_result_comment": comment_result_comment,
 			"comment_result_sign": comment_result_sign,
 			"comment_result_img": comment_result_img,

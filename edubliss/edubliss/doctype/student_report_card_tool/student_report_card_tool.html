@@ -320,7 +320,7 @@
 </table>
 <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
     <tr>
-        <td colspan="4"><b class="text-primary-head">Overall Grade:</b> {{ get_grade_remark(grading_scale, average | round(2)) }}
+        <td colspan="4"><b class="text-primary-head">Overall Grade:</b> {{ get_grade(grading_scale, average | round(2)) }}
         	<hr style="margin-top: 5px; margin-bottom: 5px;">
         </td>
     </tr>
@@ -357,7 +357,7 @@
       {% for criterias in assessment_criteria %}
           <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">{{ criterias.custom_abbr }}</span></th>
       {% endfor %}
-          <th class="text-center" rowspan="2" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Total</span></th>
+          <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Total</span></th>
           <th class="text-center" rowspan="2" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Grade</span></th>
           <th class="text-center" rowspan="2" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Class Avg.</span></th>
           <th class="text-center" rowspan="2" width="10%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Remark</span></th>
@@ -367,6 +367,7 @@
       {% for criterias in assessment_criteria %}
           <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary text-2xs" style="font-size: 6pt">{{ criterias.weightage or '' }}%</span></th>
       {% endfor %}
+          <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary text-2xs" style="font-size: 6pt">100%</span></th>
         </tr>
     </thead>
     <tbody>
@@ -489,20 +490,16 @@
 <p class="performance-title"><b class="text-secondary" style="font-size: 9pt">COMMENTS</b></p>
 <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
     <tr>
-        <td width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-header text-2sm">CLASS TEACHER'S COMMENT</b></p></td>
-        <td class=" text-2sm" width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_comment %}{{ comment_result_comment }}{% endif %} </p></td>
+        <td width="20%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-header text-2sm">CLASS TEACHER'S COMMENT</b></p></td>
+        <td class=" text-2sm" width="35%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_comment %}{{ comment_result_comment }}{% endif %} </p></td>
+        <td class=" text-2sm" width="20%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-head">CLASS TEACHER'S NAME AND SIGNATURE</b></p></td>
+        <td class=" text-2sm" width="25%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:10%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:10%;"></div>{% endif %}{% if comment_result_comment %}{{ comment_result_instructor }}{% endif %}</p></td>
     </tr>
     <tr>
-        <td class=" text-2sm" width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-head">CLASS TEACHER'S NAME AND SIGNATURE</b></p></td>
-        <td class=" text-2sm" width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:10%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:10%;"></div>{% endif %}</p></td>
-    </tr>
-    <tr>
-        <td class=" text-2sm" width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-header">HEAD TEACHER'S COMMENT</b></p></td>
-        <td class=" text-2sm" width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_head_comment %}{{ comment_result_head_comment }}{% endif %} </p></td>
-    </tr>
-    <tr>
-        <td class=" text-2sm" width="25%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-head">HEAD TEACHER'S NAME AND SIGNATURE</b></p></td>
-        <td width="75%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_head_upload == 0 %}<div align="left"><img src="{{ comment_result_head_sign }}" style="width:10%;"></div>{% elif comment_result_head_upload == 1 %}<div align="left"><img src="{{ comment_result_head_img }}" style="width:10%;"></div>{% endif %}</p></td>
+        <td class=" text-2sm" width="20%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-header">{% if program.custom_school == 'Maryland Prestigious Elementary School' %}HEAD TEACHER'S {% else %}PRINCIPAL'S {% endif %}COMMENT</b></p></td>
+        <td class=" text-2sm" width="35%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_head_comment %}{{ comment_result_head_comment }}{% endif %} </p></td>
+        <td class=" text-2sm" width="20%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-head">{% if program.custom_school == 'Maryland Prestigious Elementary School' %}HEAD TEACHER'S {% else %}PRINCIPAL'S {% endif %}NAME AND SIGNATURE</b></p></td>
+        <td class=" text-2sm" width="25%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_head_upload == 0 %}<div align="left"><img src="{{ comment_result_head_sign }}" style="width:10%;"></div>{% elif comment_result_head_upload == 1 %}<div align="left"><img src="{{ comment_result_head_img }}" style="width:10%;"></div>{% endif %}{% if comment_result_head_comment %}{{ comment_result_head_instructor }}{% endif %}</p></td>
     </tr>
 </table>
 {% endif %}

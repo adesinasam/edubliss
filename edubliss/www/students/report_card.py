@@ -408,12 +408,14 @@ def get_context(context):
                 for comment in comment_results:
                     if comment.comment_type=='HEAD TEACHER':
                         context.comment_result_head = comment.name
+                        context.comment_result_head_instructor = comment.teacher
                         context.comment_result_head_comment = comment.comment
                         context.comment_result_head_sign = comment.signature
                         context.comment_result_head_img = comment.signature_image
                         context.comment_result_head_upload = comment.upload_signature
                     else:
                         context.comment_result = comment.name
+                        context.comment_result_instructor = comment.teacher
                         context.comment_result_comment = comment.comment
                         context.comment_result_sign = comment.signature
                         context.comment_result_img = comment.signature_image
