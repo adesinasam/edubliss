@@ -411,16 +411,21 @@
 <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
     <thead>
         <tr>
-          <th class="text-center" width="3%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head text-2sm">SN</span></th>
-          <th class="text-center" width="20%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head text-2sm">SUBJECTS</span></th>
+          <th class="text-center" rowspan="2" width="3%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">SN</span></th>
+          <th class="text-center" rowspan="2" width="20%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">SUBJECTS</span></th>
       {% for criterias in assessment_criteria %}
           <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">{{ criterias.custom_abbr }}</span></th>
       {% endfor %}
-          <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head text-2sm">Total</span></th>
-          <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head text-2sm">Grade</span></th>
-          <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Class Avg.</span></th>
-          <th class="text-center" width="10%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head text-2sm">Remark</span></th>
-          <th width="10%"><span class="text-primary-head text-2sm">Subject Teacher</span></th>
+          <th class="text-center" rowspan="2" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Total</span></th>
+          <th class="text-center" rowspan="2" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Grade</span></th>
+          <th class="text-center" rowspan="2" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Class Avg.</span></th>
+          <th class="text-center" rowspan="2" width="10%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Remark</span></th>
+          <th rowspan="2" width="10%" style='padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Subject Teacher</span></th>
+        </tr>
+        <tr>
+      {% for criterias in assessment_criteria %}
+          <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2xs">{{ criterias.weightage or '' }}%</span></th>
+      {% endfor %}
         </tr>
     </thead>
     <tbody>

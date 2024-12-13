@@ -140,7 +140,7 @@ def preview_report_card(doc):
 	term = frappe.get_doc("Academic Term", doc.academic_term)
 	assessment_criteria = frappe.get_all('Assessment Criteria',
 		filters={'assessment_criteria_group': "PERFORMANCE IN SUBJECTS"}, 
-		fields=['custom_abbr', 'assessment_criteria_group', 'assessment_criteria'], 
+		fields=['custom_abbr', 'assessment_criteria_group', 'assessment_criteria', 'custom_order_name', 'weightage'], 
 		order_by="custom_order_name asc")
 	assessment_results = frappe.get_all('Assessment Result',
 		filters={
