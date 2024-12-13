@@ -316,28 +316,28 @@
 </table>
 <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #000; border-color: #007BFF;">
     <tr>
-        <td><b class="text-primary-head text-sm">Name:<span class="text-primary-rep"> {{ students.student_name | upper }}</span></b></td>
-        <td><b class="text-primary-head text-sm">ID:<span class="text-primary-rep"> {{ students.name }}</span></b></td>
-        <td><b class="text-primary-head text-sm">Class:<span class="text-primary-rep"> {{ program.program }}</span></b></td>
+        <td><b class="text-primary-head text-2sm">Name:<span class="text-primary-rep"> {{ students.student_name | upper }}</span></b></td>
+        <td><b class="text-primary-head text-2sm">ID:<span class="text-primary-rep"> {{ students.name }}</span></b></td>
+        <td><b class="text-primary-head text-2sm">Class:<span class="text-primary-rep"> {{ program.program }}</span></b></td>
     </tr>
     <tr>
-        <td><b class="text-primary-head text-sm">Session:<span class="text-primary-rep"> {{ acadyear }}</span></b></td>
-        <td><b class="text-primary-head text-sm">Term:<span class="text-primary-rep"> {{ term.term_name }}</span></b></td>
-        <td><b class="text-primary-head text-sm">Arm:<span class="text-primary-rep"> {{ section.program_section or "" }}</span></b></td>
+        <td><b class="text-primary-head text-2sm">Session:<span class="text-primary-rep"> {{ acadyear }}</span></b></td>
+        <td><b class="text-primary-head text-2sm">Term:<span class="text-primary-rep"> {{ term.term_name }}</span></b></td>
+        <td><b class="text-primary-head text-2sm">Arm:<span class="text-primary-rep"> {{ section.program_section or "" }}</span></b></td>
     </tr>
     <tr>
-        <td><b class="text-primary-head text-sm">Class Teacher:<span class="text-primary-rep"> {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %}</span></b></td>
-        <td><b class="text-primary-head text-sm">Attendance:<span class="text-primary-rep"> {{ attendance.present if attendance.present else 0 }} out of {{ attendance.total }}  {{ _(" days") }}</span></b></td>
-        <td><b class="text-primary-head text-sm">Date of Birth:<span class="text-primary-rep"> {{ format_date(students.date_of_birth) or "" }}</span></b></td>
+        <td><b class="text-primary-head text-2sm">Class Teacher:<span class="text-primary-rep"> {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %}</span></b></td>
+        <td><b class="text-primary-head text-2sm">Attendance:<span class="text-primary-rep"> {{ attendance.present if attendance.present else 0 }} out of {{ attendance.total }}  {{ _(" days") }}</span></b></td>
+        <td><b class="text-primary-head text-2sm">Date of Birth:<span class="text-primary-rep"> {{ format_date(students.date_of_birth) or "" }}</span></b></td>
     </tr>
 </table>
 
 {% if programs.department=='Early Years - MPPS' %}
-<hr>
+<!-- <hr> -->
  {% if assessment_result %} 
   {% for result in assessment_result %}
    {% if get_course_subject(result.course) != 'Others' %}
-    <table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 0;">
+    <table width="100%" style="margin-top: 5px; margin-bottom: 0; padding: 0;">
      <tbody>
       <tr>
        <td style="width: 4%; border: 0; vertical-align: top !important;">{{ loop.index}}</td>
@@ -345,13 +345,13 @@
     <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 2px solid #043f80;">
        <tbody>
           <tr>
-            <td class="left text-sm" style='width: 70%; border-right:#043f80 solid 2px;;'><b class="text-primary-head text-sm">{{ get_course_subject(result.course) | upper }}</b></th>
-            <td class="left text-sm" style='width: 30%; border-right:#043f80 solid 2px;;'><b class="text-primary-head text-sm">Observation</b></th>
+            <td class="left text-2sm" style='width: 70%; border-right:#043f80 solid 2px;;'><b class="text-primary-head text-2sm">{{ get_course_subject(result.course) | upper }}</b></th>
+            <td class="left text-2sm" style='width: 30%; border-right:#043f80 solid 2px;;'><b class="text-primary-head text-2sm">Observation</b></th>
           </tr>
       {% for criteria in get_structure_marks(result.name, result.assessment_plan) %}
           <tr>
-            <td class="left text-primary-head text-sm" style='width: 70%; border-right:#043f80 solid 2px;;border-top:#043f80 solid 2px;;border-bottom:#043f80 solid 2px;;'>{{ criteria.topics }}</td>
-            <td class="left text-primary-head text-sm" style='width: 30%; border-right:#043f80 solid 2px;;border-top:#043f80 solid 2px;;border-bottom:#043f80 solid 2px;;'>{{ get_grade_comment(result.grading_scale, criteria.grade) }}</td>
+            <td class="left text-primary-head text-2sm" style='width: 70%; border-right:#043f80 solid 2px;;border-top:#043f80 solid 2px;;border-bottom:#043f80 solid 2px;;'>{{ criteria.topics }}</td>
+            <td class="left text-primary-head text-2sm" style='width: 30%; border-right:#043f80 solid 2px;;border-top:#043f80 solid 2px;;border-bottom:#043f80 solid 2px;;'>{{ get_grade_comment(result.grading_scale, criteria.grade) }}</td>
         </tr>
       {% endfor %}
        </tbody>
@@ -361,49 +361,49 @@
       </tr>
      </tbody>
   </table>
-  <div style="margin-bottom: 20px;">
-    <p class="text-primary-head left text-sm"><b class="text-primary-head left">Note: </b>{{result.comment}}</p>
+  <div style="margin-bottom: 10px;">
+    <p class="text-primary-head left text-2sm"><b class="text-primary-head left">Note: </b>{{result.comment}}</p>
   </div>
    {% endif %}
   {% endfor %}
  {% endif %}  
-<hr>
+<!-- <hr> -->
 <table width="100%" style="margin-top: 0; margin-bottom: 5px; padding: 2; border: 0;">
     <tr>
         <td width="3%"></td>
-        <td width="7%" class="text-primary-head left text-sm" style="font-size: 7pt"><b>GRADE:</b></td>
+        <td width="7%" class="text-primary-head left text-2sm" style="font-size: 7pt"><b>GRADE:</b></td>
         {% for grading_scale in grading_scale_intervals %}
-        <td width="15%" class="text-primary-head left text-sm" style="font-size: 7pt">{{grading_scale.grade_code}}={{grading_scale.grade_description}}</td>
+        <td width="15%" class="text-primary-head left text-2sm" style="font-size: 7pt">{{grading_scale.grade_code}}={{grading_scale.grade_description}}</td>
         {% endfor %}
     </tr>
 </table>
 <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
     <tr>
-        <td class="text-2sm" colspan="4"><b class="text-primary-head text-sm">Overall Grade:</b> {{ get_grade_remark(grading_scale, average | round(2)) }}
+        <td class="text-2sm" colspan="4"><b class="text-primary-head text-2sm">Overall Grade:</b> {{ get_grade_remark(grading_scale, average | round(2)) }}
           <hr style="margin-top: 5px; margin-bottom: 5px;">
         </td>
     </tr>
     <tr>
-        <td colspan="2"><b class="text-primary-head text-sm">Class Teacher's Remark:</b></td>
-        <td colspan="2" class="text-primary-head left text-sm">{% if comment_result_comment %}{{ comment_result_comment }}{% endif %} </td>
+        <td colspan="2"><b class="text-primary-head text-2sm">Class Teacher's Remark:</b></td>
+        <td colspan="2" class="text-primary-head left text-2sm">{% if comment_result_comment %}{{ comment_result_comment }}{% endif %} </td>
     </tr>
     <tr>
         <td colspan="4"></td>
     </tr>
     <tr>
-        <td width="15%"><b class="text-primary-head text-sm">Class Teacher:</b></td>
-        <td width="40%" class="text-primary-head left text-sm">  {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %} ({{ section.program_section or "" }})</td>
-        <td width="15%"><b class="text-primary-head text-sm">Signature:</b></td>
-        <td width="30%" class="text-primary-head text-sm">{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:10%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:10%;"></div>{% endif %} </td>
+        <td width="15%"><b class="text-primary-head text-2sm">Class Teacher:</b></td>
+        <td width="40%" class="text-primary-head left text-2sm">  {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %} ({{ section.program_section or "" }})</td>
+        <td width="15%"><b class="text-primary-head text-2sm">Signature:</b></td>
+        <td width="30%" class="text-primary-head text-2sm">{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:10%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:10%;"></div>{% endif %} </td>
     </tr>
     <tr>
         <td colspan="4"></td>
     </tr>
     <tr>
-        <td width="15%"><b class="text-primary-head text-sm">Head Teacher:</b></td>
-        <td width="40%" class="text-primary-head left text-sm">{% if comment_result_head_comment %}{{ comment_result_head_comment }}{% endif %} </td>
-        <td width="15%"><b class="text-primary-head text-sm">Signature:</b></td>
-        <td width="30%" class="text-primary-head text-sm">{% if comment_result_head_upload == 0 %}<div align="left"><img src="{{ comment_result_head_sign }}" style="width:10%;"></div>{% elif comment_result_head_upload == 1 %}<div align="left"><img src="{{ comment_result_head_img }}" style="width:10%;"></div>{% endif %} </td>
+        <td width="15%"><b class="text-primary-head text-2sm">Head Teacher:</b></td>
+        <td width="40%" class="text-primary-head left text-2sm">{% if comment_result_head_comment %}{{ comment_result_head_comment }}{% endif %} </td>
+        <td width="15%"><b class="text-primary-head text-2sm">Signature:</b></td>
+        <td width="30%" class="text-primary-head text-2sm">{% if comment_result_head_upload == 0 %}<div align="left"><img src="{{ comment_result_head_sign }}" style="width:10%;"></div>{% elif comment_result_head_upload == 1 %}<div align="left"><img src="{{ comment_result_head_img }}" style="width:10%;"></div>{% endif %} </td>
     </tr>
 </table>
 {% else %}
@@ -417,8 +417,8 @@
           <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">{{ criterias.custom_abbr }}</span></th>
       {% endfor %}
           <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head text-2sm">Total</span></th>
-          <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Class Avg.</span></th>
           <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head text-2sm">Grade</span></th>
+          <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Class Avg.</span></th>
           <th class="text-center" width="10%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head text-2sm">Remark</span></th>
           <th width="10%"><span class="text-primary-head text-2sm">Subject Teacher</span></th>
         </tr>
@@ -434,8 +434,8 @@
             <td class="text-center text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score | round(1) }}</td>
       {% endfor %}
             <td class="text-center text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ result.total_score | round(1) }}</td>
-            <td class="text-center text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_marks_avg(result.course, result.program, result.academic_term) | round(1) }}</td>
             <td class="text-center text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ result.grade }}</td>
+            <td class="text-center text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_marks_avg(result.course, result.program, result.academic_term) | round(1) }}</td>
             <td class=" text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_grade_remark(result.grading_scale, result.total_score) }}</td>
             <td class=" text-2sm" style='border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_course_teacher(result.course, result.student_group, result.academic_term) }}</td>
         </tr>
@@ -464,7 +464,7 @@
 </table>
 
 <div style="margin-top: 0px;">
-<p><i><b class="text-primary-rep left text-2sm" style="font-size: 9pt">INTERPRETATION: 95-100= Outstanding, 90-94= Excellent, 85-89= Proficient, 80-84= V.Good, 75-79= Good, 70-74= Satisfactory, 0-69= Fair<hr></b></i></p>
+<p><i><b class="text-primary-rep left text-xs" style="font-size: 7.5pt">INTERPRETATION: 100= Outstanding, 95= Excellent, 90= Proficient, 85= V.Good, 80= Upper Credit, 75= Good, 70= Lower Credit, 60=Satisfactory, 50= Pass, 0= Below Grade<hr></b></i></p>
 </div>
 
 <table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 0;">
@@ -531,7 +531,7 @@
     </tbody>
 </table>
 <div style="margin-top: 0px;">
-<p><i><b class="text-primary-rep left text-2sm">INTERPRETATION: 4.5-5= EXCELLENT , 3.5-4= VERY GOOD , 2.5-3= GOOD , 1.5-2= FAIR , 0-1= POOR<hr></b></i></p>
+<p><i><b class="text-primary-rep left text-xs">INTERPRETATION: 4.5-5= EXCELLENT , 3.5-4= VERY GOOD , 2.5-3= GOOD , 1.5-2= FAIR , 0-1= POOR<hr></b></i></p>
 </div>
 
 <p class="performance-title text-2sm"><b class="text-secondary" style="font-size: 9pt">COMMENTS</b></p>

@@ -216,30 +216,41 @@
 </style>
 
 
-<table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 0;">
+<table width="100%" style="margin: 0; padding: 0;">
     <tbody>
         <tr>
-            <td style="width: 11%; border: 0; vertical-align: top;">
-                <div align="left"><img src="/files/Super Logo New.png"></div>
+            <td style="width: 11%; vertical-align: top; border: none;">
+                <div align="left">
+                    <img src="/files/Super Logo New.png" alt="Logo">
+                </div>
             </td>
-            <td style="width: 4%; border: 0;">
+            <td style="width: 4%; border: none;"></td>
+            <td style="width: 70%; border: none;">
+                <div class="text-center">
+                    <h3>
+                        <b class="text-primary-header">{{ program.custom_school | upper }}</b>
+                        <small>
+                            <i>
+                                {% set u = frappe.get_doc("Company", program.custom_school) %}
+                                <p>{{ frappe.db.get_value("Address", u.custom_default_address, "address_line1") or "" }}, 
+                                   {{ frappe.db.get_value("Address", u.custom_default_address, "city") or "" }}, 
+                                   {{ frappe.db.get_value("Address", u.custom_default_address, "state") or "" }}</p>
+                                <p>Tel: {{ frappe.db.get_value("Address", u.custom_default_address, "phone") or "" }}</p>
+                                <p>Email: enquiries@mpischool.com | Web: www.mpischool.com</p>
+                            </i>
+                        </small>
+                    </h3>
+                    {% if program.custom_school == 'Maryland Prestigious PreSchool' %}
+                        <h5><b class="text-secondary">TERMLY OBSERVATION AND EVALUATION REPORT</b></h5>
+                    {% else %}
+                        <h5><b class="text-secondary">CONTINUOUS ASSESSMENT REPORT SHEET</b></h5>
+                    {% endif %}
+                </div>
             </td>
-            <td style="width: 70%; border: 0">
-				<div class="text-center">
-				    <h3><b class="text-primary-header">{{ program.custom_school | upper }}</b><small><i>
-				    {% set u = frappe.get_doc("Company", program.custom_school) %}
-				    <p>{{ frappe.db.get_value("Address", u.custom_default_address, "address_line1") or "" }}, {{ frappe.db.get_value("Address", u.custom_default_address, "city") or "" }}, {{ frappe.db.get_value("Address", u.custom_default_address, "state") or "" }}</p>
-				    <p>Tel: {{ frappe.db.get_value("Address", u.custom_default_address, "phone") or "" }}</p>
-				    <p>Email: enquiries@mpischool.com | Web: www.mpischool.com</p></i></small></h3>
-				    {% if program.custom_school=='Maryland Prestigious PreSchool' %}
-				    <h5><b class="text-secondary">TERMLY OBSERVATION AND EVALUATION REPORT</b></h5>
-				    {% else %}
-				    <h5><b class="text-secondary">CONTINUOUS ASSESSMENT REPORT SHEET</b></h5>
-				    {% endif %}
-				</div>
-            </td>
-            <td style="width: 15%; border: 0; vertical-align: top;">
-                <div align="right"><img class="stuphoto-img" src="{{ students.image }}"></div>
+            <td style="width: 15%; vertical-align: top; border: none;">
+                <div align="right">
+                    <img class="stuphoto-img" src="{{ students.image }}" alt="Student Image">
+                </div>
             </td>
         </tr>
     </tbody>
@@ -263,11 +274,11 @@
 </table>
 
 {% if program.department=='Early Years - MPPS' %}
-<hr>
+<!-- <hr> -->
  {% if assessment_result %}	
   {% for result in assessment_result %}
    {% if get_course_subject(result.course) != 'Others' %}
-    <table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 0;">
+    <table width="100%" style="margin-top: 5px; margin-bottom: 0; padding: 0;">
      <tbody>
       <tr>
        <td style="width: 4%; border: 0; vertical-align: top !important;">{{ loop.index}}</td>
@@ -291,13 +302,13 @@
       </tr>
      </tbody>
 	</table>
-	<div style="margin-bottom: 20px;">
+	<div style="margin-bottom: 10px;">
 		<p class="text-primary-head left"><b class="text-primary-head left">Note: </b>{{result.comment}}</p>
 	</div>
    {% endif %}
   {% endfor %}
  {% endif %}  
-<hr>
+<!-- <hr> -->
 <table width="100%" style="margin-top: 0; margin-bottom: 5px; padding: 2; border: 0;">
     <tr>
         <td width="3%"></td>
@@ -309,31 +320,31 @@
 </table>
 <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
     <tr>
-        <td colspan="4"><b class="text-primary-head">Overall Grade:</b> {{ get_grade(grading_scale, average | round(2)) }}
+        <td colspan="4"><b class="text-primary-head">Overall Grade:</b> {{ get_grade_remark(grading_scale, average | round(2)) }}
         	<hr style="margin-top: 5px; margin-bottom: 5px;">
         </td>
     </tr>
     <tr>
-        <td colspan="2"><b class="text-primary-head text-sm">Class Teacher's Remark:</b></td>
-        <td colspan="2" class="text-primary-head left text-sm">{% if comment_result_comment %}{{ comment_result_comment }}{% endif %} </td>
+        <td colspan="2"><b class="text-primary-head text-2sm">Class Teacher's Remark:</b></td>
+        <td colspan="2" class="text-primary-head left text-2sm">{% if comment_result_comment %}{{ comment_result_comment }}{% endif %} </td>
     </tr>
     <tr>
         <td colspan="4"></td>
     </tr>
     <tr>
-        <td width="15%"><b class="text-primary-head text-sm">Class Teacher:</b></td>
-        <td width="40%" class="text-primary-head left text-sm">  {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %} ({{ section.program_section or "" }})</td>
-        <td width="15%"><b class="text-primary-head text-sm">Signature:</b></td>
-        <td width="30%" class="text-primary-head text-sm">{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:10%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:10%;"></div>{% endif %} </td>
+        <td width="15%"><b class="text-primary-head text-2sm">Class Teacher:</b></td>
+        <td width="40%" class="text-primary-head left text-2sm">  {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %} ({{ section.program_section or "" }})</td>
+        <td width="15%"><b class="text-primary-head text-2sm">Signature:</b></td>
+        <td width="30%" class="text-primary-head text-2sm">{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:10%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:10%;"></div>{% endif %} </td>
     </tr>
     <tr>
         <td colspan="4"></td>
     </tr>
     <tr>
-        <td width="15%"><b class="text-primary-head text-sm">Head Teacher:</b></td>
-        <td width="40%" class="text-primary-head left text-sm">{% if comment_result_head_comment %}{{ comment_result_head_comment }}{% endif %} </td>
-        <td width="15%"><b class="text-primary-head text-sm">Signature:</b></td>
-        <td width="30%" class="text-primary-head text-sm">{% if comment_result_head_upload == 0 %}<div align="left"><img src="{{ comment_result_head_sign }}" style="width:10%;"></div>{% elif comment_result_head_upload == 1 %}<div align="left"><img src="{{ comment_result_head_img }}" style="width:10%;"></div>{% endif %} </td>
+        <td width="15%"><b class="text-primary-head text-2sm">Head Teacher:</b></td>
+        <td width="40%" class="text-primary-head left text-2sm">{% if comment_result_head_comment %}{{ comment_result_head_comment }}{% endif %} </td>
+        <td width="15%"><b class="text-primary-head text-2sm">Signature:</b></td>
+        <td width="30%" class="text-primary-head text-2sm">{% if comment_result_head_upload == 0 %}<div align="left"><img src="{{ comment_result_head_sign }}" style="width:10%;"></div>{% elif comment_result_head_upload == 1 %}<div align="left"><img src="{{ comment_result_head_img }}" style="width:10%;"></div>{% endif %} </td>
     </tr>
 </table>
 {% else %}
@@ -347,8 +358,8 @@
           <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">{{ criterias.custom_abbr }}</span></th>
       {% endfor %}
           <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head text-2sm">Total</span></th>
-          <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Class Avg.</span></th>
           <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head text-2sm">Grade</span></th>
+          <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Class Avg.</span></th>
           <th class="text-center" width="10%" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head text-2sm">Remark</span></th>
           <th width="10%"><span class="text-primary-head text-2sm">Subject Teacher</span></th>
         </tr>
@@ -364,8 +375,8 @@
             <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score | round(1) }}</td>
 			{% endfor %}
             <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ result.total_score | round(1) }}</td>
-            <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_marks_avg(result.course, result.program, result.academic_term) | round(1) }}</td>
             <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ result.grade }}</td>
+            <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_marks_avg(result.course, result.program, result.academic_term) | round(1) }}</td>
             <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_grade_remark(result.grading_scale, result.total_score) }}</td>
             <td style='border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_course_teacher(result.course, result.student_group, result.academic_term) }}</td>
         </tr>
@@ -394,13 +405,19 @@
 </table>
 
 <div style="margin-top: 0px;">
-<p><i><b class="text-primary left" style="font-size: 7pt">INTERPRETATION: 95-100= Outstanding, 90-94= Excellent, 85-89= Proficient, 80-84= V.Good, 75-79= Good, 70-74= Satisfactory, 0-69= Fair<hr></b></i></p>
+<p><i><b class="text-primary left" style="font-size: 5.5pt">INTERPRETATION: 
+        <span class="text-primary left" style="font-size: 6pt">
+        {% for grading_scale in grading_scale_intervals %}
+        {{grading_scale.threshold | int}}={{grading_scale.grade_description}}
+        {% endfor %}
+        </span>
+</b></i></p>
 </div>
 
 <table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 0;">
     <tbody>
         <tr>
-            <td style="width: 48%; border: 0">
+            <td style="width: 48%; border: 0; vertical-align: top;">
 
 <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
     <thead>
@@ -428,9 +445,9 @@
 </table>
 
             </td>
-            <td style="width: 4%; border: 0">
+            <td style="width: 4%; border: 0; vertical-align: top;">
             </td>
-            <td style="width: 48%; border: 0">
+            <td style="width: 48%; border: 0; vertical-align: top;">
 
 <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
     <thead>
@@ -461,7 +478,7 @@
     </tbody>
 </table>
 <div style="margin-top: 0px;">
-<p><i><b class="text-primary left">INTERPRETATION: 4.5-5= EXCELLENT , 3.5-4= VERY GOOD , 2.5-3= GOOD , 1.5-2= FAIR , 0-1= POOR<hr></b></i></p>
+<p><i><b class="text-primary left" style="font-size: 6pt">INTERPRETATION: 4.5-5= EXCELLENT , 3.5-4= VERY GOOD , 2.5-3= GOOD , 1.5-2= FAIR , 0-1= POOR</b></i></p>
 </div>
 
 <p class="performance-title"><b class="text-secondary" style="font-size: 9pt">COMMENTS</b></p>
