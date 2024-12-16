@@ -383,27 +383,27 @@
           <hr style="margin-top: 5px; margin-bottom: 5px;">
         </td>
     </tr>
-    <tr>
+    <!-- <tr>
         <td colspan="2"><b class="text-primary-head text-2sm">Class Teacher's Remark:</b></td>
         <td colspan="2" class="text-primary-head left text-2sm">{% if comment_result_comment %}{{ comment_result_comment }}{% endif %} </td>
-    </tr>
+    </tr> -->
     <tr>
         <td colspan="4"></td>
     </tr>
     <tr>
-        <td width="15%"><b class="text-primary-head text-2sm">Class Teacher:</b></td>
-        <td width="40%" class="text-primary-head left text-2sm">  {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %} ({{ section.program_section or "" }})</td>
+        <td width="25%"><b class="text-primary-head text-2sm">Class Teacher's Remark:</b></td>
+        <td width="40%" class="text-primary-head left text-2sm">{% if comment_result_comment %}{{ comment_result_comment }}{% endif %}</td>
         <td width="15%"><b class="text-primary-head text-2sm">Signature:</b></td>
-        <td width="30%" class="text-primary-head text-2sm">{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:20%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:20%;"></div>{% endif %} </td>
+        <td width="20%" class="text-primary-head text-2sm"><p>{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:20%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:20%;"></div>{% endif %}{% if comment_result_comment %}{{ comment_result_instructor }}{% endif %}</p></td>
     </tr>
     <tr>
         <td colspan="4"></td>
     </tr>
     <tr>
-        <td width="15%"><b class="text-primary-head text-2sm">Head Teacher:</b></td>
+        <td width="25%"><b class="text-primary-head text-2sm">Head Teacher's Remark:</b></td>
         <td width="40%" class="text-primary-head left text-2sm">{% if comment_result_head_comment %}{{ comment_result_head_comment }}{% endif %} </td>
         <td width="15%"><b class="text-primary-head text-2sm">Signature:</b></td>
-        <td width="30%" class="text-primary-head text-2sm">{% if comment_result_head_upload == 0 %}<div align="left"><img src="{{ comment_result_head_sign }}" style="width:20%;"></div>{% elif comment_result_head_upload == 1 %}<div align="left"><img src="{{ comment_result_head_img }}" style="width:20%;"></div>{% endif %} </td>
+        <td width="20%" class="text-primary-head text-2sm"><p>{% if comment_result_head_upload == 0 %}<div align="left"><img src="{{ comment_result_head_sign }}" style="width:20%;"></div>{% elif comment_result_head_upload == 1 %}<div align="left"><img src="{{ comment_result_head_img }}" style="width:20%;"></div>{% endif %}{% if comment_result_head_comment %}{{ comment_result_head_instructor }}{% endif %}</p></td>
     </tr>
 </table>
 {% else %}
@@ -431,10 +431,12 @@
     </thead>
     <tbody>
      {% if assessment_result %} 
+      {% set ns = {'counter': 0} %}
       {% for result in assessment_result %}
        {% if get_course_subject(result.course) != 'Others' %}
+        {% set ns = ns.update({'counter': ns.counter + 1}) or ns %}
         <tr>
-            <td class="text-center text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ loop.index}}</td>
+            <td class="text-center text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ ns.counter }}</td>
             <td class="left text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_course_subject(result.course) | upper }}</td>
       {% for criteria in get_criteria_marks(result.name) %}
             <td class="text-center text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score | round(1) }}</td>
