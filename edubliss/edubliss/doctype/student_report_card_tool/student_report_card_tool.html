@@ -353,7 +353,7 @@
     <thead>
         <tr>
           <th class="text-center" rowspan="2" width="3%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">SN</span></th>
-          <th class="text-center" rowspan="2" width="20%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">SUBJECTS</span></th>
+          <th class="text-center" rowspan="2" width="18%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">SUBJECTS</span></th>
       {% for criterias in assessment_criteria %}
           <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">{{ criterias.custom_abbr }}</span></th>
       {% endfor %}
@@ -361,7 +361,7 @@
           <th class="text-center" rowspan="2" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Grade</span></th>
           <th class="text-center" rowspan="2" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Class Avg.</span></th>
           <th class="text-center" rowspan="2" width="10%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Remark</span></th>
-          <th rowspan="2" width="10%" style='padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Subject Teacher</span></th>
+          <th rowspan="2" width="12%" style='padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Subject Teacher</span></th>
         </tr>
         <tr>
       {% for criterias in assessment_criteria %}
@@ -378,7 +378,7 @@
         {% set ns = ns.update({'counter': ns.counter + 1}) or ns %}
         <tr>
             <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ ns.counter }}</td>
-            <td class="left" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_course_subject(result.course) | upper }}</td>
+            <td class="left" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;font-size: 6pt'>{{ get_course_subject(result.course) | upper }}</td>
 			{% for criteria in get_criteria_marks(result.name) %}
             <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score | round(1) }}</td>
 			{% endfor %}
