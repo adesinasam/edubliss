@@ -166,7 +166,7 @@
   }
 
   .stuphoto-img {
-    max-width: 100%;
+    max-width: 70px;
     height: 80px;
 /*    border: 2px solid #0c2c42;*/
     border-radius: 6px;
@@ -412,7 +412,7 @@
     <thead>
         <tr>
           <th class="text-center" rowspan="2" width="3%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">SN</span></th>
-          <th class="text-center" rowspan="2" width="19%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">SUBJECTS</span></th>
+          <th class="text-center" rowspan="2" width="18%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">SUBJECTS</span></th>
       {% for criterias in assessment_criteria %}
           <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">{{ criterias.custom_abbr }}</span></th>
       {% endfor %}
@@ -420,7 +420,7 @@
           <th class="text-center" rowspan="2" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Grade</span></th>
           <th class="text-center" rowspan="2" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Class Avg.</span></th>
           <th class="text-center" rowspan="2" width="10%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Remark</span></th>
-          <th rowspan="2" width="11%" style='padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Subject Teacher</span></th>
+          <th rowspan="2" width="12%" style='padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Subject Teacher</span></th>
         </tr>
         <tr>
       {% for criterias in assessment_criteria %}
