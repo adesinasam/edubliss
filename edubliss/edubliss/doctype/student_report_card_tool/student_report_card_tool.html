@@ -386,7 +386,7 @@
             <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ result.grade }}</td>
             <td class="text-center" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_marks_avg(result.course, result.program, result.academic_term) | round(1) }}</td>
             <td style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_grade_remark(result.grading_scale, result.total_score) }}</td>
-            <td style='border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_course_teacher(result.course, result.student_group, result.academic_term) }}</td>
+            <td style='border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;font-size: 6pt'>{{ get_course_teacher(result.course, result.student_group, result.academic_term) or ""}}</td>
         </tr>
        {% endif %}
       {% endfor %}
