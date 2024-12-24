@@ -1,7 +1,7 @@
 {% extends "templates/layout.html" %}
 
 {% block title %}
-{{ _("Teacher Subjects") }}
+{{ section_name }} Details
 {% endblock %}
 
 {% block headnav_link %}
@@ -206,9 +206,9 @@
              </div>
             </div>
             <div class="card-footer justify-center">
-             <!-- <a class="btn btn-link" href="html/demo1/public-profile/network.html">
-              More
-             </a> -->
+             <a class="btn btn-link" href="/app/query-report/Section-wise%20Broadsheet?student_group={{ section_name }}&program={{ selected_section.program }}&academic_year={{selected_section.academic_year}}&academic_term={{selected_section.academic_term}}">
+            View Broadsheet
+             </a>
             </div>
          </div>
         </div>
