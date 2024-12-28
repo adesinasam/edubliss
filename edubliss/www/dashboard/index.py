@@ -17,6 +17,25 @@ def get_teachers():
     )
     return instructors_query if instructors_query else []
 
+def get_courses(company):
+    program_courses = frappe.qb.DocType("Program Course")
+    courses = frappe.qb.DocType("Course")
+    programs = frappe.qb.DocType("Program")
+
+    program_courses_query = (
+        frappe.qb.from_(program_courses)
+        .inner_join(courses).on(program_courses.course == courses.course_name)
+        .inner_join(programs).on(program_courses.parent == programs.name)
+        .select(courses.name, courses.course_name, courses.custom_course_code, courses.custom_subject, 
+        courses.custom_disabled, courses.custom_course_category, courses.department)
+        .where(programs.custom_school == company)
+        .where(courses.custom_disabled == 0)
+        .orderby(courses.course_name)
+        .run(as_dict=1)
+    )
+    return program_courses_query if program_courses_query else []
+
+
 def get_context(context):
     # Redirect guest users to the portal
     if frappe.session.user == "Guest":
@@ -71,12 +90,14 @@ def get_context(context):
     if edubliss_session:
         context.edublisession = edubliss_session
         company = edubliss_session.school
+        acadyear = edubliss_session.academic_year
         acadterm = edubliss_session.academic_term
     else:
         context.edublisession = _("Welcome")  # Placeholder message
         context.education_settings = frappe.call('edubliss.api.get_education_setting')
         context.request_url = frappe.request.url  # Placeholder message
         company = None
+        acadyear = None
         acadterm = None
 
     # Fetch necessary data
@@ -89,10 +110,23 @@ def get_context(context):
     # Count various entities
     if company:
         context.student_count = frappe.db.count('Student', filters={'custom_school': company})
+        context.teacher_count = len(frappe.call('edubliss.api.get_teachers', company=company))
+        context.program_count = frappe.db.count('Program', filters={'custom_school': company})
+        context.course_count = len(get_courses(company))
+        context.applicants_count = frappe.db.count('Student Applicant', 
+            filters={'custom_school': company,
+            'academic_year': acadyear,
+            'academic_term': acadterm}
+            )
+        context.assessments_count = len(frappe.call('edubliss.api.get_assessments', company=company,academic_term=acadterm))
     else:
         context.student_count = frappe.db.count('Student')
+        context.teacher_count = 0
+        context.program_count = 0
+        context.course_count = frappe.db.count('Course')
+        context.applicants_count = 0
+        context.assessments_count = 0
 
-    context.course_count = frappe.db.count('Course')
-    context.teacher_count = frappe.db.count('Instructor')
+    context.lmscourse_count = frappe.db.count('LMS Course')
 
     return context

@@ -270,6 +270,23 @@ def get_teachers(company=None):
     )
     return instructors_query if instructors_query else []
 
+@frappe.whitelist()
+def get_assessments(company=None, academic_term=None):
+    plans = frappe.qb.DocType("Assessment Plan")
+    programs = frappe.qb.DocType("Program")
+
+    assessments_query = (
+        frappe.qb.from_(plans)
+        .inner_join(programs)
+        .on(plans.program == programs.name)
+        .select('*')
+        .where(programs.custom_school == company)
+        .where(plans.academic_term == academic_term)
+        .where(plans.docstatus == 1)
+        .run(as_dict=1)
+    )
+    return assessments_query if assessments_query else []
+
 @frappe.whitelist(allow_guest=True)
 def get_program_lms_batch(program=None, acadyear=None):
     return frappe.get_all('LMS Batch', 

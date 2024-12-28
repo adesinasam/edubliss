@@ -67,7 +67,7 @@ def get_data(filters=None):
             `tabAssessment Result` ar
         WHERE
             ar.student IN %(students)s
-            AND ar.docstatus = 1
+            AND ar.docstatus < 2
         GROUP BY
             ar.student, ar.course
         """,

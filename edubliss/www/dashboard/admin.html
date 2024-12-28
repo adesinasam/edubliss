@@ -49,7 +49,7 @@
            <img alt="" class="light:hidden w-7 mt-4 ms-5" src="assets/edubliss/dist/media/images/icons/police-id.png"/>
            <div class="flex flex-col gap-1 pb-4 px-5">
             <span class="text-3xl font-semibold text-gray-900">
-             200
+             {{applicants_count}}
             </span>
             <span class="text-2sm font-medium text-gray-600">
              New Admissions
@@ -82,7 +82,7 @@
            </div>
           </div>
           <div class="card-body flex flex-col justify-end items-stretch grow px-3 py-1">
-           <div id="earnings_chart">
+           <div id="applicant_chart">
            </div>
           </div>
          </div>
@@ -110,7 +110,7 @@
              </div>
              <div class="flex items-center text-sm font-medium text-gray-800 gap-6">
               <span class="lg:text-right">
-               7
+               {{program_count}}
               </span>
              </div>
             </div>
@@ -124,7 +124,7 @@
              </div>
              <div class="flex items-center text-sm font-medium text-gray-800 gap-6">
               <span class="lg:text-right">
-               5
+               {{teacher_count}}
               </span>
              </div>
             </div>
@@ -135,12 +135,12 @@
               <i class="ki-filled ki-book text-base text-primary">
               </i>
               <span class="text-sm font-medium text-gray-800">
-               Subjects
+               LMS Courses
               </span>
              </div>
              <div class="flex items-center text-sm font-medium text-gray-800 gap-6">
               <span class="lg:text-right">
-               13
+               {{lmscourse_count}}
               </span>
              </div>
             </div>
@@ -149,7 +149,7 @@
               <i class="ki-filled ki-note text-base text-danger">
               </i>
               <span class="text-sm font-medium text-gray-800">
-               Courses
+               Subjects
               </span>
              </div>
              <div class="flex items-center text-sm font-medium text-gray-800 gap-6">
@@ -168,7 +168,7 @@
              </div>
              <div class="flex items-center text-sm font-medium text-gray-800 gap-6">
               <span class="lg:text-right">
-               20
+               {{assessments_count}}
               </span>
              </div>
             </div>
