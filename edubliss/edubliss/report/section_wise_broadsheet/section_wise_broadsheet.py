@@ -67,7 +67,7 @@ def get_data(filters=None):
             `tabAssessment Result` ar
         WHERE
             ar.student IN %(students)s
-            AND ar.docstatus < 2
+            AND ar.docstatus = 1  -- Only include approved documents
         GROUP BY
             ar.student, ar.course
         """,
@@ -83,22 +83,24 @@ def get_data(filters=None):
         student = row["student"]
         course = row["course"]
 
-        # Collect unique courses
-        courses.add(course)
+        # Filter out courses categorized as 'Others'
+        if get_course_subject(course) != 'Others':
+            # Collect unique courses
+            courses.add(course)
 
-        # Aggregate student data
-        if student not in results:
-            results[student] = {
-                "student": row["student"],
-                "student_name": row["student_name"],
-                "total_score": 0,
-                "course_count": 0,
-                "courses": {}
-            }
+            # Aggregate student data
+            if student not in results:
+                results[student] = {
+                    "student": row["student"],
+                    "student_name": row["student_name"],
+                    "total_score": 0,
+                    "course_count": 0,
+                    "courses": {}
+                }
 
-        results[student]["courses"][course] = flt(row["total_score"])
-        results[student]["total_score"] += flt(row["total_score"])
-        results[student]["course_count"] += 1
+            results[student]["courses"][course] = flt(row["total_score"])
+            results[student]["total_score"] += flt(row["total_score"])
+            results[student]["course_count"] += 1
 
     # Rank students based on total score
     ranked_students = sorted(
@@ -124,3 +126,11 @@ def get_data(filters=None):
         formatted_results.append(row)
 
     return formatted_results, sorted(courses)
+
+def get_course_subject(course):
+    """Fetch the subject of the course to filter out 'Others'."""
+    try:
+        course_doc = frappe.get_doc("Course", course)
+        return course_doc.custom_subject
+    except frappe.DoesNotExistError:
+        return 'Unknown'
