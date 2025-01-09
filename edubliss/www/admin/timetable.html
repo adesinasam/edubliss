@@ -210,7 +210,7 @@
             editable: true,
             weekends: showWeekends, // Initially hide weekends
             events: function(fetchInfo, successCallback, failureCallback) {
-                fetch('/api/method/edubliss.api.get_section_schedule?student_group={{ selected_section }}&academic_year={{ acadyear }}', {
+                fetch('/api/method/edubliss.api.get_section_schedule?student_group={{ selected_section }}&academic_term={{ acadterm }}', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
