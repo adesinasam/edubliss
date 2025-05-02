@@ -3,20 +3,30 @@ import json
 import frappe
 from frappe import _
 from frappe.model.document import Document
+from frappe.query_builder.functions import Sum
 from frappe.utils import flt, nowdate
 from frappe.utils.background_jobs import enqueue
 
+from erpnext import get_company_currency
 from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
 	get_accounting_dimensions,
 )
 from erpnext.accounts.doctype.payment_entry.payment_entry import (
-	get_company_defaults,
 	get_payment_entry,
 )
 from erpnext.accounts.doctype.subscription_plan.subscription_plan import get_plan_rate
 from erpnext.accounts.party import get_party_account, get_party_bank_account
-from erpnext.accounts.utils import get_account_currency
+from erpnext.accounts.utils import get_account_currency, get_currency_precision
 from erpnext.utilities import payment_app_import_guard
+
+ALLOWED_DOCTYPES_FOR_PAYMENT_REQUEST = [
+	"Sales Order",
+	"Purchase Order",
+	"Sales Invoice",
+	"Purchase Invoice",
+	"POS Invoice",
+	"Fees",
+]
 
 
 @frappe.whitelist(allow_guest=True)
@@ -25,48 +35,60 @@ def make_payment_request(**args):
 
 	args = frappe._dict(args)
 
+	if args.dt not in ALLOWED_DOCTYPES_FOR_PAYMENT_REQUEST:
+		frappe.throw(_("Payment Requests cannot be created against: {0}").format(frappe.bold(args.dt)))
+
 	ref_doc = frappe.get_doc(args.dt, args.dn)
 	gateway_account = get_gateway_details(args) or frappe._dict()
-	grand_total = args.amt
+	partial_amount = args.amt
 
-	# grand_total = get_amount(ref_doc, gateway_account.get("payment_account"))
-	# if args.loyalty_points and args.dt == "Sales Order":
-	# 	from erpnext.accounts.doctype.loyalty_program.loyalty_program import validate_loyalty_points
+	# Retrieve the Comapny Default Bank Account
+	payment_account = frappe.db.get_value('Company', ref_doc.get("company"), 'default_bank_account')
 
-	# 	loyalty_amount = validate_loyalty_points(ref_doc, int(args.loyalty_points))
-	# 	frappe.db.set_value(
-	# 		"Sales Order", args.dn, "loyalty_points", int(args.loyalty_points), update_modified=False
-	# 	)
-	# 	frappe.db.set_value("Sales Order", args.dn, "loyalty_amount", loyalty_amount, update_modified=False)
-	# 	grand_total = grand_total - loyalty_amount
+	if partial_amount:
+		grand_total = partial_amount
+	else:
+		grand_total = get_amount(ref_doc, payment_account)
+		# grand_total = get_amount(ref_doc, gateway_account.get("payment_account"))
 
-	bank_account = (
-		get_party_bank_account(args.get("party_type"), args.get("party")) if args.get("party_type") else ""
-	)
+	if not grand_total:
+		frappe.throw(_("Payment Entry is already created"))
+	if args.loyalty_points and args.dt == "Sales Order":
+		from erpnext.accounts.doctype.loyalty_program.loyalty_program import validate_loyalty_points
 
-	requested_payment_requests = frappe.db.get_all(
-    	"Payment Request",
-	    filters={
-    	    "reference_doctype": args.dt,
-        	"reference_name": args.dn,
-	        "status": "Requested",
-    	    "docstatus": 1
-	    },
-    	pluck='name'
-	)
+		loyalty_amount = validate_loyalty_points(ref_doc, int(args.loyalty_points))
+		frappe.db.set_value(
+			"Sales Order", args.dn, "loyalty_points", int(args.loyalty_points), update_modified=False
+		)
+		frappe.db.set_value("Sales Order", args.dn, "loyalty_amount", loyalty_amount, update_modified=False)
+		grand_total = grand_total - loyalty_amount
 
-	for payment_request in requested_payment_requests:
-		frappe.db.set_value("Payment Request", payment_request, {"docstatus": 2, "status": "Cancelled" }, update_modified=False)
+	# fetches existing payment request `grand_total` amount
+	existing_payment_request_amount = get_existing_payment_request_amount(ref_doc)
+
+	def validate_and_calculate_grand_total(grand_total, existing_payment_request_amount):
+		grand_total -= existing_payment_request_amount
+		if not grand_total:
+			frappe.throw(_("Payment Request is already created"))
+		return grand_total
+
+	if existing_payment_request_amount:
+		if args.order_type == "Shopping Cart":
+			# If Payment Request is in an advanced stage, then create for remaining amount.
+			if get_existing_payment_request_amount(
+				ref_doc, ["Initiated", "Partially Paid", "Payment Ordered", "Paid"]
+			):
+				grand_total = validate_and_calculate_grand_total(grand_total, existing_payment_request_amount)
+			else:
+				# If PR's are processed, cancel all of them.
+				cancel_old_payment_requests(ref_doc.doctype, ref_doc.name)
+		else:
+			grand_total = validate_and_calculate_grand_total(grand_total, existing_payment_request_amount)
 
 	draft_payment_request = frappe.db.get_value(
 		"Payment Request",
-		{"reference_doctype": args.dt, "reference_name": args.dn, "docstatus": 0},
+		{"reference_doctype": ref_doc.doctype, "reference_name": ref_doc.name, "docstatus": 0},
 	)
-
-	# existing_payment_request_amount = get_existing_payment_request_amount(args.dt, args.dn)
-
-	# if existing_payment_request_amount:
-	# 	grand_total -= existing_payment_request_amount
 
 	if draft_payment_request:
 		frappe.db.set_value(
@@ -74,6 +96,11 @@ def make_payment_request(**args):
 		)
 		pr = frappe.get_doc("Payment Request", draft_payment_request)
 	else:
+		bank_account = (
+			get_party_bank_account(args.get("party_type"), args.get("party"))
+			if args.get("party_type")
+			else ""
+		)
 		pr = frappe.new_doc("Payment Request")
 
 		if not args.get("payment_request_type"):
@@ -81,24 +108,36 @@ def make_payment_request(**args):
 				"Outward" if args.get("dt") in ["Purchase Order", "Purchase Invoice"] else "Inward"
 			)
 
+		party_type = args.get("party_type") or "Customer"
+		party_account_currency = ref_doc.get("party_account_currency")
+
+		if not party_account_currency:
+			party_account = get_party_account(party_type, ref_doc.get(party_type.lower()), ref_doc.company)
+			party_account_currency = get_account_currency(party_account)
+
 		pr.update(
 			{
 				"payment_gateway_account": gateway_account.get("name"),
 				"payment_gateway": gateway_account.get("payment_gateway"),
-				"payment_account": gateway_account.get("payment_account"),
+				# "payment_account": gateway_account.get("payment_account"),
+				"payment_account": payment_account,
 				"payment_channel": gateway_account.get("payment_channel"),
 				"payment_request_type": args.get("payment_request_type"),
 				"currency": ref_doc.currency,
+				"party_account_currency": party_account_currency,
 				"grand_total": grand_total,
 				"mode_of_payment": args.mode_of_payment,
-				"email_to": frappe.session.user,
+				"email_to": args.recipient_id or ref_doc.owner,
 				"subject": _("Payment Request for {0}").format(args.dn),
 				"message": gateway_account.get("message") or get_dummy_message(ref_doc),
 				"reference_doctype": args.dt,
 				"reference_name": args.dn,
-				"party_type": args.get("party_type") or "Customer",
+				"company": ref_doc.get("company"),
+				"party_type": party_type,
 				"party": args.get("party") or ref_doc.get("customer"),
 				"bank_account": bank_account,
+				"party_name": args.get("party_name") or ref_doc.get("customer_name"),
+				"phone_number": args.get("phone_number") if args.get("phone_number") else None,
 			}
 		)
 
@@ -116,8 +155,11 @@ def make_payment_request(**args):
 		if args.order_type == "Shopping Cart" or args.mute_email:
 			pr.flags.mute_email = True
 
-		pr.insert(ignore_permissions=True)
+		if frappe.db.get_single_value("Accounts Settings", "create_pr_in_draft_status", cache=True):
+			pr.insert(ignore_permissions=True)
 		if args.submit_doc:
+			if pr.get("__unsaved"):
+				pr.insert(ignore_permissions=True)
 			pr.submit()
 
 	if args.order_type == "Shopping Cart":
@@ -133,20 +175,40 @@ def make_payment_request(**args):
 
 def get_amount(ref_doc, payment_account=None):
 	"""get amount based on doctype"""
+	grand_total = 0
+
 	dt = ref_doc.doctype
 	if dt in ["Sales Order", "Purchase Order"]:
-		grand_total = flt(ref_doc.rounded_total) or flt(ref_doc.grand_total)
+		advance_amount = flt(ref_doc.advance_paid)
+		if ref_doc.party_account_currency != ref_doc.currency:
+			advance_amount = flt(flt(ref_doc.advance_paid) / ref_doc.conversion_rate)
+
+		grand_total = (flt(ref_doc.rounded_total) or flt(ref_doc.grand_total)) - advance_amount
+
 	elif dt in ["Sales Invoice", "Purchase Invoice"]:
-		if not ref_doc.get("is_pos"):
+		if (
+			dt == "Sales Invoice"
+			and ref_doc.is_pos
+			and ref_doc.payments
+			and any(
+				[
+					payment.type == "Phone" and payment.account == payment_account
+					for payment in ref_doc.payments
+				]
+			)
+		):
+			grand_total = sum(
+				[
+					payment.amount
+					for payment in ref_doc.payments
+					if payment.type == "Phone" and payment.account == payment_account
+				]
+			)
+		else:
 			if ref_doc.party_account_currency == ref_doc.currency:
-				grand_total = flt(ref_doc.grand_total)
+				grand_total = flt(ref_doc.outstanding_amount)
 			else:
-				grand_total = flt(ref_doc.base_grand_total) / ref_doc.conversion_rate
-		elif dt == "Sales Invoice":
-			for pay in ref_doc.payments:
-				if pay.type == "Phone" and pay.account == payment_account:
-					grand_total = pay.amount
-					break
+				grand_total = flt(flt(ref_doc.outstanding_amount) / ref_doc.conversion_rate)
 	elif dt == "POS Invoice":
 		for pay in ref_doc.payments:
 			if pay.type == "Phone" and pay.account == payment_account:
@@ -155,32 +217,74 @@ def get_amount(ref_doc, payment_account=None):
 	elif dt == "Fees":
 		grand_total = ref_doc.outstanding_amount
 
-	if grand_total > 0:
-		return grand_total
-	else:
-		frappe.throw(_("Payment Entry is already created"))
+	return flt(grand_total, get_currency_precision()) if grand_total > 0 else 0
 
 
-def get_existing_payment_request_amount(ref_dt, ref_dn):
+def get_irequest_status(payment_requests: None | list = None) -> list:
+	IR = frappe.qb.DocType("Integration Request")
+	res = []
+	if payment_requests:
+		res = (
+			frappe.qb.from_(IR)
+			.select(IR.name)
+			.where(IR.reference_doctype.eq("Payment Request"))
+			.where(IR.reference_docname.isin(payment_requests))
+			.where(IR.status.isin(["Authorized", "Completed"]))
+			.run(as_dict=True)
+		)
+	return res
+
+
+def cancel_old_payment_requests(ref_dt, ref_dn):
+	PR = frappe.qb.DocType("Payment Request")
+
+	if res := (
+		frappe.qb.from_(PR)
+		.select(PR.name)
+		.where(PR.reference_doctype == ref_dt)
+		.where(PR.reference_name == ref_dn)
+		.where(PR.docstatus == 1)
+		.where(PR.status.isin(["Draft", "Requested"]))
+		.run(as_dict=True)
+	):
+		if get_irequest_status([x.name for x in res]):
+			frappe.throw(_("Another Payment Request is already processed"))
+		else:
+			for x in res:
+				doc = frappe.get_doc("Payment Request", x.name)
+				doc.flags.ignore_permissions = True
+				doc.cancel()
+
+				if ireqs := get_irequests_of_payment_request(doc.name):
+					for ireq in ireqs:
+						frappe.db.set_value("Integration Request", ireq.name, "status", "Cancelled")
+
+
+def get_existing_payment_request_amount(ref_doc, statuses: list | None = None) -> list:
 	"""
-	Get the existing payment request which are unpaid or partially paid for payment channel other than Phone
-	and get the summation of existing paid payment request for Phone payment channel.
+	Return the total amount of Payment Requests against a reference document.
 	"""
-	existing_payment_request_amount = frappe.db.sql(
-		"""
-		select sum(grand_total)
-		from `tabPayment Request`
-		where
-			reference_doctype = %s
-			and reference_name = %s
-			and docstatus = 1
-			and (status != 'Paid'
-			or (payment_channel = 'Phone'
-				and status = 'Paid'))
-	""",
-		(ref_dt, ref_dn),
+	PR = frappe.qb.DocType("Payment Request")
+
+	query = (
+		frappe.qb.from_(PR)
+		.select(Sum(PR.outstanding_amount))
+		.where(PR.reference_doctype == ref_doc.doctype)
+		.where(PR.reference_name == ref_doc.name)
+		.where(PR.docstatus == 1)
 	)
-	return flt(existing_payment_request_amount[0][0]) if existing_payment_request_amount else 0
+
+	if statuses:
+		query = query.where(PR.status.isin(statuses))
+
+	response = query.run()
+
+	os_amount_in_transaction_currency = flt(response[0][0] if response[0] else 0)
+
+	if ref_doc.currency != ref_doc.party_account_currency:
+		os_amount_in_transaction_currency = flt(os_amount_in_transaction_currency / ref_doc.conversion_rate)
+
+	return os_amount_in_transaction_currency
 
 
 def get_gateway_details(args):  # nosemgrep
@@ -227,41 +331,66 @@ def make_payment_entry(docname):
 	return doc.create_payment_entry(submit=False).as_dict()
 
 
-def update_payment_req_status(doc, method):
-	from erpnext.accounts.doctype.payment_entry.payment_entry import get_reference_details
+def update_payment_requests_as_per_pe_references(references=None, cancel=False):
+	"""
+	Update Payment Request's `Status` and `Outstanding Amount` based on Payment Entry Reference's `Allocated Amount`.
+	"""
+	if not references:
+		return
 
-	for ref in doc.references:
-		payment_request_name = frappe.db.get_value(
-			"Payment Request",
-			{
-				"reference_doctype": ref.reference_doctype,
-				"reference_name": ref.reference_name,
-				"docstatus": 1,
-			},
+	precision = references[0].precision("allocated_amount")
+
+	referenced_payment_requests = frappe.get_all(
+		"Payment Request",
+		filters={"name": ["in", {row.payment_request for row in references if row.payment_request}]},
+		fields=[
+			"name",
+			"grand_total",
+			"outstanding_amount",
+			"payment_request_type",
+		],
+	)
+
+	referenced_payment_requests = {pr.name: pr for pr in referenced_payment_requests}
+
+	for ref in references:
+		if not ref.payment_request:
+			continue
+
+		payment_request = referenced_payment_requests[ref.payment_request]
+		pr_outstanding = payment_request["outstanding_amount"]
+
+		# update outstanding amount
+		new_outstanding_amount = flt(
+			pr_outstanding + ref.allocated_amount if cancel else pr_outstanding - ref.allocated_amount,
+			precision,
 		)
 
-		if payment_request_name:
-			ref_details = get_reference_details(
-				ref.reference_doctype,
-				ref.reference_name,
-				doc.party_account_currency,
-				doc.party_type,
-				doc.party,
+		# to handle same payment request for the multiple allocations
+		payment_request["outstanding_amount"] = new_outstanding_amount
+
+		if not cancel and new_outstanding_amount < 0:
+			frappe.throw(
+				msg=_(
+					"The allocated amount is greater than the outstanding amount of Payment Request {0}"
+				).format(ref.payment_request),
+				title=_("Invalid Allocated Amount"),
 			)
-			pay_req_doc = frappe.get_doc("Payment Request", payment_request_name)
-			status = pay_req_doc.status
 
-			if status != "Paid" and not ref_details.outstanding_amount:
-				status = "Paid"
-			elif status != "Partially Paid" and ref_details.outstanding_amount != ref_details.total_amount:
-				status = "Partially Paid"
-			elif ref_details.outstanding_amount == ref_details.total_amount:
-				if pay_req_doc.payment_request_type == "Outward":
-					status = "Initiated"
-				elif pay_req_doc.payment_request_type == "Inward":
-					status = "Requested"
+		# update status
+		if new_outstanding_amount == payment_request["grand_total"]:
+			status = "Initiated" if payment_request["payment_request_type"] == "Outward" else "Requested"
+		elif new_outstanding_amount == 0:
+			status = "Paid"
+		elif new_outstanding_amount > 0:
+			status = "Partially Paid"
 
-			pay_req_doc.db_set("status", status)
+		# update database
+		frappe.db.set_value(
+			"Payment Request",
+			ref.payment_request,
+			{"outstanding_amount": new_outstanding_amount, "status": status},
+		)
 
 
 def get_dummy_message(doc):
@@ -345,3 +474,45 @@ def validate_payment(doc, method=None):
 			doc.reference_docname
 		)
 	)
+
+
+@frappe.whitelist()
+def get_open_payment_requests_query(doctype, txt, searchfield, start, page_len, filters):
+	# permission checks in `get_list()`
+	filters = frappe._dict(filters)
+
+	if not filters.reference_doctype or not filters.reference_name:
+		return []
+
+	if txt:
+		filters.name = ["like", f"%{txt}%"]
+
+	open_payment_requests = frappe.get_list(
+		"Payment Request",
+		filters=filters,
+		fields=["name", "grand_total", "outstanding_amount"],
+		order_by="transaction_date ASC,creation ASC",
+	)
+
+	return [
+		(
+			pr.name,
+			_("<strong>Grand Total:</strong> {0}").format(pr.grand_total),
+			_("<strong>Outstanding Amount:</strong> {0}").format(pr.outstanding_amount),
+		)
+		for pr in open_payment_requests
+	]
+
+
+def get_irequests_of_payment_request(doc: str | None = None) -> list:
+	res = []
+	if doc:
+		res = frappe.db.get_all(
+			"Integration Request",
+			{
+				"reference_doctype": "Payment Request",
+				"reference_docname": doc,
+				"status": "Queued",
+			},
+		)
+	return res
