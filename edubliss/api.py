@@ -843,6 +843,8 @@ def get_student_attendance(student_group, student):
 def get_order_details(order_name):
     order = frappe.get_doc('Sales Order', order_name)
     if order:
+        advance_paid = order.advance_paid or 0
+        outstanding_amount = order.grand_total - advance_paid
         return {
             'name': order.name,
             'customer': order.customer,
@@ -851,7 +853,7 @@ def get_order_details(order_name):
             'program': order.program,
             'academic_year': order.academic_year,
             'academic_term': order.academic_term,
-            'grand_total': order.grand_total
+            'grand_total': outstanding_amount
         }
     else:
         return {'error': 'Order not found'}
