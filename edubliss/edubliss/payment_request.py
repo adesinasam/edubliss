@@ -260,7 +260,7 @@ def cancel_old_payment_requests(ref_dt, ref_dn):
 				# doc = frappe.get_doc("Payment Request", x.name)
 				# doc.flags.ignore_permissions = True
 				# doc.cancel()
-				frappe.db.set_value("Payment Request", x, {"docstatus": 2, "status": "Cancelled" }, update_modified=False)
+				frappe.db.set_value("Payment Request", x.name, {"docstatus": 2, "status": "Cancelled" }, update_modified=False)
 
 				# if ireqs := get_irequests_of_payment_request(doc.name):
 				# 	for ireq in ireqs:
