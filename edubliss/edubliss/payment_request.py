@@ -39,7 +39,13 @@ def make_payment_request(**args):
 		frappe.throw(_("Payment Requests cannot be created against: {0}").format(frappe.bold(args.dt)))
 
 	ref_doc = frappe.get_doc(args.dt, args.dn)
-	gateway_account = get_gateway_details(args) or frappe._dict()
+	company_name = ref_doc.get("company")
+
+	if company_name:
+		gateway_account = get_company_gateway_details(company_name)
+	else:
+		gateway_account = get_gateway_details(args) or frappe._dict()
+
 	partial_amount = args.amt
 
 	# Retrieve the Comapny Default Bank Account
@@ -285,6 +291,19 @@ def get_existing_payment_request_amount(ref_doc, statuses: list | None = None) -
 		os_amount_in_transaction_currency = flt(os_amount_in_transaction_currency / ref_doc.conversion_rate)
 
 	return os_amount_in_transaction_currency
+
+
+def get_company_gateway_details(company_name):  # nosemgrep
+	"""
+	Return gateway and payment account of company payment gateway
+	"""
+    # Try to get gateway account for the specific company
+    gateway_account = get_payment_gateway_account({"custom_company": company_name})
+    if gateway_account:
+        return gateway_account
+    
+    # Fall back to default gateway account
+    return get_payment_gateway_account({"is_default": 1})
 
 
 def get_gateway_details(args):  # nosemgrep
