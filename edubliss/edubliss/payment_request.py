@@ -133,7 +133,7 @@ def make_payment_request(**args):
 				"party_account_currency": party_account_currency,
 				"grand_total": grand_total,
 				"mode_of_payment": args.mode_of_payment,
-				"email_to": args.recipient_id or ref_doc.owner,
+				"email_to": frappe.session.user,
 				"subject": _("Payment Request for {0}").format(args.dn),
 				"message": gateway_account.get("message") or get_dummy_message(ref_doc),
 				"reference_doctype": args.dt,
