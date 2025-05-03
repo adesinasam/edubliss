@@ -257,13 +257,14 @@ def cancel_old_payment_requests(ref_dt, ref_dn):
 			frappe.throw(_("Another Payment Request is already processed"))
 		else:
 			for x in res:
-				doc = frappe.get_doc("Payment Request", x.name)
-				doc.flags.ignore_permissions = True
-				doc.cancel()
+				# doc = frappe.get_doc("Payment Request", x.name)
+				# doc.flags.ignore_permissions = True
+				# doc.cancel()
+				frappe.db.set_value("Payment Request", x, {"docstatus": 2, "status": "Cancelled" }, update_modified=False)
 
-				if ireqs := get_irequests_of_payment_request(doc.name):
-					for ireq in ireqs:
-						frappe.db.set_value("Integration Request", ireq.name, "status", "Cancelled")
+				# if ireqs := get_irequests_of_payment_request(doc.name):
+				# 	for ireq in ireqs:
+				# 		frappe.db.set_value("Integration Request", ireq.name, "status", "Cancelled")
 
 
 def get_existing_payment_request_amount(ref_doc, statuses: list | None = None) -> list:
