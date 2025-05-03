@@ -407,7 +407,7 @@ async function openModalWithFetch(orderName, doctype) {
                </div>
                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                 <label class="form-label max-w-56">Amount</label>
-                <input id="paymentAmount" class="input" name="amount" type="text" data-modal-autofocus="true" value="${data.message.grand_total}" required/>
+                <input id="paymentAmount" class="input" name="amount" type="text" data-modal-autofocus="true" value="${data.message.grand_total}" max="${data.message.grand_total}" required/>
                </div>
                <div class="flex justify-end">
                 <button class="btn btn-sm btn-dark" onclick="proceedToPayment('${doctype}','${data.message.name}', document.getElementById('paymentAmount').value)">
