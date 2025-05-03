@@ -194,6 +194,10 @@ def generate_unpaid_invoices_html(unpaid_sales_invoices, sales_orders):
     
     rows = []
     for idx, order in enumerate(sales_orders, start=1):
+        # Skip orders where advance_paid >= grand_total
+        if not (order.get('advance_paid', 0) < order.get('grand_total', 0)):
+            continue  # Skip this order
+
         status_badge = get_status_badge(order.status)
         payment_button = f'<button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch(\'{order['name']}\',\'Sales%20Order\')">Pay</button>' if order['advance_paid'] < order['grand_total'] else ''
         row = f"""
