@@ -1,7 +1,6 @@
 import frappe
 from frappe import _
 from datetime import datetime
-from frappe.utils import flt
 
 no_cache = 1
 
@@ -199,7 +198,7 @@ def generate_unpaid_invoices_html(unpaid_sales_invoices, sales_orders):
         if not (order.get('advance_paid', 0) < order.get('grand_total', 0)):
             continue  # Skip this order
 
-        outstanding_amount = flt(order.get('grand_total', 0)) - flt(order.get('advance_paid', 0))
+        outstanding_amount = (order.get('grand_total', 0)) - (order.get('advance_paid', 0))
         status_badge = get_status_badge(order.grand_total)
         payment_button = f'<button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch(\'{order['name']}\',\'Sales%20Order\')">Pay</button>' if order['advance_paid'] < order['grand_total'] else ''
         row = f"""
