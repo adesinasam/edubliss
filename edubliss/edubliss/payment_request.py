@@ -294,17 +294,19 @@ def get_existing_payment_request_amount(ref_doc, statuses: list | None = None) -
 	return os_amount_in_transaction_currency
 
 
-def get_company_gateway_details(company_name):  # nosemgrep
+def get_company_gateway_details(company_name):
 	"""
 	Return gateway and payment account of company payment gateway
 	"""
-    # Try to get gateway account for the specific company
-    gateway_account = get_payment_gateway_account({"custom_company": company_name})
-    if gateway_account:
-        return gateway_account
-    
-    # Fall back to default gateway account
-    return get_payment_gateway_account({"is_default": 1})
+
+	# Try to get gateway account for the specific company
+	gateway_account = get_payment_gateway_account({"custom_company": company_name})
+
+	if gateway_account:
+		return gateway_account
+
+	# Fall back to default gateway account
+	return get_payment_gateway_account({"is_default": 1})
 
 
 def get_gateway_details(args):  # nosemgrep
