@@ -407,7 +407,8 @@ async function openModalWithFetch(orderName, doctype) {
                </div>
                <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
                 <label class="form-label max-w-56">Amount</label>
-                <input id="paymentAmount" class="input" name="amount" type="text" data-modal-autofocus="true" value="${data.message.grand_total}" max="${data.message.grand_total}" required/>
+                <input id="paymentAmount" class="input" name="amount" type="text" data-modal-autofocus="true" value="${data.message.grand_total}" max="${data.message.grand_total}" step="0.01" required/>
+                <div id="amountError" class="text-red-500 text-sm hidden">Amount cannot exceed ${data.message.grand_total}</div>
                </div>
                <div class="flex justify-end">
                 <button class="btn btn-sm btn-dark" onclick="proceedToPayment('${doctype}','${data.message.name}', document.getElementById('paymentAmount').value)">
@@ -421,6 +422,20 @@ async function openModalWithFetch(orderName, doctype) {
             const modalEl = KTDom.getElement('#payModal');
             const modal = KTModal.getInstance(modalEl);
             modal?.show();
+
+            // Add event listener for input validation
+            paymentAmountInput.addEventListener('input', function() {
+                const maxAmount = parseFloat(this.max);
+                const enteredAmount = parseFloat(this.value) || 0;
+
+                if (enteredAmount > maxAmount) {
+                    amountError.classList.remove('hidden');
+                    this.value = maxAmount; // Reset to max value
+                } else {
+                    amountError.classList.add('hidden');
+                }
+            });
+
         } else {
             console.error('Error fetching data:', data.error);
         }
@@ -431,11 +446,25 @@ async function openModalWithFetch(orderName, doctype) {
 
 // Function to handle "Proceed to Payment" button click
 function proceedToPayment(doctype, orderName, amount) {
-    if (!amount) {
+    // if (!amount) {
+    //     alert("Please enter a valid amount.");
+    //     return;
+    // }
+    
+    const paymentAmountInput = document.getElementById('paymentAmount');
+    const maxAmount = parseFloat(paymentAmountInput.max);
+    const enteredAmount = parseFloat(amount) || 0;
+
+    if (!amount || enteredAmount <= 0) {
         alert("Please enter a valid amount.");
         return;
     }
 
+    if (enteredAmount > maxAmount) {
+        alert(`Amount cannot exceed ${maxAmount}`);
+        return;
+    }
+    
     // Construct the URL for the payment request with dynamic amount
     const paymentUrl = `/api/method/edubliss.edubliss.payment_request.make_payment_request?dn=${orderName}&dt=${doctype}&submit_doc=1&amt=${amount}&order_type=Shopping%20Cart`;
 
