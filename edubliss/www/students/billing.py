@@ -150,7 +150,7 @@ def generate_sales_orders_html(sales_orders):
     rows = []
     for idx, order in enumerate(sales_orders, start=1):
         status_badge = get_status_badge(order.status)
-        payment_button = f'<button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch(\'{order['name']}\',\'Sales%20Order\')">Pay</button>' if order['advance_paid'] < order['grand_total'] else ''
+        payment_button = f'<button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch(\'{order["name"]}\',\'Sales%20Order\')">Pay</button>' if order['advance_paid'] < order['grand_total'] else ''
         row = f"""
         <tr>
             <td class="text-2sm">{format_date(order['transaction_date'])}</td>
@@ -200,7 +200,7 @@ def generate_unpaid_invoices_html(unpaid_sales_invoices, sales_orders):
 
         outstanding_amount = (order.get('grand_total', 0)) - (order.get('advance_paid', 0))
         status_badge = get_status_badge(order.status)
-        payment_button = f'<button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch(\'{order['name']}\',\'Sales%20Order\')">Pay</button>' if order['advance_paid'] < order['grand_total'] else ''
+        payment_button = f'<button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch(\'{order["name"]}\',\'Sales%20Order\')">Pay</button>' if order['advance_paid'] < order['grand_total'] else ''
         row = f"""
         <tr>
             <td class="text-2sm">{format_date(order['transaction_date'])}</td>
