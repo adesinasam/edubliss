@@ -51,6 +51,19 @@
         {% include "templates/includes/student_sidebar.html" %}
        {% else %}
        {% endif %}
+       {% if "School Management" in user_roles %}
+       <div class="menu-item">
+        <a class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="/g/" tabindex="0">
+         <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
+          <i class="ki-filled ki-information-2 text-lg">
+          </i>
+         </span>
+         <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
+          School Management
+         </span>
+        </a>
+       </div>
+       {% endif %}
        <div class="menu-item">
         <a class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="/raven/channel/" tabindex="0">
          <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
