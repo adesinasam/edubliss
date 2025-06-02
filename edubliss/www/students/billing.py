@@ -150,7 +150,7 @@ def generate_sales_orders_html(sales_orders):
     rows = []
     for idx, order in enumerate(sales_orders, start=1):
         status_badge = get_status_badge(order.status)
-        payment_button = f'<button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch(\'{order["name"]}\',\'Sales%20Order\')">Pay</button>' if order['advance_paid'] < order['grand_total'] else ''
+        # payment_button = f'<button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch(\'{order["name"]}\',\'Sales%20Order\')">Pay</button>' if order['advance_paid'] < order['grand_total'] else ''
         row = f"""
         <tr>
             <td class="text-2sm">{format_date(order['transaction_date'])}</td>
@@ -158,7 +158,6 @@ def generate_sales_orders_html(sales_orders):
             <td class="text-2sm">Order</td>
             <td class="text-2sm">{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
             <td>{status_badge}</td>
-            <td>{payment_button}</td>
         </tr>
         """
         rows.append(row)
@@ -210,7 +209,7 @@ def generate_unpaid_invoices_html(unpaid_sales_invoices, sales_orders):
             <td class="text-2sm">{frappe.format(outstanding_amount, {'fieldtype': 'Currency'})}</td>
             <td class="text-2sm">{format_date(order['delivery_date']) or ""}</td>
             <td>{status_badge}</td>
-            <td>{payment_button}</td>
+            <td></td>
         </tr>
         """
         rows.append(row)

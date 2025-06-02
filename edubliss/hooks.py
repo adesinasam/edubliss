@@ -4,7 +4,22 @@ app_publisher = "Adesina"
 app_description = "School Portal and Dashboard Extension"
 app_email = "support@glistercp.com.ng"
 app_license = "mit"
+
+# Apps
+# ------------------
+
 # required_apps = []
+
+# Each item in the list will be shown as an app in the apps page
+add_to_apps_screen = [
+  {
+    "name": "edubliss",
+    "logo": "/assets/edubliss/dist/media/logo.png",
+    "title": "Edubliss",
+    "route": "/edubliss"
+    # "has_permission": "edubliss.api.permission.has_app_permission"
+  }
+]
 
 # Includes in <head>
 # ------------------
@@ -86,6 +101,7 @@ home_page = "portal"
 website_route_rules = [
     {"from_route": "/", "to_route": "portal"},
     {"from_route": "/index", "to_route": "portal"},
+    {"from_route": "/edubliss", "to_route": "dashboard"},
     {"from_route": "/dashboard/index", "to_route": "dashboard"},
     {"from_route": "/students/profile/<docname>", "to_route": "students/profile"},
     {"from_route": "/students/family/<docname>", "to_route": "students/family"},

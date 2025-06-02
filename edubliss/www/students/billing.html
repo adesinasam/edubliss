@@ -205,8 +205,8 @@
               <th class="min-w-[120px]">
                  Status
               </th>
-              <th class="min-w-[60px]">
-              </th>
+              <!-- <th class="min-w-[60px]">
+              </th> -->
              </tr>
             </thead>
             <tbody>
@@ -411,7 +411,7 @@ async function openModalWithFetch(orderName, doctype) {
                 <div id="amountError" class="text-red-500 text-sm hidden">Amount cannot exceed ${data.message.grand_total}</div>
                </div>
                <div class="flex justify-end">
-                <button class="btn btn-sm btn-dark" onclick="proceedToPayment('${doctype}','${data.message.name}', document.getElementById('paymentAmount').value)">
+                <button class="btn btn-sm btn-dark" onclick="proceedToPayment('${doctype}','${data.message.name}','${data.message.student}', document.getElementById('paymentAmount').value)">
                  <i class="ki-filled ki-credit-cart"></i>
                  Proceed to Payment
                 </button>
@@ -445,7 +445,7 @@ async function openModalWithFetch(orderName, doctype) {
 }
 
 // Function to handle "Proceed to Payment" button click
-function proceedToPayment(doctype, orderName, amount) {
+function proceedToPayment(doctype, orderName, studentid, amount) {
     // if (!amount) {
     //     alert("Please enter a valid amount.");
     //     return;
@@ -466,7 +466,7 @@ function proceedToPayment(doctype, orderName, amount) {
     }
     
     // Construct the URL for the payment request with dynamic amount
-    const paymentUrl = `/api/method/edubliss.edubliss.payment_request.make_payment_request?dn=${orderName}&dt=${doctype}&submit_doc=1&amt=${amount}&order_type=Shopping%20Cart`;
+    const paymentUrl = `/api/method/edubliss.edubliss.payment_request.make_payment_request?dn=${orderName}&dt=${doctype}&submit_doc=1&amt=${amount}&student=${studentid}&order_type=Shopping%20Cart`;
 
     // Redirect the user to the payment URL
     window.location.href = paymentUrl;

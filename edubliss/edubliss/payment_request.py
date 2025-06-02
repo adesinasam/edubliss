@@ -144,6 +144,7 @@ def make_payment_request(**args):
 				"bank_account": bank_account,
 				"party_name": args.get("party_name") or ref_doc.get("customer_name"),
 				"phone_number": args.get("phone_number") if args.get("phone_number") else None,
+				"custom_redirect": _("/students/billing/{0}").format(args.student),
 			}
 		)
 
