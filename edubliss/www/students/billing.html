@@ -466,7 +466,7 @@ function proceedToPayment(doctype, orderName, studentid, amount) {
     }
     
     // Construct the URL for the payment request with dynamic amount
-    const paymentUrl = `/api/method/edubliss.edubliss.payment_request.make_payment_request?dn=${orderName}&dt=${doctype}&submit_doc=1&amt=${amount}&student=${studentid}&order_type=Shopping%20Cart`;
+    const paymentUrl = `/api/method/edubliss.edubliss.payment_request.make_payment_request?dn=${orderName}&dt=${doctype}&submit_doc=1&amt=${amount}&studentid=${studentid}&order_type=Shopping%20Cart`;
 
     // Redirect the user to the payment URL
     window.location.href = paymentUrl;

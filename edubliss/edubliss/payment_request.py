@@ -47,6 +47,7 @@ def make_payment_request(**args):
 		gateway_account = get_gateway_details(args) or frappe._dict()
 
 	partial_amount = args.amt
+	student_id = args.studentid
 
 	# Retrieve the Comapny Default Bank Account
 	payment_account = frappe.db.get_value('Company', ref_doc.get("company"), 'default_bank_account')
@@ -144,7 +145,7 @@ def make_payment_request(**args):
 				"bank_account": bank_account,
 				"party_name": args.get("party_name") or ref_doc.get("customer_name"),
 				"phone_number": args.get("phone_number") if args.get("phone_number") else None,
-				"custom_redirect": _("/students/billing/{0}").format(args.student),
+				"custom_redirect": _("/students/billing/{0}").format(student_id),
 			}
 		)
 
