@@ -11,12 +11,12 @@
  "idx": 0,
  "indicator_color": "",
  "is_hidden": 0,
- "label": "Teacher",
+ "label": "Edubliss",
  "links": [],
- "modified": "2024-10-29 12:57:02.098868",
- "modified_by": "Administrator",
+ "modified": "2025-06-03 08:43:37.051779",
+ "modified_by": "kenneth.umoh@mpischool.com",
  "module": "Edubliss",
- "name": "Teacher",
+ "name": "Edubliss",
  "number_cards": [],
  "owner": "Administrator",
  "parent_page": "",
@@ -37,5 +37,5 @@
    "url": "/dashboard"
   }
  ],
- "title": "Teacher"
+ "title": "Edubliss"
 }
