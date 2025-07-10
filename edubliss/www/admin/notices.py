@@ -68,7 +68,12 @@ def get_context(context):
     context.companys = frappe.call('edubliss.api.get_company')
     context.acadyears = frappe.call('edubliss.api.get_academic_year')
     context.acadterms = frappe.call('edubliss.api.get_academic_term')
-    context.notices = frappe.get_all('Newsletter', filters={'published': 1}, fields=['*'])
+    context.notices = frappe.get_all(
+        'Newsletter', 
+        filters={'published': 1}, 
+        fields=['*'], 
+        order_by='last_updated_on desc'
+        )
 
     # Count
     context.program_count = frappe.db.count('Program', filters={'custom_school': company})
