@@ -266,6 +266,7 @@ def get_teachers(company=None):
         .on(instructors.employee == employees.name)
         .select('*')
         .where(employees.company == company)
+        .where(employees.status == "Active")
         .run(as_dict=1)
     )
     return instructors_query if instructors_query else []
