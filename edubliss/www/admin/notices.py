@@ -72,7 +72,7 @@ def get_context(context):
         'Newsletter', 
         filters={'published': 1}, 
         fields=['*'], 
-        order_by='last_updated_on desc'
+        order_by='modified desc'
         )
 
     # Count
