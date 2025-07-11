@@ -999,13 +999,39 @@ def get_grade(grading_scale, percentage):
     for d in frappe.local.grading_scale:
         grading_scale_intervals.update({d.threshold: d.grade_code})
     intervals = sorted(grading_scale_intervals.keys(), key=float, reverse=True)
+    
+    grade = ""  # Initialize grade with a default value
     for interval in intervals:
         if flt(percentage) >= interval:
             grade = grading_scale_intervals.get(interval)
             break
-        else:
-            grade = ""
+    
     return grade
+
+# def get_grade(grading_scale, percentage):
+#     """Returns Grade based on the Grading Scale and Score.
+
+#     :param Grading Scale: Grading Scale
+#     :param Percentage: Score Percentage Percentage
+#     """
+#     grading_scale_intervals = {}
+#     if not hasattr(frappe.local, "grading_scale"):
+#         grading_scale = frappe.get_all(
+#             "Grading Scale Interval",
+#             fields=["grade_code", "threshold"],
+#             filters={"parent": grading_scale},
+#         )
+#         frappe.local.grading_scale = grading_scale
+#     for d in frappe.local.grading_scale:
+#         grading_scale_intervals.update({d.threshold: d.grade_code})
+#     intervals = sorted(grading_scale_intervals.keys(), key=float, reverse=True)
+#     for interval in intervals:
+#         if flt(percentage) >= interval:
+#             grade = grading_scale_intervals.get(interval)
+#             break
+#         else:
+#             grade = ""
+#     return grade
 
 @frappe.whitelist()
 def get_grade_remark(grading_scale, percentage):
