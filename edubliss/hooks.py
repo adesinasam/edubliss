@@ -80,7 +80,8 @@ doctype_js = {
     "Quotation": "public/js/pages/quotation.js",
     "Sales Order": "public/js/pages/sorder.js",
     "Sales Invoice": "public/js/pages/sinvoice.js",
-    "Lead": "public/js/pages/lead.js"    
+    "Lead": "public/js/pages/lead.js",
+    "Student": "public/js/pages/student.js"
     }
 
 # Svg Icons

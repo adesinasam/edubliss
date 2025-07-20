@@ -1206,3 +1206,71 @@ def get_assessment_result_doc(student, assessment_plan):
             frappe.throw(_("Result already submitted for this student and assessment plan."), title="Duplicate Entry")
     else:
         return frappe.new_doc("Assessment Result")
+
+@frappe.whitelist()
+def add_guardian_to_customer_portal(student_id):
+    student = frappe.get_doc("Student", student_id)
+    customer = student.customer  # Assuming the field is named "customer"
+    customer_doc = frappe.get_doc("Customer", customer) 
+
+    if not customer:
+        frappe.throw("No customer linked to this student")
+    if not student.guardians:
+        frappe.msgprint(f"No guardians found for student {student_id}")
+        return
+    
+    added_users = []
+    skipped_users = []
+
+    guardians = student.get("guardians")  # Assuming the child table is named "guardians"
+
+    for guardian in guardians:
+        guardian_doc = frappe.get_doc("Guardian", guardian.guardian)
+
+        if not guardian_doc.email_address:
+            skipped_users.append(f"{guardian_doc.guardian_name} (no email)")
+            continue
+        
+        # Check if user exists or create new
+        if not frappe.db.exists("User", guardian_doc.email_address):
+            try:
+                user = frappe.get_doc({
+                    "doctype": "User",
+                    "email": guardian_doc.email_address,
+                    "first_name": guardian_doc.guardian_name,
+                    "send_welcome_email": 0,
+                    "role_profile_name": "MPIS Parent",
+                    "user_type": "Website User"
+                }).insert(ignore_permissions=True)
+                user_name = user.name
+            except Exception as e:
+                skipped_users.append(f"{guardian_doc.guardian_name} (error: {str(e)})")
+                continue
+        else:
+            user_name = frappe.db.get_value("User", guardian_doc.email_address, "name")
+        
+        # Check if already in portal users
+        existing = [d.user for d in customer_doc.portal_users or []]
+        if user_name in existing:
+            skipped_users.append(f"{user_name} (already exists)")
+            continue
+        
+        # Append to portal_users child table
+        customer_doc.append("portal_users", {
+            "user": user_name
+        })
+        added_users.append(user_name)
+    
+    if added_users:
+        try:
+            customer_doc.save(ignore_permissions=True)
+            frappe.db.commit()
+            message = f"Successfully added {len(added_users)} guardian(s) as portal users"
+            if skipped_users:
+                message += f"<br>Skipped {len(skipped_users)}: {', '.join(skipped_users)}"
+            frappe.msgprint(message)
+        except Exception as e:
+            frappe.msgprint(f"Error saving student: {str(e)}", alert=True)
+    else:
+        frappe.msgprint("No new guardians were added. " + 
+                       (f"Skipped: {', '.join(skipped_users)}" if skipped_users else ""))
