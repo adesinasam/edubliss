@@ -1209,6 +1209,11 @@ def get_assessment_result_doc(student, assessment_plan):
 
 @frappe.whitelist()
 def add_guardian_to_customer_portal(student_id):
+
+    frappe.publish_realtime(
+        "create_applicant_progress", {"progress": [1, 4]}, user=frappe.session.user
+    )
+
     student = frappe.get_doc("Student", student_id)
     customer = student.customer  # Assuming the field is named "customer"
     customer_doc = frappe.get_doc("Customer", customer) 
@@ -1260,6 +1265,10 @@ def add_guardian_to_customer_portal(student_id):
             "user": user_name
         })
         added_users.append(user_name)
+
+    frappe.publish_realtime(
+        "create_applicant_progress", {"progress": [4, 4]}, user=frappe.session.user
+    )
     
     if added_users:
         try:

@@ -17,5 +17,12 @@ frappe.ui.form.on('Student', {
                 });
             });
         }
+
+        frappe.realtime.on("create_applicant_progress", function(data) {
+            if(data.progress) {
+                frappe.hide_msgprint(true);
+                frappe.show_progress(__("Add Guardian as Portal User"), data.progress[0],data.progress[1]);
+            }
+        });        
     }
 });
