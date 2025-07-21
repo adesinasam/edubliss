@@ -1211,7 +1211,7 @@ def get_assessment_result_doc(student, assessment_plan):
 def add_guardian_to_customer_portal(student_id):
 
     frappe.publish_realtime(
-        "create_applicant_progress", {"progress": [1, 4]}, user=frappe.session.user
+        "create_guardian_progress", {"progress": [1, 4]}, user=frappe.session.user
     )
 
     student = frappe.get_doc("Student", student_id)
@@ -1267,7 +1267,7 @@ def add_guardian_to_customer_portal(student_id):
         added_users.append(user_name)
 
     frappe.publish_realtime(
-        "create_applicant_progress", {"progress": [4, 4]}, user=frappe.session.user
+        "create_guardian_progress", {"progress": [4, 4]}, user=frappe.session.user
     )
     
     if added_users:

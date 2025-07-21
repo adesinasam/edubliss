@@ -216,6 +216,9 @@ doc_events = {
   },
   "Course": {
     "validate": "edubliss.edubliss.course.validate"
+  },
+  "Student": {
+    "on_update": "edubliss.edubliss.student.on_update"
   }  
 }
 # doc_events = {
