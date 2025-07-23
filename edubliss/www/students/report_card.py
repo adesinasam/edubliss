@@ -74,7 +74,7 @@ def get_structure_marks(assessment_result_name,assessment_plan):
 
 def get_marks_avg(course,program,academic_term):
     assessment_results = frappe.get_all('Assessment Result',
-        filters={'course': course, 'program': program, 'academic_term': academic_term, 'grading_scale': 'MPIS Grade Scale', 'docstatus': ("!=", 2)}, 
+        filters={'course': course, 'program': program, 'academic_term': academic_term, 'docstatus': ("!=", 2)}, 
         fields=[
             'name', 'academic_term', 'student_group', 'course', 'grading_scale',
             'maximum_score', 'total_score', 'grade'
