@@ -1243,7 +1243,7 @@ def add_guardian_to_customer_portal(student_id):
                     "doctype": "User",
                     "email": guardian_doc.email_address,
                     "first_name": guardian_doc.guardian_name,
-                    "send_welcome_email": 0,
+                    "send_welcome_email": 1,
                     "role_profile_name": "MPIS Parent",
                     "user_type": "Website User"
                 }).insert(ignore_permissions=True)
