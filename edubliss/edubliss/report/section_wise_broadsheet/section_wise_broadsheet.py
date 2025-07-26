@@ -67,11 +67,12 @@ def get_data(filters=None):
             `tabAssessment Result` ar
         WHERE
             ar.student IN %(students)s
+            AND ar.student_group = %(student_group)s
             AND ar.docstatus = 1  -- Only include approved documents
         GROUP BY
             ar.student, ar.course
         """,
-        {"students": student_ids},
+        {"students": student_ids, "student_group": student_group},
         as_dict=True
     )
 
