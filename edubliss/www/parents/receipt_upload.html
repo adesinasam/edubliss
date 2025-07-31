@@ -1,0 +1,392 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Receipt Upload") }}
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav3.html" %}
+{% endblock %}
+
+{% block content %}
+<style>
+/* Style for the date input container */
+.date-input-container {
+  margin: 15px 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Style for the date input label */
+.date-input-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+/* Base style for the date input */
+.date-input {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  background-color: #fff;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  width: 200px;
+}
+
+/* Focus state */
+.date-input:focus {
+  border-color: #4a90e2;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+/* Disabled state */
+.date-input:disabled {
+  background-color: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Style for the calendar dropdown (applies to browsers that support it) */
+.date-input::-webkit-calendar-picker-indicator {
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+}
+
+.date-input::-webkit-calendar-picker-indicator:hover {
+  background-color: #e0e0e0;
+}
+
+/* Style for invalid date input */
+.date-input:invalid {
+  border-color: #e74c3c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .date-input {
+    width: 100%;
+  }
+}
+</style>
+
+    <main class="grow content pt-5" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+
+    {% include "templates/includes/parent_nav.html" %}
+
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-primary">
+         Payment Receipt Upload
+        </h1>
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="grid gap-5 lg:gap-7.5">
+       <div class="card">
+         <div class="card-body lg:py-7.5">
+          <div class="flex flex-wrap gap-7.5 lg:px-10 py-1.5">
+           <div class="flex flex-col gap-5 lg:gap-7.5 grow">
+            <div class="flex items-center flex-wrap gap-3 lg:gap-5">
+             {% if "Academics User" in user_roles %}
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-primary-light">
+              <span class="text-primary text-md leading-none font-semibold">
+               {{ frappe.format(total_debit, {'fieldtype': 'Currency'}) }}
+              </span>
+              <span class="text-gray-700 text-2sm font-medium">
+               Total Fees
+              </span>
+             </div>
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-info-light">
+              <span class="text-info text-md leading-none font-semibold">
+               {{ frappe.format(total_credit, {'fieldtype': 'Currency'}) }}
+              </span>
+              <span class="text-gray-700 text-2sm font-medium">
+               Total Payment
+              </span>
+             </div>
+             {% endif %}
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-danger-light">
+              <span class="text-danger text-md leading-none font-semibold">
+               {% if balance > 0 %}
+               {{ frappe.format(balance, {'fieldtype': 'Currency'}) }}
+               {% else %}
+               {{ frappe.format(0.00, {'fieldtype': 'Currency'}) }}
+               {% endif %}               
+              </span>
+              <span class="text-gray-700 text-2sm font-medium">
+               Balance Due
+              </span>
+             </div>
+             <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-success-light">
+              <span class="text-success text-md leading-none font-semibold">
+               {% if balance < 0 %}
+               {{ frappe.format(abs(balance), {'fieldtype': 'Currency'}) }}
+               {% else %}
+               {{ frappe.format(0.00, {'fieldtype': 'Currency'}) }}
+               {% endif %}               
+              </span>
+              <span class="text-gray-700 text-2sm font-medium">
+               Deposit
+              </span>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+         <!-- <div class="card-footer justify-center">
+          <a class="btn btn-link" href="#">
+           Example link
+          </a>
+         </div> -->
+       </div>
+       <div class="card pb-2.5">
+         <div class="card-header">
+          <h3 class="card-title">
+           Receipt Details
+          </h3>
+         </div>
+         <div class="card-body grid gap-5">
+          <div class="flex items-center flex-wrap gap-2.5">
+           <label class="form-label max-w-56">
+            Upload Receipt
+           </label>
+           <div class="flex items-center justify-between flex-wrap grow gap-2.5">
+            <div class="image-input size-[140px]" data-image-input="true">
+             <input accept=".png, .jpg, .jpeg" name="avatar" type="file">
+              <input name="avatar_remove" type="hidden">
+               <div class="btn btn-icon btn-icon-xs btn-light shadow-default absolute z-1 size-5 -top-0.5 -right-0.5 rounded-full" data-image-input-remove="" data-tooltip="#image_input_tooltip" data-tooltip-trigger="hover">
+                <i class="ki-filled ki-cross">
+                </i>
+               </div>
+               <span class="tooltip" id="image_input_tooltip">
+                Click to remove or revert
+               </span>
+               <div class="image-input-placeholder border-2 border-success image-input-empty:border-gray-300" style="">
+                <div class="image-input-preview" style="">
+                </div>
+                <div class="flex items-center justify-center cursor-pointer h-5 left-0 right-0 bottom-0 bg-dark-clarity absolute">
+                 <svg class="fill-light opacity-80" height="12" viewbox="0 0 14 12" width="14" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11.6665 2.64585H11.2232C11.0873 2.64749 10.9538 2.61053 10.8382 2.53928C10.7225 2.46803 10.6295 2.36541 10.5698 2.24335L10.0448 1.19918C9.91266 0.931853 9.70808 0.707007 9.45438 0.550249C9.20068 0.393491 8.90806 0.311121 8.60984 0.312517H5.38984C5.09162 0.311121 4.799 0.393491 4.5453 0.550249C4.2916 0.707007 4.08701 0.931853 3.95484 1.19918L3.42984 2.24335C3.37021 2.36541 3.27716 2.46803 3.1615 2.53928C3.04584 2.61053 2.91234 2.64749 2.7765 2.64585H2.33317C1.90772 2.64585 1.49969 2.81486 1.19885 3.1157C0.898014 3.41654 0.729004 3.82457 0.729004 4.25002V10.0834C0.729004 10.5088 0.898014 10.9168 1.19885 11.2177C1.49969 11.5185 1.90772 11.6875 2.33317 11.6875H11.6665C12.092 11.6875 12.5 11.5185 12.8008 11.2177C13.1017 10.9168 13.2707 10.5088 13.2707 10.0834V4.25002C13.2707 3.82457 13.1017 3.41654 12.8008 3.1157C12.5 2.81486 12.092 2.64585 11.6665 2.64585ZM6.99984 9.64585C6.39413 9.64585 5.80203 9.46624 5.2984 9.12973C4.79478 8.79321 4.40225 8.31492 4.17046 7.75532C3.93866 7.19572 3.87802 6.57995 3.99618 5.98589C4.11435 5.39182 4.40602 4.84613 4.83432 4.41784C5.26262 3.98954 5.80831 3.69786 6.40237 3.5797C6.99644 3.46153 7.61221 3.52218 8.1718 3.75397C8.7314 3.98576 9.2097 4.37829 9.54621 4.88192C9.88272 5.38554 10.0623 5.97765 10.0623 6.58335C10.0608 7.3951 9.73765 8.17317 9.16365 8.74716C8.58965 9.32116 7.81159 9.64431 6.99984 9.64585Z" fill="">
+                  </path>
+                  <path d="M7 8.77087C8.20812 8.77087 9.1875 7.7915 9.1875 6.58337C9.1875 5.37525 8.20812 4.39587 7 4.39587C5.79188 4.39587 4.8125 5.37525 4.8125 6.58337C4.8125 7.7915 5.79188 8.77087 7 8.77087Z" fill="">
+                  </path>
+                 </svg>
+                </div>
+               </div>
+              </input>
+             </input>
+            </div>
+            <span class="text-2sm font-medium text-gray-600">
+             Upload Image (JPEG, PNG, JPG)
+            </span>
+           </div>
+          </div>
+          <div class="w-full">
+           <div class="date-input-container flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+            <label for="date" class="form-label flex items-center gap-1 max-w-56">
+             Receipt Date
+            </label>
+            <input  class="date-input" type="date" id="date" name="receipt_date"/>
+           </div>
+          </div>
+          <div class="w-full">
+           <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+            <label class="form-label flex items-center gap-1 max-w-56">
+             Amount Paid
+            </label>
+            <input class="input" placeholder="Amount Paid" name="amount_paid" type="number"/>
+           </div>
+          </div>
+          <div class="w-full">
+           <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+            <label class="form-label flex items-center gap-1 max-w-56">
+             Depositor Name
+            </label>
+            <input class="input" type="text" name="depositor" placeholder="Depositor Name"/>
+           </div>
+          </div>
+          <div class="w-full">
+           <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+            <label class="date-input-label flex items-center gap-1 max-w-56">
+             Allocate Amount Paid
+            </label>
+           </div>
+          </div>
+          <div class="scrollable-x-auto">
+           <table class="table table-border" data-datatable-table="true">
+            <thead>
+             <tr>
+              <th class="min-w-[100px]">
+                Type
+              </th>
+              <th class="min-w-[150px]">
+                Transaction
+              </th>
+              <th class="min-w-[200px] text-center">
+                Student
+              </th>
+              <th class="min-w-[150px]">
+                 Outstanding
+              </th>
+              <th class="min-w-[150px]">
+                 Allocate Amount
+              </th>
+              <th class="min-w-[120px]">
+                 Status
+              </th>
+              <th class="min-w-[150px]">
+                 Invoice Date
+              </th>
+               <th class="min-w-[120px]">
+                 Due Date
+              </th>
+             </tr>
+            </thead>
+            <tbody>
+              {% if unpaid_invoices_html %}
+               {{ unpaid_invoices_html | safe }}
+              {% else %}
+              <tr><td colspan="9" class="text-center">No Invoice found.</td></tr>
+              {% endif %}
+           </tbody>
+           </table>
+          </div>
+          <div class="flex justify-end pt-2.5">
+           <button class="btn btn-primary">
+            Submit
+           </button>
+          </div>
+         </div>
+        </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+      </div>
+     </div>
+     <!-- end: container -->
+    </main>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all the elements we need
+    const amountPaidInput = document.querySelector('input[name="amount_paid"]');
+    const allocateAmountInputs = document.querySelectorAll('input[placeholder="Allocate Amount"]');
+    const submitButton = document.querySelector('.btn.btn-primary');
+    
+    // Function to split amount paid proportionally based on outstanding amounts
+    function splitAmountPaid() {
+        const amountPaid = parseFloat(amountPaidInput.value) || 0;
+        let totalOutstanding = 0;
+        
+        // First, calculate total outstanding
+        const outstandingAmounts = [];
+        allocateAmountInputs.forEach(input => {
+            const row = input.closest('tr');
+            const outstandingCell = row.querySelector('td:nth-child(4)'); // 4th column is Outstanding
+            const outstandingText = outstandingCell.textContent.trim().replace(/[^\d.-]/g, '');
+            const outstanding = parseFloat(outstandingText) || 0;
+            outstandingAmounts.push(outstanding);
+            totalOutstanding += outstanding;
+        });
+        
+        // If no outstanding or no amount paid, clear all allocate amounts
+        if (totalOutstanding <= 0 || amountPaid <= 0) {
+            allocateAmountInputs.forEach(input => {
+                input.value = '';
+            });
+            return;
+        }
+        
+        // Distribute the amount paid proportionally
+        let remainingAmount = amountPaid;
+        allocateAmountInputs.forEach((input, index) => {
+            const outstanding = outstandingAmounts[index];
+            let allocated = 0;
+            
+            if (index === allocateAmountInputs.length - 1) {
+                // Last item gets the remaining amount to avoid rounding errors
+                allocated = remainingAmount;
+            } else {
+                // Calculate proportional amount
+                allocated = (outstanding / totalOutstanding) * amountPaid;
+                allocated = Math.min(allocated, outstanding); // Don't allocate more than outstanding
+                allocated = parseFloat(allocated.toFixed(2)); // Round to 2 decimal places
+                remainingAmount -= allocated;
+            }
+            
+            input.value = allocated.toFixed(2);
+        });
+    }
+    
+    // Function to validate total allocated amount matches amount paid
+    function validateAllocation() {
+        const amountPaid = parseFloat(amountPaidInput.value) || 0;
+        let totalAllocated = 0;
+        
+        allocateAmountInputs.forEach(input => {
+            const value = parseFloat(input.value) || 0;
+            totalAllocated += value;
+        });
+        
+        // Round to 2 decimal places to avoid floating point precision issues
+        const roundedPaid = Math.round(amountPaid * 100) / 100;
+        const roundedAllocated = Math.round(totalAllocated * 100) / 100;
+        
+        if (roundedPaid !== roundedAllocated) {
+            frappe.msgprint({
+                title: __('Validation Error'),
+                indicator: 'red',
+                message: __('Total allocated amount (${0}) does not match amount paid (${1})', [roundedAllocated.toFixed(2), roundedPaid.toFixed(2)])
+            });
+            return false;
+        }
+        
+        return true;
+    }
+    
+    // Event listeners
+    amountPaidInput.addEventListener('change', splitAmountPaid);
+    amountPaidInput.addEventListener('blur', splitAmountPaid);
+    
+    submitButton.addEventListener('click', function(e) {
+        if (!validateAllocation()) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    });
+    
+    // Also validate when any allocate amount changes
+    allocateAmountInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            // When user manually changes an amount, we don't auto-split but we still validate
+            validateAllocation();
+        });
+    });
+});
+</script>
+{% endblock %}
+{% block welcome_link %}
+{% include "templates/includes/modal/pay.html" %}
+{% endblock %}

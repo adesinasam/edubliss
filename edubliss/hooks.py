@@ -8,7 +8,7 @@ app_license = "mit"
 # Apps
 # ------------------
 
-# required_apps = []
+required_apps = ["education","lms"]
 
 # Each item in the list will be shown as an app in the apps page
 add_to_apps_screen = [
@@ -122,6 +122,7 @@ website_route_rules = [
     {"from_route": "/teachers/sections/<docname>", "to_route": "teachers/sections"},
     {"from_route": "/parents/profile/<docname>", "to_route": "parents/profile"},
     {"from_route": "/parents/billing/<docname>", "to_route": "parents/billing"},
+    {"from_route": "/parents/receipt_upload/<docname>", "to_route": "parents/receipt_upload"},
     {"from_route": "/admin/course/overview/<docname>", "to_route": "admin/course/overview"},
     {"from_route": "/admin/course/students/<docname>", "to_route": "admin/course/students"},
     {"from_route": "/admin/course/outline/<docname>", "to_route": "admin/course/outline"},

@@ -1,0 +1,88 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-29 16:35:16.821994",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "billing_document_type",
+  "billing_document",
+  "student",
+  "column_break_dpfi",
+  "posting_date",
+  "outstanding",
+  "grand_total",
+  "allocated_amount"
+ ],
+ "fields": [
+  {
+   "fieldname": "billing_document_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Billing Document Type",
+   "options": "Sales Invoice\nSales Order",
+   "reqd": 1
+  },
+  {
+   "fieldname": "billing_document",
+   "fieldtype": "Dynamic Link",
+   "in_list_view": 1,
+   "label": "Billing Document",
+   "options": "billing_document_type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "student",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Student",
+   "options": "Student",
+   "print_width": "220px",
+   "read_only": 1,
+   "width": "220px"
+  },
+  {
+   "fieldname": "column_break_dpfi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "outstanding",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Outstanding",
+   "read_only": 1
+  },
+  {
+   "fieldname": "grand_total",
+   "fieldtype": "Currency",
+   "label": "Grand Total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "allocated_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Allocated Amount",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-29 17:03:57.140484",
+ "modified_by": "Administrator",
+ "module": "Edubliss",
+ "name": "Payment Receipt Details",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

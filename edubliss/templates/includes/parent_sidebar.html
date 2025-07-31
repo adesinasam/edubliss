@@ -67,11 +67,22 @@
        <div class="menu-item {% if active_parent_route == 'billing' %}active{% endif %}">
         <a class="menu-link flex items-center border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0" href="/parents/billing">
          <span class="menu-icon items-start text-gray-500 dark:text-gray-400 w-[20px]">
-          <i class="ki-filled ki-users text-lg">
+          <i class="ki-filled ki-credit-cart text-lg">
           </i>
          </span>
          <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
           Invoices
+         </span>
+        </a>
+       </div>
+       <div class="menu-item {% if active_parent_route == 'receipt_upload' %}active{% endif %}">
+        <a class="menu-link flex items-center border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0" href="/parents/receipt_upload">
+         <span class="menu-icon items-start text-gray-500 dark:text-gray-400 w-[20px]">
+          <i class="ki-filled ki-cheque text-lg">
+          </i>
+         </span>
+         <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
+          Upload Receipt
          </span>
         </a>
        </div>
