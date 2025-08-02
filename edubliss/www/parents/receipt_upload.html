@@ -162,15 +162,18 @@
            Receipt Details
           </h3>
          </div>
+         <form action="/api/method/edubliss.api.upload_receipt_form" method="post" enctype="multipart/form-data">
          <div class="card-body grid gap-5">
-          <div class="flex items-center flex-wrap gap-2.5">
+            <input type="hidden" value="{{frappe.session.csrf_token}}" name="csrf_token">
+            <input type="hidden" name="initial_url" value="{{ frappe.request.url }}">
+          <!-- <div class="flex items-center flex-wrap gap-2.5">
            <label class="form-label max-w-56">
             Upload Receipt
            </label>
            <div class="flex items-center justify-between flex-wrap grow gap-2.5">
             <div class="image-input size-[140px]" data-image-input="true">
-             <input accept=".png, .jpg, .jpeg" name="avatar" type="file">
-              <input name="avatar_remove" type="hidden">
+             <input accept=".png, .jpg, .jpeg" name="avatar" type="file" required />
+              <input name="avatar_remove" type="hidden" />
                <div class="btn btn-icon btn-icon-xs btn-light shadow-default absolute z-1 size-5 -top-0.5 -right-0.5 rounded-full" data-image-input-remove="" data-tooltip="#image_input_tooltip" data-tooltip-trigger="hover">
                 <i class="ki-filled ki-cross">
                 </i>
@@ -196,6 +199,14 @@
             <span class="text-2sm font-medium text-gray-600">
              Upload Image (JPEG, PNG, JPG)
             </span>
+           </div>           
+          </div> -->
+          <div class="w-full">
+           <div class="date-input-container flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+            <label class="form-label flex items-center gap-1 max-w-56">
+             Upload Receipt
+            </label>
+            <input accept=".png, .jpg, .jpeg" class="file-input" name="avatar" type="file" required />
            </div>
           </div>
           <div class="w-full">
@@ -203,23 +214,23 @@
             <label for="date" class="form-label flex items-center gap-1 max-w-56">
              Receipt Date
             </label>
-            <input  class="date-input" type="date" id="date" name="receipt_date"/>
+            <input  class="date-input" type="date" id="date" name="posting_date"/>
            </div>
           </div>
           <div class="w-full">
-           <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+           <div class="date-input-container flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
             <label class="form-label flex items-center gap-1 max-w-56">
              Amount Paid
             </label>
-            <input class="input" placeholder="Amount Paid" name="amount_paid" type="number"/>
+            <input class="date-input" placeholder="Amount Paid" name="amount_paid" type="number"/>
            </div>
           </div>
           <div class="w-full">
-           <div class="flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
+           <div class="date-input-container flex items-baseline flex-wrap lg:flex-nowrap gap-2.5">
             <label class="form-label flex items-center gap-1 max-w-56">
              Depositor Name
             </label>
-            <input class="input" type="text" name="depositor" placeholder="Depositor Name"/>
+            <input class="date-input" type="text" name="depositor" placeholder="Depositor Name"/>
            </div>
           </div>
           <div class="w-full">
@@ -274,6 +285,7 @@
            </button>
           </div>
          </div>
+         </form>
         </div>
       </div>
      </div>
@@ -293,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get all the elements we need
     const amountPaidInput = document.querySelector('input[name="amount_paid"]');
     const allocateAmountInputs = document.querySelectorAll('input[placeholder="Allocate Amount"]');
-    const submitButton = document.querySelector('.btn.btn-primary');
+    const form = document.querySelector('form'); // Get the form element
     
     // Function to split amount paid proportionally based on outstanding amounts
     function splitAmountPaid() {
@@ -329,14 +341,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Last item gets the remaining amount to avoid rounding errors
                 allocated = remainingAmount;
             } else {
-                // Calculate proportional amount
-                allocated = (outstanding / totalOutstanding) * amountPaid;
+                // // Calculate proportional amount
+                // allocated = (outstanding / totalOutstanding) * amountPaid;
+                if (outstanding <= remainingAmount){
+                    allocated = outstanding;
+                } else {
+                    allocated = remainingAmount;
+                }
                 allocated = Math.min(allocated, outstanding); // Don't allocate more than outstanding
-                allocated = parseFloat(allocated.toFixed(2)); // Round to 2 decimal places
+                allocated = parseFloat(allocated.toFixed(0)); // Round to 2 decimal places
                 remainingAmount -= allocated;
             }
             
-            input.value = allocated.toFixed(2);
+            input.value = allocated.toFixed(0);
         });
     }
     
@@ -347,19 +364,24 @@ document.addEventListener('DOMContentLoaded', function() {
         
         allocateAmountInputs.forEach(input => {
             const value = parseFloat(input.value) || 0;
+            console.log("Allocated Input:", input.value, "Parsed as:", value);
             totalAllocated += value;
+
+            console.log("Total Allocated:", totalAllocated); // Check sum
         });
         
         // Round to 2 decimal places to avoid floating point precision issues
-        const roundedPaid = Math.round(amountPaid * 100) / 100;
-        const roundedAllocated = Math.round(totalAllocated * 100) / 100;
+        // const roundedPaid = Math.round(amountPaid * 100) / 100;
+        // const roundedAllocated = Math.round(totalAllocated * 100) / 100;
+        const roundedPaid = Math.round(amountPaid);
+        const roundedAllocated = Math.round(totalAllocated);
         
         if (roundedPaid !== roundedAllocated) {
-            frappe.msgprint({
-                title: __('Validation Error'),
-                indicator: 'red',
-                message: __('Total allocated amount (${0}) does not match amount paid (${1})', [roundedAllocated.toFixed(2), roundedPaid.toFixed(2)])
-            });
+            alert('Validation Error: Total allocated amount (' + roundedAllocated + ') does not match amount paid (' + roundedPaid + ')');
+            // if (event) {
+            //     event.preventDefault();
+            //     event.stopPropagation();
+            // }
             return false;
         }
         
@@ -370,19 +392,17 @@ document.addEventListener('DOMContentLoaded', function() {
     amountPaidInput.addEventListener('change', splitAmountPaid);
     amountPaidInput.addEventListener('blur', splitAmountPaid);
     
-    submitButton.addEventListener('click', function(e) {
-        if (!validateAllocation()) {
-            e.preventDefault();
-            e.stopPropagation();
+    form.addEventListener('submit', function(e) {
+        if (!validateAllocation(e)) {
+            // The event.preventDefault() is already handled in validateAllocation
+            return false;
         }
+        // If validation passes, form will submit normally
     });
     
     // Also validate when any allocate amount changes
     allocateAmountInputs.forEach(input => {
-        input.addEventListener('change', function() {
-            // When user manually changes an amount, we don't auto-split but we still validate
-            validateAllocation();
-        });
+        input.addEventListener('change', validateAllocation);
     });
 });
 </script>

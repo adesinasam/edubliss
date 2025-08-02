@@ -129,56 +129,31 @@ def generate_ledger_html(ledgers, context):
         context.total_credit += credit
         balance += debit - credit
 
-        # row = f"""
-        # <tr>
-        #     <td class="text-xs">{idx}</td>
-        #     <td class="text-xs">{format_date(ledger.posting_date)}</td>
-        #     <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype={ledger.voucher_type}&name={ledger.voucher_no}" target="_blank">{ledger.voucher_no}</a></td>
-        #     <td class="text-xs">{ledger.voucher_type}</td>
-        #     <td class="text-xs">{frappe.format_value(debit, {"fieldtype": "Currency"})}</td>
-        #     <td class="text-xs">{frappe.format_value(credit, {"fieldtype": "Currency"})}</td>
-        #     <td class="text-xs {'text-success' if balance < 0 else 'text-gray-800'}">{frappe.format_value(balance, {"fieldtype": "Currency"})}</td>
-        #     <td class="text-xs">{ledger.remarks}</td>
-        # </tr>
-        # """
-        # rows.append(row)
 
     context.balance = balance
     return ''.join(rows)
 
 
 def generate_unpaid_invoices_html(unpaid_sales_invoices,sales_orders):
-    # if not unpaid_sales_invoices and not sales_orders:
-    #     return '<tr><td colspan="7" class="text-center">No Invoice found.</td></tr>'
     
     rows = []
-    # for idx, order in enumerate(sales_orders, start=1):
-    #     status_badge = get_status_badge(order.status)
-    #     row = f"""
-    #     <tr>
-    #         <td class="text-2sm">{format_date(order['transaction_date'])}</td>
-    #         <td class="left"><a class="text-primary text-xs" href="/students/billing/{order['student']}">{order['customer']}</a></td>
-    #         <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Order&name={order['name']}" target="_blank">{order['name']}</a></td>
-    #         <td class="text-2sm">Order</td>
-    #         <td class="text-2sm">{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
-    #         <td class="text-2sm">{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
-    #         <td class="text-2sm">{format_date(order['delivery_date']) or ""}</td>
-    #         <td>{status_badge}</td>
-    #         <td><input class="input" placeholder="Amount Paid" type="number" /></td>
-    #     </tr>
-    #     """
-    #     rows.append(row)
 
     for invoice in unpaid_sales_invoices:
         status_badge = get_status_badge(invoice.status)
         payment_button = f'<button class="btn btn-xs btn-danger text-2sm text-light" onclick="openModalWithFetch(\'{invoice["name"]}\',\'Sales%20Invoice\')">Pay</button>' if invoice['outstanding_amount'] > 0 else ''
         row = f"""
-        <tr>
-            <td class="text-2sm">Invoice</td>
-            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Invoice&name={invoice['name']}" target="_blank">{invoice['name']}</a></td>
+        <tr>            
+            <td class="text-2sm">Invoice
+            <input type="hidden" name="billing_document_type" value="Sales Invoice">
+            </td>
+            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Invoice&name={invoice['name']}" target="_blank">{invoice['name']}</a>
+            <input type="hidden" name="billing_document" value="{invoice['name']}">
+            </td>
             <td class="left"><a class="text-primary text-xs" href="/students/billing/{invoice['student']}">{invoice['customer']}</a></td>
             <td class="text-2sm">{frappe.format(invoice['outstanding_amount'], {'fieldtype': 'Currency'})}</td>
-            <td><input class="input" placeholder="Allocate Amount" type="number" name="{invoice['name']}" /></td>
+            <td>
+            <input class="input" placeholder="Allocate Amount" value="0" type="number" name="allocated_amount" />
+            </td>
             <td>{status_badge}</td>
             <td class="text-2sm">{format_date(invoice['posting_date'])}</td>
             <td class="text-2sm">{format_date(invoice['due_date'])}</td>

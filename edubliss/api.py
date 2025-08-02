@@ -1,5 +1,7 @@
 
 import json
+import os
+from werkzeug.utils import secure_filename
 
 import frappe
 from frappe import _
@@ -9,6 +11,7 @@ from frappe.model.mapper import get_mapped_doc
 from frappe.utils import cstr, flt, getdate, nowdate
 from frappe.utils.dateutils import get_dates_from_timegrain
 from datetime import datetime
+from frappe.utils import get_files_path
 
 
 @frappe.whitelist()
@@ -1283,3 +1286,100 @@ def add_guardian_to_customer_portal(student_id):
     else:
         frappe.msgprint("No new guardians were added. " + 
                        (f"Skipped: {', '.join(skipped_users)}" if skipped_users else ""))
+
+
+@frappe.whitelist()
+def upload_receipt_form():
+    try:
+        # Get form data
+        form_dict = frappe.local.form_dict
+        initial_url = form_dict.get('initial_url')
+        amount_paid = flt(form_dict.get('amount_paid'))
+        
+        # Validate required fields
+        required_fields = ['posting_date', 'amount_paid', 'depositor']
+        for field in required_fields:
+            if not form_dict.get(field):
+                return error_response(initial_url, f"{field.replace('_', ' ').title()} is required")
+        
+        # Add invoice allocations
+        invoice_names = frappe.request.form.getlist('billing_document')
+        allocate_amounts = frappe.request.form.getlist('allocated_amount')
+        
+        if len(invoice_names) != len(allocate_amounts):
+            return error_response(initial_url, "Mismatch between invoice names and allocated amounts")
+        
+        billing_receipts = []
+        total_allocated = 0
+        
+        for i, invoice_name in enumerate(invoice_names):
+            allocated_amount = flt(allocate_amounts[i])
+            if allocated_amount > 0:
+                billing_receipts.append({
+                    "billing_document_type": "Sales Invoice",
+                    "billing_document": invoice_name,
+                    "allocated_amount": allocated_amount
+                })
+                total_allocated += allocated_amount
+        
+        # Validate allocation matches amount paid
+        if abs(total_allocated - amount_paid) > 0.01:  # Allow small rounding differences
+            return error_response(initial_url, f"Total allocated amount ({total_allocated}) does not match amount paid ({amount_paid})")
+
+        # Validate amount
+        if amount_paid <= 0:
+            return error_response(initial_url, "Amount Paid must be greater than 0")
+        
+        # File handling
+        file = frappe.request.files.get('avatar')
+        if not file or file.filename == '':
+            return error_response(initial_url, "Please select a valid image file (PNG/JPG/JPEG)")
+        
+        # Validate file extension
+        allowed_extensions = {'png', 'jpg', 'jpeg'}
+        filename = secure_filename(file.filename)
+        if '.' not in filename or filename.rsplit('.', 1)[1].lower() not in allowed_extensions:
+            return error_response(initial_url, "Invalid file type. Only PNG, JPG, JPEG allowed")
+
+        # Create Payment Receipt document FIRST
+        receipt_doc = frappe.get_doc({
+            "doctype": "Payment Receipt Upload",
+            "posting_date": getdate(form_dict.get('posting_date')),
+            "paid_amount": amount_paid,
+            "billing_receipts": billing_receipts,
+            "depositor_name": form_dict.get('depositor'),
+            "status": "Pending"
+        })
+        receipt_doc.insert(ignore_permissions=True)
+        
+        # Now handle file attachment with proper reference
+        file_content = file.stream.read()
+        file_doc = frappe.get_doc({
+            "doctype": "File",
+            "file_name": filename,
+            "attached_to_doctype": "Payment Receipt Upload",
+            "attached_to_name": receipt_doc.name,  # This was missing
+            "attached_to_field": "receipt_image",
+            "content": file_content,  # Direct upload instead of saving to filesystem
+            "is_private": 1
+        })
+        file_doc.insert(ignore_permissions=True)
+        
+        # Update receipt with file URL
+        receipt_doc.db_set('attach_image', file_doc.file_url)
+        
+        frappe.db.commit()
+        return success_response(initial_url, "?success=1")
+        
+    except Exception as e:
+        frappe.log_error(f"Receipt upload failed: {str(e)}")
+        frappe.db.rollback()
+        return error_response(initial_url, f"An error occurred: {str(e)}")
+
+def success_response(redirect_url, message):
+    frappe.local.response["type"] = "redirect"
+    frappe.local.response["location"] = redirect_url + message
+
+def error_response(redirect_url, message):
+    frappe.local.response["type"] = "redirect"
+    frappe.local.response["location"] = redirect_url + "?error=" + frappe.utils.quote(message)
