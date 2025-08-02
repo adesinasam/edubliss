@@ -169,6 +169,7 @@ def get_status_badge(status):
         'Overdue': 'badge-danger',
         'Cancelled': 'badge-danger',
         'To Deliver and Bill': 'badge-warning',
+        'Unpaid': 'badge-warning',
         'Partly Paid': 'badge-warning',
         'Completed': 'badge-success',
         'Return': 'badge-dark',
