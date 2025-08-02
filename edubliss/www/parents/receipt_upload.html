@@ -378,10 +378,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (roundedPaid !== roundedAllocated) {
             alert('Validation Error: Total allocated amount (' + roundedAllocated + ') does not match amount paid (' + roundedPaid + ')');
-            // if (event) {
-            //     event.preventDefault();
-            //     event.stopPropagation();
-            // }
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
             return false;
         }
         

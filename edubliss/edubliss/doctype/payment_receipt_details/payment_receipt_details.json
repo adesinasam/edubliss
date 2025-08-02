@@ -21,7 +21,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Billing Document Type",
-   "options": "Sales Invoice\nSales Order",
+   "options": "Sales Invoice",
    "reqd": 1
   },
   {
@@ -76,7 +76,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-07-29 17:03:57.140484",
+ "modified": "2025-07-29 18:25:02.714877",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Payment Receipt Details",
