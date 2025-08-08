@@ -1,7 +1,8 @@
 import frappe
 from frappe import _
-from frappe.utils import validate_email_address
+from frappe.utils import get_url_to_form
 from frappe.utils.print_format import download_pdf
+from frappe.utils import cstr
 
 def on_update(doc, method):
     if doc.status == "Converted" or doc.custom_admission_status == "Offer Rejected":
@@ -85,3 +86,12 @@ def on_update(doc, method):
     except Exception as e:
         frappe.log_error(_("Failed to send status email: {0}").format(str(e)), reference_doctype=doc.doctype, reference_name=doc.name)
         frappe.msgprint(_("Failed to send email. Please check error logs."), alert=True)
+
+def validate_email(email):
+    from frappe.utils import validate_email_address
+    try:
+        validate_email_address(email, throw=True)
+        return True
+    except:
+        frappe.log_error(f"Invalid email address: {email}")
+        return False
