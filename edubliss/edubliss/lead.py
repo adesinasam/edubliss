@@ -41,18 +41,8 @@ def on_update(doc, method):
 
         # 3. Prepare Email
         email_template = frappe.get_doc("Email Template", template_name)
-        
-        # Render subject and content using Jinja
-        context = {"doc": doc}
-        subject = frappe.render_template(email_template.subject, context)
-        
-        # Handle both response and response_html
-        if email_template.response_html:
-            message = frappe.render_template(email_template.response_html, context)
-            content_type = "html"
-        else:
-            message = frappe.render_template(email_template.response, context)
-            content_type = "plain"
+        subject = frappe.render_template(email_template.subject, {"doc": doc})
+        message = frappe.render_template(email_template.response_html, {"doc": doc})
 
         # 4. Prepare Attachments (if applicable)
         attachments = []
@@ -77,14 +67,13 @@ def on_update(doc, method):
             subject=subject,
             message=message,
             attachments=attachments if attachments else None,
-            content_type=content_type,
             now=True
         )
         
         frappe.msgprint(_("Email sent successfully to: {0}").format(", ".join(recipients)))
         
     except Exception as e:
-        frappe.log_error(_("Failed to send status email: {0}").format(str(e)), reference_doctype=doc.doctype, reference_name=doc.name)
+        frappe.log_error(_("Failed to send status email"), reference_doctype=doc.doctype, reference_name=doc.name)
         frappe.msgprint(_("Failed to send email. Please check error logs."), alert=True)
 
 def validate_email(email):
