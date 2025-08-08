@@ -1,0 +1,103 @@
+{
+ "actions": [],
+ "creation": "2025-08-08 06:06:41.536257",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "default_email_template",
+  "enquiry_registration",
+  "form_payment",
+  "test_booking",
+  "column_break_4",
+  "admission_letter",
+  "acceptance_paid"
+ ],
+ "fields": [
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Welcome Message",
+   "fieldname": "enquiry_registration",
+   "fieldtype": "Link",
+   "label": "Enquiry Registration",
+   "options": "Email Template"
+  },
+  {
+   "description": "Payment confirmation message",
+   "fieldname": "form_payment",
+   "fieldtype": "Link",
+   "label": "Form Payment",
+   "options": "Email Template"
+  },
+  {
+   "description": "Test Invitation Letter",
+   "fieldname": "test_booking",
+   "fieldtype": "Link",
+   "label": "Test Booking",
+   "options": "Email Template"
+  },
+  {
+   "description": "Admission Letter",
+   "fieldname": "admission_letter",
+   "fieldtype": "Link",
+   "label": "Admission Letter",
+   "options": "Email Template"
+  },
+  {
+   "description": "Payment confirmation message",
+   "fieldname": "acceptance_paid",
+   "fieldtype": "Link",
+   "label": "Acceptance Paid",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "default_email_template",
+   "fieldtype": "Section Break",
+   "label": "Default Email Template"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-08-08 06:17:47.358496",
+ "modified_by": "Administrator",
+ "module": "Edubliss",
+ "name": "Edubliss Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Education Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Guest",
+   "share": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

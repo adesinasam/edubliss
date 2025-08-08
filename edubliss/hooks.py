@@ -220,7 +220,10 @@ doc_events = {
   },
   "Student": {
     "on_update": "edubliss.edubliss.student.on_update"
-  }  
+  },
+  "Lead": {
+    "on_update": "edubliss.edubliss.lead.on_update"
+  }
 }
 # doc_events = {
 # 	"*": {
