@@ -42,7 +42,10 @@ def on_update(doc, method):
         # 3. Prepare Email
         email_template = frappe.get_doc("Email Template", template_name)
         subject = frappe.render_template(email_template.subject, {"doc": doc})
-        message = frappe.render_template(email_template.response_html, {"doc": doc})
+        if email_template.use_html:
+        	message = frappe.render_template(email_template.response_html, {"doc": doc})
+        else:
+        	message = frappe.render_template(email_template.response, {"doc": doc})
 
         # 4. Prepare Attachments (if applicable)
         attachments = []
