@@ -9,12 +9,16 @@
   "naming_series",
   "paid_amount",
   "depositor_name",
+  "mode_of_payment",
   "column_break_vcrr",
   "posting_date",
   "attach_image",
   "attach_document",
   "section_break_akmc",
   "billing_receipts",
+  "status",
+  "user_name",
+  "is_portal",
   "section_break_fzxd",
   "amended_from"
  ],
@@ -65,7 +69,7 @@
    "fieldname": "attach_image",
    "fieldtype": "Attach Image",
    "label": "Preview Image",
-   "mandatory_depends_on": "eval:!doc.attach_description"
+   "mandatory_depends_on": "eval:!doc.attach_document"
   },
   {
    "fieldname": "attach_document",
@@ -82,12 +86,40 @@
    "fieldtype": "Table",
    "options": "Payment Receipt Details",
    "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Pending\nApproved\nRejected\nCancelled",
+   "read_only": 1
+  },
+  {
+   "fieldname": "user_name",
+   "fieldtype": "Data",
+   "label": "User Name",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.attach_document || doc.attach_image",
+   "fieldname": "mode_of_payment",
+   "fieldtype": "Link",
+   "label": "Mode of Payment",
+   "mandatory_depends_on": "eval:doc.attach_document || doc.attach_image",
+   "options": "Mode of Payment"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_portal",
+   "fieldtype": "Check",
+   "label": "Is Portal",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-07-29 17:40:42.923886",
+ "modified": "2025-08-11 06:24:09.242235",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Payment Receipt Upload",

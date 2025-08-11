@@ -1452,6 +1452,8 @@ def upload_receipt_form():
             "paid_amount": amount_paid,
             "billing_receipts": billing_receipts,
             "depositor_name": form_dict.get('depositor'),
+            "user_name": form_dict.get('user_name'),
+            "is_portal": 1,
             "status": "Pending"
         })
         receipt_doc.insert(ignore_permissions=True)
