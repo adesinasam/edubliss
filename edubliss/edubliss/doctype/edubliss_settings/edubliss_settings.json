@@ -11,7 +11,9 @@
   "test_booking",
   "column_break_4",
   "admission_letter",
-  "acceptance_paid"
+  "acceptance_paid",
+  "section_break_vtrz",
+  "letterhead"
  ],
  "fields": [
   {
@@ -57,11 +59,21 @@
    "fieldname": "default_email_template",
    "fieldtype": "Section Break",
    "label": "Default Email Template"
+  },
+  {
+   "fieldname": "section_break_vtrz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "letterhead",
+   "fieldtype": "Link",
+   "label": "Email Letterhead",
+   "options": "Letter Head"
   }
  ],
  "issingle": 1,
  "links": [],
- "modified": "2025-08-08 06:17:47.358496",
+ "modified": "2025-08-11 06:14:10.083799",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Edubliss Settings",
