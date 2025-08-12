@@ -142,8 +142,7 @@ def on_update(doc, method):
                 pdf_data = frappe.get_print(
                     doctype=doc.doctype,
                     name=doc.name,
-                    print_format="Provisional Admission Letter",
-                    as_file=True
+                    print_format="Provisional Admission Letter"
                 )
 
                 # Convert to PDF (if not already in PDF format)
