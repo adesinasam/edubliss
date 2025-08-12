@@ -139,7 +139,7 @@ def on_update(doc, method):
         attachments = []
         if doc.custom_admission_status == "Letter Issued":
             try:
-                pdf_data = download_pdf(
+                pdf_data = frappe.get_print(
                     doctype=doc.doctype,
                     name=doc.name,
                     print_format="Provisional Admission Letter",
@@ -147,7 +147,7 @@ def on_update(doc, method):
                 )
                 attachments.append({
                     'fname': f"Provisional_Admission_Letter_{doc.name}.pdf",
-                    'fcontent': pdf_data.getvalue()
+                    'fcontent': pdf_data
                 })
             except Exception as e:
                 frappe.log_error(_("Failed to generate admission letter PDF"), reference_doctype=doc.doctype, reference_name=doc.name)
