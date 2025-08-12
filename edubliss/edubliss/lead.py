@@ -139,14 +139,14 @@ def on_update(doc, method):
         attachments = []
         if doc.custom_admission_status == "Letter Issued":
             try:
-                pdf_data = frappe.utils.print_format.download_pdf(
+                pdf_content = frappe.get_print(
                     doctype=doc.doctype,
                     name=doc.name,
                     print_format="Provisional Admission Letter"
                 )
 
                 # Convert to PDF (if not already in PDF format)
-                # pdf_data = frappe.utils.pdf.get_pdf(pdf_content)
+                pdf_data = frappe.utils.pdf.get_pdf(pdf_content)
                 
                 attachments.append({
                     'fname': f"Provisional_Admission_Letter_{doc.name}.pdf",
