@@ -145,6 +145,10 @@ def on_update(doc, method):
                     print_format="Provisional Admission Letter",
                     as_file=True
                 )
+
+                # Convert to PDF (if not already in PDF format)
+                pdf_data = frappe.utils.pdf.get_pdf(pdf_content)
+                
                 attachments.append({
                     'fname': f"Provisional_Admission_Letter_{doc.name}.pdf",
                     'fcontent': pdf_data
