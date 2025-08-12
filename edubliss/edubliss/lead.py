@@ -142,11 +142,11 @@ def on_update(doc, method):
                 pdf_data = download_pdf(
                     doctype=doc.doctype,
                     name=doc.name,
-                    print_format="Admission Letter",
+                    print_format="Provisional Admission Letter",
                     as_file=True
                 )
                 attachments.append({
-                    'fname': f"Admission_Letter_{doc.name}.pdf",
+                    'fname': f"Provisional_Admission_Letter_{doc.name}.pdf",
                     'fcontent': pdf_data.getvalue()
                 })
             except Exception as e:

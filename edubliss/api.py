@@ -500,89 +500,6 @@ def get_students(company=None):
         filters['enabled'] = 1
     return frappe.get_all('Student', filters=filters, fields=['student_name', 'name', 'enabled', 'custom_school', 'joining_date', 'student_email_id', 'image'])
 
-# @frappe.whitelist()
-# def create_applicant(source_name):
-
-#     frappe.publish_realtime(
-#         "create_applicant_progress", {"progress": [1, 4]}, user=frappe.session.user
-#     )
-#     student_applicant = get_mapped_doc(
-#         "Lead",
-#         source_name,
-#         {
-#             "Lead": {
-#                 "doctype": "Student Applicant",
-#                 "field_map": {
-#                     "name": "lead_name",
-#                 },
-#             }
-#         },
-#         ignore_permissions=True,
-#     )
-
-#     lead = frappe.db.get_value(
-#         "Lead",
-#         source_name,
-#         ["company", "custom_student_email", "custom_desired_academic_year", "custom_desired_academic_term", "custom_fathers_name", "custom_fathers_mobile_no", "email_id", "custom_mothers_name", "custom_mothers_mobile_no", "custom_mothers_email", "custom_fathers_occupation", "custom_fathers_designation", "custom_mothers_occupation", "custom_mothers_designation"],
-#         as_dict=True,
-#     )
-
-#     guardians = []
-
-#     # Create and save Father Guardian
-#     if lead.custom_fathers_name:
-#         student_father = frappe.new_doc("Guardian")
-#         student_father.guardian_name = lead.custom_fathers_name
-#         student_father.mobile_number = lead.custom_fathers_mobile_no
-#         student_father.email_address = lead.email_id
-#         student_father.occupation = lead.custom_fathers_occupation
-#         student_father.designation = lead.custom_fathers_designation
-#         student_father.save()
-    
-#         guardians.append({
-#             'guardian': student_father.name,
-#             'guardian_name': lead.custom_fathers_name,
-#             'relation': 'Father'
-#         })
-
-#     # Create and save Mother Guardian
-#     if lead.custom_mothers_name:
-#         student_mother = frappe.new_doc("Guardian")
-#         student_mother.guardian_name = lead.custom_mothers_name
-#         student_mother.mobile_number = lead.custom_mothers_mobile_no
-#         student_mother.email_address = lead.custom_mothers_email
-#         student_mother.occupation = lead.custom_mothers_occupation
-#         student_mother.designation = lead.custom_mothers_designation
-#         student_mother.save()
-    
-#         guardians.append({
-#             'guardian': student_mother.name,
-#             'guardian_name': lead.custom_mothers_name,
-#             'relation': 'Mother'
-#         })
-
-#     # Assign guardians to the student applicant as child document objects
-#     for guardian in guardians:
-#         student_applicant.append('guardians', guardian)
-
-#     student_applicant.custom_school = lead.company
-#     student_applicant.student_email_id = lead.custom_student_email
-#     student_applicant.academic_year = lead.custom_desired_academic_year
-#     student_applicant.academic_term = lead.custom_desired_academic_term
-#     student_applicant.application_date = nowdate()
-#     student_applicant.application_status = "Approved"
-#     student_applicant.paid = 1
-#     student_applicant.save()
-
-#     # Update the status of the Lead to 'Converted'
-#     frappe.db.set_value("Lead", source_name, "status", "Converted")
-#     frappe.db.commit()
-
-#     frappe.publish_realtime(
-#         "create_applicant_progress", {"progress": [2, 4]}, user=frappe.session.user
-#     )
-
-#     return student_applicant
 
 @frappe.whitelist()
 def create_applicant(source_name):
@@ -707,6 +624,14 @@ def send_lead_status_email(doc, method):
         )
 
         frappe.msgprint(f"Email sent to {', '.join(recipients)} for status update.")
+
+@frappe.whitelist()
+def enquiry_progress(lead, target_status):
+    doc = frappe.get_doc("Lead", lead)
+    doc.custom_admission_status = target_status
+    doc.save()
+    frappe.db.commit()
+    return True
 
 @frappe.whitelist()
 def get_course_schedule_for_student(program_name, student_groups):
