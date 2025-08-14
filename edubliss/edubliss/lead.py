@@ -155,6 +155,23 @@ def on_update(doc, method):
             except Exception as e:
                 frappe.log_error(_("Failed to generate admission letter PDF"), reference_doctype=doc.doctype, reference_name=doc.name)
 
+            try:
+                pdf_contents = frappe.get_print(
+                    doctype=doc.doctype,
+                    name=doc.name,
+                    print_format="Admission Acceptance Form"
+                )
+
+                # Convert to PDF (if not already in PDF format)
+                pdf_datas = frappe.utils.pdf.get_pdf(pdf_contents)
+                
+                attachments.append({
+                    'fname': f"Admission Acceptance Form_{doc.name}.pdf",
+                    'fcontent': pdf_datas
+                })
+            except Exception as e:
+                frappe.log_error(_("Failed to generate admission acceptance form PDF"), reference_doctype=doc.doctype, reference_name=doc.name)
+
         # 5. Send Email
         frappe.sendmail(
             recipients=recipients,
