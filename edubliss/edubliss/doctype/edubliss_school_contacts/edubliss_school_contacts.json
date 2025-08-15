@@ -1,0 +1,66 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-08-15 04:40:31.618460",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "phone",
+  "email",
+  "principal",
+  "principal_name"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Phone",
+   "in_list_view": 1,
+   "label": "Smart Centre / Admin No",
+   "reqd": 1
+  },
+  {
+   "default": "email",
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Email",
+   "reqd": 1
+  },
+  {
+   "fieldname": "principal",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Principal / Head of School",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "principal.employee",
+   "fieldname": "principal_name",
+   "fieldtype": "Data",
+   "label": "Principal / Head of School Name",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-08-15 05:05:36.106945",
+ "modified_by": "Administrator",
+ "module": "Edubliss",
+ "name": "Edubliss School Contacts",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

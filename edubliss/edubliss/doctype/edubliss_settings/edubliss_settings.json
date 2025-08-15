@@ -5,6 +5,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "email_details_tab",
   "default_email_template",
   "enquiry_registration",
   "form_payment",
@@ -12,8 +13,25 @@
   "column_break_4",
   "admission_letter",
   "acceptance_paid",
+  "payment_receipt",
   "section_break_vtrz",
-  "letterhead"
+  "letterhead",
+  "attachment_details_tab",
+  "orientation_resumption_section",
+  "orientation_date",
+  "orientation_time",
+  "column_break_ppsi",
+  "resumption_date",
+  "resumption_time",
+  "default_contact_section",
+  "smart_centre__admin_no",
+  "default_contact_email",
+  "default_principal__head_of_school",
+  "table_ygav",
+  "prospectus_section",
+  "boarders_prospectus",
+  "column_break_uvce",
+  "day_student_prospectus"
  ],
  "fields": [
   {
@@ -69,11 +87,101 @@
    "fieldtype": "Link",
    "label": "Email Letterhead",
    "options": "Letter Head"
+  },
+  {
+   "description": "Payment entry receipt message",
+   "fieldname": "payment_receipt",
+   "fieldtype": "Link",
+   "label": "Payment Receipt",
+   "options": "Email Template"
+  },
+  {
+   "fieldname": "email_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Email Settings"
+  },
+  {
+   "fieldname": "attachment_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Attachment Details"
+  },
+  {
+   "fieldname": "orientation_date",
+   "fieldtype": "Date",
+   "label": "Orientation Date"
+  },
+  {
+   "fieldname": "orientation_time",
+   "fieldtype": "Time",
+   "label": "Orientation Time"
+  },
+  {
+   "fieldname": "column_break_ppsi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "resumption_date",
+   "fieldtype": "Date",
+   "label": "Resumption Date"
+  },
+  {
+   "fieldname": "resumption_time",
+   "fieldtype": "Time",
+   "label": "Resumption Time"
+  },
+  {
+   "fieldname": "orientation_resumption_section",
+   "fieldtype": "Section Break",
+   "label": "Orientation & Resumption "
+  },
+  {
+   "fieldname": "default_contact_section",
+   "fieldtype": "Section Break",
+   "label": "Default Contact"
+  },
+  {
+   "fieldname": "smart_centre__admin_no",
+   "fieldtype": "Phone",
+   "label": "Smart Centre / Admin No"
+  },
+  {
+   "fieldname": "default_contact_email",
+   "fieldtype": "Phone",
+   "label": "Default Contact Email"
+  },
+  {
+   "fieldname": "default_principal__head_of_school",
+   "fieldtype": "Data",
+   "label": "Default Principal / Head of School"
+  },
+  {
+   "fieldname": "table_ygav",
+   "fieldtype": "Table",
+   "options": "Edubliss School Contacts"
+  },
+  {
+   "fieldname": "prospectus_section",
+   "fieldtype": "Section Break",
+   "label": "Prospectus"
+  },
+  {
+   "fieldname": "boarders_prospectus",
+   "fieldtype": "Attach",
+   "label": "Boarders Prospectus"
+  },
+  {
+   "fieldname": "column_break_uvce",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "day_student_prospectus",
+   "fieldtype": "Attach",
+   "label": "Day Student Prospectus"
   }
  ],
  "issingle": 1,
  "links": [],
- "modified": "2025-08-11 06:14:10.083799",
+ "modified": "2025-08-15 05:15:08.349345",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Edubliss Settings",
