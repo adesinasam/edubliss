@@ -4,6 +4,13 @@ from frappe.utils import get_url_to_form
 from frappe.utils.print_format import download_pdf
 from frappe.utils import cstr
 
+def on_update_after_save(doc, method):
+    """
+    Hook that triggers after a document is updated, but only if custom_admission_status has changed
+    """
+    if doc.has_value_changed('custom_admission_status'):
+        on_update(doc, method)
+
 def on_update(doc, method):
     if doc.status == "Converted" or doc.custom_admission_status == "Offer Rejected":
         return

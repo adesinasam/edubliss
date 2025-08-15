@@ -222,7 +222,7 @@ doc_events = {
     "on_update": "edubliss.edubliss.student.on_update"
   },
   "Lead": {
-    "on_update": "edubliss.edubliss.lead.on_update"
+    "on_update": "edubliss.edubliss.lead.on_update_after_save"
   }
 }
 # doc_events = {
