@@ -11,9 +11,13 @@ frappe.ui.form.on('Lead', {
             });
         }
         if (frm.doc.custom_admission_status === "Form Paid") {
-            frm.add_custom_button(__("Test Booked"), function() {
-                frm.events.show_confirmation(frm, "Test Booked");
-            });
+            if (!frm.doc.custom_assessment_date || !frm.doc.custom_assessment_venue){
+                frappe.throw(__("Assessment Date and Venue are required before marking as Test Booked"));
+            } else {
+                frm.add_custom_button(__("Test Booked"), function() {
+                    frm.events.show_confirmation(frm, "Test Booked");
+                });
+            }
         }
         if (frm.doc.custom_admission_status === "Test Booked") {
             frm.add_custom_button(__("Test Done"), function() {
