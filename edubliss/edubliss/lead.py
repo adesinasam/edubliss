@@ -122,6 +122,32 @@ def on_update(doc, method):
             except Exception as e:
                 frappe.log_error(_("Failed to generate admission letter confirmation PDF"), reference_doctype=doc.doctype, reference_name=doc.name)
 
+            if doc.student_category == "Day Student":
+                try:
+                    # Assuming day_student_prospectus is a File field containing a PDF
+                    file_data = frappe.get_doc("File", {"file_url": edublisetting.day_student_prospectus})
+                    pdf_data = file_data.get_content()
+
+                    attachments.append({
+                        'fname': f"Day Student Prospectus_{doc.name}.pdf",
+                        'fcontent': pdf_data
+                    })
+                except Exception as e:
+                    frappe.log_error(_("Failed to generate day student prospectus PDF"), reference_doctype=doc.doctype, reference_name=doc.name)
+
+            if doc.student_category == "Boarder":
+                try:
+                    # Assuming boarders_prospectus is a File field containing a PDF
+                    file_data = frappe.get_doc("File", {"file_url": edublisetting.boarders_prospectus})
+                    pdf_data = file_data.get_content()
+                
+                    attachments.append({
+                        'fname': f"Boarders Prospectus_{doc.name}.pdf",
+                        'fcontent': pdf_data
+                    })
+                except Exception as e:
+                    frappe.log_error(_("Failed to generate boarders prospectus PDF"), reference_doctype=doc.doctype, reference_name=doc.name)
+
         # 5. Send Email
         frappe.sendmail(
             recipients=recipients,
