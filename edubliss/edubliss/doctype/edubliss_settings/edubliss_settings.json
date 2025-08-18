@@ -145,8 +145,9 @@
    "label": "Smart Centre / Admin No"
   },
   {
+   "default": "Email",
    "fieldname": "default_contact_email",
-   "fieldtype": "Phone",
+   "fieldtype": "Data",
    "label": "Default Contact Email"
   },
   {
@@ -181,7 +182,7 @@
  ],
  "issingle": 1,
  "links": [],
- "modified": "2025-08-15 05:15:08.349345",
+ "modified": "2025-08-18 11:38:21.558096",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Edubliss Settings",
