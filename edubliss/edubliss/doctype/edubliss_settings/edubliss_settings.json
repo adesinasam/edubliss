@@ -10,9 +10,10 @@
   "enquiry_registration",
   "form_payment",
   "test_booking",
-  "column_break_4",
   "admission_letter",
+  "column_break_4",
   "acceptance_paid",
+  "transferring_student",
   "payment_receipt",
   "section_break_vtrz",
   "letterhead",
@@ -178,11 +179,18 @@
    "fieldname": "day_student_prospectus",
    "fieldtype": "Attach",
    "label": "Day Student Prospectus"
+  },
+  {
+   "description": "The admission letter for the transfering student",
+   "fieldname": "transferring_student",
+   "fieldtype": "Link",
+   "label": "Transferring Student",
+   "options": "Email Template"
   }
  ],
  "issingle": 1,
  "links": [],
- "modified": "2025-08-18 11:38:21.558096",
+ "modified": "2025-08-19 09:06:01.107215",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Edubliss Settings",
