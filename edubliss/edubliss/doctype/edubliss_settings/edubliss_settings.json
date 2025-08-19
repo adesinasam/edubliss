@@ -181,7 +181,7 @@
    "label": "Day Student Prospectus"
   },
   {
-   "description": "The admission letter for the transfering student",
+   "description": "Admission letter for the transfering student",
    "fieldname": "transferring_student",
    "fieldtype": "Link",
    "label": "Transferring Student",
@@ -190,7 +190,7 @@
  ],
  "issingle": 1,
  "links": [],
- "modified": "2025-08-19 09:06:01.107215",
+ "modified": "2025-08-19 09:07:25.167011",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Edubliss Settings",
