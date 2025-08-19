@@ -1,5 +1,10 @@
 frappe.ui.form.on('Lead', {
     refresh: function (frm) {
+        // Hide Save button if status is "Converted"
+        if (frm.doc.status === "Converted") {
+            frm.disable_save();
+        }
+
         if (frm.doc.status === "Quotation" && frm.doc.custom_admission_status === "Acceptance Paid") {
             frm.add_custom_button(__("Create Student Applicant"), function() {
                 frm.events.show_enroll_confirmation(frm);
