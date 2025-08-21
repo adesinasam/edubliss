@@ -81,6 +81,8 @@ doctype_js = {
     "Sales Order": "public/js/pages/sorder.js",
     "Sales Invoice": "public/js/pages/sinvoice.js",
     "Lead": "public/js/pages/lead.js",
+    "Program Enrollment": "public/js/pages/program_enrollment.js",
+    "Program Enrollment Tool": "public/js/pages/program_enrollment_tool.js",
     "Student": "public/js/pages/student.js"
     }
 
@@ -213,6 +215,7 @@ doc_events = {
     "on_cancel": "edubliss.edubliss.assessment_plan.setup"
   },
   "Program Enrollment": {
+    "on_update": "edubliss.edubliss.program_enrollment.on_update_after_save",
     "on_submit": "edubliss.edubliss.program_enrollment.setup"
   },
   "Course": {

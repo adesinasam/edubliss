@@ -626,12 +626,22 @@ def send_lead_status_email(doc, method):
         frappe.msgprint(f"Email sent to {', '.join(recipients)} for status update.")
 
 @frappe.whitelist()
-def enquiry_progress(lead, target_status):
-    doc = frappe.get_doc("Lead", lead)
-    doc.custom_admission_status = target_status
-    doc.save()
-    frappe.db.commit()
-    return True
+def enquiry_progress(doctype, name, target_status):
+    # Validate allowed doctypes for security
+    allowed_doctypes = ["Lead", "Program Enrollment"]
+    if doctype not in allowed_doctypes:
+        frappe.throw(f"Operation not allowed for {doctype}")
+    
+    try:
+        doc = frappe.get_doc(doctype, name)
+        doc.custom_admission_status = target_status
+        doc.save()
+        frappe.db.commit()
+        return True
+    except Exception as e:
+        frappe.log_error(f"Error in enquiry_progress: {str(e)}")
+        frappe.throw("Failed to update status")
+        return False
 
 @frappe.whitelist()
 def get_course_schedule_for_student(program_name, student_groups):
@@ -1414,3 +1424,55 @@ def success_response(redirect_url, message):
 def error_response(redirect_url, message):
     frappe.local.response["type"] = "redirect"
     frappe.local.response["location"] = redirect_url + "?error=" + frappe.utils.quote(message)
+
+
+@frappe.whitelist()
+def update_transfer_status(enrollment_tool_doc):
+    """
+    Update is_transfer = 1 for program enrollments created by the enrollment tool
+    """
+    doc = frappe.parse_json(enrollment_tool_doc) if isinstance(enrollment_tool_doc, str) else enrollment_tool_doc
+    
+    # Get all students from the enrollment tool
+    students = doc.get('students', [])
+    
+    if not students:
+        frappe.msgprint(_("No students found to update transfer status"))
+        return
+    
+    updated_count = 0
+    
+    for stud in students:
+        if stud.get('student'):
+            # Find the program enrollment that matches the criteria
+            enrollment_filters = {
+                'student': stud.get('student'),
+                'student_category': stud.get('student_category'),
+                'program': doc.get('new_program'),
+                'academic_term': doc.get('new_academic_term'),
+                'academic_year': doc.get('new_academic_year')
+            }
+            
+            # Remove None values from filters
+            enrollment_filters = {k: v for k, v in enrollment_filters.items() if v is not None}
+            
+            # Find the program enrollment
+            enrollment = frappe.get_all(
+                'Program Enrollment',
+                filters=enrollment_filters,
+                fields=['name'],
+                order_by='creation desc',  # Get the most recent one
+                limit=1
+            )
+            
+            if enrollment:
+                # Update the is_transfer field
+                frappe.db.set_value(
+                    'Program Enrollment',
+                    enrollment[0]['name'],
+                    'custom_is_transfer',
+                    1
+                )
+                updated_count += 1
+    
+    frappe.msgprint(_("Transfer status updated for {0} program enrollments").format(updated_count))

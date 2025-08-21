@@ -17,6 +17,12 @@
   "payment_receipt",
   "section_break_vtrz",
   "letterhead",
+  "interview_booking_tab",
+  "admission_assessment_schedule_section",
+  "assessment_date",
+  "assessment_time",
+  "assessment_venue",
+  "contact_name",
   "attachment_details_tab",
   "orientation_resumption_section",
   "orientation_date",
@@ -186,11 +192,43 @@
    "fieldtype": "Link",
    "label": "Transferring Student",
    "options": "Email Template"
+  },
+  {
+   "fieldname": "interview_booking_tab",
+   "fieldtype": "Tab Break",
+   "label": "Interview Booking"
+  },
+  {
+   "fieldname": "admission_assessment_schedule_section",
+   "fieldtype": "Section Break",
+   "label": "Admission Assessment Schedule"
+  },
+  {
+   "fieldname": "assessment_date",
+   "fieldtype": "Date",
+   "label": "Assessment Date"
+  },
+  {
+   "fieldname": "assessment_time",
+   "fieldtype": "Time",
+   "label": "Assessment Time"
+  },
+  {
+   "fieldname": "assessment_venue",
+   "fieldtype": "Select",
+   "label": "Assessment Venue",
+   "options": "Idoro Campus (Uyo) - Elementary Academic Block\nIdoro Campus (Uyo) - Preschool Academic Block\nItak Campus (Ikono) - Academic Block I"
+  },
+  {
+   "fieldname": "contact_name",
+   "fieldtype": "Link",
+   "label": "Contact Name",
+   "options": "Employee"
   }
  ],
  "issingle": 1,
  "links": [],
- "modified": "2025-08-19 09:07:25.167011",
+ "modified": "2025-08-20 14:18:33.968066",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Edubliss Settings",

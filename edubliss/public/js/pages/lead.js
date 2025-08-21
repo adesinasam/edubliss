@@ -99,7 +99,8 @@ frappe.ui.form.on('Lead', {
         frappe.call({
             method: "edubliss.api.enquiry_progress",
             args: {
-                "lead": frm.doc.name,
+                "doctype": "Lead",
+                "name": frm.doc.name,
                 "target_status": target_status
             },
             callback: function(r) {
