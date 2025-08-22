@@ -162,7 +162,7 @@ def on_update(doc, method):
                 pdf_contents = frappe.get_print(
                     doctype=doc.doctype,
                     name=doc.name,
-                    print_format="Admission Acceptance Form"
+                    print_format="Transfer - Admission Acceptance Form"
                 )
 
                 # Convert to PDF (if not already in PDF format)
@@ -180,7 +180,7 @@ def on_update(doc, method):
                 pdf_content = frappe.get_print(
                     doctype=doc.doctype,
                     name=doc.name,
-                    print_format="Admission Letter Confirmation"
+                    print_format="Transfer - Admission Letter Confirmation"
                 )
 
                 # Convert to PDF (if not already in PDF format)
