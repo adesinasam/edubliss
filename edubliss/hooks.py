@@ -218,6 +218,9 @@ doc_events = {
     "on_update": "edubliss.edubliss.program_enrollment.on_update_after_save",
     "on_submit": "edubliss.edubliss.program_enrollment.setup"
   },
+  "Payment Entry": {
+    "on_submit": "edubliss.edubliss.payment_entry.send_email_to_party"
+  },
   "Course": {
     "validate": "edubliss.edubliss.course.validate"
   },

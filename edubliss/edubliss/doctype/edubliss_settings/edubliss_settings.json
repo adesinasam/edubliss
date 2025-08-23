@@ -19,10 +19,14 @@
   "letterhead",
   "interview_booking_tab",
   "admission_assessment_schedule_section",
+  "admission_assessment_schedule_column",
   "assessment_date",
   "assessment_time",
   "assessment_venue",
   "contact_name",
+  "acceptance_fee_column",
+  "day_student_acceptance_fee",
+  "boarders_acceptance_fee",
   "attachment_details_tab",
   "orientation_resumption_section",
   "orientation_date",
@@ -200,8 +204,7 @@
   },
   {
    "fieldname": "admission_assessment_schedule_section",
-   "fieldtype": "Section Break",
-   "label": "Admission Assessment Schedule"
+   "fieldtype": "Section Break"
   },
   {
    "fieldname": "assessment_date",
@@ -224,11 +227,31 @@
    "fieldtype": "Link",
    "label": "Contact Name",
    "options": "Employee"
+  },
+  {
+   "fieldname": "admission_assessment_schedule_column",
+   "fieldtype": "Column Break",
+   "label": "Admission Assessment Schedule"
+  },
+  {
+   "fieldname": "acceptance_fee_column",
+   "fieldtype": "Column Break",
+   "label": "Acceptance Fee"
+  },
+  {
+   "fieldname": "day_student_acceptance_fee",
+   "fieldtype": "Currency",
+   "label": "Day Student Acceptance Fee"
+  },
+  {
+   "fieldname": "boarders_acceptance_fee",
+   "fieldtype": "Currency",
+   "label": "Boarders Acceptance Fee"
   }
  ],
  "issingle": 1,
  "links": [],
- "modified": "2025-08-20 14:18:33.968066",
+ "modified": "2025-08-23 15:19:49.676272",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Edubliss Settings",
