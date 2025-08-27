@@ -302,7 +302,7 @@ def get_company_gateway_details(company_name):
 	"""
 
 	# Try to get gateway account for the specific company
-	gateway_account = get_payment_gateway_account({"custom_company": company_name})
+	gateway_account = get_payment_gateway_account({"company": company_name})
 
 	if gateway_account:
 		return gateway_account
