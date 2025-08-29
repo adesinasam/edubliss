@@ -185,7 +185,8 @@ def get_student_invoices(customer=None):
         'Sales Invoice', 
         filters=filters, 
         fields=['*'], 
-        order_by="posting_date desc"
+        order_by="posting_date desc",
+        limit=20
         )
 
 @frappe.whitelist()
@@ -201,7 +202,26 @@ def get_student_orders(customer=None):
         'Sales Order', 
         filters=filters, 
         fields=['*'], 
-        order_by="transaction_date desc"
+        order_by="transaction_date desc",
+        limit=20
+        )
+
+@frappe.whitelist()
+def get_student_payments(customer=None):
+    filters = {}
+    if customer:
+        filters = {
+            'docstatus': 1,
+            'payment_type': 'Receive',
+            'party_type': 'Customer',
+            'party': customer
+        }
+    return frappe.get_all(
+        'Payment Entry', 
+        filters=filters, 
+        fields=['*'], 
+        order_by="posting_date desc",
+        limit=20
         )
 
 @frappe.whitelist()

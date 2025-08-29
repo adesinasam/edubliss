@@ -124,6 +124,9 @@
           <button class="tab" data-tab-toggle="#tab_4_3">
            Invoices
           </button>
+          <button class="tab" data-tab-toggle="#tab_4_5">
+           Payments
+          </button>
           <button class="tab" data-tab-toggle="#tab_4_4">
            Ledger
           </button>
@@ -135,7 +138,7 @@
            <table class="table table-border" data-datatable-table="true">
             <thead>
              <tr>
-              <th class="min-w-[150px]">
+              <th class="min-w-[120px]">
                <span class="sort desc">
                 <span class="sort-label">
                  Date
@@ -144,7 +147,7 @@
                 </span>
                </span>
               </th>
-              <th class="min-w-[180px]">
+              <th class="min-w-[180px] text-center">
                 Type
               </th>
               <th class="min-w-[150px]">
@@ -193,7 +196,7 @@
               <th class="min-w-[120px]">
                  Date
               </th>
-              <th class="min-w-[180px]">
+              <th class="min-w-[180px] text-center">
                 Type
               </th>
               <th class="min-w-[120px]">
@@ -205,8 +208,8 @@
               <th class="min-w-[120px]">
                  Status
               </th>
-              <!-- <th class="min-w-[60px]">
-              </th> -->
+              <th class="min-w-[60px]">
+              </th>
              </tr>
             </thead>
             <tbody>
@@ -222,7 +225,7 @@
               <th class="min-w-[120px]">
                  Date
               </th>
-              <th class="min-w-[180px]">
+              <th class="min-w-[180px] text-center">
                 Type
               </th>
               <th class="min-w-[150px]">
@@ -261,6 +264,34 @@
            </div>
           </div>
          </div>
+         <div class="scrollable-x-auto hidden transition-opacity duration-700" id="tab_4_5">
+           <table class="table table-border">
+            <thead>
+             <tr>
+              <th class="min-w-[150px]">
+                Date
+              </th>
+              <th class="min-w-[180px] text-center">
+                Type
+              </th>
+              <th class="min-w-[150px]">
+                 Transaction
+              </th>
+              <th class="min-w-[150px]">
+                 Amount
+              </th>
+              <th class="min-w-[120px]">
+                 Mode of Payment
+              </th>
+              <th class="min-w-[60px]">
+              </th>
+             </tr>
+            </thead>
+            <tbody>
+               {{ payments_html | safe }}
+           </tbody>
+           </table>
+         </div>
          <div data-datatable="true" data-datatable-page-size="20" class="hidden transition-opacity duration-700" id="tab_4_4">
           <div class="scrollable-x-auto">
             <table class="table table-border" data-datatable-table="true">
@@ -268,7 +299,7 @@
               <tr>
                 <th></th>
                 <th class="min-w-[120px]">Posting Date</th>
-                <th class="min-w-[180px]">Type</th>
+                <th class="min-w-[180px] text-center">Type</th>
                 <th class="min-w-[150px]">Transaction</th>
                 <th class="min-w-[120px]">Debit</th>
                 <th class="min-w-[120px]">Credit</th>

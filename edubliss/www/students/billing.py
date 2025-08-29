@@ -132,6 +132,9 @@ def get_context(context):
 
     # Fetch sales orders
     if customer:
+        payments = frappe.call('edubliss.api.get_student_payments', customer=customer)
+        context.payments_html = generate_payments_html(payments)
+
         sales_orders = frappe.call('edubliss.api.get_student_orders', customer=customer)
         context.sales_orders_html = generate_sales_orders_html(sales_orders)
 
@@ -142,6 +145,26 @@ def get_context(context):
         context.unpaid_invoices_html = generate_unpaid_invoices_html(unpaid_sales_invoices, sales_orders)
 
     return context
+
+def generate_payments_html(payments):
+    if not payments:
+        return '<tr><td colspan="7" class="text-center">No Payment found.</td></tr>'
+    
+    rows = []
+    for payment in payments:
+        row = f"""
+        <tr>
+            <td class="text-2sm">{format_date(payment['posting_date'])}</td>
+            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Payment%20Entry&name={payment['name']}" target="_blank">{payment['name']}</a></td>
+            <td class="text-center text-2sm">Payment</td>
+            <td class="text-2sm">{frappe.format(payment['paid_amount'], {'fieldtype': 'Currency'})}</td>
+            <td class="text-2sm">{payment.mode_of_payment or ''}</td>
+            <td class="text-center"><a class="btn btn-link" href="/printview?doctype=Payment%20Entry&name={payment['name']}" target="_blank">View</a></td>
+        </tr>
+        """
+        rows.append(row)
+    
+    return ''.join(rows)
 
 def generate_sales_orders_html(sales_orders):
     if not sales_orders:
@@ -158,6 +181,7 @@ def generate_sales_orders_html(sales_orders):
             <td class="text-2sm">Order</td>
             <td class="text-2sm">{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
             <td>{status_badge}</td>
+            <td class="text-center"><a class="btn btn-link" href="/printview?doctype=Sales%20Order&name={order['name']}" target="_blank">View</a></td>
         </tr>
         """
         rows.append(row)
@@ -175,7 +199,9 @@ def generate_sales_invoices_html(sales_invoices):
         row = f"""
         <tr>
             <td class="text-2sm">{format_date(invoice['posting_date'])}</td>
-            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Invoice&name={invoice['name']}" target="_blank">{invoice['name']}</a></td>
+            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Invoice&name={invoice['name']}" target="_blank">{invoice['name']}
+                <span class="btn btn-link">View</span></a>
+            </td>
             <td class="text-2sm">{frappe.format(invoice['grand_total'], {'fieldtype': 'Currency'})}</td>
             <td class="text-2sm">{frappe.format(invoice['outstanding_amount'], {'fieldtype': 'Currency'})}</td>
             <td class="text-2sm">{format_date(invoice['due_date'])}</td>
@@ -188,31 +214,33 @@ def generate_sales_invoices_html(sales_invoices):
     return ''.join(rows)
 
 def generate_unpaid_invoices_html(unpaid_sales_invoices, sales_orders):
-    if not unpaid_sales_invoices and not sales_orders:
+    if not unpaid_sales_invoices:
+        # and not sales_orders
         return '<tr><td colspan="7" class="text-center">No Invoice found.</td></tr>'
     
     rows = []
-    for idx, order in enumerate(sales_orders, start=1):
-        # Skip orders where advance_paid >= grand_total
-        if not (order.get('advance_paid', 0) < order.get('grand_total', 0)):
-            continue  # Skip this order
+    # for idx, order in enumerate(sales_orders, start=1):
+    #     # Skip orders where advance_paid >= grand_total
+    #     if not (order.get('advance_paid', 0) < order.get('grand_total', 0)):
+    #         continue  # Skip this order
 
-        outstanding_amount = (order.get('grand_total', 0)) - (order.get('advance_paid', 0))
-        status_badge = get_status_badge(order.status)
-        payment_button = f'<button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch(\'{order["name"]}\',\'Sales%20Order\')">Pay</button>' if order['advance_paid'] < order['grand_total'] else ''
-        row = f"""
-        <tr>
-            <td class="text-2sm">{format_date(order['transaction_date'])}</td>
-            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Order&name={order['name']}" target="_blank">{order['name']}</a></td>
-            <td class="text-2sm">Order</td>
-            <td class="text-2sm">{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
-            <td class="text-2sm">{frappe.format(outstanding_amount, {'fieldtype': 'Currency'})}</td>
-            <td class="text-2sm">{format_date(order['delivery_date']) or ""}</td>
-            <td>{status_badge}</td>
-            <td></td>
-        </tr>
-        """
-        rows.append(row)
+    #     outstanding_amount = (order.get('grand_total', 0)) - (order.get('advance_paid', 0))
+    #     status_badge = get_status_badge(order.status)
+    #     payment_button = f'<button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch(\'{order["name"]}\',\'Sales%20Order\')">Pay</button>' if order['advance_paid'] < order['grand_total'] else ''
+    #     row = f"""
+    #     <tr>
+    #         <td class="text-2sm">{format_date(order['transaction_date'])}</td>
+    #         <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Order&name={order['name']}" target="_blank">{order['name']}</a></td>
+    #         <td class="text-2sm">Order</td>
+    #         <td class="text-2sm">{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
+    #         <td class="text-2sm">{frappe.format(outstanding_amount, {'fieldtype': 'Currency'})}</td>
+    #         <td class="text-2sm">{format_date(order['delivery_date']) or ""}</td>
+    #         <td>{status_badge}</td>
+    #         <td class="text-center"><a class="btn btn-link" href="/printview?doctype=Sales%20Order&name={order['name']}" target="_blank">View</a></td>
+    #         <td></td>
+    #     </tr>
+    #     """
+    #     rows.append(row)
 
     for invoice in unpaid_sales_invoices:
         status_badge = get_status_badge(invoice.status)
@@ -220,7 +248,9 @@ def generate_unpaid_invoices_html(unpaid_sales_invoices, sales_orders):
         row = f"""
         <tr>
             <td class="text-2sm">{format_date(invoice['posting_date'])}</td>
-            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Invoice&name={invoice['name']}" target="_blank">{invoice['name']}</a></td>
+            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Invoice&name={invoice['name']}" target="_blank">{invoice['name']} 
+                <span class="btn btn-link">View</span></a>
+            </td>
             <td class="text-2sm">Invoice</td>
             <td class="text-2sm">{frappe.format(invoice['grand_total'], {'fieldtype': 'Currency'})}</td>
             <td class="text-2sm">{frappe.format(invoice['outstanding_amount'], {'fieldtype': 'Currency'})}</td>

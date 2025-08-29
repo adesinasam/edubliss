@@ -110,6 +110,9 @@ def process_students(context, students):
 
         # Fetch and process ledger
         if customer:
+            payments = frappe.call('edubliss.api.get_student_payments', customer=customer)
+            context.payments_html = generate_payments_html(payments)
+
             ledgers = frappe.call('edubliss.api.get_student_ledger', customer=customer)
             context.tbody_content += generate_ledger_html(ledgers, context)
 
@@ -152,10 +155,31 @@ def generate_ledger_html(ledgers, context):
     context.balance = balance
     return ''.join(rows)
 
+def generate_payments_html(payments):
+    if not payments:
+        return '<tr><td colspan="7" class="text-center">No Payment found.</td></tr>'
+    
+    rows = []
+    for payment in payments:
+        row = f"""
+        <tr>
+            <td class="text-2sm">{format_date(payment['posting_date'])}</td>
+            <td class="left"><span class="text-primary text-xs">{payment['party_name']}</span></td>
+            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Payment%20Entry&name={payment['name']}" target="_blank">{payment['name']}</a></td>
+            <td class="text-center text-2sm">Payment</td>
+            <td class="text-2sm">{frappe.format(payment['paid_amount'], {'fieldtype': 'Currency'})}</td>
+            <td class="text-2sm">{payment.mode_of_payment or ''}</td>
+            <td class="text-center"><a class="btn btn-link" href="/printview?doctype=Payment%20Entry&name={payment['name']}" target="_blank">View</a></td>
+        </tr>
+        """
+        rows.append(row)
+    
+    return ''.join(rows)
 
 def generate_sales_orders_html(sales_orders):
     # if not sales_orders:
     #     return '<tr><td colspan="7" class="text-center">No Incoming Bill found.</td></tr>'
+    # <button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch('{order['name']}','Sales%20Order')">Pay</button>
     
     rows = []
     for idx, order in enumerate(sales_orders, start=1):
@@ -168,7 +192,7 @@ def generate_sales_orders_html(sales_orders):
             <td class="text-2sm">Order</td>
             <td class="text-2sm">{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
             <td>{status_badge}</td>
-            <td><button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch('{order['name']}','Sales%20Order')">Pay</button></td>
+            <td class="text-center"><a class="btn btn-link" href="/printview?doctype=Sales%20Order&name={order['name']}" target="_blank">View</a></td>
         </tr>
         """
         rows.append(row)
@@ -187,7 +211,9 @@ def generate_sales_invoices_html(sales_invoices):
         <tr>
             <td class="text-2sm">{format_date(invoice['posting_date'])}</td>
             <td class="left"><a class="text-primary text-xs" href="/students/billing/{invoice['student']}">{invoice['customer']}</a></td>
-            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Invoice&name={invoice['name']}" target="_blank">{invoice['name']}</a></td>
+            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Invoice&name={invoice['name']}" target="_blank">{invoice['name']}
+                <span class="btn btn-link">View</span></a>
+            </td>
             <td class="text-2sm">{frappe.format(invoice['grand_total'], {'fieldtype': 'Currency'})}</td>
             <td class="text-2sm">{frappe.format(invoice['outstanding_amount'], {'fieldtype': 'Currency'})}</td>
             <td class="text-2sm">{format_date(invoice['due_date'])}</td>
@@ -200,26 +226,28 @@ def generate_sales_invoices_html(sales_invoices):
     return ''.join(rows)
 
 def generate_unpaid_invoices_html(unpaid_sales_invoices, sales_orders):
-    # if not unpaid_sales_invoices and not sales_orders:
-    #     return '<tr><td colspan="7" class="text-center">No Invoice found.</td></tr>'
+    #   <td><button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch('{order['name']}','Sales%20Order')">Pay</button></td>
+
     
     rows = []
-    for idx, order in enumerate(sales_orders, start=1):
-        status_badge = get_status_badge(order.status)
-        row = f"""
-        <tr>
-            <td class="text-2sm">{format_date(order['transaction_date'])}</td>
-            <td class="left"><a class="text-primary text-xs" href="/students/billing/{order['student']}">{order['customer']}</a></td>
-            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Order&name={order['name']}" target="_blank">{order['name']}</a></td>
-            <td class="text-2sm">Order</td>
-            <td class="text-2sm">{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
-            <td class="text-2sm">{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
-            <td class="text-2sm">{format_date(order['delivery_date']) or ""}</td>
-            <td>{status_badge}</td>
-            <td><button class="btn btn-xs btn-dark text-2sm text-light" onclick="openModalWithFetch('{order['name']}','Sales%20Order')">Pay</button></td>
-        </tr>
-        """
-        rows.append(row)
+    # for idx, order in enumerate(sales_orders, start=1):
+    #     status_badge = get_status_badge(order.status)
+    #     row = f"""
+    #     <tr>
+    #         <td class="text-2sm">{format_date(order['transaction_date'])}</td>
+    #         <td class="left"><a class="text-primary text-xs" href="/students/billing/{order['student']}">{order['customer']}</a></td>
+    #         <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Order&name={order['name']}" target="_blank">{order['name']}</a>
+    #             <span class="btn btn-link">View</span></a>
+    #         </td>
+    #         <td class="text-2sm">Order</td>
+    #         <td class="text-2sm">{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
+    #         <td class="text-2sm">{frappe.format(order['grand_total'], {'fieldtype': 'Currency'})}</td>
+    #         <td class="text-2sm">{format_date(order['delivery_date']) or ""}</td>
+    #         <td>{status_badge}</td>
+    #         <td></td>
+    #     </tr>
+    #     """
+    #     rows.append(row)
 
     for invoice in unpaid_sales_invoices:
         status_badge = get_status_badge(invoice.status)
@@ -228,7 +256,9 @@ def generate_unpaid_invoices_html(unpaid_sales_invoices, sales_orders):
         <tr>
             <td class="text-2sm">{format_date(invoice['posting_date'])}</td>
             <td class="left"><a class="text-primary text-xs" href="/students/billing/{invoice['student']}">{invoice['customer']}</a></td>
-            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Invoice&name={invoice['name']}" target="_blank">{invoice['name']}</a></td>
+            <td class="text-center"><a class="text-primary text-xs" href="/printview?doctype=Sales%20Invoice&name={invoice['name']}" target="_blank">{invoice['name']}
+                <span class="btn btn-link">View</span></a>
+            </td>
             <td class="text-2sm">Invoice</td>
             <td class="text-2sm">{frappe.format(invoice['grand_total'], {'fieldtype': 'Currency'})}</td>
             <td class="text-2sm">{frappe.format(invoice['outstanding_amount'], {'fieldtype': 'Currency'})}</td>

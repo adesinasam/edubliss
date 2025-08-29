@@ -113,7 +113,7 @@
            Invoices
           </button>
           <button class="tab" data-tab-toggle="#tab_4_4">
-           Ledger
+           Payments
           </button>
          </div>        
         </div>
@@ -124,7 +124,13 @@
             <thead>
              <tr>
               <th class="min-w-[150px]">
+               <span class="sort desc">
+                <span class="sort-label">
                  Date
+                </span>
+                <span class="sort-icon">
+                </span>
+               </span>
               </th>
               <th class="min-w-[200px] text-center">
                 Student
@@ -266,6 +272,57 @@
          </div>
          <div data-datatable="true" data-datatable-page-size="20" class="hidden transition-opacity duration-700" id="tab_4_4">
           <div class="scrollable-x-auto">
+           <table class="table table-border" data-datatable-table="true">
+            <thead>
+             <tr>
+              <th class="min-w-[120px]">
+                 Date
+              </th>
+              <th class="min-w-[200px] text-center">
+                Student
+              </th>
+              <th class="min-w-[180px]">
+                Type
+              </th>
+              <th class="min-w-[150px]">
+                 Transaction
+              </th>
+              <th class="min-w-[150px]">
+                 Amount
+              </th>
+              <th class="min-w-[120px]">
+                 Mode of Payment
+              </th>
+              <th class="min-w-[60px]">
+              </th>
+             </tr>
+            </thead>
+            <tbody>
+              {% if payments_html %}
+               {{ payments_html | safe }}
+              {% else %}
+              <tr><td colspan="7" class="text-center">No Payments found.</td></tr>
+              {% endif %}
+           </tbody>
+           </table>
+          </div>
+          <div class="card-footer justify-center md:justify-between flex-col md:flex-row gap-5 text-gray-600 text-2sm font-medium">
+           <div class="flex items-center gap-2 order-2 md:order-1">
+            Show
+            <select class="select select-sm w-16" data-datatable-size="true" name="perpage">
+            </select>
+            per page
+           </div>
+           <div class="flex items-center gap-4 order-1 md:order-2">
+            <span data-datatable-info="true">
+            </span>
+            <div class="pagination" data-datatable-pagination="true">
+            </div>
+           </div>
+          </div>
+         </div>
+         <!-- <div data-datatable="true" data-datatable-page-size="20" class="hidden transition-opacity duration-700" id="tab_4_5">
+          <div class="scrollable-x-auto">
             <table class="table table-border" data-datatable-table="true">
              <thead>
               <tr>
@@ -285,8 +342,6 @@
              <tfoot>
               <tr>
                <td colspan="6"><b>Total</b></td>
-               <!-- <td><b>{{ frappe.format(total_debit, {'fieldtype': 'Currency'}) }}</b></td>
-               <td><b>{{ frappe.format(total_credit, {'fieldtype': 'Currency'}) }}</b></td> -->
                <td><b>{{ frappe.format(balance, {'fieldtype': 'Currency'}) }}</b></td>
                <td></td>
               </tr>
@@ -307,7 +362,7 @@
             </div>
            </div>
           </div>
-         </div>
+         </div> -->
         </div>
        </div>
       </div>
