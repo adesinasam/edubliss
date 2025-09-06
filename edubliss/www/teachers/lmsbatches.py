@@ -9,6 +9,20 @@ def format_date(value, format="%d %b %Y"):
         return value.strftime(format)
     return value
 
+def get_teachers():
+    instructors = frappe.qb.DocType("Instructor")
+    employees = frappe.qb.DocType("Employee")
+
+    instructors_query = (
+        frappe.qb.from_(employees)
+        .inner_join(instructors)
+        .on(instructors.employee == employees.name)
+        .select('*')
+        .where(employees.user_id == frappe.session.user)
+        .run(as_dict=1)
+    )
+    return instructors_query if instructors_query else []
+
 def get_batches(acadyear):
     batches = frappe.qb.DocType("LMS Batch")
     instructors = frappe.qb.DocType("Course Instructor")
@@ -27,6 +41,17 @@ def get_batches(acadyear):
     return batches_query if batches_query else []
 
 def get_context(context):
+
+    docnames = frappe.form_dict.docname
+
+    if docnames:
+        docname = docnames
+    else:
+        teacher = get_teachers()
+        if teacher:
+            docname = teacher[0].name
+        else:
+            docname = None
 
     # login
     if frappe.session.user == "Guest":
@@ -49,6 +74,8 @@ def get_context(context):
     # nav
     context.active_route = "lms"
     context.active_subroute = "lms_batch"
+
+    context.docname = docname
 
     edubliss_session = frappe.call('edubliss.api.get_edubliss_user_session')
     if edubliss_session:
@@ -74,5 +101,18 @@ def get_context(context):
 
     # Count
     context.lmsbatch_count = len(get_batches(acadyear=acadyear))
+
+    try:
+        context.teachers = frappe.get_doc("Instructor", docname)
+        staff = context.teachers
+    except frappe.DoesNotExistError:
+        frappe.throw(_("Teacher not found"), frappe.DoesNotExistError)
+
+    if staff:
+        try:
+            context.employees = frappe.get_doc("Employee", staff.employee)
+        except frappe.DoesNotExistError:
+            frappe.throw(_("Employee Record not found"), frappe.DoesNotExistError)
+
 
     return context
