@@ -80,6 +80,7 @@ class ClassSchedule(Document):
             overlaps = frappe.get_all(
                 "Subject Schedule",
                 filters={
+                    "academic_term": row.academic_term,
                     "week_days": row.week_days,
                     "is_cancelled": 0,
                     "name": ["!=", row.name],  # exclude itself
