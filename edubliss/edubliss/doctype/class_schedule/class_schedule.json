@@ -1,10 +1,12 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "naming_series:",
  "creation": "2025-09-08 06:21:23.540159",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
   "student_group",
   "program",
   "column_break_mzwv",
@@ -106,16 +108,25 @@
    "label": "Timetable Slot",
    "options": "Timetable Slot",
    "reqd": 1
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series",
+   "options": "CSH-.YY.-",
+   "set_only_once": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-08 12:14:18.733173",
+ "modified": "2025-09-08 19:14:36.414541",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Class Schedule",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {

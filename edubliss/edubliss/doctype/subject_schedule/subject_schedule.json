@@ -25,7 +25,8 @@
   "title",
   "column_break_pthp",
   "instructor",
-  "instructor_name"
+  "instructor_name",
+  "is_cancelled"
  ],
  "fields": [
   {
@@ -161,12 +162,18 @@
   {
    "fieldname": "column_break_pthp",
    "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_cancelled",
+   "fieldtype": "Check",
+   "label": "Is Cancelled"
   }
  ],
  "grid_page_length": 50,
  "istable": 1,
  "links": [],
- "modified": "2025-09-08 16:51:54.348392",
+ "modified": "2025-09-08 17:48:15.458871",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Subject Schedule",

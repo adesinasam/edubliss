@@ -77,3 +77,95 @@ frappe.ui.form.on("Subject Schedule", {
         }
     }
 });
+
+frappe.ui.form.on("Subject Schedule", {
+    from_time(frm, cdt, cdn) {
+        validate_conflicts(frm, cdt, cdn);
+    },
+    to_time(frm, cdt, cdn) {
+        validate_conflicts(frm, cdt, cdn);
+    },
+    week_days(frm, cdt, cdn) {
+        validate_conflicts(frm, cdt, cdn);
+    },
+    course(frm, cdt, cdn) {
+        validate_conflicts(frm, cdt, cdn);
+    },
+    instructor(frm, cdt, cdn) {
+        validate_conflicts(frm, cdt, cdn);
+    }
+});
+
+// helper function
+function validate_conflicts(frm, cdt, cdn) {
+    let row = frappe.get_doc(cdt, cdn);
+
+    if (!row.week_days || !row.from_time || !row.to_time) {
+        return;
+    }
+
+    // check against other rows in the same form
+    frm.doc.subject_schedule.forEach(r => {
+        if (r.name !== row.name && r.week_days === row.week_days) {
+            let overlap = (row.from_time < r.to_time) && (row.to_time > r.from_time);
+
+            if (overlap) {
+                if (row.course && row.course === r.course) {
+                    frappe.msgprint({
+                        title: __("Conflict"),
+                        indicator: "red",
+                        message: __(`Course ${row.course} already scheduled on ${row.week_days} from ${r.from_time} to ${r.to_time}.`)
+                    });
+                }
+                if (row.instructor && row.instructor === r.instructor) {
+                    frappe.msgprint({
+                        title: __("Conflict"),
+                        indicator: "red",
+                        message: __(`Instructor ${row.instructor} already scheduled on ${row.week_days} from ${r.from_time} to ${r.to_time}.`)
+                    });
+                }
+            }
+        }
+    });
+
+    // check against database
+    // if (row.course || row.instructor) {
+    //     frappe.call({
+    //         method: "frappe.client.get_list",
+    //         args: {
+    //             doctype: "Subject Schedule",
+    //             filters: {
+    //                 week_days: row.week_days,
+    //                 is_cancelled: 0,
+    //                 name: ["!=", row.name],
+    //             },
+    //             fields: ["name", "from_time", "to_time", "course", "instructor", "parent"]
+    //         },
+    //         callback: function (res) {
+    //             if (res.message) {
+    //                 res.message.forEach(ss => {
+    //                     let overlap = (row.from_time < ss.to_time) && (row.to_time > ss.from_time);
+    //                     if (overlap) {
+    //                         if (row.course && row.course === ss.course) {
+    //                             frappe.msgprint({
+    //                                 title: __("Conflict with DB"),
+    //                                 indicator: "red",
+    //                                 message: __(`Course ${row.course} already scheduled in ClassSchedule ${ss.parent} on ${row.week_days} from ${ss.from_time} to ${ss.to_time}.`)
+    //                             });
+    //                         }
+    //                         if (row.instructor && row.instructor === ss.instructor) {
+    //                             frappe.msgprint({
+    //                                 title: __("Conflict with DB"),
+    //                                 indicator: "red",
+    //                                 message: __(`Instructor ${row.instructor} already scheduled in ClassSchedule ${ss.parent} on ${row.week_days} from ${ss.from_time} to ${ss.to_time}.`)
+    //                             });
+    //                         }
+    //                     }
+    //                 });
+    //             }
+    //         }
+    //     });
+    // }
+}
+
+
