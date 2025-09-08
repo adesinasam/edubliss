@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"PDIJ-kH7QK\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Get Started</span>\",\"col\":12}},{\"id\":\"Bt-EN0fi_7\",\"type\":\"paragraph\",\"data\":{\"text\":\"Welcome onboard. Click on Switch to School Portal to proceed.\",\"col\":12}},{\"id\":\"DggqRCm8UU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Switch to School Portal\",\"col\":4}}]",
+ "content": "[{\"id\":\"PDIJ-kH7QK\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Get Started</span>\",\"col\":12}},{\"id\":\"Bt-EN0fi_7\",\"type\":\"paragraph\",\"data\":{\"text\":\"Welcome onboard. Click on Switch to School Portal to proceed.\",\"col\":12}},{\"id\":\"DggqRCm8UU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Switch to School Portal\",\"col\":4}},{\"id\":\"4i3sGbdGrr\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Class Schedule\",\"col\":3}},{\"id\":\"RhpMS3Oewj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Time Slots Template\",\"col\":3}},{\"id\":\"sEl7CD8t5p\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Edubliss Settings\",\"col\":3}}]",
  "creation": "2024-10-27 18:49:25.434768",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,8 +13,8 @@
  "is_hidden": 0,
  "label": "Edubliss",
  "links": [],
- "modified": "2025-06-03 08:43:37.051779",
- "modified_by": "kenneth.umoh@mpischool.com",
+ "modified": "2025-09-08 12:09:36.412621",
+ "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Edubliss",
  "number_cards": [],
@@ -35,6 +35,29 @@
    "label": "Switch to School Portal",
    "type": "URL",
    "url": "/dashboard"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Class Schedule",
+   "link_to": "Class Schedule",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Time Slots Template",
+   "link_to": "Time Slots Template",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Edubliss Settings",
+   "link_to": "Edubliss Settings",
+   "type": "DocType"
   }
  ],
  "title": "Edubliss"
