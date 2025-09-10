@@ -20,13 +20,14 @@
   "schedule_date",
   "room",
   "column_break_9",
-  "from_time",
-  "to_time",
-  "title",
-  "column_break_pthp",
+  "period_label",
   "instructor",
   "instructor_name",
-  "is_cancelled"
+  "column_break_pthp",
+  "from_time",
+  "to_time",
+  "is_cancelled",
+  "title"
  ],
  "fields": [
   {
@@ -113,19 +114,23 @@
    "fieldtype": "Column Break"
   },
   {
+   "fetch_from": "period_label.start_time",
    "fieldname": "from_time",
    "fieldtype": "Time",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "From Time",
+   "read_only": 1,
    "reqd": 1
   },
   {
+   "fetch_from": "period_label.end_time",
    "fieldname": "to_time",
    "fieldtype": "Time",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "To Time",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -168,12 +173,21 @@
    "fieldname": "is_cancelled",
    "fieldtype": "Check",
    "label": "Is Cancelled"
+  },
+  {
+   "fieldname": "period_label",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Period Label",
+   "options": "Period Label",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "istable": 1,
  "links": [],
- "modified": "2025-09-08 17:48:15.458871",
+ "modified": "2025-09-10 08:35:50.968068",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Subject Schedule",

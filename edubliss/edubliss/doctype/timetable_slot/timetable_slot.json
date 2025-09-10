@@ -6,20 +6,23 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "label",
+  "period_label",
   "start_time",
   "end_time",
   "column_break_dmot",
-  "duration",
-  "is_break"
+  "label",
+  "is_break",
+  "duration"
  ],
  "fields": [
   {
    "columns": 2,
+   "fetch_from": "period_label.start_time",
    "fieldname": "start_time",
    "fieldtype": "Time",
    "in_list_view": 1,
    "label": "Start Time",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -28,22 +31,28 @@
   },
   {
    "columns": 2,
+   "fetch_from": "period_label.end_time",
    "fieldname": "end_time",
    "fieldtype": "Time",
    "in_list_view": 1,
    "label": "End Time",
+   "read_only": 1,
    "reqd": 1
   },
   {
    "columns": 1,
+   "fetch_from": "period_label.duration",
    "fieldname": "duration",
    "fieldtype": "Int",
    "in_list_view": 1,
    "label": "Duration",
-   "non_negative": 1
+   "non_negative": 1,
+   "read_only": 1
   },
   {
    "columns": 2,
+   "description": "e.g. Period 1, Short Break etc",
+   "fetch_from": "period_label.label",
    "fieldname": "label",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -53,17 +62,27 @@
   {
    "columns": 1,
    "default": "0",
+   "fetch_from": "period_label.is_break",
    "fieldname": "is_break",
    "fieldtype": "Check",
    "in_list_view": 1,
    "label": "Is Break"
+  },
+  {
+   "fieldname": "period_label",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Period Label",
+   "options": "Period Label",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-09-08 08:08:53.240422",
+ "modified": "2025-09-10 09:00:26.082833",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Timetable Slot",
