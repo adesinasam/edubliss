@@ -1496,3 +1496,23 @@ def update_transfer_status(enrollment_tool_doc):
                 updated_count += 1
     
     frappe.msgprint(_("Transfer status updated for {0} program enrollments").format(updated_count))
+
+@frappe.whitelist()
+def get_subjects_schedule_instructors(course, academic_term, student_group):
+    # Find instructors that have a matching Instructor Log row
+    instructors = frappe.db.sql("""
+        SELECT DISTINCT i.name
+        FROM `tabInstructor` i
+        JOIN `tabInstructor Log` il ON il.parent = i.name
+        WHERE il.course = %s
+          AND il.academic_term = %s
+          AND il.student_group = %s
+    """, (course, academic_term, student_group), as_dict=True)
+
+    return [i.name for i in instructors]
+
+@frappe.whitelist()
+def get_instructors(student_group):
+    return frappe.get_all(
+        "Student Group Instructor", {"parent": student_group}, pluck="instructor"
+    )

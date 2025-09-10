@@ -38,11 +38,12 @@ frappe.ui.form.on("Class Schedule", {
                     
                     response.message.timetable_slot.forEach(function(row) {
                         var new_row = frm.add_child("timetable_slot");
-                        new_row.label = row.label;
+                        new_row.period_label = row.period_label;
                         new_row.start_time = row.start_time;
                         new_row.end_time = row.end_time;
-                        new_row.duration = row.duration;
+                        new_row.label = row.label;
                         new_row.is_break = row.is_break;
+                        new_row.duration = row.duration;
                     });
                     
                     frm.refresh_field("timetable_slot");
@@ -61,8 +62,17 @@ frappe.ui.form.on("Class Schedule", {
                 frappe.model.set_value(item.doctype, item.name, "academic_term", frm.doc.academic_term);
             });
         }
-    }
+    },
 
+    program(frm) {
+        if (frm.doc.subject_schedule && frm.doc.subject_schedule.length) {
+            frm.doc.subject_schedule.forEach((row) => {
+                frappe.model.set_value(row.doctype, row.name, "course", "");
+                frappe.model.set_value(row.doctype, row.name, "instructor", "");
+            });
+        }
+        frm.refresh_field("subject_schedule");
+    }
 });
 
 // Trigger on child table row add
@@ -75,10 +85,65 @@ frappe.ui.form.on("Subject Schedule", {
             frappe.model.set_value(cdt, cdn, "academic_year", frm.doc.academic_year);
             frappe.model.set_value(cdt, cdn, "academic_term", frm.doc.academic_term);
         }
+    },
+
+    course: function(frm, cdt, cdn) {
+        let d = locals[cdt][cdn];
+
+        if (!d.course) return;
+
+        frappe.call({
+            method: "edubliss.api.get_subjects_schedule_instructors",
+            args: {
+                course: d.course,
+                academic_term: d.academic_term,
+                student_group: d.student_group
+            },
+            callback: function(res) {
+                if (res.message && res.message.length) {
+                    if (res.message.length === 1) {
+                        // Only one instructor → auto-set
+                        frappe.model.set_value(cdt, cdn, "instructor", res.message[0]);
+                    } else {
+                        // Multiple instructors → let user pick
+                        let dialog = new frappe.ui.Dialog({
+                            title: __("Select Instructor"),
+                            fields: [
+                                {
+                                    fieldtype: "Link",
+                                    fieldname: "instructor",
+                                    options: "Instructor",
+                                    label: "Instructor",
+                                    reqd: 1
+                                }
+                            ],
+                            primary_action_label: __("Set"),
+                            primary_action(values) {
+                                frappe.model.set_value(cdt, cdn, "instructor", values.instructor);
+                                dialog.hide();
+                            }
+                        });
+
+                        dialog.set_values({ instructor: res.message[0] });
+                        dialog.show();
+                    }
+                } else {
+                    // frappe.msgprint({
+                    //     title: __("No Instructor Found"),
+                    //     message: __("No instructor is mapped for this course, student group, and academic term."),
+                    //     indicator: "red"
+                    // });
+                    frappe.model.set_value(cdt, cdn, "instructor", "");
+                }
+            }
+        });
     }
 });
 
 frappe.ui.form.on("Subject Schedule", {
+    period_label(frm, cdt, cdn) {
+        validate_conflicts(frm, cdt, cdn);
+    },
     from_time(frm, cdt, cdn) {
         validate_conflicts(frm, cdt, cdn);
     },
