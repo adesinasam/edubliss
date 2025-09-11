@@ -6,17 +6,20 @@ frappe.ui.form.on("Class Schedule", {
         // apply query to restrict period_label in Subject Schedule
         frm.fields_dict["subject_schedule"].grid.get_field("period_label").get_query = function(doc, cdt, cdn) {
             if (!frm.doc.timetable_slot || !frm.doc.timetable_slot.length) {
-                // Soft alert (non-blocking, fades after a few seconds)
                 frappe.show_alert({
                     message: __("Please select a <b>Time Slots Template</b> before choosing Period Labels."),
                     indicator: "red"
                 }, 5);
 
-                // Return empty filter to block selection
                 return { filters: [["name", "=", ""]] };
             }
 
-            let allowed = frm.doc.timetable_slot.map(r => r.period_label).filter(Boolean);
+            // Allow only non-break period labels
+            let allowed = frm.doc.timetable_slot
+                .filter(r => !r.is_break)      // keep rows where is_break == 0
+                .map(r => r.period_label)
+                .filter(Boolean);
+
             return {
                 filters: [["name", "in", allowed]]
             };
