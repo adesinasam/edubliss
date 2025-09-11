@@ -2,9 +2,26 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Class Schedule", {
-	// refresh(frm) {
+	refresh(frm) {
+        // apply query to restrict period_label in Subject Schedule
+        frm.fields_dict["subject_schedule"].grid.get_field("period_label").get_query = function(doc, cdt, cdn) {
+            if (!frm.doc.timetable_slot || !frm.doc.timetable_slot.length) {
+                // Soft alert (non-blocking, fades after a few seconds)
+                frappe.show_alert({
+                    message: __("Please select a <b>Time Slots Template</b> before choosing Period Labels."),
+                    indicator: "red"
+                }, 5);
 
-	// },
+                // Return empty filter to block selection
+                return { filters: [["name", "=", ""]] };
+            }
+
+            let allowed = frm.doc.timetable_slot.map(r => r.period_label).filter(Boolean);
+            return {
+                filters: [["name", "in", allowed]]
+            };
+        };
+	},
 
     onload(frm) {
         // apply query on the "course" field inside the child table "subjects"
@@ -42,7 +59,7 @@ frappe.ui.form.on("Class Schedule", {
                         new_row.start_time = row.start_time;
                         new_row.end_time = row.end_time;
                         new_row.label = row.label;
-                        new_row.is_break = row.is_break;
+                        new_row.is_break = row.is_break ? 1 : 0;
                         new_row.duration = row.duration;
                     });
                     
@@ -128,11 +145,11 @@ frappe.ui.form.on("Subject Schedule", {
                         dialog.show();
                     }
                 } else {
-                    // frappe.msgprint({
-                    //     title: __("No Instructor Found"),
-                    //     message: __("No instructor is mapped for this course, student group, and academic term."),
-                    //     indicator: "red"
-                    // });
+                    frappe.msgprint({
+                        title: __("No Instructor Found"),
+                        message: __("No instructor is mapped for this course, student group, and academic term."),
+                        indicator: "red"
+                    });
                     frappe.model.set_value(cdt, cdn, "instructor", "");
                 }
             }
