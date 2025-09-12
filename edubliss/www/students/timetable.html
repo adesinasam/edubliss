@@ -154,75 +154,10 @@
     thead, tfoot { display: table-row-group; }
   }
 
-  [document-status] {
-    margin-bottom: 5mm;
-  }
-
-  .signature-img {
-    background: #fff;
-    border-radius: 3px;
-    margin-top: 5px;
-    max-height: 150px;
-  }
-
-  .stuphoto-img {
-    max-width: 70px;
-    height: 80px;
-/*    border: 2px solid #0c2c42;*/
-    border-radius: 6px;
-  }
-
-  .print-heading {
-    text-align: right;
-    text-transform: uppercase;
-    color: #666;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #d1d8dd;
-  }
-
-  .print-heading h2 {
-    font-size: 24px;
-  }
-
-  .print-format th {
-    background-color: #a0d0db !important;
-    border-bottom: 0px !important;
-  }
-
-  /* modern format: for-test */
-
-  .pbi_avoid {
-    page-break-inside: avoid !important;
-  }
-
-  .pb_before {
-    page-break-before: always !important;
-  }
-
-  .pdf-header {
-    display: inline-block;
-  }
-
-  .text-primary-header {
-      color: #010a4f; /* or any warning color you prefer */
-  }
 
   .text-primary-head {
       color: #043f80; /* or any warning color you prefer */
   }
-
-  .text-primary-rep {
-      color: #3532ed; /* or any warning color you prefer */
-  }
-
-  .text-secondary {
-      color: #610623; /* or any warning color you prefer */
-  }
-
-    .performance-title {
-      text-align: center;
-    }
 
 /* Break slot column */
 .break-slot {
@@ -275,23 +210,6 @@
   </div>
  </div>
  <!-- end: container -->
- <!-- Container -->
- <div class="container-fixed">
-  <div class="flex flex-col items-stretch gap-5 lg:gap-7.5">
-   <div class="flex flex-wrap items-center gap-5 justify-between">
-    <h3 class="text-md text-gray-900 font-medium">
-    </h3>
-    <div class="flex items-center gap-5">
-     <div class="flex items-center gap-2.5">
-     </div>
-    </div>
-   </div>
-    
-    <div class="flex grow justify-center">
-    </div>
-  </div>
- </div>
- <!-- End of Container -->
 
 {% set sections = sections or {} %}
 {% set timetable_slots = timetable_slots or [] %}
@@ -304,8 +222,8 @@
       <div class="card">
         <div class="card-body lg:py-7.5">
 
-          <p class="performance-title">
-            <b class="text-secondary" style="font-size: 12pt">
+          <p class="text-center">
+            <b class="text-center" style="font-size: 12pt">
               {{ sections.program_section if sections.program_section is defined else (sections if sections is string else '') }} Timetable
             </b>
           </p>
@@ -313,7 +231,7 @@
           <table width="100%" style="margin:0; padding:0; border:1px solid #043f80; border-collapse:collapse;">
             <thead>
               <tr>
-                <th class="text-left bg-danger-light" style="border-right:1px solid #043f80; padding:6px; width:12%;">Day</th>
+                <th class="text-left bg-danger-light" style="border-right:1px solid #043f80; padding:6px; width:15%;">Day</th>
                 {% for slot in timetable_slots %}
                   <th class="text-center bg-success-light" 
                       style="border-right:1px solid #043f80; padding:6px; width:{{ 100 / (timetable_slots|length + 2) }}%;">

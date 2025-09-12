@@ -166,20 +166,6 @@ def get_context(context):
                 context.timetable_map = timetable_map
                 context.days_order = days_order
 
-
-        # Try to fetch the Student Courses document and handle errors if it doesn't exist
-        try:
-            courses = frappe.call(
-                'edubliss.api.get_student_courses',
-                student=docname, 
-                program_enrollment=program_enrollment
-                )
-        except Exception as e:
-            courses = None  # or set a default value if required        
-
-        if courses:
-            context.courses = courses    
-
     else:
         context.program = _("Welcome")  # or set a default value if required
 
@@ -193,18 +179,6 @@ def get_context(context):
         customer = context.students.customer
     except frappe.DoesNotExistError:
         frappe.throw(_("Student not found"), frappe.DoesNotExistError)
-
-    # Fetch courses based on the selected section, if any
-    course_name = frappe.form_dict.get('course_name')
-    if course_name:
-        context.selected_course = course_name
-        context.course_plan = frappe.call('edubliss.api.get_course_plan', course=course_name)
-        context.course_plan_1 = frappe.call('edubliss.api.get_course_plan_terms', course=course_name, terms='First Term')
-        context.course_plan_2 = frappe.call('edubliss.api.get_course_plan_terms', course=course_name, terms='Second Term')
-        context.course_plan_3 = frappe.call('edubliss.api.get_course_plan_terms', course=course_name, terms='Third Term')
-    else:
-        context.selected_course = None
-        context.course_plan = []
 
 
     return context
