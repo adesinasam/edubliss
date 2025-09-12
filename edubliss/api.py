@@ -1516,3 +1516,36 @@ def get_instructors(student_group):
     return frappe.get_all(
         "Student Group Instructor", {"parent": student_group}, pluck="instructor"
     )
+
+@frappe.whitelist()
+def get_class_schedule(student_group):
+    filters = {
+        "student_group": student_group,
+        "docstatus": 1
+    }
+    found = frappe.get_all("Class Schedule", 
+        filters=filters, 
+        fields=["name"], 
+        limit_page_length=1
+        )
+    if not found:
+        return None
+    return found[0].get("name")
+
+@frappe.whitelist()
+def get_subject_schedules(schedule):
+    return frappe.get_all(
+        "Subject Schedule",
+        filters={"parent": schedule},
+        fields=["name", "course", "student_group", "week_days", "period_label", "instructor", "instructor_name", "room", "from_time", "to_time", "is_cancelled", "class_schedule_color"],
+        order_by="week_days asc, from_time asc"
+    )
+
+@frappe.whitelist()
+def get_timetable_slots(schedule):
+    return frappe.get_all(
+        "Timetable Slot",
+        filters={"parent": schedule},
+        fields=["name", "period_label", "label", "is_break", "duration", "start_time", "end_time"],
+        order_by="idx asc"
+    )
