@@ -83,6 +83,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_on_submit": 1,
    "depends_on": "eval:doc.time_slots_template",
    "fieldname": "subject_schedule",
    "fieldtype": "Table",
@@ -123,7 +124,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-11 16:53:02.292727",
+ "modified": "2025-09-15 07:41:34.630187",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Class Schedule",
