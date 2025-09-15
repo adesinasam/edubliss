@@ -250,8 +250,8 @@
                <!-- {# iterate through timetable slots in order; for each slot render a row #} -->
                {% for slot in timetable_slots %}
                 <tr>
-                  <td class="bg-success-light text-primary-head">{{ slot.start_time or slot.get("start_time") or "" }}</td>
-                  <td class="bg-danger-light text-primary-head">{{ slot.end_time or slot.get("end_time") or "" }}</td>
+                  <td class="bg-success-light text-2xs" style="color: #043f80;">{{ frappe.utils.format_time(slot.start_time or slot.get("start_time"), "hh:mm a") }}</td>
+                  <td class="bg-danger-light text-2xs" style="color: #043f80;">{{ frappe.utils.format_time(slot.end_time or slot.get("end_time"), "hh:mm a") }}</td>
 
                   <!-- {# if this slot is a break, render a single cell that spans all day columns #} -->
                   {% if slot.is_break %}
@@ -259,10 +259,11 @@
                       <div style="font-weight:700;">
                         {{ slot.label or slot.period_label or "Break" }}
                       </div>
-                      {% if slot.duration %}
+                      <div style="font-size:9px;color:#334155;margin-top:.25rem;">{{ frappe.utils.format_time(slot.start_time or slot.get("start_time"), "hh:mm a") }}</div>
+                     {% if slot.duration %}
                         <div style="font-size:11px;color:#6b7280;">{{ slot.duration }} min</div>
                       {% endif %}
-                    </td>
+                     </td>
                   {% else %}
                     <!-- {# Normal slot: render one cell per day using timetable_map[day][loop_index] #} -->
                     {% set idx = loop.index0 %}
@@ -275,12 +276,12 @@
 
                       {% if cell %}
                         {% set bg = cell.class_schedule_color if cell.class_schedule_color else '' %}
-                        <td class="bg-gray-100">
-                          <div class="card bg-info-light">
-                            <div class="card-body">
+                        <td>
+                          <div class="card" style="{% if bg %} background-color: {{ bg }};{% endif %} ">
+                            <div class="card-body"> 
                          <!-- <span class="badge badge-pill badge-outline badge-info"> -->
                           <!-- {# Course name (fall back to course field) #} -->
-                          <div style="font-weight: 700; font-size: 11px;{% if bg %} color: {{ bg }};{% endif %}">
+                          <div style="font-weight: 700; font-size: 11px;color: #374151;">
                             {% if cell.course_name %}{{ cell.course_name }}{% elif cell.course %}{{ cell.course }}{% else %}{{ cell.get('name') or 'Scheduled' }}{% endif %}
                           </div>
                          <!-- </span> -->
@@ -291,6 +292,7 @@
                           {% elif cell.instructor %}
                             <div style="font-size: 10px; color: #6b021f; margin-top: .25rem;">{{ cell.instructor }}</div>
                           {% endif %}
+                            <div style="font-size:9px;color:#334155;margin-top:.25rem;">{{ frappe.utils.format_time(slot.start_time or slot.get("start_time"), "hh:mm a") }} - {{ frappe.utils.format_time(slot.end_time or slot.get("end_time"), "hh:mm a") }}</div>
 
                           <!-- {# Room or other micro info #} -->
                           {% if cell.room %}
@@ -300,7 +302,7 @@
                           </div>
                         </td>
                       {% else %}
-                        <td class="bg-gray-100">
+                        <td>
                           <!-- <div class="card">
                             <div class="card-body"> -->
                               &nbsp;
@@ -313,6 +315,21 @@
                 </tr>
                {% endfor %}
               </tbody>
+              <tfoot>
+               <tr>
+                <th class="min-w-[125px]">
+                 Start Time
+                </th>
+                <th class="min-w-[125px]">
+                 End Time
+                </th>
+                {% for day in days %}
+                <th class="min-w-[200px]">
+                 {{ day }}
+                </th>
+                {% endfor %}
+               </tr>
+              </tfoot>
              </table>
             </div>
            </div>
