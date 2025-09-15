@@ -1,0 +1,322 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Class Timetable") }}
+{% endblock %}
+
+{% block custom_link %}
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+    <style>
+      body {
+        background: #edf2f7;
+      }
+
+      #calendar { 
+        max-width: 1100px;
+        margin: 5px auto;
+      }
+      .fc-button {
+        background-color: #a4a5a6 !important;
+        color: white;
+        border: none !important;
+        padding: 8px 16px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+
+      .fc-button:hover {
+        background-color: #575757 !important;
+      }
+
+      /* Customize Previous and Next Buttons */
+      .fc-prev-button {
+        background-color: #a4a5a6 !important;
+        color: white;
+        border-radius: 50%;
+        padding: 5px 10px;
+      }
+
+      .fc-prev-button:hover {
+        background-color: #575757 !important;
+      }
+
+      .fc-next-button {
+        background-color: #a4a5a6 !important;
+        color: white;
+        border-radius: 50%;
+        padding: 5px 10px;
+      }
+
+      .fc-next-button:hover {
+        background-color: #575757 !important;
+      }
+
+      /* Customize Today Button */
+      .fc-today-button {
+        background-color: #a4a5a6 !important;
+        color: white;
+        border-radius: 10px;
+      }
+
+      .fc-today-button:hover {
+        background-color: #575757 !important;
+      }
+
+      /* Customize View Buttons (Month, Week, Day) */
+      .fc-dayGridMonth-button {
+        background-color: #8e44ad !important;
+        color: white;
+      }
+
+      .fc-dayGridMonth-button:hover {
+        background-color: #9b59b6 !important;
+      }
+
+      .fc-timeGridWeek-button {
+        background-color: #a4a5a6 !important;
+        color: white;
+      }
+
+      .fc-timeGridDay-button {
+        background-color: #27ae60 !important;
+        color: white;
+      }
+
+      .fc-timeGridWeek-button:hover,
+      .fc-timeGridDay-button:hover {
+        filter: brightness(85%) !important;
+      }
+
+      .fc .fc-col-header-cell {
+        padding: 20px !important;
+      }
+
+      .fc td, .fc th {
+        border: 0 none;
+      }
+      .fc {
+        font-family: 'Arial', sans-serif; /* Custom font family */
+        color: #929496 !important; /* Darker color for day headers */
+        border: 0 none;
+      }
+      .fc-event {
+        cursor: pointer;
+        border-radius: 10px !important;
+        font-size: 0.65rem !important; /* Reduce font size for mobile */
+        font-weight: 600;
+        line-height: 1.2; /* Adjust line height for event titles */
+        padding: 0.3rem; /* Add some padding inside the event */
+      }
+      .fc-toolbar-title {
+        font-weight: 300;
+        font-size: 1.3rem !important; /* Reduce font size for mobile */
+        color: #575757 !important;
+      }
+      .fc-button {
+        font-size: 0.8rem !important; /* Optionally reduce button font size */
+      }
+
+      /* Responsive styling for the month header */
+      @media (max-width: 600px) {
+        .fc-toolbar-title {
+          font-weight: 500;
+          font-size: 0.9rem !important; /* Reduce font size for mobile */
+        }
+        .fc-button {
+          font-size: 0.7rem !important; /* Optionally reduce button font size */
+        }
+      }
+    </style>
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav2.html" %}
+{% endblock %}
+
+{% block content %}
+<main class="grow content pt-5 bg-gray-100" id="content" role="content">
+  <!-- begin: container -->
+  <div class="container-fixed" id="content_container"></div>
+  <!-- end: container -->
+  <!-- begin: container -->
+  <div class="container-fixed">
+    <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+      <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-primary">Class Schedule</h1>
+      </div>
+       {% if "Academics User" in user_roles %}
+       <div class="flex items-center gap-2.5">
+        <a class="btn btn-sm btn-primary btn-light" href="/app/course-scheduling-tool">
+         Course Schedule Tool
+        </a>
+       </div>
+       {% endif %}
+    </div>
+  </div>
+  <!-- end: container -->
+
+    {% include "templates/includes/section_nav.html" %}
+
+  <!-- begin: container -->
+  <div class="container-fixed">
+    <!-- begin: grid -->
+    <div class="grid grid-cols-1 gap-5 lg:gap-7.5">
+      <div class="col-span-1">
+        <div class="grid gap-5 lg:gap-7.5">
+          <div class="card flex flex-col gap-5 lg:gap-7.5 bg-info-light">
+           {% if selected_section %} 
+              <div class="card-header">
+                <h3 class="card-title text-info">{{ selected_section }}</h3>
+                <!-- Add the button for toggling weekends -->
+                <div align="right"><button class="btn btn-secondary btn-xs text-sm" id="toggleWeekends">Show Weekends</button></div>
+              </div>
+                <div id="calendar"  class="card-body bg-light text-gray-900 text-sm rounded-lg shadow-md" style="width: 100%; height: 600px; border: 0px solid #000;"></div>
+           {% endif %} 
+          </div>
+        </div>
+      <!-- </div> -->
+    </div>
+    <!-- end: grid -->
+  </div>
+  <!-- end: container -->
+</main>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var showWeekends = false; // Initially hide weekends
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            headerToolbar: {
+                left: 'prev next',
+                center: 'title',
+                right: 'today timeGridWeek,listWeek' // View options
+            },
+            buttonText: {
+                today: 'Today',
+                week: 'Week',
+                listWeek: 'List'
+            },
+            height: 800,
+            contentHeight: 780,
+            initialView: 'timeGridWeek', // Week view with time slots
+            slotMinTime: "07:00:00", // Start showing time slots from 7 AM
+            slotMaxTime: "21:00:00", // End showing time slots at 5 PM
+            nowIndicator: true,
+            allDaySlot: false, // Disable the 'all-day' slot
+            editable: true,
+            weekends: showWeekends, // Initially hide weekends
+            events: function(fetchInfo, successCallback, failureCallback) {
+                fetch('/api/method/edubliss.api.get_section_schedule?student_group={{ selected_section }}&academic_term={{ acadterm }}', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    successCallback(data.message.message);
+                })
+                .catch(error => {
+                    console.error('Error fetching events:', error);
+                    failureCallback(error);
+                });
+            },
+
+            eventClick: function(info) {
+                // Open a modal or navigate to a detail page using the event ID
+                var eventId = info.event.id;
+
+                // Example: Open modal with more event details
+                fetch(`/api/method/edubliss.api.get_schedule_details?event_id=${eventId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+
+                    // Helper function to format date
+                    function formatDate(dateStr) {
+                        const options = { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' };
+                        return new Intl.DateTimeFormat('en-GB', options).format(new Date(dateStr));
+                    }
+
+                    // Format start and end dates
+                    const formattedStart = formatDate(data.message.start);
+
+                    // You can now populate the modal with event details
+                    document.getElementById('eventModalTitle').innerHTML = `
+                        <h3 class="modal-title" style="color: ${data.message.color}">
+                         ${data.message.title}
+                        </h3>
+                        <button class="btn btn-xs btn-icon btn-light" data-modal-dismiss="true">
+                         <i class="ki-outline ki-cross"></i>
+                        </button>       
+                    `;
+                    document.getElementById('eventModalBody').innerHTML = `
+                       <div class="flex flex-col gap-3.5 mb-3.5">
+                        <div class="flex items-center gap-2.5">
+                         <span class="text-sm text-gray-600 shrink-0">
+                          <i class="ki-filled ki-calendar"></i>
+                         </span>
+                         <div class="text-sm text-gray-900">
+                          ${formattedStart}
+                         </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                         <span class="text-sm text-gray-600 shrink-0">
+                          <i class="ki-filled ki-user"></i>
+                         </span>
+                         <div class="text-sm text-gray-900">
+                          ${data.message.instructor}
+                         </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                         <span class="text-sm text-gray-600 shrink-0">
+                          <i class="ki-filled ki-time"></i>
+                         </span>
+                         <div class="text-sm text-gray-900">
+                          ${data.message.from_time} - ${data.message.to_time}
+                         </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                         <span class="text-sm text-gray-600 shrink-0">
+                          <i class="ki-filled ki-book"></i>
+                         </span>
+                         <div class="text-sm text-gray-900">
+                          ${data.message.student_group}
+                         </div>
+                        </div>
+                       </div>
+                    `;
+                    const modalEl = KTDom.getElement('#scheduleModal');
+                    const modal = KTModal.getInstance(modalEl);
+                    modal?.show();
+                })
+                .catch(error => {
+                    console.error('Error fetching event details:', error);
+                });
+            }
+        });
+
+        // Button to toggle weekends
+        var toggleWeekendBtn = document.getElementById('toggleWeekends');
+        toggleWeekendBtn.addEventListener('click', function() {
+            showWeekends = !showWeekends; // Toggle weekends visibility
+            calendar.setOption('weekends', showWeekends); // Update calendar
+            toggleWeekendBtn.textContent = showWeekends ? 'Hide Weekends' : 'Show Weekends'; // Update button text
+        });
+
+        calendar.render();
+    });
+</script>
+{% endblock %}
+
+{% block welcome_link %}
+{% include "templates/includes/modal/schedule.html" %}
+{% endblock %}

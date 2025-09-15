@@ -70,9 +70,98 @@ def get_context(context):
     if section_name:
         context.selected_section = section_name
         context.students = frappe.call('edubliss.api.get_section_students', section=section_name)
+
+        context.section_doc = frappe.get_doc("Student Group", section_name)
+        context.sections_name = section_name
+
+        try:
+            schedules = frappe.call(
+                'edubliss.api.get_class_schedule',
+                student_group=section_name
+                )
+        except Exception as e:
+            schedules = None  # or set a default value if required        
+
+        if schedules:
+            schedule = frappe.get_doc("Class Schedule", schedules)
+            context.schedules = schedule.name
+            context.schedule_name = schedules
+            subject_schedules = frappe.call('edubliss.api.get_subject_schedules', schedule=schedules)
+            timetable_slots = frappe.call('edubliss.api.get_timetable_slots', schedule=schedules)
+
+            # Normalize subject_schedules and timetable_slots to lists of dicts
+            subject_schedules = subject_schedules or []
+            timetable_slots = timetable_slots or []
+
+            # Build a quick lookup: for each week_day -> { period_label : subject_row }
+            # Note: subject_schedules entries returned by get_all should already be dict-like.
+            schedule_lookup = {}
+            for s in subject_schedules:
+                # expected keys: week_days (Link), period_label (Link name), course, instructor, room, is_cancelled, instructor_name ...
+                day = s.get("week_days") or s.get("week_day") or "Unknown"
+                period = s.get("period_label") or s.get("period_label_name") or None
+                if not day or not period:
+                    continue
+                schedule_lookup.setdefault(day, {})[period] = s
+
+            # Determine the list/order of days to display.
+            # Use distinct week_days from subject_schedules, or fallback to a reasonable order.
+            days_order = []
+
+            # Get all active days from Week Days, ordered by list_no
+            all_days = frappe.get_all(
+                "Week Days",
+                filters={"disabled": 0},
+                fields=["week_days"],
+                order_by="list_no asc",
+                pluck="week_days"
+            )
+
+            # Collect only the days that actually appear in subject_schedules
+            seen = set(s.get("week_days") for s in subject_schedules if s.get("week_days"))
+
+            # Keep the order defined in Week Days (list_no), but filter to only used days
+            days_order = [d for d in all_days if d in seen]
+
+            # If no subject_schedules days exist, fall back to all ordered days
+            if not days_order:
+                days_order = all_days
+
+            # Prepare timetable_map: for each day, create a list matching timetable_slots order
+            timetable_map = {}
+            for day in days_order:
+                row = []
+                for slot in timetable_slots:
+                    period_label_name = slot.get("period_label") or slot.get("period_label_name") or slot.get("name")
+                    cell = schedule_lookup.get(day, {}).get(period_label_name)
+                    # We may want to enrich the cell (e.g. fetch instructor name or course name display)
+                    if cell:
+                        # ensure instructor_name present if fetched by link
+                        if "instructor" in cell and not cell.get("instructor_name"):
+                            # attempt to fetch instructor name quickly (optional)
+                            try:
+                                instr_doc = frappe.get_cached_doc("Instructor", cell["instructor"])
+                                cell["instructor_name"] = getattr(instr_doc, "instructor_name", None)
+                            except Exception:
+                                pass
+                        # compute course_name for display
+                        if "course" in cell and not cell.get("course_name"):
+                            try:
+                                course_doc = frappe.get_cached_doc("Course", cell["course"])
+                                cell["course_name"] = getattr(course_doc, "custom_subject", cell["course"])
+                            except Exception:
+                                cell["course_name"] = cell.get("course")
+                    row.append(cell)
+                timetable_map[day] = row
+
+            # push context for the template
+            context.subject_schedules = subject_schedules
+            context.timetable_slots = timetable_slots
+            context.timetable_map = timetable_map
+            context.days_order = days_order
+
     else:
         context.selected_section = None
         context.students = []
-
 
     return context

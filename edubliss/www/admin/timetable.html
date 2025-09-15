@@ -4,132 +4,6 @@
 {{ _("Class Timetable") }}
 {% endblock %}
 
-{% block custom_link %}
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
-    <style>
-      body {
-        background: #edf2f7;
-      }
-
-      #calendar { 
-        max-width: 1100px;
-        margin: 5px auto;
-      }
-      .fc-button {
-        background-color: #a4a5a6 !important;
-        color: white;
-        border: none !important;
-        padding: 8px 16px;
-        border-radius: 4px;
-        transition: background-color 0.3s ease;
-      }
-
-      .fc-button:hover {
-        background-color: #575757 !important;
-      }
-
-      /* Customize Previous and Next Buttons */
-      .fc-prev-button {
-        background-color: #a4a5a6 !important;
-        color: white;
-        border-radius: 50%;
-        padding: 5px 10px;
-      }
-
-      .fc-prev-button:hover {
-        background-color: #575757 !important;
-      }
-
-      .fc-next-button {
-        background-color: #a4a5a6 !important;
-        color: white;
-        border-radius: 50%;
-        padding: 5px 10px;
-      }
-
-      .fc-next-button:hover {
-        background-color: #575757 !important;
-      }
-
-      /* Customize Today Button */
-      .fc-today-button {
-        background-color: #a4a5a6 !important;
-        color: white;
-        border-radius: 10px;
-      }
-
-      .fc-today-button:hover {
-        background-color: #575757 !important;
-      }
-
-      /* Customize View Buttons (Month, Week, Day) */
-      .fc-dayGridMonth-button {
-        background-color: #8e44ad !important;
-        color: white;
-      }
-
-      .fc-dayGridMonth-button:hover {
-        background-color: #9b59b6 !important;
-      }
-
-      .fc-timeGridWeek-button {
-        background-color: #a4a5a6 !important;
-        color: white;
-      }
-
-      .fc-timeGridDay-button {
-        background-color: #27ae60 !important;
-        color: white;
-      }
-
-      .fc-timeGridWeek-button:hover,
-      .fc-timeGridDay-button:hover {
-        filter: brightness(85%) !important;
-      }
-
-      .fc .fc-col-header-cell {
-        padding: 20px !important;
-      }
-
-      .fc td, .fc th {
-        border: 0 none;
-      }
-      .fc {
-        font-family: 'Arial', sans-serif; /* Custom font family */
-        color: #929496 !important; /* Darker color for day headers */
-        border: 0 none;
-      }
-      .fc-event {
-        cursor: pointer;
-        border-radius: 10px !important;
-        font-size: 0.65rem !important; /* Reduce font size for mobile */
-        font-weight: 600;
-        line-height: 1.2; /* Adjust line height for event titles */
-        padding: 0.3rem; /* Add some padding inside the event */
-      }
-      .fc-toolbar-title {
-        font-weight: 300;
-        font-size: 1.3rem !important; /* Reduce font size for mobile */
-        color: #575757 !important;
-      }
-      .fc-button {
-        font-size: 0.8rem !important; /* Optionally reduce button font size */
-      }
-
-      /* Responsive styling for the month header */
-      @media (max-width: 600px) {
-        .fc-toolbar-title {
-          font-weight: 500;
-          font-size: 0.9rem !important; /* Reduce font size for mobile */
-        }
-        .fc-button {
-          font-size: 0.7rem !important; /* Optionally reduce button font size */
-        }
-      }
-    </style>
-{% endblock %}
-
 {% block headnav_link %}
     {% include "templates/includes/headnav/edu_headnav2.html" %}
 {% endblock %}
@@ -147,8 +21,8 @@
       </div>
        {% if "Academics User" in user_roles %}
        <div class="flex items-center gap-2.5">
-        <a class="btn btn-sm btn-primary btn-light" href="/app/course-scheduling-tool">
-         Course Schedule Tool
+        <a class="btn btn-sm btn-primary btn-light" href="/app/class-schedule">
+         Class Schedule Tool
         </a>
        </div>
        {% endif %}
@@ -159,162 +33,149 @@
     {% include "templates/includes/section_nav.html" %}
 
   <!-- begin: container -->
-  <div class="container-fixed">
-    <!-- begin: grid -->
-    <div class="grid grid-cols-1 gap-5 lg:gap-7.5">
-      <div class="col-span-1">
-        <div class="grid gap-5 lg:gap-7.5">
-          <div class="card flex flex-col gap-5 lg:gap-7.5 bg-info-light">
-           {% if selected_section %} 
-              <div class="card-header">
-                <h3 class="card-title text-info">{{ selected_section }}</h3>
-                <!-- Add the button for toggling weekends -->
-                <div align="right"><button class="btn btn-secondary btn-xs text-sm" id="toggleWeekends">Show Weekends</button></div>
-              </div>
-                <div id="calendar"  class="card-body bg-light text-gray-900 text-sm rounded-lg shadow-md" style="width: 100%; height: 600px; border: 0px solid #000;"></div>
-           {% endif %} 
+{% if selected_section %} 
+{% set section_doc = section_doc or {} %}
+{% set timetable_slots = timetable_slots or [] %}
+{% set days = days_order or [] %}
+{% set timetable_map = timetable_map or {} %}
+
+{% if timetable_slots and days %}
+  <div class="container-fixed" id="content_container">
+    <div class="grid gap-5 lg:gap-7.5">
+      <div class="card">
+        <div class="card-body lg:py-7.5">
+
+          <p class="text-center">
+            <b class="text-center text-info" style="font-size: 13pt">
+              {{ section_doc.program_section if section_doc.program_section is defined else (selected_section if selected_section is string else '') }} Timetable
+            </b>
+          </p>
+          <div class="grid">
+           <div class="card min-w-full">
+            <div class="card-table scrollable-x-auto">
+             <table class="table align-middle text-center text-gray-700 font-medium text-xs">
+              <thead>
+               <tr>
+                <th class="min-w-[125px]">
+                 Start Time
+                </th>
+                <th class="min-w-[125px]">
+                 End Time
+                </th>
+                {% for day in days %}
+                <th class="min-w-[200px]">
+                 {{ day }}
+                </th>
+                {% endfor %}
+               </tr>
+              </thead>
+              <tbody>
+               <!-- {# iterate through timetable slots in order; for each slot render a row #} -->
+               {% for slot in timetable_slots %}
+                <tr>
+                  <td class="bg-success-light text-2xs" style="color: #043f80;">{{ frappe.utils.format_time(slot.start_time or slot.get("start_time"), "hh:mm a") }}</td>
+                  <td class="bg-danger-light text-2xs" style="color: #043f80;">{{ frappe.utils.format_time(slot.end_time or slot.get("end_time"), "hh:mm a") }}</td>
+
+                  <!-- {# if this slot is a break, render a single cell that spans all day columns #} -->
+                  {% if slot.is_break %}
+                    <td class="bg-info-light" style="text-align: center; font-style: italic; color: #374151;" colspan="{{ days|length }}">
+                      <div style="font-weight:700;">
+                        {{ slot.label or slot.period_label or "Break" }}
+                      </div>
+                      <div style="font-size:9px;color:#334155;margin-top:.25rem;">{{ frappe.utils.format_time(slot.start_time or slot.get("start_time"), "hh:mm a") }} - {{ frappe.utils.format_time(slot.end_time or slot.get("end_time"), "hh:mm a") }}</div>
+                     {% if slot.duration %}
+                        <div style="font-size:11px;color:#6b7280;">{{ slot.duration }} min</div>
+                      {% endif %}
+                     </td>
+                  {% else %}
+                    <!-- {# Normal slot: render one cell per day using timetable_map[day][loop_index] #} -->
+                    {% set idx = loop.index0 %}
+                    {% for day in days %}
+                      {% set day_row = timetable_map.get(day, []) %}
+                      {% set cell = None %}
+                      {% if day_row and day_row|length > idx %}
+                        {% set cell = day_row[idx] %}
+                      {% endif %}
+
+                      {% if cell %}
+                        {% set bg = cell.class_schedule_color if cell.class_schedule_color else '' %}
+                        <td>
+                          <div class="card" style="{% if bg %} background-color: {{ bg }};{% endif %}">
+                            <div class="card-body">
+                         <!-- <span class="badge badge-pill badge-outline badge-info"> -->
+                          <!-- {# Course name (fall back to course field) #} -->
+                          <div style="font-weight: 700; font-size: 11px;color: #374151;">
+                            {% if cell.course_name %}{{ cell.course_name }}{% elif cell.course %}{{ cell.course }}{% else %}{{ cell.get('name') or 'Scheduled' }}{% endif %}
+                          </div>
+                         <!-- </span> -->
+
+                          <!-- {# Instructor if available #} -->
+                          {% if cell.instructor_name %}
+                            <div style="font-size: 10px; color: #6b021f; margin-top: .25rem;">{{ cell.instructor_name }}</div>
+                          {% elif cell.instructor %}
+                            <div style="font-size: 10px; color: #6b021f; margin-top: .25rem;">{{ cell.instructor }}</div>
+                          {% endif %}
+                            <div style="font-size:9px;color:#334155;margin-top:.25rem;">{{ frappe.utils.format_time(slot.start_time or slot.get("start_time"), "hh:mm a") }} - {{ frappe.utils.format_time(slot.end_time or slot.get("end_time"), "hh:mm a") }}</div>
+
+                          <!-- {# Room or other micro info #} -->
+                          {% if cell.room %}
+                            <div style="font-size:10px;color:#334155;margin-top:.25rem;">Room: {{ cell.room }}</div>
+                          {% endif %}
+                            </div>
+                          </div>
+                        </td>
+                      {% else %}
+                        <td>
+                          <!-- <div class="card">
+                            <div class="card-body"> -->
+                              &nbsp;
+                            <!-- </div>
+                          </div> -->
+                        </td>
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                </tr>
+               {% endfor %}
+              </tbody>
+              <tfoot>
+               <tr>
+                <th class="min-w-[125px]">
+                 Start Time
+                </th>
+                <th class="min-w-[125px]">
+                 End Time
+                </th>
+                {% for day in days %}
+                <th class="min-w-[200px]">
+                 {{ day }}
+                </th>
+                {% endfor %}
+               </tr>
+              </tfoot>
+             </table>
+            </div>
+           </div>
           </div>
         </div>
-      <!-- </div> -->
+      </div>
     </div>
-    <!-- end: grid -->
   </div>
+{% else %}
+  <div class="container-fixed" id="content_container">
+    <div class="card">
+      <div class="card-body">
+      <p class="text-center">No timetable data available.</p>
+      </div>
+    </div>
+  </div>
+{% endif %}
+{% endif %} 
   <!-- end: container -->
 </main>
 {% endblock %}
 
 {% block custom_js %}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var showWeekends = false; // Initially hide weekends
-
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            headerToolbar: {
-                left: 'prev next',
-                center: 'title',
-                right: 'today timeGridWeek,listWeek' // View options
-            },
-            buttonText: {
-                today: 'Today',
-                week: 'Week',
-                listWeek: 'List'
-            },
-            height: 800,
-            contentHeight: 780,
-            initialView: 'timeGridWeek', // Week view with time slots
-            slotMinTime: "07:00:00", // Start showing time slots from 7 AM
-            slotMaxTime: "21:00:00", // End showing time slots at 5 PM
-            nowIndicator: true,
-            allDaySlot: false, // Disable the 'all-day' slot
-            editable: true,
-            weekends: showWeekends, // Initially hide weekends
-            events: function(fetchInfo, successCallback, failureCallback) {
-                fetch('/api/method/edubliss.api.get_section_schedule?student_group={{ selected_section }}&academic_term={{ acadterm }}', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    successCallback(data.message.message);
-                })
-                .catch(error => {
-                    console.error('Error fetching events:', error);
-                    failureCallback(error);
-                });
-            },
-
-            eventClick: function(info) {
-                // Open a modal or navigate to a detail page using the event ID
-                var eventId = info.event.id;
-
-                // Example: Open modal with more event details
-                fetch(`/api/method/edubliss.api.get_schedule_details?event_id=${eventId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-
-                    // Helper function to format date
-                    function formatDate(dateStr) {
-                        const options = { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' };
-                        return new Intl.DateTimeFormat('en-GB', options).format(new Date(dateStr));
-                    }
-
-                    // Format start and end dates
-                    const formattedStart = formatDate(data.message.start);
-
-                    // You can now populate the modal with event details
-                    document.getElementById('eventModalTitle').innerHTML = `
-                        <h3 class="modal-title" style="color: ${data.message.color}">
-                         ${data.message.title}
-                        </h3>
-                        <button class="btn btn-xs btn-icon btn-light" data-modal-dismiss="true">
-                         <i class="ki-outline ki-cross"></i>
-                        </button>       
-                    `;
-                    document.getElementById('eventModalBody').innerHTML = `
-                       <div class="flex flex-col gap-3.5 mb-3.5">
-                        <div class="flex items-center gap-2.5">
-                         <span class="text-sm text-gray-600 shrink-0">
-                          <i class="ki-filled ki-calendar"></i>
-                         </span>
-                         <div class="text-sm text-gray-900">
-                          ${formattedStart}
-                         </div>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                         <span class="text-sm text-gray-600 shrink-0">
-                          <i class="ki-filled ki-user"></i>
-                         </span>
-                         <div class="text-sm text-gray-900">
-                          ${data.message.instructor}
-                         </div>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                         <span class="text-sm text-gray-600 shrink-0">
-                          <i class="ki-filled ki-time"></i>
-                         </span>
-                         <div class="text-sm text-gray-900">
-                          ${data.message.from_time} - ${data.message.to_time}
-                         </div>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                         <span class="text-sm text-gray-600 shrink-0">
-                          <i class="ki-filled ki-book"></i>
-                         </span>
-                         <div class="text-sm text-gray-900">
-                          ${data.message.student_group}
-                         </div>
-                        </div>
-                       </div>
-                    `;
-                    const modalEl = KTDom.getElement('#scheduleModal');
-                    const modal = KTModal.getInstance(modalEl);
-                    modal?.show();
-                })
-                .catch(error => {
-                    console.error('Error fetching event details:', error);
-                });
-            }
-        });
-
-        // Button to toggle weekends
-        var toggleWeekendBtn = document.getElementById('toggleWeekends');
-        toggleWeekendBtn.addEventListener('click', function() {
-            showWeekends = !showWeekends; // Toggle weekends visibility
-            calendar.setOption('weekends', showWeekends); // Update calendar
-            toggleWeekendBtn.textContent = showWeekends ? 'Hide Weekends' : 'Show Weekends'; // Update button text
-        });
-
-        calendar.render();
-    });
-</script>
 {% endblock %}
 
 {% block welcome_link %}
