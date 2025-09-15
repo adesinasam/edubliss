@@ -1,7 +1,7 @@
 {% extends "templates/layout.html" %}
 
 {% block title %}
-{{ _("Student Timetable") }}
+{{ _("Techers Schedule") }}
 {% endblock %}
 
 {% block headnav_link %}
@@ -14,31 +14,28 @@
  <div class="container-fixed" id="content_container">
  </div>
  <!-- end: container -->
-  {% if "Academics User" in user_roles or "Parent" in user_roles %}
-  {% include "templates/includes/student_header.html" %}
+    {% if "Academics User" in user_roles %}
+    {% include "templates/includes/teacher_header.html" %}
 
-  {% include "templates/includes/student_nav.html" %}
-  {% endif %}
+    {% include "templates/includes/teacher_nav.html" %}
+    {% endif %}
  <!-- begin: container -->
  <div class="container-fixed">
   <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
    <div class="flex flex-col justify-center gap-2">
-    {% if sections %}   
     <h1 class="text-xl font-semibold leading-none text-primary">
-     Class Timetable
+     Schedule
     </h1>
     <div class="flex items-center flex-wrap gap-1.5 font-medium">
      <span class="text-md text-gray-600">
-       {{ sections.program_section or ""}} 
+       {{teachers.instructor_name}} 
      </span>
     </div>
-    {% endif %}
    </div>
   </div>
  </div>
  <!-- end: container -->
 
-{% set sections = sections or {} %}
 {% set timetable_slots = timetable_slots or [] %}
 {% set days = days_order or [] %}
 {% set timetable_map = timetable_map or {} %}
@@ -51,7 +48,7 @@
 
           <p class="text-center">
             <b class="text-center" style="font-size: 12pt">
-              {{ sections.program_section if sections.program_section is defined else (sections if sections is string else '') }} Timetable
+              {{teachers.instructor_name}} Schedule
             </b>
           </p>
           <div class="grid">
@@ -114,10 +111,8 @@
                          <!-- </span> -->
 
                           <!-- {# Instructor if available #} -->
-                          {% if cell.instructor_name %}
-                            <div style="font-size: 10px; color: #6b021f; margin-top: .25rem;">{{ cell.instructor_name }}</div>
-                          {% elif cell.instructor %}
-                            <div style="font-size: 10px; color: #6b021f; margin-top: .25rem;">{{ cell.instructor }}</div>
+                          {% if cell.student_group %}
+                            <div style="font-size: 10px; color: #6b021f; margin-top: .25rem;">{{ cell.student_group }}</div>
                           {% endif %}
                             <div style="font-size:9px;color:#334155;margin-top:.25rem;">{{ frappe.utils.format_time(slot.start_time or slot.get("start_time"), "hh:mm a") }} - {{ frappe.utils.format_time(slot.end_time or slot.get("end_time"), "hh:mm a") }}</div>
 

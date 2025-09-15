@@ -1548,3 +1548,29 @@ def get_timetable_slots(schedule):
         fields=["name", "period_label", "label", "is_break", "duration", "start_time", "end_time"],
         order_by="idx asc"
     )
+
+frappe.whitelist()
+def get_instructor_class_schedule(instructor=None,academic_term=None):
+    filters = {
+        "instructor": instructor,
+        "academic_term": academic_term
+    }
+    found = frappe.get_all("Subject Schedule", 
+        filters=filters, 
+        fields=["parent"], 
+        limit_page_length=1
+        )
+    if not found:
+        return None
+    return found[0].get("parent")
+
+@frappe.whitelist()
+def get_instructor_subject_schedules(instructor=None,academic_term=None):
+    return frappe.get_all(
+        "Subject Schedule",
+        filters={
+        "instructor": instructor,
+        "academic_term": academic_term
+        },
+        fields=["name", "course", "student_group", "week_days", "period_label", "instructor", "instructor_name", "room", "from_time", "to_time", "is_cancelled", "class_schedule_color"]
+    )

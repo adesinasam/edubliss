@@ -122,6 +122,7 @@ website_route_rules = [
     {"from_route": "/teachers/profile/<docname>", "to_route": "teachers/profile"},
     {"from_route": "/teachers/course/<docname>", "to_route": "teachers/course"},
     {"from_route": "/teachers/schedule/<docname>", "to_route": "teachers/schedule"},
+    {"from_route": "/teachers/timetable/<docname>", "to_route": "teachers/timetable"},
     {"from_route": "/teachers/sections/<docname>", "to_route": "teachers/sections"},
     {"from_route": "/parents/profile/<docname>", "to_route": "parents/profile"},
     {"from_route": "/parents/billing/<docname>", "to_route": "parents/billing"},
