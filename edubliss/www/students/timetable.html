@@ -276,14 +276,14 @@
                       {% if cell %}
                         {% set bg = cell.class_schedule_color if cell.class_schedule_color else '' %}
                         <td class="bg-gray-100">
-                          <div class="card">
+                          <div class="card bg-info-light">
                             <div class="card-body">
-                         <span class="badge badge-pill badge-outline badge-primary">
+                         <!-- <span class="badge badge-pill badge-outline badge-info"> -->
                           <!-- {# Course name (fall back to course field) #} -->
                           <div style="font-weight: 700; font-size: 11px;{% if bg %} color: {{ bg }};{% endif %}">
                             {% if cell.course_name %}{{ cell.course_name }}{% elif cell.course %}{{ cell.course }}{% else %}{{ cell.get('name') or 'Scheduled' }}{% endif %}
                           </div>
-                         </span>
+                         <!-- </span> -->
 
                           <!-- {# Instructor if available #} -->
                           {% if cell.instructor_name %}
