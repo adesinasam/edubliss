@@ -121,17 +121,37 @@ def get_context(context):
                 # Determine the list/order of days to display.
                 # Use distinct week_days from subject_schedules, or fallback to a reasonable order.
                 days_order = []
-                # keep insertion order from subject_schedules
-                seen = set()
-                for s in subject_schedules:
-                    d = s.get("week_days")
-                    if d and d not in seen:
-                        days_order.append(d)
-                        seen.add(d)
 
-                # If no days found from subject_schedules, maybe use common week list
+                # Get all active days from Week Days, ordered by list_no
+                all_days = frappe.get_all(
+                    "Week Days",
+                    filters={"disabled": 0},
+                    fields=["week_days"],
+                    order_by="list_no asc",
+                    pluck="week_days"
+                )
+
+                # Collect only the days that actually appear in subject_schedules
+                seen = set(s.get("week_days") for s in subject_schedules if s.get("week_days"))
+
+                # Keep the order defined in Week Days (list_no), but filter to only used days
+                days_order = [d for d in all_days if d in seen]
+
+                # If no subject_schedules days exist, fall back to all ordered days
                 if not days_order:
-                    days_order = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+                    days_order = all_days
+
+                # # keep insertion order from subject_schedules
+                # seen = set()
+                # for s in subject_schedules:
+                #     d = s.get("week_days")
+                #     if d and d not in seen:
+                #         days_order.append(d)
+                #         seen.add(d)
+
+                # # If no days found from subject_schedules, maybe use common week list
+                # if not days_order:
+                #     days_order = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
                 # Prepare timetable_map: for each day, create a list matching timetable_slots order
                 timetable_map = {}

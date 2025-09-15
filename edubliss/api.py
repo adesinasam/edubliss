@@ -1537,8 +1537,7 @@ def get_subject_schedules(schedule):
     return frappe.get_all(
         "Subject Schedule",
         filters={"parent": schedule},
-        fields=["name", "course", "student_group", "week_days", "period_label", "instructor", "instructor_name", "room", "from_time", "to_time", "is_cancelled", "class_schedule_color"],
-        order_by="week_days asc, from_time asc"
+        fields=["name", "course", "student_group", "week_days", "period_label", "instructor", "instructor_name", "room", "from_time", "to_time", "is_cancelled", "class_schedule_color"]
     )
 
 @frappe.whitelist()

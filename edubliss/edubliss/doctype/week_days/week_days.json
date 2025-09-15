@@ -6,7 +6,9 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "week_days"
+  "week_days",
+  "list_no",
+  "disabled"
  ],
  "fields": [
   {
@@ -16,12 +18,24 @@
    "label": "Week Days",
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "list_no",
+   "fieldtype": "Int",
+   "label": "List No",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "disabled",
+   "fieldtype": "Check",
+   "label": "Disabled"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-08 06:19:03.157852",
+ "modified": "2025-09-15 04:49:51.958593",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Week Days",
