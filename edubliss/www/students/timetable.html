@@ -230,7 +230,7 @@
           <div class="grid">
            <div class="card min-w-full">
             <div class="card-table scrollable-x-auto">
-             <table class="table table-border align-middle text-center text-gray-700 font-medium text-2sm">
+             <table class="table align-middle text-center text-gray-700 font-medium text-xs">
               <thead>
                <tr>
                 <th class="min-w-[125px]">
@@ -247,15 +247,15 @@
                </tr>
               </thead>
               <tbody>
-               {# iterate through timetable slots in order; for each slot render a row #}
+               <!-- {# iterate through timetable slots in order; for each slot render a row #} -->
                {% for slot in timetable_slots %}
                 <tr>
-                  <td class="bg-info-light text-primary-head">{{ slot.start_time or slot.get("start_time") or "" }}</td>
+                  <td class="bg-success-light text-primary-head">{{ slot.start_time or slot.get("start_time") or "" }}</td>
                   <td class="bg-danger-light text-primary-head">{{ slot.end_time or slot.get("end_time") or "" }}</td>
 
-                  {# if this slot is a break, render a single cell that spans all day columns #}
+                  <!-- {# if this slot is a break, render a single cell that spans all day columns #} -->
                   {% if slot.is_break %}
-                    <td class="bg-warning-light" style="text-align: center; font-style: italic; color: #374151; background: rgba(99,102,241,0.08);" colspan="{{ days|length }}">
+                    <td class="bg-info-light" style="text-align: center; font-style: italic; color: #374151;" colspan="{{ days|length }}">
                       <div style="font-weight:700;">
                         {{ slot.label or slot.period_label or "Break" }}
                       </div>
@@ -264,7 +264,7 @@
                       {% endif %}
                     </td>
                   {% else %}
-                    {# Normal slot: render one cell per day using timetable_map[day][loop_index] #}
+                    <!-- {# Normal slot: render one cell per day using timetable_map[day][loop_index] #} -->
                     {% set idx = loop.index0 %}
                     {% for day in days %}
                       {% set day_row = timetable_map.get(day, []) %}
@@ -275,23 +275,29 @@
 
                       {% if cell %}
                         {% set bg = cell.class_schedule_color if cell.class_schedule_color else '' %}
-                        <td class="bg-primary-light">
-                          {# Course name (fall back to course field) #}
+                        <td class="bg-gray-100">
+                          <div class="card">
+                            <div class="card-body">
+                         <span class="badge badge-pill badge-outline badge-primary">
+                          <!-- {# Course name (fall back to course field) #} -->
                           <div style="font-weight: 700; font-size: 11px;{% if bg %} color: {{ bg }};{% endif %}">
                             {% if cell.course_name %}{{ cell.course_name }}{% elif cell.course %}{{ cell.course }}{% else %}{{ cell.get('name') or 'Scheduled' }}{% endif %}
                           </div>
+                         </span>
 
-                          {# Instructor if available #}
+                          <!-- {# Instructor if available #} -->
                           {% if cell.instructor_name %}
                             <div style="font-size: 10px; color: #6b021f; margin-top: .25rem;">{{ cell.instructor_name }}</div>
                           {% elif cell.instructor %}
                             <div style="font-size: 10px; color: #6b021f; margin-top: .25rem;">{{ cell.instructor }}</div>
                           {% endif %}
 
-                          {# Room or other micro info #}
+                          <!-- {# Room or other micro info #} -->
                           {% if cell.room %}
                             <div style="font-size:10px;color:#334155;margin-top:.25rem;">Room: {{ cell.room }}</div>
                           {% endif %}
+                            </div>
+                          </div>
                         </td>
                       {% else %}
                         <td style="color: #9ca3af; font-style: italic;">&nbsp;</td>

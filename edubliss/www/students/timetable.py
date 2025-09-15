@@ -3,6 +3,10 @@ from frappe import _
 
 no_cache = 1
 
+def get_course_subject(course):
+    course_doc = frappe.get_doc("Course", course)
+    return course_doc.custom_subject
+
 def get_context(context):
 
     docnames = frappe.form_dict.docname
@@ -174,7 +178,7 @@ def get_context(context):
                             if "course" in cell and not cell.get("course_name"):
                                 try:
                                     course_doc = frappe.get_cached_doc("Course", cell["course"])
-                                    cell["course_name"] = getattr(course_doc, "course_name", cell["course"])
+                                    cell["course_name"] = getattr(course_doc, "custom_subject", cell["course"])
                                 except Exception:
                                     cell["course_name"] = cell.get("course")
                         row.append(cell)
@@ -185,6 +189,7 @@ def get_context(context):
                 context.timetable_slots = timetable_slots
                 context.timetable_map = timetable_map
                 context.days_order = days_order
+                context['get_course_subject'] = get_course_subject
 
     else:
         context.program = _("Welcome")  # or set a default value if required
