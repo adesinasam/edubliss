@@ -124,7 +124,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-15 07:41:34.630187",
+ "modified": "2025-09-15 14:04:16.036068",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Class Schedule",
@@ -174,7 +174,10 @@
   }
  ],
  "row_format": "Dynamic",
+ "search_fields": "student_group,program,time_slots_template",
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "student_group"
 }
