@@ -24,6 +24,14 @@ frappe.ui.form.on("Class Schedule", {
                 filters: [["name", "in", allowed]]
             };
         };
+
+        if (frm.doc.docstatus == 1) {
+            // Add "View" button
+            frm.page.set_primary_action(`${__('View Schedule')}`, function() {
+                window.location.href = `/admin/timetable?section_name=${frm.doc.student_group}`;
+         });
+        }
+
 	},
 
     onload(frm) {
