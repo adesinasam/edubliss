@@ -89,10 +89,12 @@
   },
   {
    "allow_on_submit": 1,
+   "columns": 1,
    "default": "lavender",
    "fieldname": "class_schedule_color",
    "fieldtype": "Select",
-   "label": "Class Schedule Color",
+   "in_list_view": 1,
+   "label": "Color - Class Schedule ",
    "options": "lavender\nlightcyan\nfloralwhite\nmintcream\nlightblue\nlightsteelblue\nbeige\nlavenderblush",
    "print_hide": 1
   },
@@ -120,6 +122,7 @@
   },
   {
    "allow_on_submit": 1,
+   "columns": 1,
    "fetch_from": "period_label.start_time",
    "fieldname": "from_time",
    "fieldtype": "Time",
@@ -148,6 +151,7 @@
   },
   {
    "allow_on_submit": 1,
+   "columns": 2,
    "fieldname": "week_days",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -197,7 +201,7 @@
  "grid_page_length": 50,
  "istable": 1,
  "links": [],
- "modified": "2025-09-15 13:38:16.816863",
+ "modified": "2025-09-23 09:39:36.293183",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Subject Schedule",

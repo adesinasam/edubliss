@@ -83,14 +83,16 @@
                   <!-- {# if this slot is a break, render a single cell that spans all day columns #} -->
                   {% if slot.is_break %}
                     <td class="bg-info-light" style="text-align: center; font-style: italic; color: #374151;" colspan="{{ days|length }}">
-                      <div style="font-weight:700;">
-                        {{ slot.label or slot.period_label or "Break" }}
-                      </div>
-                      <div style="font-size:9px;color:#334155;margin-top:.25rem;">{{ frappe.utils.format_time(slot.start_time or slot.get("start_time"), "hh:mm a") }} - {{ frappe.utils.format_time(slot.end_time or slot.get("end_time"), "hh:mm a") }}</div>
-                     {% if slot.duration %}
-                        <div style="font-size:11px;color:#6b7280;">{{ slot.duration }} min</div>
+                      <div>
+                      <span style="font-weight:700;">
+                        {{ slot.label or slot.period_label or "Break" }}: 
+                      </span>
+                      <span style="font-size:11px;color:#334155;">{{ frappe.utils.format_time(slot.start_time or slot.get("start_time"), "hh:mm a") }} - {{ frappe.utils.format_time(slot.end_time or slot.get("end_time"), "hh:mm a") }}</span>
+                      {% if slot.duration %}
+                        <span style="font-size:11px;color:#6b7280;"> ({{ slot.duration }} min)</span>
                       {% endif %}
-                     </td>
+                      </div>
+                    </td>
                   {% else %}
                     <!-- {# Normal slot: render one cell per day using timetable_map[day][loop_index] #} -->
                     {% set idx = loop.index0 %}
