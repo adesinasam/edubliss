@@ -68,6 +68,8 @@ def get_context(context):
     # Process student data and generate ledger and sales information
     if students:
         process_students(context, students)
+    else:
+        context.total_debit = context.total_credit = context.balance = 0
 
     return context
 

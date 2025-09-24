@@ -68,6 +68,15 @@ def get_context(context):
     # Process student data and generate ledger and sales information
     if students:
         process_students(context, students)
+    else:
+        context.total_debit = context.total_credit = context.balance = 0
+
+    # Fetch courses based on the selected section, if any
+    success = frappe.form_dict.get('success')
+    if success:
+        context.success = success
+    else:
+        context.success = None
 
     return context
 

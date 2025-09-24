@@ -1422,7 +1422,7 @@ def upload_receipt_form():
             "attached_to_name": receipt_doc.name,  # This was missing
             "attached_to_field": "receipt_image",
             "content": file_content,  # Direct upload instead of saving to filesystem
-            "is_private": 1
+            "is_private": 0
         })
         file_doc.insert(ignore_permissions=True)
         

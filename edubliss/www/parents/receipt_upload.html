@@ -107,7 +107,11 @@
              {% if "Academics User" in user_roles %}
              <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-primary-light">
               <span class="text-primary text-md leading-none font-semibold">
+               {% if total_debit %}
                {{ frappe.format(total_debit, {'fieldtype': 'Currency'}) }}
+               {% else %}
+               {{ frappe.format(0.00, {'fieldtype': 'Currency'}) }}
+               {% endif %}               
               </span>
               <span class="text-gray-700 text-2sm font-medium">
                Total Fees
@@ -115,7 +119,11 @@
              </div>
              <div class="grid grid-cols-1 content-between gap-1.5 border border-dashed border-gray-400 shrink-0 rounded-md px-3.5 py-2 min-w-24 max-w-auto bg-info-light">
               <span class="text-info text-md leading-none font-semibold">
+               {% if total_credit %}
                {{ frappe.format(total_credit, {'fieldtype': 'Currency'}) }}
+               {% else %}
+               {{ frappe.format(0.00, {'fieldtype': 'Currency'}) }}
+               {% endif %}               
               </span>
               <span class="text-gray-700 text-2sm font-medium">
                Total Payment
@@ -409,5 +417,5 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 {% endblock %}
 {% block welcome_link %}
-{% include "templates/includes/modal/pay.html" %}
+{% include "templates/includes/modal/success.html" %}
 {% endblock %}
