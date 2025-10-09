@@ -85,6 +85,7 @@ class PaymentReceiptUpload(Document):
     
     def on_cancel(self):
         """Handle cancellation"""
+
         # Find all Payment Entries created from this Payment Receipt Upload
         payment_entries = frappe.get_all(
             "Payment Entry",
@@ -110,51 +111,9 @@ class PaymentReceiptUpload(Document):
         """Create Payment Entry for each billing receipt"""
         company = self.get_company_for_mode_of_payment()
         
-        successful_payments = []
-        skipped_invoices = []
-        
         for row in self.billing_receipts:
             if row.billing_document_type == "Sales Invoice":
-                try:
-                    # Check current outstanding before creating payment
-                    current_outstanding = frappe.db.get_value(
-                        "Sales Invoice", 
-                        row.billing_document, 
-                        "outstanding_amount"
-                    )
-                    
-                    if flt(current_outstanding) <= 0:
-                        skipped_invoices.append(row.billing_document)
-                        frappe.msgprint(_(
-                            "Skipping Sales Invoice {0} - already fully paid. Outstanding: {1}"
-                        ).format(row.billing_document, current_outstanding), indicator="orange")
-                        continue
-                    
-                    # Create payment entry using Frappe's built-in function
-                    payment_entry = self.create_payment_entry_for_sales_invoice(row, company)
-                    successful_payments.append({
-                        'payment_entry': payment_entry.name,
-                        'sales_invoice': row.billing_document
-                    })
-                    
-                except Exception as e:
-                    frappe.log_error(f"Error creating Payment Entry for {row.billing_document}: {str(e)}")
-                    if "has already been fully paid" in str(e):
-                        skipped_invoices.append(row.billing_document)
-                        frappe.msgprint(_(
-                            "Sales Invoice {0} was already paid by another process"
-                        ).format(row.billing_document), indicator="orange")
-                    else:
-                        frappe.throw(_(
-                            "Failed to create Payment Entry for Sales Invoice {0}: {1}"
-                        ).format(row.billing_document, str(e)))
-        
-        # Show summary
-        if successful_payments:
-            frappe.msgprint(_("Successfully created {0} Payment Entries").format(len(successful_payments)))
-        
-        if skipped_invoices:
-            frappe.msgprint(_("Skipped {0} already paid invoices").format(len(skipped_invoices)), indicator="orange")
+                self.create_payment_entry_for_sales_invoice(row, company)
     
     def get_company_for_mode_of_payment(self):
         """Get company based on Mode of Payment settings"""
@@ -173,54 +132,71 @@ class PaymentReceiptUpload(Document):
                 "No accounts configured for Mode of Payment {0}. Please set up Mode of Payment Account."
             ).format(self.mode_of_payment))
         
-        # Use the first company found
+        # Use the first company found (you might want to enhance this logic based on your multi-company setup)
         company = mode_of_payment_accounts[0].company
         return company
     
     def create_payment_entry_for_sales_invoice(self, row, company):
-        """Create Payment Entry for Sales Invoice reference using Frappe's built-in function"""
+        """Create Payment Entry for Sales Invoice reference"""
         try:
-            # Use Frappe's built-in get_payment_entry function
-            from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry
+            # Get Sales Invoice details
+            si = frappe.get_doc("Sales Invoice", row.billing_document)
             
-            # Get payment entry template from Sales Invoice
-            payment_entry = get_payment_entry("Sales Invoice", row.billing_document)
-            
-            # Update with our specific details
+            # Create Payment Entry
+            payment_entry = frappe.new_doc("Payment Entry")
+            payment_entry.payment_type = "Receive"
+            payment_entry.party_type = "Customer"
+            payment_entry.party = si.customer
+            payment_entry.party_name = si.customer_name
             payment_entry.posting_date = self.posting_date or getdate(nowdate())
             payment_entry.company = company
             payment_entry.mode_of_payment = self.mode_of_payment
+            payment_entry.paid_amount = flt(row.allocated_amount)
+            payment_entry.received_amount = flt(row.allocated_amount)
             payment_entry.reference_no = self.name
             payment_entry.reference_date = self.posting_date or getdate(nowdate())
-            payment_entry.remarks = f"Payment via Payment Receipt Upload {self.name}"
+            payment_entry.remarks = f"Payment against Sales Invoice {row.billing_document} via Payment Receipt Upload {self.name}"
             
-            # Set the allocated amount specifically
-            allocated_amount = flt(row.allocated_amount)
-            for reference in payment_entry.references:
-                reference.allocated_amount = allocated_amount
+            # Set paid from account (customer account)
+            payment_entry.paid_from = si.debit_to
             
-            # Update paid amounts based on allocated amount
-            payment_entry.paid_amount = allocated_amount
-            payment_entry.received_amount = allocated_amount
-            payment_entry.base_paid_amount = allocated_amount
-            payment_entry.base_received_amount = allocated_amount
+            # Set paid to account from mode of payment
+            mode_of_payment_account = frappe.get_value(
+                "Mode of Payment Account",
+                {
+                    "parent": self.mode_of_payment,
+                    "company": company
+                },
+                "default_account"
+            )
             
-            # Validate the payment entry before inserting
-            payment_entry.validate()
+            if not mode_of_payment_account:
+                frappe.throw(_(
+                    "No default account found for Mode of Payment {0} in company {1}"
+                ).format(self.mode_of_payment, company))
             
-            # Insert and submit
+            payment_entry.paid_to = mode_of_payment_account
+            
+            # Add reference to Sales Invoice
+            payment_entry.append("references", {
+                "reference_doctype": "Sales Invoice",
+                "reference_name": row.billing_document,
+                "total_amount": si.grand_total,
+                "outstanding_amount": si.outstanding_amount,
+                "allocated_amount": flt(row.allocated_amount)
+            })
+            
+            # Insert and submit Payment Entry
             payment_entry.insert(ignore_permissions=True)
             payment_entry.submit()
             
+            # Add comment in Payment Receipt Upload
             frappe.msgprint(_(
                 "Payment Entry {0} created and submitted for Sales Invoice {1}"
             ).format(payment_entry.name, row.billing_document))
             
-            return payment_entry
-            
         except Exception as e:
-            frappe.log_error(
-                title=f"Error creating Payment Entry for {row.billing_document}",
-                message=f"Payment Receipt Upload: {self.name}\nError: {str(e)}"
-            )
-            raise
+            frappe.log_error(f"Error creating Payment Entry for {row.billing_document}: {str(e)}")
+            frappe.throw(_(
+                "Failed to create Payment Entry for Sales Invoice {0}: {1}"
+            ).format(row.billing_document, str(e)))
