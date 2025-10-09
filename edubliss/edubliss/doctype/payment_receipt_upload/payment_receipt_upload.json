@@ -14,6 +14,9 @@
   "posting_date",
   "attach_image",
   "attach_document",
+  "column_break_qyzf",
+  "reference_no",
+  "reference_date",
   "section_break_akmc",
   "billing_receipts",
   "status",
@@ -117,12 +120,28 @@
    "fieldtype": "Check",
    "label": "Is Portal",
    "read_only": 1
+  },
+  {
+   "fieldname": "reference_no",
+   "fieldtype": "Data",
+   "label": "Cheque/Reference No",
+   "mandatory_depends_on": "eval:doc.attach_document || doc.attach_image"
+  },
+  {
+   "fieldname": "reference_date",
+   "fieldtype": "Date",
+   "label": "Cheque/Reference Date",
+   "mandatory_depends_on": "eval:doc.attach_document || doc.attach_image"
+  },
+  {
+   "fieldname": "column_break_qyzf",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-09-24 10:05:52.965133",
+ "modified": "2025-10-08 10:47:25.771091",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Payment Receipt Upload",
