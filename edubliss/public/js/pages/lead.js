@@ -10,7 +10,7 @@ frappe.ui.form.on('Lead', {
                 frm.events.show_enroll_confirmation(frm);
             });
         }
-        if (frm.doc.custom_admission_status === "Enquiry") {
+        if (!frm.is_new() && frm.doc.custom_admission_status === "Enquiry") {
             frm.add_custom_button(__("Form Paid"), function() {
                 frm.events.show_confirmation(frm, "Form Paid");
             });

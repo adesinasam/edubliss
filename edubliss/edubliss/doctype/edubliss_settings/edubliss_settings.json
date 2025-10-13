@@ -27,7 +27,7 @@
   "acceptance_fee_column",
   "day_student_acceptance_fee",
   "boarders_acceptance_fee",
-  "attachment_details_tab",
+  "orientation_contact_tab",
   "orientation_resumption_section",
   "orientation_date",
   "orientation_time",
@@ -39,10 +39,13 @@
   "default_contact_email",
   "default_principal__head_of_school",
   "table_ygav",
+  "attachment_details_tab",
   "prospectus_section",
   "boarders_prospectus",
   "column_break_uvce",
-  "day_student_prospectus"
+  "day_student_prospectus",
+  "fee_breakdown_section",
+  "fee_breakdown_template"
  ],
  "fields": [
   {
@@ -247,11 +250,26 @@
    "fieldname": "boarders_acceptance_fee",
    "fieldtype": "Currency",
    "label": "Boarders Acceptance Fee"
+  },
+  {
+   "fieldname": "orientation_contact_tab",
+   "fieldtype": "Tab Break",
+   "label": "Orientation & Contact"
+  },
+  {
+   "fieldname": "fee_breakdown_section",
+   "fieldtype": "Section Break",
+   "label": "Fee Breakdown"
+  },
+  {
+   "fieldname": "fee_breakdown_template",
+   "fieldtype": "Table",
+   "options": "Fee Breakdown Template"
   }
  ],
  "issingle": 1,
  "links": [],
- "modified": "2025-08-23 15:19:49.676272",
+ "modified": "2025-10-13 04:46:45.089114",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Edubliss Settings",
@@ -286,6 +304,7 @@
   }
  ],
  "quick_entry": 1,
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

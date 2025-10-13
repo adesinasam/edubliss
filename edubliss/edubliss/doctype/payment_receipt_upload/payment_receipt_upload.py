@@ -177,14 +177,14 @@ class PaymentReceiptUpload(Document):
             
             payment_entry.paid_to = mode_of_payment_account
             
-            # Add reference to Sales Invoice
-            payment_entry.append("references", {
-                "reference_doctype": "Sales Invoice",
-                "reference_name": row.billing_document,
-                "total_amount": si.grand_total,
-                "outstanding_amount": si.outstanding_amount,
-                "allocated_amount": flt(row.allocated_amount)
-            })
+            # # Add reference to Sales Invoice
+            # payment_entry.append("references", {
+            #     "reference_doctype": "Sales Invoice",
+            #     "reference_name": row.billing_document,
+            #     "total_amount": si.grand_total,
+            #     "outstanding_amount": si.outstanding_amount,
+            #     "allocated_amount": flt(row.allocated_amount)
+            # })
             
             # Insert and submit Payment Entry
             payment_entry.insert(ignore_permissions=True)
