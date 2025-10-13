@@ -71,7 +71,7 @@ def on_update(doc, method):
         attachments = []
         
         # Add Fee Breakdown Template for Enquiry status
-        if doc.custom_admission_status == "Enquiry" and doc.custom_program:
+        if doc.custom_admission_status == "Enquiry" and doc.program:
             try:
                 # Get the fee breakdown templates from Edubliss Settings
                 fee_templates = edublisetting.get("fee_breakdown_template", {})
@@ -79,7 +79,7 @@ def on_update(doc, method):
                 # Find the matching template based on program and student category
                 matching_template = None
                 for template in fee_templates:
-                    if template.program == doc.custom_program:
+                    if template.program == doc.program and template.academic_year == doc.custom_desired_academic_year:
                         if doc.student_category == "Day Student" and template.day_student_fee:
                             matching_template = template.day_student_fee
                             break
@@ -97,7 +97,7 @@ def on_update(doc, method):
                     
                     # Determine attachment filename
                     category_slug = "Boarder" if doc.student_category == "Boarder" else "Day_Student"
-                    filename = f"Fee_Breakdown_{doc.custom_program}_{category_slug}_{doc.name}.pdf"
+                    filename = f"Fee_Breakdown_{doc.program}_{category_slug}_{doc.name}.pdf"
                     
                     attachments.append({
                         'fname': filename,
