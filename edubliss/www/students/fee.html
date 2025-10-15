@@ -1,0 +1,150 @@
+{% extends "templates/layout.html" %}
+
+{% block title %}
+{{ _("Program Fee Breakdown") }}
+{% endblock %}
+
+{% block headnav_link %}
+    {% include "templates/includes/headnav/edu_headnav3.html" %}
+{% endblock %}
+
+{% block content %}
+    <main class="grow content pt-5 {% if 'Student' in user_roles and not 'Academics User' in user_roles %}bg-gray-100{% endif %}" id="content" role="content">
+     <!-- begin: container -->
+     <div class="container-fixed" id="content_container">
+     </div>
+     <!-- end: container -->
+    {% if "Academics User" in user_roles or "Parent" in user_roles %}
+    {% include "templates/includes/student_header.html" %}
+
+    {% include "templates/includes/student_nav.html" %}
+    {% endif %}
+     <!-- begin: container -->
+     <div class="container-fixed">
+      <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
+       <div class="flex flex-col justify-center gap-2">
+        <h1 class="text-xl font-semibold leading-none text-primary">
+         Program Fee Breakdown
+        </h1>
+        <div class="flex items-center gap-2 text-sm font-medium text-gray-600">
+         <span>Program: {{ programs.program_name if programs else program.program if program else "N/A" }}</span>
+         <span>•</span>
+         <span>Academic Year: {{ acadyear }}</span>
+        </div>
+       </div>
+       <div class="flex items-center gap-2.5">
+        <!-- <a class="btn btn-sm btn-light" href="/students/billing/{{ students.name }}">
+         Billing
+        </a> -->
+       </div>
+      </div>
+     </div>
+     <!-- end: container -->
+     <!-- begin: container -->
+    <div class="container-fixed">
+     <div class="grid gap-5 lg:gap-7.5">
+        <div class="card">
+         <div class="card-body lg:py-7.5">
+          {% if has_fee_breakdown and fee_pdf_url %}
+          <div class="mb-4">
+           <h3 class="text-lg font-semibold text-gray-900 mb-2">Day Student Fee Breakdown</h3>
+           <p class="text-sm text-gray-600">Fee structure for {{ programs.program_name if programs else program.program if program else "N/A" }} - {{ acadyear }} Academic Year</p>
+          <div class="mt-4 flex gap-2">
+           <a href="{{ fee_pdf_url }}" download class="btn btn-primary btn-sm" target="_blank">
+            <i class="ki-filled ki-download"></i>
+            Download PDF
+           </a>
+          </div>
+          </div>
+          <div class="border rounded-lg overflow-hidden">
+           <iframe 
+            src="{{ fee_pdf_url }}" 
+            width="100%" 
+            height="600" 
+            frameborder="0"
+            class="w-full"
+            style="min-height: 600px;">
+            <p>Your browser does not support PDFs. <a href="{{ fee_pdf_url }}" target="_blank">Download the PDF</a> instead.</p>
+           </iframe>
+          </div>
+          {% else %}
+          <div class="text-center py-10">
+           <i class="ki-filled ki-document text-4xl text-gray-300 mb-4"></i>
+           <h3 class="text-lg font-semibold text-gray-700 mb-2">No Fee Breakdown Available</h3>
+           <p class="text-gray-500 mb-4">
+            {% if program %}
+            The fee breakdown for {{ programs.program_name if programs else program.program if program else "N/A" }} - {{ acadyear }} is not currently available.
+            {% else %}
+            Please contact the administration for fee structure information.
+            {% endif %}
+           </p>
+           <div class="flex justify-center gap-2">
+            <a href="/helpdesk/tickets" class="btn btn-primary btn-sm">Contact Administration</a>
+           </div>
+          </div>
+          {% endif %}
+         </div>
+        </div>
+       <div class="grid lg:grid-cols-2 gap-5 lg:gap-7.5">
+        <div class="card">
+         <div class="card-body px-10 py-7.5 lg:pr-12.5">
+          <div class="flex flex-wrap md:flex-nowrap items-center gap-6 md:gap-10">
+           <div class="flex flex-col items-start gap-3">
+            <h2 class="text-1.5xl font-semibold text-gray-900">
+             Questions ?
+            </h2>
+            <p class="text-sm font-medium text-gray-700 leading-5.5 mb-2.5">
+             Visit our Help Center for detailed assistance on billing, payments, subscriptions and more.
+            </p>
+           </div>
+           <img alt="image" class="dark:hidden max-h-[150px]" src="assets/edubliss/dist/media/illustrations/29.svg"/>
+           <img alt="image" class="light:hidden max-h-[150px]" src="assets/edubliss/dist/media/illustrations/29-dark.svg"/>
+          </div>
+         </div>
+         <div class="card-footer justify-center">
+          <a class="btn btn-link" href="https://wa.me/+2347043257997">
+          <i class="ki-filled ki-whatsapp">
+          </i>
+           Chat us on Whatsapp
+          </a>
+         </div>
+        </div>
+        <div class="card">
+         <div class="card-body px-10 py-7.5 lg:pr-12.5">
+          <div class="flex flex-wrap md:flex-nowrap items-center gap-6 md:gap-10">
+           <div class="flex flex-col items-start gap-3">
+            <h2 class="text-1.5xl font-semibold text-gray-900">
+             Contact Support
+            </h2>
+            <p class="text-sm font-medium text-gray-700 leading-5.5 mb-2.5">
+             Need assistance? Contact our support team for prompt, personalized help your queries &amp; concerns.
+            </p>
+           </div>
+           <img alt="image" class="dark:hidden max-h-[150px]" src="assets/edubliss/dist/media/illustrations/31.svg"/>
+           <img alt="image" class="light:hidden max-h-[150px]" src="assets/edubliss/dist/media/illustrations/31-dark.svg"/>
+          </div>
+         </div>
+         <div class="card-footer justify-center">
+          <a class="btn btn-link" href="/helpdesk/tickets" target="_blank">
+           Contact Support
+          </a>
+         </div>
+        </div>
+       </div>
+     </div>
+    </div>
+     <!-- end: container -->
+    </main>
+
+    <style>
+    @media print {
+        .card-footer, .btn, .flex.justify-between, .student-nav {
+            display: none !important;
+        }
+        .card {
+            box-shadow: none !important;
+            border: 1px solid #e5e7eb !important;
+        }
+    }
+    </style>
+{% endblock %}

@@ -118,6 +118,7 @@ website_route_rules = [
     {"from_route": "/students/schedule/<docname>", "to_route": "students/schedule"},
     {"from_route": "/students/timetable/<docname>", "to_route": "students/timetable"},
     {"from_route": "/students/ledger/<docname>", "to_route": "students/ledger"},
+    {"from_route": "/students/fee/<docname>", "to_route": "students/fee"},
     {"from_route": "/students/attendance/<docname>", "to_route": "students/attendance"},
     {"from_route": "/teachers/profile/<docname>", "to_route": "teachers/profile"},
     {"from_route": "/teachers/course/<docname>", "to_route": "teachers/course"},
