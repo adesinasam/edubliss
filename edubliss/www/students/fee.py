@@ -91,7 +91,7 @@ def get_context(context):
             elif fee_breakdown and students.custom_student_category == "Boarder" and fee_breakdown.boarders_fee:
                 context.fee_pdf_url = fee_breakdown.boarders_fee
                 context.has_fee_breakdown = True
-            elif fee_breakdown and students.custom_student_category == "" and fee_breakdown.day_student_fee:
+            elif fee_breakdown and fee_breakdown.day_student_fee and not students.custom_student_category:
                 context.fee_pdf_url = fee_breakdown.day_student_fee
                 context.has_fee_breakdown = True
             else:
