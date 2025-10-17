@@ -14,11 +14,11 @@
  <div class="container-fixed" id="content_container">
  </div>
  <!-- end: container -->
-  {% if "Academics User" in user_roles or "Parent" in user_roles %}
+ {% if "Academics User" in user_roles or "Parent" in user_roles %}
   {% include "templates/includes/student_header.html" %}
 
   {% include "templates/includes/student_nav.html" %}
-  {% endif %}
+ {% endif %}
  <!-- begin: container -->
  <div class="container-fixed">
   <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
@@ -38,12 +38,12 @@
  </div>
  <!-- end: container -->
 
-{% set sections = sections or {} %}
-{% set timetable_slots = timetable_slots or [] %}
-{% set days = days_order or [] %}
-{% set timetable_map = timetable_map or {} %}
+ {% set sections = sections or {} %}
+ {% set timetable_slots = timetable_slots or [] %}
+ {% set days = days_order or [] %}
+ {% set timetable_map = timetable_map or {} %}
 
-{% if timetable_slots and days %}
+ {% if timetable_slots and days %}
   <div class="container-fixed" id="content_container">
     <div class="grid gap-5 lg:gap-7.5">
       <div class="card">
@@ -106,28 +106,29 @@
                       {% if cell %}
                         {% set bg = cell.class_schedule_color if cell.class_schedule_color else '' %}
                         <td>
-                          <div class="card" style="{% if bg %} background-color: {{ bg }};{% endif %}">
-                            <div class="card-body">
-                         <!-- <span class="badge badge-pill badge-outline badge-info"> -->
-                          <!-- {# Course name (fall back to course field) #} -->
-                          <div style="font-weight: 700; font-size: 11px;color: #374151;">
-                            {% if cell.course_name %}{{ cell.course_name }}{% elif cell.course %}{{ cell.course }}{% else %}{{ cell.get('name') or 'Scheduled' }}{% endif %}
-                          </div>
-                         <!-- </span> -->
+                          <div class="flex items-center justify-between flex-wrap group border border-gray-200 rounded-xl gap-1 px-3.5" style="{% if bg %} background-color: {{ bg }};{% endif %}">
+                           <!-- <div class="card" style="{% if bg %} background-color: {{ bg }};{% endif %}"> -->
+                            <!-- <div class="card-body"> -->
+                             <!-- <span class="badge badge-pill badge-outline badge-info"> -->
+                             <!-- {# Course name (fall back to course field) #} -->
+                              <div style="font-weight: 700; font-size: 11px;color: #374151;">
+                                {% if cell.course_name %}{{ cell.course_name }}{% elif cell.course %}{{ cell.course }}{% else %}{{ cell.get('name') or 'Scheduled' }}{% endif %}
+                              </div>
+                             <!-- </span> -->
+                             <!-- {# Instructor if available #} -->
+                             {% if cell.instructor_name %}
+                              <div style="font-size: 10px; color: #6b021f; ">{{ cell.instructor_name }}</div>
+                             {% elif cell.instructor %}
+                              <div style="font-size: 10px; color: #6b021f; ">{{ cell.instructor }}</div>
+                             {% endif %}
+                             <div style="font-size:9px;color:#334155;">{{ frappe.utils.format_time(slot.start_time or slot.get("start_time"), "hh:mm a") }} - {{ frappe.utils.format_time(slot.end_time or slot.get("end_time"), "hh:mm a") }}</div>
 
-                          <!-- {# Instructor if available #} -->
-                          {% if cell.instructor_name %}
-                            <div style="font-size: 10px; color: #6b021f; margin-top: .25rem;">{{ cell.instructor_name }}</div>
-                          {% elif cell.instructor %}
-                            <div style="font-size: 10px; color: #6b021f; margin-top: .25rem;">{{ cell.instructor }}</div>
-                          {% endif %}
-                            <div style="font-size:9px;color:#334155;margin-top:.25rem;">{{ frappe.utils.format_time(slot.start_time or slot.get("start_time"), "hh:mm a") }} - {{ frappe.utils.format_time(slot.end_time or slot.get("end_time"), "hh:mm a") }}</div>
-
-                          <!-- {# Room or other micro info #} -->
-                          {% if cell.room %}
-                            <div style="font-size:10px;color:#334155;margin-top:.25rem;">Room: {{ cell.room }}</div>
-                          {% endif %}
-                            </div>
+                             <!-- {# Room or other micro info #} -->
+                             {% if cell.room %}
+                              <div style="font-size:10px;color:#334155;">Room: {{ cell.room }}</div>
+                             {% endif %}
+                            <!-- </div> -->
+                           <!-- </div> -->
                           </div>
                         </td>
                       {% else %}
@@ -167,13 +168,13 @@
       </div>
     </div>
   </div>
-{% else %}
+ {% else %}
   <div class="container-fixed" id="content_container">
     <div class="card"><div class="card-body">
       <p class="text-center">No timetable data available.</p>
     </div></div>
   </div>
-{% endif %}
+ {% endif %}
 
-    </main>
+</main>
 {% endblock %}

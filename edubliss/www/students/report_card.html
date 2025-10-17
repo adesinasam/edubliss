@@ -168,7 +168,6 @@
   .stuphoto-img {
     max-width: 70px;
     height: 80px;
-/*    border: 2px solid #0c2c42;*/
     border-radius: 6px;
   }
 
@@ -226,18 +225,18 @@
 
 </style>
 
-    <main class="grow content pt-5 {% if 'Student' in user_roles and not 'Academics User' in user_roles %}bg-gray-100{% endif %}" id="content" role="content">
-     <!-- begin: container -->
-     <div class="container-fixed" id="content_container">
-     </div>
-     <!-- end: container -->
-    {% if "Academics User" in user_roles or "Parent" in user_roles %}
+<main class="grow content pt-5 {% if 'Student' in user_roles and not 'Academics User' in user_roles %}bg-gray-100{% endif %}" id="content" role="content">
+ <!-- begin: container -->
+ <div class="container-fixed" id="content_container">
+ </div>
+ <!-- end: container -->
+ {% if "Academics User" in user_roles or "Parent" in user_roles %}
     {% include "templates/includes/student_header.html" %}
 
     {% include "templates/includes/student_nav.html" %}
-    {% endif %}
-     <!-- begin: container -->
-     <div class="container-fixed">
+ {% endif %}
+ <!-- begin: container -->
+ <div class="container-fixed">
       <div class="flex flex-wrap items-center lg:items-end justify-between gap-5 pb-7.5">
        <div class="flex flex-col justify-center gap-2">
         <h1 class="text-xl font-semibold leading-none text-primary">
@@ -252,50 +251,65 @@
        <div class="flex items-center gap-2.5">
        </div>
       </div>
-     </div>
-     <!-- end: container -->
-     <!-- Container -->
-     <div class="container-fixed">
+ </div>
+ <!-- end: container -->
+ <!-- Container -->
+ <div class="container-fixed">
       <div class="flex flex-col items-stretch gap-5 lg:gap-7.5">
        <div class="flex flex-wrap items-center gap-5 justify-between">
         <h3 class="text-md text-gray-900 font-medium">
          Generate Report Card
         </h3>
-        <div class="flex items-center gap-5">
-         <div class="flex items-center gap-2.5">
-          {% if assessment_result and comment_result_head and comment_result %}
-          <form id="myForm" method="POST" action="/api/method/edubliss.edubliss.doctype.student_report_card_tool.student_report_card_tool.preview_report_card" target="_blank">
+        {% if "Parent" in user_roles and balance > 0 %}
+
+        {% else %}
+         <div class="flex items-center gap-5">
+          <div class="flex items-center gap-2.5">
+           {% if assessment_result and comment_result_head and comment_result %}
+           <form id="myForm" method="POST" action="/api/method/edubliss.edubliss.doctype.student_report_card_tool.student_report_card_tool.preview_report_card" target="_blank">
             <input type="hidden" name="csrf_token" value="{{frappe.session.csrf_token}}">
             <input type="hidden" name="doc" value=""> <!-- Will be dynamically populated -->
             <input type="submit"  id="print-report-card" class="btn btn-sm btn-dark justify-center" value="Print Report Card">
-          </form>
-          {% endif %}
+           </form>
+           {% endif %}
+          </div>
          </div>
-        </div>
+        {% endif %}
        </div>
         
         <div class="flex grow justify-center">
         </div>
       </div>
-     </div>
-     <!-- End of Container -->
-{% if assessment_result %}
-     <!-- begin: container -->
-     <div class="container-fixed" id="content_container">
-     <div class="grid gap-5 lg:gap-7.5">
-        <div class="card">
-         <div class="card-body lg:py-7.5">
-
-<table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 0;">
-    <tbody>
+ </div>
+ <!-- End of Container -->
+ {% if assessment_result %}
+  <!-- begin: container -->
+  <div class="container-fixed" id="content_container">
+   <div class="grid gap-5 lg:gap-7.5">
+    <div class="card">
+    <div class="card-body lg:py-7.5">
+    {% if "Parent" in user_roles or "Student" in user_roles and balance > 0 %}  
+          <div class="text-center py-10">
+           <i class="ki-filled ki-document text-4xl text-gray-300 mb-4"></i>
+           <h3 class="text-lg font-semibold text-gray-700 mb-2">Access Restricted</h3>
+           <p class="text-gray-500 mb-4">
+            The Report Card for {{students.student_name}} is not currently available due to outstanding balance of {{ frappe.format(balance, {'fieldtype': 'Currency'}) }}.
+           </p>
+           <div class="flex justify-center gap-2">
+            <a href="/helpdesk/tickets" class="btn btn-primary btn-sm">Contact Administration</a>
+           </div>
+          </div>
+    {% else %}
+     <table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 0;">
+      <tbody>
         <tr>
-            <td style="width: 11%; border: 0; vertical-align: top;">
-                <div align="left"><img src="/files/Super Logo New.png"></div>
-            </td>
-            <td style="width: 4%; border: 0;">
-            </td>
-            <td style="width: 70%; border: 0">
-        <div class="text-center">
+          <td style="width: 11%; border: 0; vertical-align: top;">
+            <div align="left"><img src="/files/Super Logo New.png"></div>
+          </td>
+          <td style="width: 4%; border: 0;">
+          </td>
+          <td style="width: 70%; border: 0">
+           <div class="text-center">
             <h3><b class="text-primary-header">{{ program.custom_school | upper }}</b><small><i>
             {% set u = frappe.get_doc("Company", program.custom_school) %}
             <p>{{ frappe.db.get_value("Address", u.custom_default_address, "address_line1") or "" }}, {{ frappe.db.get_value("Address", u.custom_default_address, "city") or "" }}, {{ frappe.db.get_value("Address", u.custom_default_address, "state") or "" }}</p>
@@ -306,116 +320,116 @@
             {% else %}
             <h5><b class="text-secondary">CONTINUOUS ASSESSMENT REPORT SHEET</b></h5>
             {% endif %}
-        </div>
-            </td>
-            <td style="width: 15%; border: 0; vertical-align: top;">
-                <div align="right"><img class="stuphoto-img" src="{{ students.image }}"></div>
-            </td>
+           </div>
+          </td>
+          <td style="width: 15%; border: 0; vertical-align: top;">
+            <div align="right"><img class="stuphoto-img" src="{{ students.image }}"></div>
+          </td>
         </tr>
-    </tbody>
-</table>
-<table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #000; border-color: #007BFF;">
-    <tr>
+      </tbody>
+     </table>
+     <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #000; border-color: #007BFF;">
+      <tr>
         <td><b class="text-primary-head text-2sm">Name:<span class="text-primary-rep"> {{ students.student_name | upper }}</span></b></td>
         <td><b class="text-primary-head text-2sm">ID:<span class="text-primary-rep"> {{ students.name }}</span></b></td>
         <td><b class="text-primary-head text-2sm">Class:<span class="text-primary-rep"> {{ program.program }}</span></b></td>
-    </tr>
-    <tr>
+      </tr>
+      <tr>
         <td><b class="text-primary-head text-2sm">Session:<span class="text-primary-rep"> {{ acadyear }}</span></b></td>
         <td><b class="text-primary-head text-2sm">Term:<span class="text-primary-rep"> {{ term.term_name }}</span></b></td>
         <td><b class="text-primary-head text-2sm">Arm:<span class="text-primary-rep"> {{ section.program_section or "" }}</span></b></td>
-    </tr>
-    <tr>
+      </tr>
+      <tr>
         <td><b class="text-primary-head text-2sm">Class Teacher:<span class="text-primary-rep"> {% for instructor in instructor %}{{ instructor.instructor | upper or ""}}{% endfor %}</span></b></td>
         <td><b class="text-primary-head text-2sm">Attendance:<span class="text-primary-rep"> {{ attendance.present if attendance.present else 0 }} out of {{ attendance.total }}  {{ _(" days") }}</span></b></td>
         <td><b class="text-primary-head text-2sm">Date of Birth:<span class="text-primary-rep"> {{ format_date(students.date_of_birth) or "" }}</span></b></td>
-    </tr>
-</table>
-
-{% if programs.department=='Early Years - MPPS' %}
-<!-- <hr> -->
- {% if assessment_result %} 
-  {% for result in assessment_result %}
-   {% if get_course_subject(result.course) != 'Others' %}
-    <table width="100%" style="margin-top: 5px; margin-bottom: 0; padding: 0;">
-     <tbody>
-      <tr>
-       <td style="width: 4%; border: 0; vertical-align: top !important;">{{ loop.index}}</td>
-       <td style="width: 90%; border: 0">
-    <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 2px solid #043f80;">
-       <tbody>
-          <tr>
-            <td class="left text-2sm" style='width: 70%; border-right:#043f80 solid 2px;;'><b class="text-primary-head text-2sm">{{ get_course_subject(result.course) | upper }}</b></th>
-            <td class="left text-2sm" style='width: 30%; border-right:#043f80 solid 2px;;'><b class="text-primary-head text-2sm">Observation</b></th>
-          </tr>
-      {% for criteria in get_structure_marks(result.name, result.assessment_plan) %}
-          <tr>
-            <td class="left text-primary-head text-2sm" style='width: 70%; border-right:#043f80 solid 2px;;border-top:#043f80 solid 2px;;border-bottom:#043f80 solid 2px;;'>{{ criteria.topics }}</td>
-            <td class="left text-primary-head text-2sm" style='width: 30%; border-right:#043f80 solid 2px;;border-top:#043f80 solid 2px;;border-bottom:#043f80 solid 2px;;'>{{ get_grade_comment(result.grading_scale, criteria.grade) }}</td>
-        </tr>
-      {% endfor %}
-       </tbody>
-    </table>
-       </td>
-       <td style="width: 6%; border: 0"></td>
       </tr>
-     </tbody>
-  </table>
-  <div style="margin-bottom: 10px;">
-    <p class="text-primary-head left text-2sm"><b class="text-primary-head left">Note: </b>{{result.comment}}</p>
-  </div>
-   {% endif %}
-  {% endfor %}
- {% endif %}  
-<!-- <hr> -->
-<table width="100%" style="margin-top: 0; margin-bottom: 5px; padding: 2; border: 0;">
-    <tr>
+     </table>
+
+     {% if programs.department=='Early Years - MPPS' %}
+      <!-- <hr> -->
+      {% if assessment_result %} 
+       {% for result in assessment_result %}
+       {% if get_course_subject(result.course) != 'Others' %}
+        <table width="100%" style="margin-top: 5px; margin-bottom: 0; padding: 0;">
+         <tbody>
+          <tr>
+           <td style="width: 4%; border: 0; vertical-align: top !important;">{{ loop.index}}</td>
+           <td style="width: 90%; border: 0">
+            <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 2px solid #043f80;">
+             <tbody>
+              <tr>
+               <td class="left text-2sm" style='width: 70%; border-right:#043f80 solid 2px;;'><b class="text-primary-head text-2sm">{{ get_course_subject(result.course) | upper }}</b></th>
+               <td class="left text-2sm" style='width: 30%; border-right:#043f80 solid 2px;;'><b class="text-primary-head text-2sm">Observation</b></th>
+              </tr>
+              {% for criteria in get_structure_marks(result.name, result.assessment_plan) %}
+               <tr>
+                <td class="left text-primary-head text-2sm" style='width: 70%; border-right:#043f80 solid 2px;;border-top:#043f80 solid 2px;;border-bottom:#043f80 solid 2px;;'>{{ criteria.topics }}</td>
+                <td class="left text-primary-head text-2sm" style='width: 30%; border-right:#043f80 solid 2px;;border-top:#043f80 solid 2px;;border-bottom:#043f80 solid 2px;;'>{{ get_grade_comment(result.grading_scale, criteria.grade) }}</td>
+               </tr>
+              {% endfor %}
+             </tbody>
+            </table>
+           </td>
+           <td style="width: 6%; border: 0"></td>
+          </tr>
+         </tbody>
+        </table>
+        <div style="margin-bottom: 10px;">
+         <p class="text-primary-head left text-2sm"><b class="text-primary-head left">Note: </b>{{result.comment}}</p>
+        </div>
+       {% endif %}
+       {% endfor %}
+      {% endif %}  
+      <!-- <hr> -->
+      <table width="100%" style="margin-top: 0; margin-bottom: 5px; padding: 2; border: 0;">
+       <tr>
         <td width="3%"></td>
         <td width="7%" class="text-primary-head left text-2sm" style="font-size: 7pt"><b>GRADE:</b></td>
         {% for grading_scale in grading_scale_intervals %}
         <td width="15%" class="text-primary-head left text-2sm" style="font-size: 7pt">{{grading_scale.grade_code}}={{grading_scale.grade_description}}</td>
         {% endfor %}
-    </tr>
-</table>
-<table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
-    <tr>
+       </tr>
+      </table>
+      <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
+       <tr>
         <td class="text-2sm" colspan="4"><b class="text-primary-head text-2sm">Overall Grade:</b> {{ get_grade(grading_scale, average | round(2)) }} ({{ average | round(1) }})
           <hr style="margin-top: 5px; margin-bottom: 5px;">
         </td>
-    </tr>
-    <!-- <tr>
+       </tr>
+       <!-- <tr>
         <td colspan="2"><b class="text-primary-head text-2sm">Class Teacher's Remark:</b></td>
         <td colspan="2" class="text-primary-head left text-2sm">{% if comment_result_comment %}{{ comment_result_comment }}{% endif %} </td>
-    </tr> -->
-    <tr>
+       </tr> -->
+       <tr>
         <td colspan="4"></td>
-    </tr>
-    <tr>
+       </tr>
+       <tr>
         <td width="25%"><b class="text-primary-head text-2sm">Class Teacher's Remark:</b></td>
         <td width="40%" class="text-primary-head left text-2sm">{% if comment_result_comment %}{{ comment_result_comment }}{% endif %}</td>
         <td width="15%"><b class="text-primary-head text-2sm">Signature:</b></td>
         <td width="20%" class="text-primary-head text-2sm"><p>{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:20%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:20%;"></div>{% endif %}{% if comment_result_comment %}{{ comment_result_instructor }}{% endif %}</p></td>
-    </tr>
-    <tr>
+       </tr>
+       <tr>
         <td colspan="4"></td>
-    </tr>
-    <tr>
+       </tr>
+       <tr>
         <td width="25%"><b class="text-primary-head text-2sm">Head Teacher's Remark:</b></td>
         <td width="40%" class="text-primary-head left text-2sm">{% if comment_result_head_comment %}{{ comment_result_head_comment }}{% endif %} </td>
         <td width="15%"><b class="text-primary-head text-2sm">Signature:</b></td>
         <td width="20%" class="text-primary-head text-2sm"><p>{% if comment_result_head_upload == 0 %}<div align="left"><img src="{{ comment_result_head_sign }}" style="width:20%;"></div>{% elif comment_result_head_upload == 1 %}<div align="left"><img src="{{ comment_result_head_img }}" style="width:20%;"></div>{% endif %}{% if comment_result_head_comment %}{{ comment_result_head_instructor }}{% endif %}</p></td>
-    </tr>
-</table>
-{% else %}
-<p class="performance-title"><b class="text-secondary" style="font-size: 9pt">PERFORMANCE IN SUBJECTS</b></p>
-<table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
-    <thead>
+       </tr>
+      </table>
+     {% else %}
+      <p class="performance-title"><b class="text-secondary" style="font-size: 9pt">PERFORMANCE IN SUBJECTS</b></p>
+      <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
+       <thead>
         <tr>
           <th class="text-center" rowspan="2" width="3%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">SN</span></th>
           <th class="text-center" rowspan="2" width="18%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">SUBJECTS</span></th>
-      {% for criterias in assessment_criteria %}
-          <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">{{ criterias.custom_abbr }}</span></th>
-      {% endfor %}
+          {% for criterias in assessment_criteria %}
+            <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">{{ criterias.custom_abbr }}</span></th>
+          {% endfor %}
           <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Total</span></th>
           <th class="text-center" rowspan="2" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Grade</span></th>
           <th class="text-center" rowspan="2" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Class Avg.</span></th>
@@ -423,145 +437,146 @@
           <th rowspan="2" width="12%" style='padding: 0;;line-height: 1;;'><span class="text-primary-head text-2sm">Subject Teacher</span></th>
         </tr>
         <tr>
-      {% for criterias in assessment_criteria %}
+         {% for criterias in assessment_criteria %}
           <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2xs">{{ criterias.weightage or '' }}%</span></th>
-      {% endfor %}
+         {% endfor %}
           <th class="text-center" width="5%" style='border-right:#043f80 solid 1px;;padding: 0;;line-height: 1;;'><span class="text-primary-head text-2xs">100%</span></th>
         </tr>
-    </thead>
-    <tbody>
-     {% if assessment_result %} 
-      {% set ns = {'counter': 0} %}
-      {% for result in assessment_result %}
-       {% if get_course_subject(result.course) != 'Others' %}
-        {% set ns = ns.update({'counter': ns.counter + 1}) or ns %}
-        <tr>
+       </thead>
+       <tbody>
+        {% if assessment_result %} 
+         {% set ns = {'counter': 0} %}
+         {% for result in assessment_result %}
+          {% if get_course_subject(result.course) != 'Others' %}
+           {% set ns = ns.update({'counter': ns.counter + 1}) or ns %}
+           <tr>
             <td class="text-center text-xs" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ ns.counter }}</td>
             <td class="left text-xs" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_course_subject(result.course) | upper }}</td>
-      {% for criteria in get_criteria_marks(result.name) %}
-            <td class="text-center text-xs" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score | round(1) }}</td>
-      {% endfor %}
+            {% for criteria in get_criteria_marks(result.name) %}
+             <td class="text-center text-xs" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score | round(1) }}</td>
+            {% endfor %}
             <td class="text-center text-xs" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ result.total_score | round(1) }}</td>
             <td class="text-center text-xs" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ result.grade }}</td>
             <td class="text-center text-xs" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_marks_avg(result.course, result.program, result.academic_term) | round(1) }}</td>
             <td class=" text-xs" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_grade_remark(result.grading_scale, result.total_score) }}</td>
             <td class=" text-xs" style='border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ get_course_teacher(result.course, result.student_group, result.academic_term) or ""}}</td>
-        </tr>
-       {% endif %}
-      {% endfor %}
-     {% else %}  
-        <tr>
+           </tr>
+          {% endif %}
+         {% endfor %}
+        {% else %}  
+          <tr>
             <td colspan="10" class="text-center text-2sm">No result found.</td>
-        </tr>
-     {% endif %}  
-    </tbody>
-</table>
+          </tr>
+        {% endif %}  
+       </tbody>
+      </table>
 
-<table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 2; border: 0;">
-    <tr>
+      <table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 2; border: 0;">
+       <tr>
         <td width="30%"><p><b class="text-primary-header text-2sm">Number of Subjects Offered: {{ course_count }}</b></p></td>
         <td width="45%" class="text-center text-2sm" colspan="2"><p><b class="text-primary-header">Total Score: {{ total_score | round(1) }}</b></p></td>
         <td width="25%"><p><b class="text-primary-header text-2sm">Final Average: {{ average | round(1) }}</b></p></td>
-    </tr>
-    <tr>
+       </tr>
+       <tr>
         <td width="30%"><p><b class="text-primary-header text-2sm">Position in Arm: {{sections_position}}</b></p></td>
         <td width="20%"><p><b class="text-primary-header text-2sm">No. in Arm: {{ section_count }}</b></p></td>
         <td width="25%"><p><b class="text-primary-header text-2sm">Position in Class: {{class_position}}</b></p></td>
         <td width="25%"><p><b class="text-primary-header text-2sm">No. in Class: {{ program_count }}</b></p></td>
-    </tr>
-</table>
+       </tr>
+      </table>
 
-<div style="margin-top: 0px;">
-<p><i><b class="text-primary-rep left text-xs" style="font-size: 7.5pt">INTERPRETATION: 100= Outstanding, 95= Excellent, 90= Proficient, 85= V.Good, 80= Upper Credit, 75= Good, 70= Lower Credit, 60=Satisfactory, 50= Pass, 0= Below Grade<hr></b></i></p>
-</div>
+      <div style="margin-top: 0px;">
+        <p><i><b class="text-primary-rep left text-xs" style="font-size: 7.5pt">INTERPRETATION: 100= Outstanding, 95= Excellent, 90= Proficient, 85= V.Good, 80= Upper Credit, 75= Good, 70= Lower Credit, 60=Satisfactory, 50= Pass, 0= Below Grade<hr></b></i></p>
+      </div>
 
-<table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 0;">
-    <tbody>
+      <table width="100%" style="margin-top: 0; margin-bottom: 0; padding: 0;">
+       <tbody>
         <tr>
-            <td style="width: 48%; border: 0; vertical-align: top;">
+         <td style="width: 48%; border: 0; vertical-align: top;">
 
-<table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
-    <thead>
-        <tr>
-            <th class="text-center text-2sm" style='border-right:#043f80 solid 1px;;'><b class="text-primary-head">AFFECTIVE ASSESSMENT</b></th>
-            <th class="text-center text-2sm" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">SCORE</span></th>
-            <th class="text-center text-2sm" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">GRADE</span></th>
-        </tr>
-    </thead>
-    <tbody>
-     {% if assessment_result %} 
-      {% for result in assessment_result %}
-       {% if result.course == 'AFFECTIVE ASSESSMENT' %}
-        {% for criteria in get_structure_marks(result.name, result.assessment_plan) %}
-        <tr>
-            <td class=" text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.topics }}</td>
-            <td class="text-center text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score }}</td>
-            <td class="text-center text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.grade }}</td>
-        </tr>
-        {% endfor %}
-       {% endif %}
-      {% endfor %}
-     {% endif %}  
-    </tbody>
-</table>
+          <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
+           <thead>
+            <tr>
+             <th class="text-center text-2sm" style='border-right:#043f80 solid 1px;;'><b class="text-primary-head">AFFECTIVE ASSESSMENT</b></th>
+             <th class="text-center text-2sm" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">SCORE</span></th>
+             <th class="text-center text-2sm" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">GRADE</span></th>
+            </tr>
+           </thead>
+           <tbody>
+           {% if assessment_result %} 
+            {% for result in assessment_result %}
+            {% if result.course == 'AFFECTIVE ASSESSMENT' %}
+            {% for criteria in get_structure_marks(result.name, result.assessment_plan) %}
+             <tr>
+              <td class=" text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.topics }}</td>
+              <td class="text-center text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score }}</td>
+              <td class="text-center text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.grade }}</td>
+             </tr>
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+           {% endif %}  
+           </tbody>
+          </table>
 
             </td>
             <td style="width: 4%; border: 0; vertical-align: top;">
             </td>
             <td style="width: 48%; border: 0; vertical-align: top;">
 
-<table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
-    <thead>
-        <tr>
-            <th class="text-center text-2sm" style='border-right:#043f80 solid 1px;;'><b class="text-primary-head">PSYCHOMOTOR ASSESSMENT</b></th>
-            <th class="text-center text-2sm" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">SCORE</span></th>
-            <th class="text-center text-2sm" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">GRADE</span></th>
+          <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
+           <thead>
+            <tr>
+             <th class="text-center text-2sm" style='border-right:#043f80 solid 1px;;'><b class="text-primary-head">PSYCHOMOTOR ASSESSMENT</b></th>
+             <th class="text-center text-2sm" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">SCORE</span></th>
+             <th class="text-center text-2sm" style='border-right:#043f80 solid 1px;;'><span class="text-primary-head">GRADE</span></th>
+            </tr>
+           </thead>
+           <tbody>
+           {% if assessment_result %} 
+            {% for result in assessment_result %}
+            {% if result.course == 'PSYCHOMOTOR ASSESSMENT' %}
+            {% for criteria in get_structure_marks(result.name, result.assessment_plan) %}
+             <tr>
+              <td class=" text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.topics }}</td>
+              <td class="text-center text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score }}</td>
+              <td class="text-center text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.grade }}</td>
+             </tr>
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+           {% endif %}  
+           </tbody>
+          </table>
+         </td>
         </tr>
-    </thead>
-    <tbody>
-     {% if assessment_result %} 
-      {% for result in assessment_result %}
-       {% if result.course == 'PSYCHOMOTOR ASSESSMENT' %}
-        {% for criteria in get_structure_marks(result.name, result.assessment_plan) %}
-        <tr>
-            <td class=" text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.topics }}</td>
-            <td class="text-center text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.score }}</td>
-            <td class="text-center text-2sm" style='border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;'>{{ criteria.grade }}</td>
-        </tr>
-        {% endfor %}
-       {% endif %}
-      {% endfor %}
-     {% endif %}  
-    </tbody>
-</table>
-            </td>
-        </tr>
-    </tbody>
-</table>
-<div style="margin-top: 0px;">
-<p><i><b class="text-primary-rep left text-xs">INTERPRETATION: 4.5-5= EXCELLENT , 3.5-4= VERY GOOD , 2.5-3= GOOD , 1.5-2= FAIR , 0-1= POOR<hr></b></i></p>
-</div>
+       </tbody>
+      </table>
+      <div style="margin-top: 0px;">
+        <p><i><b class="text-primary-rep left text-xs">INTERPRETATION: 4.5-5= EXCELLENT , 3.5-4= VERY GOOD , 2.5-3= GOOD , 1.5-2= FAIR , 0-1= POOR<hr></b></i></p>
+      </div>
 
-<p class="performance-title text-2sm"><b class="text-secondary" style="font-size: 9pt">COMMENTS</b></p>
-<table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
-    <tr>
+      <p class="performance-title text-2sm"><b class="text-secondary" style="font-size: 9pt">COMMENTS</b></p>
+      <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
+       <tr>
         <td width="20%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-header text-2sm">CLASS TEACHER'S COMMENT</b></p></td>
         <td class=" text-2sm" width="35%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_comment %}{{ comment_result_comment }}{% endif %} </p></td>
         <td class=" text-2sm" width="20%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-head">CLASS TEACHER'S NAME AND SIGNATURE</b></p></td>
         <td class=" text-2sm" width="25%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:20%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:20%;"></div>{% endif %}{% if comment_result_comment %}{{ comment_result_instructor }}{% endif %}</p></td>
-    </tr>
-    <tr>
+       </tr>
+       <tr>
         <td class=" text-2sm" width="20%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-header">{% if program.custom_school == 'Maryland Prestigious Elementary School' %}HEAD TEACHER'S {% else %}PRINCIPAL'S {% endif %}COMMENT</b></p></td>
         <td class=" text-2sm" width="35%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_head_comment %}{{ comment_result_head_comment }}{% endif %} </p></td>
         <td class=" text-2sm" width="20%" style="background-color: #e9eff5 !important; margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p><b class="text-primary-head">{% if program.custom_school == 'Maryland Prestigious Elementary School' %}HEAD TEACHER'S {% else %}PRINCIPAL'S {% endif %}NAME AND SIGNATURE</b></p></td>
         <td class=" text-2sm" width="25%" style="margin-top: 30px; border-right:#043f80 solid 1px;;border-top:#043f80 solid 1px;;border-bottom:#043f80 solid 1px;;"><p>{% if comment_result_head_upload == 0 %}<div align="left"><img src="{{ comment_result_head_sign }}" style="width:20%;"></div>{% elif comment_result_head_upload == 1 %}<div align="left"><img src="{{ comment_result_head_img }}" style="width:20%;"></div>{% endif %}{% if comment_result_head_comment %}{{ comment_result_head_instructor }}{% endif %}</p></td>
-    </tr>
-</table>
-{% endif %}
-
-         </div>
-        </div>
-       <div class="flex flex-wrap items-center gap-5 justify-between">
+       </tr>
+      </table>
+     {% endif %}
+    {% endif %}
+    </div>
+    </div>
+    {% if not "Parent" in user_roles or not "Student" in user_roles %}
+      <div class="flex flex-wrap items-center gap-5 justify-between">
        {% if "Academics User" in user_roles or "School Administrator" in user_roles %}
          {% if comment_result_head %}
           <div class="flex items-center gap-2.5">
@@ -594,12 +609,13 @@
          {% endif %}
        {% endif %}
         </div>
-       </div>
-     </div>
-     </div>
-     <!-- end: container -->
-{% endif %}  
-    </main>
+      </div>
+    {% endif %}  
+   </div>
+  </div>
+  <!-- end: container -->
+ {% endif %}  
+</main>
 {% endblock %}
 
 {% block custom_js %}

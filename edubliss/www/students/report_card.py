@@ -202,7 +202,34 @@ def get_context(context):
         context.students = students
         customer = students.customer
     except frappe.DoesNotExistError:
+        customer = None
         frappe.throw(_("Student not found"), frappe.DoesNotExistError)
+
+    # Fetch student ledger
+    ledgers = frappe.call(
+        'edubliss.api.get_student_ledger', 
+        customer=customer 
+        )
+    context.ledgers = ledgers
+
+    # Initialize totals and balance
+    total_debit = 0
+    total_credit = 0
+    balance = 0
+    
+    # Start generating the tbody content
+    tbody_content = ''
+    
+    for index, ledger in enumerate(ledgers, start=1):
+        debit = ledger.debit or 0
+        credit = ledger.credit or 0
+        total_debit += debit
+        total_credit += credit
+        balance += debit - credit
+        
+    context.total_debit = total_debit
+    context.total_credit = total_credit
+    context.balance = balance
 
     try:
         context.acad_terms = frappe.get_doc("Academic Term", acadterm)

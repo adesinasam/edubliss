@@ -49,12 +49,12 @@
           <div class="mb-4">
            <h3 class="text-lg font-semibold text-gray-900 mb-2">Day Student Fee Breakdown</h3>
            <p class="text-sm text-gray-600">Fee structure for {{ programs.program_name if programs else program.program if program else "N/A" }} - {{ acadyear }} Academic Year</p>
-          <div class="mt-4 flex gap-2">
-           <a href="{{ fee_pdf_url }}" download class="btn btn-primary btn-sm" target="_blank">
-            <i class="ki-filled ki-download"></i>
-            Download PDF
-           </a>
-          </div>
+           <div class="mt-4 flex gap-2">
+            <a href="{{ fee_pdf_url }}" download class="btn btn-primary btn-sm" target="_blank">
+             <i class="ki-filled ki-download"></i>
+             Download PDF
+            </a>
+           </div>
           </div>
           <div class="border rounded-lg overflow-hidden">
            <iframe 
