@@ -261,7 +261,11 @@
          Generate Report Card
         </h3>
         {% set user_roles_list = user_roles or [] %}
-        {% set balance_num = balance | float %}
+        {% if balance > 0 %}
+          {% set balance_num = balance | float %}
+        {% else %}
+          {% set balance_num = 0.00 %}
+        {% endif %}
         {% if not ("Parent" in user_roles_list and balance_num > 0) %}
          <div class="flex items-center gap-5">
           <div class="flex items-center gap-2.5">
