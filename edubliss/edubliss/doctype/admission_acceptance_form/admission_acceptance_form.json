@@ -1,0 +1,259 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2025-10-28 14:53:59.690563",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "student_information_section",
+  "naming_series",
+  "admission_enquiry_no",
+  "student_first_name",
+  "student_last_name",
+  "student_full_name",
+  "column_break_zrev",
+  "program",
+  "gender",
+  "academic_year",
+  "academic_term",
+  "parentguardian_information_section",
+  "full_name",
+  "relationship_to_student",
+  "phone_number",
+  "column_break_xtge",
+  "email",
+  "address",
+  "acceptance_declaration_section",
+  "declaration",
+  "parentguardian_signature",
+  "date",
+  "section_break_6vq8",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_6vq8",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Admission Acceptance Form",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "student_information_section",
+   "fieldtype": "Section Break",
+   "label": "Student Information"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "MPIS/AAF/."
+  },
+  {
+   "fieldname": "admission_enquiry_no",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Admission Enquiry No",
+   "options": "Lead",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fetch_from": "admission_enquiry_no.first_name",
+   "fieldname": "student_first_name",
+   "fieldtype": "Data",
+   "label": "Student First Name"
+  },
+  {
+   "fetch_from": "admission_enquiry_no.last_name",
+   "fieldname": "student_last_name",
+   "fieldtype": "Data",
+   "label": "Student Last Name"
+  },
+  {
+   "fieldname": "column_break_zrev",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "admission_enquiry_no.lead_name",
+   "fieldname": "student_full_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Student Full Name"
+  },
+  {
+   "fetch_from": "admission_enquiry_no.program",
+   "fieldname": "program",
+   "fieldtype": "Link",
+   "label": "Program",
+   "options": "Program"
+  },
+  {
+   "fetch_from": "admission_enquiry_no.gender",
+   "fieldname": "gender",
+   "fieldtype": "Link",
+   "label": "Gender",
+   "options": "Gender"
+  },
+  {
+   "fieldname": "parentguardian_information_section",
+   "fieldtype": "Section Break",
+   "label": "Parent/Guardian Information"
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "label": "Full Name"
+  },
+  {
+   "fieldname": "relationship_to_student",
+   "fieldtype": "Select",
+   "label": "Relationship to Student",
+   "options": "Father\nMother\nGuardian"
+  },
+  {
+   "fieldname": "phone_number",
+   "fieldtype": "Phone",
+   "label": "Phone Number"
+  },
+  {
+   "fieldname": "column_break_xtge",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fetch_from": "admission_enquiry_no.custom_desired_academic_year",
+   "fieldname": "academic_year",
+   "fieldtype": "Link",
+   "label": "Academic Year",
+   "options": "Academic Year"
+  },
+  {
+   "fetch_from": "admission_enquiry_no.custom_desired_academic_term",
+   "fieldname": "academic_term",
+   "fieldtype": "Link",
+   "label": "Academic Term",
+   "options": "Academic Term"
+  },
+  {
+   "fieldname": "acceptance_declaration_section",
+   "fieldtype": "Section Break",
+   "label": "Acceptance Declaration"
+  },
+  {
+   "default": "I, [Parent/Guardian\u2019s Full Name], hereby accept the provisional admission offer for my child/ward, [Student\u2019s Full Name], into [Class] at Maryland Prestigious International School.\nI acknowledge that:\n\n1.\tThis admission is provisional and subject to submission of all required documents, payment of school fees, and compliance with MPIS admission policies.\n2.\tI will submit the outstanding documents and complete all administrative formalities before the stated deadline.\n3.\tI understand that failure to meet the conditions of this offer may result in withdrawal of the provisional admission.\n",
+   "fieldname": "declaration",
+   "fieldtype": "Text Editor",
+   "label": "Declaration"
+  },
+  {
+   "fieldname": "parentguardian_signature",
+   "fieldtype": "Signature",
+   "label": "Parent/Guardian Signature"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-10-29 06:33:14.242044",
+ "modified_by": "Administrator",
+ "module": "Edubliss",
+ "name": "Admission Acceptance Form",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts User",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Academics User",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "All",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
