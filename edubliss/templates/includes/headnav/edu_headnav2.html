@@ -11,11 +11,6 @@
             </i>
             {{ edublisession.school or "" }} 
            </span>
-<!--            <span class="badge badge-pill badge-outline badge-primary gap-1 items-center">
-            <i class="ki-duotone ki-calendar">
-            </i>
-            {{ edublisession.academic_year or "" }} 
-           </span> -->
            <span class="badge badge-pill badge-outline badge-info gap-1 items-center">
             <i class="ki-solid ki-calendar">
             </i>
@@ -47,12 +42,24 @@
                 </select>
                 <br>
                 <span class="text-2sm font-semibold text-primary hover:text-primary-active">
+                  Academic Year
+                </span>
+                <select id="academic_year" name="academic_year" class="select select-sm bg-info-light" required>
+                  <option value=""> Select Academic Year </option>
+                {% for acadyear in acadyears %}
+                  <option value="{{ acadyear.name }}">{{ acadyear.academic_year_name }}</option>
+                {% endfor %}
+                </select>
+                <br>
+                <span class="text-2sm font-semibold text-primary hover:text-primary-active">
                   Academic Term
                 </span>
                 <select id="academic_term" name="academic_term" class="select select-sm bg-info-light" required>
                   <option value=""> Select Academic Term </option>
                 {% for acadterm in acadterms %}
-                  <option value="{{ acadterm.name }}">{{ acadterm.title }}</option>
+                  <option value="{{ acadterm.name }}" data-academic-year="{{ acadterm.academic_year }}">
+                    {{ acadterm.title }}
+                  </option>
                 {% endfor %}
                 </select>
               </div>
@@ -71,3 +78,4 @@
      </div>
      <!-- end: container -->
     </header>
+

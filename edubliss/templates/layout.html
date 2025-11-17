@@ -98,6 +98,66 @@
   <script src="assets/edubliss/dist/vendors/apexcharts/apexcharts.min.js"></script>
   <script src="assets/edubliss/dist/js/widgets/general.js"></script>
   <script src="assets/edubliss/dist/js/layouts/demo1.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const academicYearSelect = document.getElementById('academic_year');
+  const academicTermSelect = document.getElementById('academic_term');
+  const allTermOptions = Array.from(academicTermSelect.options);
+  
+  // Store all term options for filtering
+  const termOptionsByYear = {};
+  allTermOptions.forEach(option => {
+    if (option.value && option.dataset.academicYear) {
+      const year = option.dataset.academicYear;
+      if (!termOptionsByYear[year]) {
+        termOptionsByYear[year] = [];
+      }
+      termOptionsByYear[year].push(option);
+    }
+  });
+  
+  function filterAcademicTerms() {
+    const selectedYear = academicYearSelect.value;
+    
+    // Clear current options except the first one
+    while (academicTermSelect.options.length > 1) {
+      academicTermSelect.remove(1);
+    }
+    
+    // Add "Select Academic Term" option if not present
+    if (academicTermSelect.options.length === 0) {
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '';
+      defaultOption.textContent = 'Select Academic Term';
+      academicTermSelect.appendChild(defaultOption);
+    }
+    
+    // If a year is selected, show only terms for that year
+    if (selectedYear) {
+      const termsForYear = termOptionsByYear[selectedYear] || [];
+      termsForYear.forEach(option => {
+        academicTermSelect.appendChild(option.cloneNode(true));
+      });
+    } else {
+      // If no year selected, show all terms
+      allTermOptions.forEach(option => {
+        if (option.value) { // Skip the default option
+          academicTermSelect.appendChild(option.cloneNode(true));
+        }
+      });
+    }
+    
+    // Reset term selection
+    academicTermSelect.value = '';
+  }
+  
+  // Add event listener for academic year change
+  academicYearSelect.addEventListener('change', filterAcademicTerms);
+  
+  // Initial filter on page load
+  filterAcademicTerms();
+});
+</script>
     {% block custom_js %}
     {% endblock %}
   <!--end::Page scripts-->
