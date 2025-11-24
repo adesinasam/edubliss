@@ -11,6 +11,7 @@ class PaymentReceiptUpload(Document):
         self.validate_billing_documents()
         self.validate_allocated_amounts()
         self.validate_references()
+        self.validate_multi_company_setup()
     
     def validate_billing_documents(self):
         """Validate billing documents and fetch relevant data"""
@@ -21,12 +22,23 @@ class PaymentReceiptUpload(Document):
     def fetch_details_from_billing_doc(self, row):
         """Fetch details from the linked billing document"""
         if row.billing_document_type == "Sales Invoice":
-            sales_invoice = frappe.get_doc("Sales Invoice", row.billing_document)
-            row.student = sales_invoice.student
-            row.posting_date = sales_invoice.posting_date
-            row.outstanding = sales_invoice.outstanding_amount
-            row.grand_total = sales_invoice.base_grand_total
-        # Add other document types as needed
+            # Use db_get to get fresh data from database
+            sales_invoice_data = frappe.db.get_value(
+                "Sales Invoice", 
+                row.billing_document, 
+                ["student", "posting_date", "outstanding_amount", "grand_total", "customer", "status", "company"],
+                as_dict=True
+            )
+            
+            if sales_invoice_data:
+                row.student = sales_invoice_data.student
+                row.posting_date = sales_invoice_data.posting_date
+                row.outstanding = sales_invoice_data.outstanding_amount
+                row.grand_total = sales_invoice_data.grand_total
+                
+                # Check if Sales Invoice is valid for payment
+                if sales_invoice_data.status == "Cancelled":
+                    frappe.throw(_("Sales Invoice {0} is cancelled and cannot be used for payment").format(row.billing_document))
         
     def validate_allocated_amounts(self):
         """Validate that allocated amounts don't exceed outstanding amounts"""
@@ -34,22 +46,25 @@ class PaymentReceiptUpload(Document):
         for row in self.billing_receipts:
             total_allocated += flt(row.allocated_amount)
             
-            # Get current outstanding amount
+            # Get current outstanding amount with fresh database query
             if row.billing_document_type == "Sales Invoice" and row.billing_document:
-                si_outstanding = frappe.db.get_value(
+                current_outstanding = frappe.db.get_value(
                     "Sales Invoice", 
                     row.billing_document, 
                     "outstanding_amount"
                 )
                 
-                if flt(row.allocated_amount) > flt(si_outstanding):
+                if not current_outstanding:
+                    frappe.throw(_("Sales Invoice {0} not found").format(row.billing_document))
+                
+                if flt(row.allocated_amount) > flt(current_outstanding):
                     frappe.throw(_(
                         "Allocated amount {0} for {1} {2} cannot be greater than outstanding amount {3}"
                     ).format(
                         row.allocated_amount,
                         row.billing_document_type,
                         row.billing_document,
-                        si_outstanding
+                        current_outstanding
                     ))
         
         # Validate total allocated equals paid amount
@@ -77,6 +92,36 @@ class PaymentReceiptUpload(Document):
                         "Cheque/Reference No or Cheque/Reference Date cannot be empty"
                     ))
     
+    def validate_multi_company_setup(self):
+        """Validate that Mode of Payment is configured for all companies used in billing receipts"""
+        if not self.mode_of_payment:
+            return
+            
+        companies_in_receipts = set()
+        
+        for row in self.billing_receipts:
+            if row.billing_document_type == "Sales Invoice" and row.billing_document:
+                company = frappe.db.get_value("Sales Invoice", row.billing_document, "company")
+                if company:
+                    companies_in_receipts.add(company)
+        
+        # Check if Mode of Payment has accounts for all companies
+        for company in companies_in_receipts:
+            mode_of_payment_account = frappe.get_value(
+                "Mode of Payment Account",
+                {
+                    "parent": self.mode_of_payment,
+                    "company": company
+                },
+                "default_account"
+            )
+            
+            if not mode_of_payment_account:
+                frappe.throw(_(
+                    "Mode of Payment '{0}' is not configured for company '{1}'. "
+                    "Please set up Mode of Payment Account for this company in Mode of Payment settings."
+                ).format(self.mode_of_payment, company))
+    
     def on_submit(self):
         """Create and submit Payment Entry on submit"""
         self.validate_references()
@@ -85,7 +130,6 @@ class PaymentReceiptUpload(Document):
     
     def on_cancel(self):
         """Handle cancellation"""
-
         # Find all Payment Entries created from this Payment Receipt Upload
         payment_entries = frappe.get_all(
             "Payment Entry",
@@ -108,48 +152,167 @@ class PaymentReceiptUpload(Document):
         self.db_set('status', 'Cancelled')
     
     def create_payment_entries(self):
-        """Create Payment Entry for each billing receipt"""
-        company = self.get_company_for_mode_of_payment()
+        """Create Payment Entry for each billing receipt, handling multi-company"""
+        successful_payments = []
+        skipped_invoices = []
+        failed_invoices = []
         
         for row in self.billing_receipts:
             if row.billing_document_type == "Sales Invoice":
-                self.create_payment_entry_for_sales_invoice(row, company)
+                try:
+                    # Get company from Sales Invoice
+                    company = frappe.db.get_value("Sales Invoice", row.billing_document, "company")
+                    
+                    if not company:
+                        failed_invoices.append({
+                            'invoice': row.billing_document,
+                            'error': _("Could not determine company")
+                        })
+                        continue
+                    
+                    # Validate that Mode of Payment has account for this company
+                    mode_of_payment_account = frappe.get_value(
+                        "Mode of Payment Account",
+                        {
+                            "parent": self.mode_of_payment,
+                            "company": company
+                        },
+                        "default_account"
+                    )
+                    
+                    if not mode_of_payment_account:
+                        failed_invoices.append({
+                            'invoice': row.billing_document,
+                            'error': _("Mode of Payment not configured for company {0}").format(company)
+                        })
+                        continue
+                    
+                    # Check current outstanding with database lock to prevent race conditions
+                    frappe.db.commit()  # Ensure fresh connection
+                    
+                    current_outstanding = frappe.db.sql("""
+                        SELECT outstanding_amount 
+                        FROM `tabSales Invoice` 
+                        WHERE name = %s 
+                        FOR UPDATE
+                    """, (row.billing_document,), as_dict=True)
+                    
+                    if not current_outstanding or flt(current_outstanding[0].outstanding_amount) <= 0:
+                        skipped_invoices.append(row.billing_document)
+                        frappe.msgprint(_(
+                            "Skipping Sales Invoice {0} - already fully paid. Outstanding: {1}"
+                        ).format(row.billing_document, 
+                                current_outstanding[0].outstanding_amount if current_outstanding else 0), 
+                            indicator="orange")
+                        continue
+                    
+                    # Validate allocated amount doesn't exceed current outstanding
+                    if flt(row.allocated_amount) > flt(current_outstanding[0].outstanding_amount):
+                        failed_invoices.append({
+                            'invoice': row.billing_document,
+                            'error': _("Allocated amount exceeds current outstanding amount")
+                        })
+                        continue
+                    
+                    # Create payment entry
+                    payment_entry = self.create_payment_entry_for_sales_invoice(row, company)
+                    successful_payments.append({
+                        'payment_entry': payment_entry.name,
+                        'sales_invoice': row.billing_document,
+                        'company': company
+                    })
+                    
+                except Exception as e:
+                    error_message = str(e)
+                    frappe.log_error(
+                        title=f"Error creating Payment Entry for {row.billing_document}",
+                        message=f"Payment Receipt Upload: {self.name}\nCompany: {company}\nError: {error_message}"
+                    )
+                    
+                    if "has already been fully paid" in error_message:
+                        skipped_invoices.append(row.billing_document)
+                        frappe.msgprint(_(
+                            "Sales Invoice {0} was already paid by another process"
+                        ).format(row.billing_document), indicator="orange")
+                    else:
+                        failed_invoices.append({
+                            'invoice': row.billing_document,
+                            'error': error_message
+                        })
+        
+        # Show comprehensive summary
+        self.show_processing_summary(successful_payments, skipped_invoices, failed_invoices)
     
-    def get_company_for_mode_of_payment(self):
-        """Get company based on Mode of Payment settings"""
-        if not self.mode_of_payment:
-            frappe.throw(_("Mode of Payment is required"))
+    def show_processing_summary(self, successful_payments, skipped_invoices, failed_invoices):
+        """Show detailed summary of payment processing"""
+        if successful_payments:
+            companies = set(p['company'] for p in successful_payments)
+            frappe.msgprint(_(
+                "✅ Successfully created {0} Payment Entries across {1} company(s)"
+            ).format(len(successful_payments), len(companies)))
+            
+            # Show details of successful payments
+            success_details = "\n".join([
+                f"- {p['payment_entry']} for {p['sales_invoice']} ({p['company']})"
+                for p in successful_payments
+            ])
+            frappe.msgprint(_("Successful Payments:\n{0}").format(success_details))
         
-        # Get default company from Mode of Payment Account
-        mode_of_payment_accounts = frappe.get_all(
-            "Mode of Payment Account",
-            filters={"parent": self.mode_of_payment},
-            fields=["company", "default_account"]
-        )
+        if skipped_invoices:
+            frappe.msgprint(_(
+                "🟡 Skipped {0} already paid invoices"
+            ).format(len(skipped_invoices)), indicator="orange")
+            
+            skipped_details = "\n".join([f"- {inv}" for inv in skipped_invoices])
+            frappe.msgprint(_("Skipped Invoices:\n{0}").format(skipped_details), indicator="orange")
         
-        if not mode_of_payment_accounts:
-            frappe.throw(_(
-                "No accounts configured for Mode of Payment {0}. Please set up Mode of Payment Account."
-            ).format(self.mode_of_payment))
-        
-        # Use the first company found (you might want to enhance this logic based on your multi-company setup)
-        company = mode_of_payment_accounts[0].company
-        return company
+        if failed_invoices:
+            frappe.msgprint(_(
+                "🔴 Failed to process {0} invoices"
+            ).format(len(failed_invoices)), indicator="red")
+            
+            failed_details = "\n".join([
+                f"- {inv['invoice']}: {inv['error']}"
+                for inv in failed_invoices
+            ])
+            frappe.msgprint(_("Failed Invoices:\n{0}").format(failed_details), indicator="red")
+            
+            # If there are failures, don't throw immediately but show summary
+            if len(failed_invoices) == len(self.billing_receipts):
+                # All invoices failed
+                frappe.throw(_("Failed to create any Payment Entries. Please check the errors above."))
+            else:
+                frappe.msgprint(_(
+                    "Some invoices failed to process, but others were successful. "
+                    "Please review the failed invoices and try again if needed."
+                ), indicator="orange")
     
     def create_payment_entry_for_sales_invoice(self, row, company):
-        """Create Payment Entry for Sales Invoice reference"""
+        """Create Payment Entry for Sales Invoice reference with proper company context"""
         try:
-            # Get Sales Invoice details
-            si = frappe.get_doc("Sales Invoice", row.billing_document)
+            # Get Sales Invoice details with fresh data
+            frappe.db.commit()
+            si_data = frappe.db.get_value(
+                "Sales Invoice",
+                row.billing_document,
+                ["customer", "customer_name", "debit_to", "outstanding_amount", "grand_total", "status"],
+                as_dict=True
+            )
+            
+            if not si_data:
+                frappe.throw(_("Sales Invoice {0} not found").format(row.billing_document))
+            
+            if si_data.status == "Cancelled":
+                frappe.throw(_("Sales Invoice {0} is cancelled").format(row.billing_document))
             
             # Create Payment Entry
             payment_entry = frappe.new_doc("Payment Entry")
             payment_entry.payment_type = "Receive"
             payment_entry.party_type = "Customer"
-            payment_entry.party = si.customer
-            payment_entry.party_name = si.customer_name
+            payment_entry.party = si_data.customer
+            payment_entry.party_name = si_data.customer_name
             payment_entry.posting_date = self.posting_date or getdate(nowdate())
-            payment_entry.company = company
+            payment_entry.company = company  # Use company from Sales Invoice
             payment_entry.mode_of_payment = self.mode_of_payment
             payment_entry.paid_amount = flt(row.allocated_amount)
             payment_entry.received_amount = flt(row.allocated_amount)
@@ -157,10 +320,10 @@ class PaymentReceiptUpload(Document):
             payment_entry.reference_date = self.posting_date or getdate(nowdate())
             payment_entry.remarks = f"Payment against Sales Invoice {row.billing_document} via Payment Receipt Upload {self.name}"
             
-            # Set paid from account (customer account)
-            payment_entry.paid_from = si.debit_to
+            # Set paid from account (customer account) - belongs to the same company as Sales Invoice
+            payment_entry.paid_from = si_data.debit_to
             
-            # Set paid to account from mode of payment
+            # Set paid to account from mode of payment for the specific company
             mode_of_payment_account = frappe.get_value(
                 "Mode of Payment Account",
                 {
@@ -177,26 +340,35 @@ class PaymentReceiptUpload(Document):
             
             payment_entry.paid_to = mode_of_payment_account
             
-            # # Add reference to Sales Invoice
-            # payment_entry.append("references", {
-            #     "reference_doctype": "Sales Invoice",
-            #     "reference_name": row.billing_document,
-            #     "total_amount": si.grand_total,
-            #     "outstanding_amount": si.outstanding_amount,
-            #     "allocated_amount": flt(row.allocated_amount)
-            # })
+            # Get current outstanding amount with lock
+            current_outstanding = frappe.db.sql("""
+                SELECT outstanding_amount 
+                FROM `tabSales Invoice` 
+                WHERE name = %s
+            """, (row.billing_document,), as_dict=True)[0].outstanding_amount
+            
+            # Add reference to Sales Invoice
+            payment_entry.append("references", {
+                "reference_doctype": "Sales Invoice",
+                "reference_name": row.billing_document,
+                "total_amount": si_data.grand_total,
+                "outstanding_amount": current_outstanding,
+                "allocated_amount": flt(row.allocated_amount)
+            })
             
             # Insert and submit Payment Entry
             payment_entry.insert(ignore_permissions=True)
             payment_entry.submit()
             
-            # Add comment in Payment Receipt Upload
             frappe.msgprint(_(
-                "Payment Entry {0} created and submitted for Sales Invoice {1}"
-            ).format(payment_entry.name, row.billing_document))
+                "Payment Entry {0} created and submitted for Sales Invoice {1} in company {2}"
+            ).format(payment_entry.name, row.billing_document, company))
+            
+            return payment_entry
             
         except Exception as e:
-            frappe.log_error(f"Error creating Payment Entry for {row.billing_document}: {str(e)}")
-            frappe.throw(_(
-                "Failed to create Payment Entry for Sales Invoice {0}: {1}"
-            ).format(row.billing_document, str(e)))
+            frappe.log_error(
+                title=f"Error in create_payment_entry_for_sales_invoice for {row.billing_document}",
+                message=f"Company: {company}\nPayment Receipt Upload: {self.name}\nError: {str(e)}"
+            )
+            raise
