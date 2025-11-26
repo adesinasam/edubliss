@@ -239,54 +239,7 @@ class PaymentReceiptUpload(Document):
                             'invoice': row.billing_document,
                             'error': error_message
                         })
-        
-        # Show comprehensive summary
-        self.show_processing_summary(successful_payments, skipped_invoices, failed_invoices)
-    
-    def show_processing_summary(self, successful_payments, skipped_invoices, failed_invoices):
-        """Show detailed summary of payment processing"""
-        if successful_payments:
-            companies = set(p['company'] for p in successful_payments)
-            frappe.msgprint(_(
-                "✅ Successfully created {0} Payment Entries across {1} company(s)"
-            ).format(len(successful_payments), len(companies)))
-            
-            # Show details of successful payments
-            success_details = "\n".join([
-                f"- {p['payment_entry']} for {p['sales_invoice']} ({p['company']})"
-                for p in successful_payments
-            ])
-            frappe.msgprint(_("Successful Payments:\n{0}").format(success_details))
-        
-        if skipped_invoices:
-            frappe.msgprint(_(
-                "🟡 Skipped {0} already paid invoices"
-            ).format(len(skipped_invoices)), indicator="orange")
-            
-            skipped_details = "\n".join([f"- {inv}" for inv in skipped_invoices])
-            frappe.msgprint(_("Skipped Invoices:\n{0}").format(skipped_details), indicator="orange")
-        
-        if failed_invoices:
-            frappe.msgprint(_(
-                "🔴 Failed to process {0} invoices"
-            ).format(len(failed_invoices)), indicator="red")
-            
-            failed_details = "\n".join([
-                f"- {inv['invoice']}: {inv['error']}"
-                for inv in failed_invoices
-            ])
-            frappe.msgprint(_("Failed Invoices:\n{0}").format(failed_details), indicator="red")
-            
-            # If there are failures, don't throw immediately but show summary
-            if len(failed_invoices) == len(self.billing_receipts):
-                # All invoices failed
-                frappe.throw(_("Failed to create any Payment Entries. Please check the errors above."))
-            else:
-                frappe.msgprint(_(
-                    "Some invoices failed to process, but others were successful. "
-                    "Please review the failed invoices and try again if needed."
-                ), indicator="orange")
-    
+
     def create_payment_entry_for_sales_invoice(self, row, company):
         """Create Payment Entry for Sales Invoice reference with proper company context"""
         try:
@@ -316,8 +269,9 @@ class PaymentReceiptUpload(Document):
             payment_entry.mode_of_payment = self.mode_of_payment
             payment_entry.paid_amount = flt(row.allocated_amount)
             payment_entry.received_amount = flt(row.allocated_amount)
-            payment_entry.reference_no = self.name
-            payment_entry.reference_date = self.posting_date or getdate(nowdate())
+            payment_entry.custom_payment_receipt_upload = self.name
+            payment_entry.reference_no = self.reference_no
+            payment_entry.reference_date = self.reference_date or getdate(nowdate())
             payment_entry.remarks = f"Payment against Sales Invoice {row.billing_document} via Payment Receipt Upload {self.name}"
             
             # Set paid from account (customer account) - belongs to the same company as Sales Invoice
