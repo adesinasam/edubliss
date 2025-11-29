@@ -231,6 +231,10 @@ def get_context(context):
     context.total_credit = total_credit
     context.balance = balance
 
+    # Fetch sales orders
+    if customer:
+        context.due_sales_invoices = frappe.call('edubliss.api.get_student_due_invoices', customer=customer)
+
     try:
         context.acad_terms = frappe.get_doc("Academic Term", acadterm)
     except frappe.DoesNotExistError:

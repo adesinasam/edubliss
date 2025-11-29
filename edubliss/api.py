@@ -158,6 +158,23 @@ def get_course_plan_terms(course, terms):
     )
 
 @frappe.whitelist()
+def get_student_due_invoices(customer=None):
+    filters = {}
+    if customer:
+        filters = {
+            'docstatus': 1,
+            'customer': customer,
+            'outstanding_amount': ['>',0],
+            'due_date': ['<=', nowdate()]
+        }
+    return frappe.get_all(
+        'Sales Invoice', 
+        filters=filters, 
+        fields=['name'], 
+        limit=1
+        )
+
+@frappe.whitelist()
 def get_student_unpaid_invoices(customer=None):
     filters = {}
     if customer:
