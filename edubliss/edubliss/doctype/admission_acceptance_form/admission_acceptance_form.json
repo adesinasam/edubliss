@@ -10,6 +10,7 @@
   "naming_series",
   "admission_enquiry_no",
   "student_first_name",
+  "student_middle_name",
   "student_last_name",
   "student_full_name",
   "column_break_zrev",
@@ -29,7 +30,17 @@
   "parentguardian_signature",
   "date",
   "section_break_6vq8",
-  "amended_from"
+  "amended_from",
+  "tab_2_tab",
+  "birth_certificate",
+  "applicants_passport",
+  "parents_passport",
+  "parents_id_card",
+  "column_break_dcev",
+  "immunization_card",
+  "previous_school_result",
+  "transfer_certificate",
+  "emergency_contact_passport"
  ],
  "fields": [
   {
@@ -173,13 +184,76 @@
    "fieldname": "date",
    "fieldtype": "Date",
    "label": "Date"
+  },
+  {
+   "fetch_from": "admission_enquiry_no.first_name",
+   "fieldname": "student_middle_name",
+   "fieldtype": "Data",
+   "label": "Student Middle Name"
+  },
+  {
+   "fieldname": "tab_2_tab",
+   "fieldtype": "Tab Break",
+   "label": "Admission Folder"
+  },
+  {
+   "default": "0",
+   "fieldname": "birth_certificate",
+   "fieldtype": "Check",
+   "label": "Birth Certificate"
+  },
+  {
+   "default": "0",
+   "fieldname": "applicants_passport",
+   "fieldtype": "Check",
+   "label": "Applicant's Passport"
+  },
+  {
+   "default": "0",
+   "fieldname": "parents_passport",
+   "fieldtype": "Check",
+   "label": "Parent's Passport"
+  },
+  {
+   "default": "0",
+   "fieldname": "parents_id_card",
+   "fieldtype": "Check",
+   "label": "Parent's ID Card"
+  },
+  {
+   "fieldname": "column_break_dcev",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "immunization_card",
+   "fieldtype": "Check",
+   "label": "Immunization Card"
+  },
+  {
+   "default": "0",
+   "fieldname": "previous_school_result",
+   "fieldtype": "Check",
+   "label": "Previous School Result"
+  },
+  {
+   "default": "0",
+   "fieldname": "transfer_certificate",
+   "fieldtype": "Check",
+   "label": "Transfer Certificate"
+  },
+  {
+   "default": "0",
+   "fieldname": "emergency_contact_passport",
+   "fieldtype": "Check",
+   "label": "Emergency Contact Passport"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-29 06:33:14.242044",
+ "modified": "2025-12-05 19:54:27.046426",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Admission Acceptance Form",

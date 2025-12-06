@@ -1706,3 +1706,33 @@ def get_instructor_subject_schedules(instructor=None,academic_term=None):
         },
         fields=["name", "course", "student_group", "week_days", "period_label", "instructor", "instructor_name", "room", "from_time", "to_time", "is_cancelled", "class_schedule_color"]
     )
+
+@frappe.whitelist(allow_guest=True)
+def get_lead_details(admission_enquiry_no):
+    if not admission_enquiry_no:
+        return {"error": "No admission_enquiry_no provided"}
+
+    lead = frappe.get_doc("Lead", admission_enquiry_no)
+
+    return {
+        "admission_enquiry_no": admission_enquiry_no,
+        "student_first_name": lead.first_name or "",
+        "student_middle_name": lead.middle_name or "",
+        "student_last_name": lead.last_name or "",
+        "student_full_name": lead.lead_name 
+            or f"{(lead.first_name or '').strip()} {(lead.last_name or '').strip()}".strip(),
+        "program": lead.program,
+        "gender": lead.gender,
+        "academic_year": lead.custom_desired_academic_year,
+        "academic_term": lead.custom_desired_academic_term,
+        "birth_certificate": lead.custom_birth_certificate,
+        "applicants_passport": lead.custom_applicants_passport,
+        "immunization_card": lead.custom_imm,
+        "fathers_passport": lead.custom_fathers_passport,
+        "mothers_passport": lead.custom_mothers_passport,
+        "emergency_contact_passport": lead.custom_emergency_contact_passport,
+        "fathers_id_card": lead.custom_fathers_id_card,
+        "mothers_id_card": lead.custom_mothers_id_card,
+        "previous_school_result": lead.custom_previous_school_result,
+        "transfer_certificate": lead.custom_transfer_certificate
+    }
