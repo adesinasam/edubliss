@@ -14,6 +14,7 @@
   "student_last_name",
   "student_full_name",
   "column_break_zrev",
+  "date_of_birth",
   "program",
   "gender",
   "academic_year",
@@ -247,13 +248,18 @@
    "fieldname": "emergency_contact_passport",
    "fieldtype": "Check",
    "label": "Emergency Contact Passport"
+  },
+  {
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of Birth"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-05 19:54:27.046426",
+ "modified": "2025-12-06 17:27:54.244603",
  "modified_by": "Administrator",
  "module": "Edubliss",
  "name": "Admission Acceptance Form",

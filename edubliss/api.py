@@ -1726,6 +1726,7 @@ def get_lead_details(admission_enquiry_no):
         "academic_year": lead.custom_desired_academic_year,
         "academic_term": lead.custom_desired_academic_term,
         "birth_certificate": lead.custom_birth_certificate,
+        "image": lead.image,
         "applicants_passport": lead.custom_applicants_passport,
         "immunization_card": lead.custom_imm,
         "fathers_passport": lead.custom_fathers_passport,

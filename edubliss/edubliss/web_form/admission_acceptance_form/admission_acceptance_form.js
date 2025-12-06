@@ -33,9 +33,9 @@ frappe.ready(function () {
             frappe.web_form.set_value("gender", data.gender);
             frappe.web_form.set_value("academic_year", data.academic_year);
             frappe.web_form.set_value("academic_term", data.academic_term);
-            if (data.applicants_passport) frappe.web_form.set_value("applicants_passport", 1);
+            if (data.applicants_passport || data.image) frappe.web_form.set_value("applicants_passport", 1);
             if (data.immunization_card) frappe.web_form.set_value("immunization_card", 1);
-            if (data.fathers_passport || data.fathers_passport) frappe.web_form.set_value("parents_passport", 1);
+            if (data.fathers_passport || data.mothers_passport) frappe.web_form.set_value("parents_passport", 1);
             if (data.fathers_id_card || data.mothers_id_card) frappe.web_form.set_value("parents_id_card", 1);
             if (data.emergency_contact_passport) frappe.web_form.set_value("emergency_contact_passport", 1);
             if (data.previous_school_result) frappe.web_form.set_value("previous_school_result", 1);
