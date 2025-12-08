@@ -266,7 +266,9 @@
         {% else %}
           {% set balance_num = 0.00 %}
         {% endif %}
-        {% if not ("Parent" in user_roles_list and balance_num > 0) %}
+        {% if "Parent" in (user_roles or []) and (balance | float | default(0)) > 0 and due_sales_invoices %}
+        
+        {% else %}
          <div class="flex items-center gap-5">
           <div class="flex items-center gap-2.5">
            {% if assessment_result and comment_result_head and comment_result %}
