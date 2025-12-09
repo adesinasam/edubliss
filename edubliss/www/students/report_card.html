@@ -357,7 +357,7 @@
       {% if assessment_result %} 
        {% for result in assessment_result %}
        {% if get_course_subject(result.course) != 'Others' %}
-        <table width="100%" style="margin-top: 0px; margin-bottom: 0; padding: 0;">
+        <table width="100%" style="margin-top: 5px; margin-bottom: 0; padding: 0;">
          <tbody>
           <tr>
            <td style="width: 4%; border: 0; vertical-align: top !important;">{{ loop.index}}</td>
@@ -381,14 +381,14 @@
           </tr>
          </tbody>
         </table>
-        <div style="margin-bottom: 5px;">
+        <div style="margin-bottom: 10px;">
          <p class="text-primary-head left text-2sm"><b class="text-primary-head left">Note: </b>{{result.comment}}</p>
         </div>
        {% endif %}
        {% endfor %}
       {% endif %}  
       <!-- <hr> -->
-      <table width="100%" style="margin-top: 0; margin-bottom: 0px; padding: 2; border: 0;">
+      <table width="100%" style="margin-top: 0; margin-bottom: 5px; padding: 2; border: 0;">
        <tr>
         <td width="3%"></td>
         <td width="7%" class="text-primary-head left text-2sm" style="font-size: 7pt"><b>GRADE:</b></td>
@@ -400,25 +400,25 @@
       <table width="100%"  style="margin-top: 0; margin-bottom: 0; padding: 0; border: 1px solid #043f80;">
        <tr>
         <td class="text-2sm" colspan="4"><b class="text-primary-head text-2sm">Overall Grade:</b> {{ get_grade(grading_scale, average | round(2)) }} ({{ average | round(1) }})
-          <hr style="margin-top: 0px; margin-bottom: 5px;">
+          <hr style="margin-top: 5px; margin-bottom: 5px;">
         </td>
        </tr>
        <!-- <tr>
         <td colspan="2"><b class="text-primary-head text-2sm">Class Teacher's Remark:</b></td>
         <td colspan="2" class="text-primary-head left text-2sm">{% if comment_result_comment %}{{ comment_result_comment }}{% endif %} </td>
        </tr> -->
-       <!-- <tr>
+       <tr>
         <td colspan="4"></td>
-       </tr> -->
+       </tr>
        <tr>
         <td width="25%"><b class="text-primary-head text-2sm">Class Teacher's Remark:</b></td>
         <td width="40%" class="text-primary-head left text-2sm">{% if comment_result_comment %}{{ comment_result_comment }}{% endif %}</td>
         <td width="15%"><b class="text-primary-head text-2sm">Signature:</b></td>
         <td width="20%" class="text-primary-head text-2sm"><p>{% if comment_result_upload == 0 %}<div align="left"><img src="{{ comment_result_sign }}" style="width:20%;"></div>{% elif comment_result_upload == 1 %}<div align="left"><img src="{{ comment_result_img }}" style="width:20%;"></div>{% endif %}{% if comment_result_comment %}{{ comment_result_instructor }}{% endif %}</p></td>
        </tr>
-       <!-- <tr>
+       <tr>
         <td colspan="4"></td>
-       </tr> -->
+       </tr>
        <tr>
         <td width="25%"><b class="text-primary-head text-2sm">Head Teacher's Remark:</b></td>
         <td width="40%" class="text-primary-head left text-2sm">{% if comment_result_head_comment %}{{ comment_result_head_comment }}{% endif %} </td>
