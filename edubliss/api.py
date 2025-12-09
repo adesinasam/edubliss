@@ -1735,5 +1735,11 @@ def get_lead_details(admission_enquiry_no):
         "fathers_id_card": lead.custom_fathers_id_card,
         "mothers_id_card": lead.custom_mothers_id_card,
         "previous_school_result": lead.custom_previous_school_result,
-        "transfer_certificate": lead.custom_transfer_certificate
+        "transfer_certificate": lead.custom_transfer_certificate,
+        "fathers_name": lead.custom_fathers_name or "",
+        "fathers_mobile_no": lead.custom_fathers_mobile_no or "",
+        "email_id": lead.email_id or "",
+        "mothers_name": lead.custom_mothers_name or "",
+        "mothers_mobile_no": lead.custom_mothers_mobile_no or "",
+        "mothers_email": lead.custom_mothers_email or ""
     }
