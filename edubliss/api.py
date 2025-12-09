@@ -1723,6 +1723,7 @@ def get_lead_details(admission_enquiry_no):
             or f"{(lead.first_name or '').strip()} {(lead.last_name or '').strip()}".strip(),
         "program": lead.program,
         "gender": lead.gender,
+        "date_of_birth": lead.date_of_birth or "",
         "academic_year": lead.custom_desired_academic_year,
         "academic_term": lead.custom_desired_academic_term,
         "birth_certificate": lead.custom_birth_certificate,
