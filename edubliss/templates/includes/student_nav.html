@@ -3,12 +3,17 @@
       <div class="container-fixed">
        <div class="grid">
         <div class="scrollable-x-auto">
-         <div class="menu gap-3" data-menu="true">
+         <div class="menu gap-6" data-menu="true">
+          {% if "Academics User" in user_roles or "Parent" in user_roles or "Instructor" in user_roles or "Student" in user_roles %}          
           <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'profile' or active_student_route == 'family' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
            <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" tabindex="0">
-            <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
-             Account Home
+            <span>
+             <i class="ki-filled ki-profile-circle text-2xl text-gray-600 menu-item-active:text-primary menu-item-here:text-primary menu-item-show:text-primary menu-link-hover:text-primary">
+             </i>
             </span>
+            <!-- <span class="menu-title text-nowrap font-medium text-2xs text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
+             Overview
+            </span> -->
             <span class="menu-arrow">
              <i class="ki-filled ki-down text-2xs text-gray-500 menu-item-active:text-primary menu-item-here:text-primary menu-item-show:text-primary menu-link-hover:text-primary">
              </i>
@@ -40,22 +45,29 @@
             {% endif %}
            </div>
           </div>
-          {% if "Academics User" in user_roles or "Parent" in user_roles %}
-          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'enrollment' or active_student_route == 'lms' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'enrollment' or active_student_route == 'lms' or active_student_route == 'schedule' or active_student_route == 'attendance' or active_student_route == 'gradebook' or active_student_route == 'progress_report' or active_student_route == 'report_card' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
            <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" tabindex="0">
-            <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
-             Enrollment
+            <span>
+             <i class="ki-filled ki-book text-2xl text-gray-600 menu-item-active:text-primary menu-item-here:text-primary menu-item-show:text-primary menu-link-hover:text-primary">
+             </i>
             </span>
+            <!-- <span class="menu-title text-nowrap font-medium text-2xs text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
+             Academics
+            </span> -->
+            <!-- <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
+             Enrollment
+            </span> -->
             <span class="menu-arrow">
              <i class="ki-filled ki-down text-2xs text-gray-500 menu-item-active:text-primary menu-item-here:text-primary menu-item-show:text-primary menu-link-hover:text-primary">
              </i>
             </span>
            </div>
            <div class="menu-dropdown menu-default py-2 min-w-[200px]">
+            {% if "Academics User" in user_roles or "Parent" in user_roles %}
             <div class="menu-item {% if active_student_route == 'enrollment' %}active{% endif %}">
              <a class="menu-link" href="/students/enrollment/{{docname}}" tabindex="0">
               <span class="menu-title">
-               Class & Subjects
+               Program Enrollment
               </span>
              </a>
             </div>
@@ -66,11 +78,184 @@
               </span>
              </a>
             </div>
+            {% endif %}
+            <div class="menu-item" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
+             <div class="menu-link" tabindex="0">
+              <span class="menu-title">
+               Class Activities
+              </span>
+              <span class="menu-arrow">
+               <i class="ki-filled ki-down text-2xs [.menu-dropdown_&amp;]:-rotate-90">
+               </i>
+              </span>
+             </div>
+             <div class="menu-accordion">
+              <div class="menu-item {% if active_student_route == 'schedule' %}active{% endif %}">
+               <a class="menu-link" href="/students/timetable/{{docname}}" tabindex="0">
+                <span class="menu-title">
+                 •  Class Schedule
+                </span>
+               </a>
+              </div>
+              <div class="menu-item {% if active_student_route == 'attendance' %}active{% endif %}">
+               <a class="menu-link" href="/students/attendance/{{docname}}" tabindex="0">
+                <span class="menu-title">
+                 •  Attendance
+                </span>
+               </a>
+              </div>
+              <div class="menu-item disabled {% if active_student_route == 'homework' %}active{% endif %}">
+               <div class="menu-link" href="/students/homework/{{docname}}" tabindex="0">
+                <span class="menu-title">
+                 •  Homework
+                </span>
+               </div>
+              </div>
+             </div>
+            </div>
+            <div  class="menu-item" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
+             <div class="menu-link" tabindex="0">
+              <span class="menu-title">
+               Grades
+              </span>
+              <span class="menu-arrow">
+               <i class="ki-filled ki-down text-2xs [.menu-dropdown_&amp;]:-rotate-90">
+               </i>
+              </span>
+             </div>
+             <div class="menu-accordion">
+              <div class="menu-item {% if active_student_route == 'gradebook' %}active{% endif %}">
+               <a class="menu-link" href="/students/gradebook/{{docname}}" tabindex="0">
+                <span class="menu-title">
+                 •  Gradebook Grades
+                </span>
+               </a>
+              </div>
+              <div class="menu-item {% if active_student_route == 'progress_report' %}active{% endif %}">
+               <a class="menu-link" href="/students/progress_report/{{docname}}" tabindex="0">
+                <span class="menu-title">
+                 •  Progress Report
+                </span>
+               </a>
+              </div>
+              <div class="menu-item {% if active_student_route == 'report_card' %}active{% endif %}">
+               <a class="menu-link" href="/students/report_card/{{docname}}" tabindex="0">
+                <span class="menu-title">
+                 •  Report Cards
+                </span>
+               </a>
+              </div>
+              {% if "Academics User" in user_roles %}
+              <div class="menu-item disabled {% if active_student_route == 'report_card' %}active{% endif %}">
+               <div class="menu-link" href="/students/report_card/{{docname}}" tabindex="0">
+                <span class="menu-title">
+                 •  Transcript 
+                </span>
+               </div>
+              </div>
+              {% endif %}
+             </div>
+            </div>
+           </div>
+          </div>
+          {% endif %}
+          {% if "Academics User" in user_roles or "Parent" in user_roles or "Student" in user_roles %}
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'billing' or active_student_route == 'ledger' or active_student_route == 'fee' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
+           <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" tabindex="0">
+            <span>
+             <i class="ki-filled ki-wallet text-2xl text-gray-600 menu-item-active:text-primary menu-item-here:text-primary menu-item-show:text-primary menu-link-hover:text-primary">
+             </i>
+            </span>
+            <!-- <span class="menu-title text-nowrap font-medium text-2xs text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
+             Finance
+            </span> -->
+            <!-- <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
+             Billing
+            </span> -->
+            <span class="menu-arrow">
+             <i class="ki-filled ki-down text-2xs text-gray-500 menu-item-active:text-primary menu-item-here:text-primary menu-item-show:text-primary menu-link-hover:text-primary">
+             </i>
+            </span>
+           </div>
+           <div class="menu-dropdown menu-default py-2 min-w-[200px]">
+            <div class="menu-item {% if active_student_route == 'billing' %}active{% endif %}">
+             <a class="menu-link" href="/students/billing/{{docname}}" tabindex="0">
+              <span class="menu-title">
+               Fees and Charges
+              </span>
+             </a>
+            </div>
+            <div class="menu-item {% if active_student_route == 'ledger' %}active{% endif %}">
+             <a class="menu-link" href="/students/ledger/{{docname}}" tabindex="0">
+              <span class="menu-title">
+               Student Ledger
+              </span>
+             </a>
+            </div>
+            <div class="menu-item {% if active_student_route == 'fee' %}active{% endif %}">
+             <a class="menu-link" href="/students/fee/{{docname}}" tabindex="0">
+              <span class="menu-title">
+               Class Fee Breakdown
+              </span>
+             </a>
+            </div>
+           </div>
+          </div>
+          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'communications' or active_student_route == 'activity' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
+           <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" tabindex="0">
+            <span>
+             <i class="ki-filled ki-sms text-2xl text-gray-600 menu-item-active:text-primary menu-item-here:text-primary menu-item-show:text-primary menu-link-hover:text-primary">
+             </i>
+            </span>
+            <!-- <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
+             Communications
+            </span> -->
+            <span class="menu-arrow">
+             <i class="ki-filled ki-down text-2xs text-gray-500 menu-item-active:text-primary menu-item-here:text-primary menu-item-show:text-primary menu-link-hover:text-primary">
+             </i>
+            </span>
+           </div>
+           <div class="menu-dropdown menu-default py-2 min-w-[200px]">
+            <div class="menu-item disabled {% if active_student_route == 'communications' %}active{% endif %}">
+             <div class="menu-link" href="/students/notifications/{{students.user}}" tabindex="0">
+              <span class="menu-title">
+               Newsletter
+              </span>
+             </div>
+            </div>
+            <div class="menu-item disabled {% if active_student_route == 'activity' %}active{% endif %}">
+             <div class="menu-link" href="/students/activity/{{students.user}}" tabindex="0">
+              <span class="menu-title">
+               Announcement
+              </span>
+             </div>
+            </div>
+            <div class="menu-item disabled {% if active_student_route == 'activity' %}active{% endif %}">
+             <div class="menu-link" href="/students/activity/{{students.user}}" tabindex="0">
+              <span class="menu-title">
+               Messages
+              </span>
+             </div>
+            </div>
+            <div class="menu-item disabled {% if active_student_route == 'communications' %}active{% endif %}">
+             <div class="menu-link" href="/students/notifications/{{students.user}}" tabindex="0">
+              <span class="menu-title">
+               Ticket
+              </span>
+             </div>
+            </div>
+            <div class="menu-item disabled {% if active_student_route == 'activity' %}active{% endif %}">
+             <div class="menu-link" href="/students/activity/{{students.user}}" tabindex="0">
+              <span class="menu-title">
+               Chats
+              </span>
+             </div>
+            </div>
            </div>
           </div>
           {% endif %}
           {% if "Academics User" in user_roles or "Parent" in user_roles or "Instructor" in user_roles %}          
-          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'schedule' %}here{% endif %}">
+          <!-- <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'schedule' %}here{% endif %}">
            <a class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" href="/students/timetable/{{docname}}" tabindex="0">
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
              Class Schedule
@@ -83,10 +268,10 @@
              Attendance
             </span>
            </a>
-          </div>
+          </div> -->
           {% endif %}
           {% if "Academics User" in user_roles or "Parent" in user_roles %}          
-          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'gradebook' or active_student_route == 'progress_report' or active_student_route == 'report_card' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
+          <!-- <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'gradebook' or active_student_route == 'progress_report' or active_student_route == 'report_card' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
            <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" tabindex="0">
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
              Grades
@@ -122,6 +307,10 @@
           </div>
           <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'billing' or active_student_route == 'ledger' or active_student_route == 'fee' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
            <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" tabindex="0">
+            <span>
+             <i class="ki-filled ki-wallet text-2xl text-gray-600 menu-item-active:text-primary menu-item-here:text-primary menu-item-show:text-primary menu-link-hover:text-primary">
+             </i>
+            </span>
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
              Billing
             </span>
@@ -153,9 +342,9 @@
              </a>
             </div>
            </div>
-          </div>
+          </div> -->
           {% endif %}
-          <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'communications' or active_student_route == 'activity' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
+          <!-- <div class="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary {% if active_student_route == 'communications' or active_student_route == 'activity' %}here{% endif %}" data-menu-item-placement="bottom-start" data-menu-item-toggle="dropdown" data-menu-item-trigger="click">
            <div class="menu-link gap-1.5 pb-2 lg:pb-4 px-2" tabindex="0">
             <span class="menu-title text-nowrap font-medium text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
              Communications
@@ -181,7 +370,7 @@
              </div>
             </div>
            </div>
-          </div>
+          </div> -->
          </div>
         </div>
        </div>
