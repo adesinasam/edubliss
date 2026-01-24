@@ -1,4 +1,4 @@
-       <div class="menu-item {% if active_route == 'school' %}here show{% endif %}" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
+       <!-- <div class="menu-item {% if active_route == 'school' %}here show{% endif %}" data-menu-item-toggle="accordion" data-menu-item-trigger="click">
         <div class="menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0">
          <span class="menu-icon items-start text-gray-500 dark:text-gray-400 w-[20px]">
           <i class="ki-filled ki-bank text-lg">
@@ -52,7 +52,7 @@
           </a>
          </div>
         </div>
-       </div>
+       </div> -->
        <div class="menu-item {% if active_parent_route == 'profile' %}active{% endif %}">
         <a class="menu-link flex items-center border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0" href="/parents/profile">
          <span class="menu-icon items-start text-gray-500 dark:text-gray-400 w-[20px]">
@@ -63,6 +63,11 @@
           Parent Info
          </span>
         </a>
+       </div>
+       <div class="menu-item pt-2.25 pb-px">
+        <span class="menu-heading uppercase pl-[10px] pr-[10px] text-2sm font-semibold text-gray-500">
+         Student Account
+        </span>
        </div>
        <div class="menu-item {% if active_parent_route == 'billing' %}active{% endif %}">
         <a class="menu-link flex items-center border border-transparent gap-[10px] pl-[10px] pr-[10px] py-[6px]" tabindex="0" href="/parents/billing">
@@ -86,7 +91,56 @@
          </span>
         </a>
        </div>
-       <div class="menu-item {% if active_route == 'timetable' %}active{% endif %}">
+       <div class="menu-item pt-2.25 pb-px">
+        <span class="menu-heading uppercase pl-[10px] pr-[10px] text-2sm font-semibold text-gray-500">
+         Communication
+        </span>
+       </div>
+       <div class="menu-item {% if active_subroute == 'notices' %}active{% endif %}">
+        <a class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="/admin/notices" tabindex="0">
+         <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
+          <i class="ki-filled ki-tablet-text-up text-lg">
+          </i>
+         </span>
+         <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
+          Newsletter
+         </span>
+        </a>
+       </div>
+       <div class="menu-item">
+        <a class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="/raven/channel/" tabindex="0">
+         <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
+          <i class="ki-filled ki-information-2 text-lg">
+          </i>
+         </span>
+         <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
+          Raven Chat
+         </span>
+        </a>
+       </div>
+       <div class="menu-item">
+        <a class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="/helpdesk/my-tickets" tabindex="0">
+         <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
+          <i class="ki-filled ki-information-2 text-lg">
+          </i>
+         </span>
+         <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
+          Support Ticket
+         </span>
+        </a>
+       </div>
+       <div class="menu-item {% if active_subroute == 'events' %}active{% endif %}">
+        <a class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="/admin/events" tabindex="0">
+         <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
+          <i class="ki-filled ki-calendar text-lg">
+          </i>
+         </span>
+         <span class="menu-title text-sm font-semibold text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-link-hover:!text-primary">
+          School Calender
+         </span>
+        </a>
+       </div>
+       <!-- <div class="menu-item {% if active_route == 'timetable' %}active{% endif %}">
         <a class="menu-label gap-[10px] pl-[10px] pr-[10px] py-[6px] border border-transparent" href="/admin/timetable" tabindex="0">
          <span class="menu-icon items-start w-[20px] text-gray-500 dark:text-gray-400">
           <i class="ki-filled ki-calendar-edit text-lg">
@@ -107,4 +161,4 @@
           Support
          </span>
         </a>
-       </div>
+       </div> -->

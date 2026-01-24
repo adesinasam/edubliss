@@ -46,7 +46,7 @@ def get_context(context):
     context.abbr = "".join([p[0] for p in parts[:2] if p])
 
     # nav
-    context.active_route = "school"
+    context.active_route = "notices"
     context.active_subroute = "notices"
 
     edubliss_session = frappe.call('edubliss.api.get_edubliss_user_session')
