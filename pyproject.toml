@@ -5,11 +5,16 @@ authors = [
 ]
 description = "School Portal and Dashboard Extension"
 requires-python = ">=3.10"
+
 readme = "README.md"
 dynamic = ["version"]
 dependencies = [
     # "frappe~=15.0.0" # Installed and managed by bench.
 ]
+
+[tool.frappe]
+required-frappe-version = ">=15.0.0 <16.0.0"
+required-erpnext-version = ">=15.0.0 <16.0.0"
 
 [build-system]
 requires = ["flit_core >=3.4,<4"]
