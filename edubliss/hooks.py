@@ -1,8 +1,8 @@
 app_name = "edubliss"
 app_title = "Edubliss"
-app_publisher = "Adesina"
+app_publisher = "Wafgene Solutions Limited"
 app_description = "School Portal and Dashboard Extension"
-app_email = "support@glistercp.com.ng"
+app_email = "sinaakinyemi@gmail.com"
 app_license = "mit"
 
 # Apps
@@ -51,8 +51,8 @@ fixtures = [{
 # app_include_js = "/assets/edubliss/js/edubliss.js"
 
 # include js, css files in header of web template
-# web_include_css = "/assets/edubliss/css/styles.css"
-# web_include_js = "/assets/edubliss/dist/js/layouts/demo1.js"
+# web_include_css = "/assets/edubliss/css/edubliss.css"
+# web_include_js = "/assets/edubliss/js/edubliss.js"
 
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "edubliss/public/scss/website"
@@ -93,6 +93,7 @@ doctype_js = {
 
 # Home Pages
 # ----------
+
 # application home page (will override Website Settings)
 home_page = "portal"
 
@@ -144,6 +145,9 @@ website_route_rules = [
 
 # automatically create page for each record of this doctype
 # website_generators = ["Web Page"]
+
+# automatically load and sync documents of this doctype from downstream apps
+# importable_doctypes = [doctype_1]
 
 # Jinja
 # ----------
@@ -200,17 +204,10 @@ website_route_rules = [
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 
-# DocType Class
-# ---------------
-# Override standard doctype classes
-
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
-
 # Document Events
 # ---------------
 # Hook on document methods and events
+
 doc_events = {
   "Assessment Plan": {
     # "on_update": "edubliss.edubliss.assessment_plan.get_instructors",
@@ -267,6 +264,14 @@ doc_events = {
 # -------
 
 # before_tests = "edubliss.install.before_tests"
+
+# Extend DocType Class
+# ------------------------------
+#
+# Specify custom mixins to extend the standard doctype controller.
+# extend_doctype_class = {
+# 	"Task": "edubliss.custom.task.CustomTaskMixin"
+# }
 
 # Overriding Methods
 # ------------------------------
@@ -338,4 +343,9 @@ doc_events = {
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
+
+# Translation
+# ------------
+# List of apps whose translatable strings should be excluded from this app's translations.
+# ignore_translatable_strings_from = []
 
