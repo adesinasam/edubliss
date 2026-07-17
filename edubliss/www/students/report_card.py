@@ -113,31 +113,71 @@ def get_grade_comment(grading_scale,grade):
     )
     return grades_interval_query[0]['grade_description'] if grades_interval_query else None
 
-def get_attendance_count(student, academic_term):
-    attendance = frappe._dict()
-    attendance.total = 0
+# def get_attendance_count(student, academic_term):
+#     attendance = frappe._dict()
+#     attendance.total = 0
 
-    from_date, to_date = frappe.db.get_value(
-        "Academic Term", academic_term, ["term_start_date", "term_end_date"]
+#     from_date, to_date = frappe.db.get_value(
+#         "Academic Term", academic_term, ["term_start_date", "term_end_date"]
+#     )
+
+#     if from_date and to_date:
+#         data = frappe.get_all(
+#             "Student Attendance",
+#             {"student": student, "docstatus": 1, "date": ["between", (from_date, to_date)]},
+#             ["status", "count(student) as count"],
+#             group_by="status",
+#         )
+
+#         for row in data:
+#             if row.status == "Present":
+#                 attendance.present = row.count
+#             if row.status == "Absent":
+#                 attendance.absent = row.count
+#             attendance.total += row.count
+#         return attendance
+#     else:
+#         frappe.throw(_("Please enter the Academic Term and set the Start and End date."))
+
+def get_attendance_count(student, academic_term):
+    attendance = frappe._dict(
+        present=0,
+        absent=0,
+        total=0
     )
 
-    if from_date and to_date:
-        data = frappe.get_all(
-            "Student Attendance",
-            {"student": student, "docstatus": 1, "date": ["between", (from_date, to_date)]},
-            ["status", "count(student) as count"],
-            group_by="status",
-        )
+    from_date, to_date = frappe.db.get_value(
+        "Academic Term",
+        academic_term,
+        ["term_start_date", "term_end_date"]
+    )
 
-        for row in data:
-            if row.status == "Present":
-                attendance.present = row.count
-            if row.status == "Absent":
-                attendance.absent = row.count
-            attendance.total += row.count
-        return attendance
-    else:
+    if not (from_date and to_date):
         frappe.throw(_("Please enter the Academic Term and set the Start and End date."))
+
+    data = frappe.get_all(
+        "Student Attendance",
+        filters={
+            "student": student,
+            "docstatus": 1,
+            "date": ["between", (from_date, to_date)],
+        },
+        fields=[
+            "status",
+            {"COUNT": "student", "as": "count"},
+        ],
+        group_by="status",
+    )
+
+    for row in data:
+        if row.status == "Present":
+            attendance.present = row.count
+        elif row.status == "Absent":
+            attendance.absent = row.count
+
+        attendance.total += row.count
+
+    return attendance
 
 def get_context(context):
 
