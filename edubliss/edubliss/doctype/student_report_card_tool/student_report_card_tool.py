@@ -362,10 +362,24 @@ def get_attendance_count(student, academic_term):
 	if from_date and to_date:
 		data = frappe.get_all(
 			"Student Attendance",
-			{"student": student, "docstatus": 1, "date": ["between", (from_date, to_date)]},
-			["status", "count(student) as count"],
+			filters={
+				"student": student,
+				"docstatus": 1,
+				"date": ["between", (from_date, to_date)],
+			},
+			fields=[
+				"status",
+				{"COUNT": "student", "as": "count"},
+			],
 			group_by="status",
 		)
+
+		# data = frappe.get_all(
+		# 	"Student Attendance",
+		# 	{"student": student, "docstatus": 1, "date": ["between", (from_date, to_date)]},
+		# 	["status", "count(student) as count"],
+		# 	group_by="status",
+		# )
 
 		for row in data:
 			if row.status == "Present":
