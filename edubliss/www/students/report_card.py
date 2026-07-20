@@ -373,6 +373,7 @@ def get_context(context):
             context.course_count = course_count
             context.average = total_score / course_count if course_count else 0  # Avoid division by zero
             grading_scale = scale
+            context.grading_scale = grading_scale
 
             grading_scales = frappe.get_doc("Grading Scale", grading_scale)
             context.grading_scales = grading_scales
