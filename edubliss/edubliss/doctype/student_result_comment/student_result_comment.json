@@ -34,6 +34,7 @@
    "in_list_view": 1,
    "label": "Student",
    "options": "Student",
+   "read_only": 1,
    "reqd": 1
   },
   {
