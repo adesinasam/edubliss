@@ -11,6 +11,7 @@ from erpnext import get_company_currency
 from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
 	get_accounting_dimensions,
 )
+from erpnext.accounts.doctype.bank_account.bank_account import get_party_bank_account
 from erpnext.accounts.doctype.payment_entry.payment_entry import (
 	get_payment_entry,
 )
@@ -103,11 +104,11 @@ def make_payment_request(**args):
 		)
 		pr = frappe.get_doc("Payment Request", draft_payment_request)
 	else:
-		# bank_account = (
-		# 	get_party_bank_account(args.get("party_type"), args.get("party"))
-		# 	if args.get("party_type")
-		# 	else ""
-		# )
+		bank_account = (
+			get_party_bank_account(args.get("party_type"), args.get("party"))
+			if args.get("party_type")
+			else ""
+		)
 		pr = frappe.new_doc("Payment Request")
 
 		if not args.get("payment_request_type"):
@@ -142,7 +143,7 @@ def make_payment_request(**args):
 				"company": ref_doc.get("company"),
 				"party_type": party_type,
 				"party": args.get("party") or ref_doc.get("customer"),
-				# "bank_account": bank_account,
+				"bank_account": bank_account,
 				"party_name": args.get("party_name") or ref_doc.get("customer_name"),
 				"phone_number": args.get("phone_number") if args.get("phone_number") else None,
 				"custom_redirect": _("/students/billing/{0}").format(student_id),
