@@ -15,7 +15,7 @@ from erpnext.accounts.doctype.payment_entry.payment_entry import (
 	get_payment_entry,
 )
 from erpnext.accounts.doctype.subscription_plan.subscription_plan import get_plan_rate
-from erpnext.accounts.party import get_party_account, get_party_bank_account
+from erpnext.accounts.party import get_party_account
 from erpnext.accounts.utils import get_account_currency, get_currency_precision
 from erpnext.utilities import payment_app_import_guard
 
@@ -103,11 +103,11 @@ def make_payment_request(**args):
 		)
 		pr = frappe.get_doc("Payment Request", draft_payment_request)
 	else:
-		bank_account = (
-			get_party_bank_account(args.get("party_type"), args.get("party"))
-			if args.get("party_type")
-			else ""
-		)
+		# bank_account = (
+		# 	get_party_bank_account(args.get("party_type"), args.get("party"))
+		# 	if args.get("party_type")
+		# 	else ""
+		# )
 		pr = frappe.new_doc("Payment Request")
 
 		if not args.get("payment_request_type"):
@@ -142,7 +142,7 @@ def make_payment_request(**args):
 				"company": ref_doc.get("company"),
 				"party_type": party_type,
 				"party": args.get("party") or ref_doc.get("customer"),
-				"bank_account": bank_account,
+				# "bank_account": bank_account,
 				"party_name": args.get("party_name") or ref_doc.get("customer_name"),
 				"phone_number": args.get("phone_number") if args.get("phone_number") else None,
 				"custom_redirect": _("/students/billing/{0}").format(student_id),
